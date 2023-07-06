@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.claimNumber-button {
+  all: unset;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.blink1 {
+  /* border: 0; */
+  background-color: none;
+}
+
+.blink2 {
+  /* border: 1px solid black; */
+  background-color: #EAEDED;
+}

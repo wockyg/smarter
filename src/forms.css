@@ -1,0 +1,34 @@
+label {
+    display: block;
+    text-align: left;
+    font-size: .65em;
+}
+
+input {
+    display: block;
+    align-items: left;
+}
+
+.redBorder {
+    border-color: red;
+}
+
+.rateInput {
+    width: 6ch;
+}
+
+.therapistName {
+    width: 50ch;
+}
+
+.phoneExt {
+    width: 6ch;
+}
+
+.email {
+    width: 35ch;
+}
+
+.odg {
+    width: 5ch;
+}

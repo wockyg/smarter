@@ -1,23 +1,40 @@
-import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+import MainPage from './main/MainPage';
+
+import AddFormContextProvider from "./contexts/AddFormContext";
+import SelectedClaimContextProvider from './contexts/SelectedClaimContext';
+import SearchContextProvider from './contexts/SearchContext';
+import DetailsContextProvider from './contexts/DetailsContext';
+
 
 function App() {
+
+  const router = createBrowserRouter([
+    {
+      path: "/:id",
+      element: <MainPage />,
+    },
+    {
+      path: "/",
+      element: <MainPage />,
+    },
+  ]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SelectedClaimContextProvider>
+      <SearchContextProvider>
+      <DetailsContextProvider>
+      <AddFormContextProvider>
+          <RouterProvider router={router} />
+      </AddFormContextProvider>
+      </DetailsContextProvider>
+      </SearchContextProvider>
+      </SelectedClaimContextProvider>
     </div>
   );
 }

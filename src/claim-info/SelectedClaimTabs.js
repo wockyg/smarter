@@ -1,0 +1,157 @@
+import { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+
+import Badge from 'react-bootstrap/Badge';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+
+import InfoIcon from '@mui/icons-material/Info';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import RuleIcon from '@mui/icons-material/Rule';
+import LanguageIcon from '@mui/icons-material/Language';
+import TranslateIcon from '@mui/icons-material/Translate';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
+import useGetReferrals from '../hooks/useGetReferrals';
+
+import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
+
+import { useParams } from 'react-router-dom';
+
+import ReferralDetails from './ReferralDetails';
+import ApptVerification from './ApptVerification';
+import AuthorizationTable from './AuthorizationTable';
+import DptBilling from './DptBilling';
+import FceBilling from './FceBilling';
+
+
+function TabPanel(props) {
+    
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`selectedClaim-tabpanel-${index}`}
+      aria-labelledby={`selectedClaim-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `selectedClaim-tab-${index}`,
+    'aria-controls': `selectedClaim-tabpanel-${index}`,
+  };
+}
+
+export default function SelectedClaimTabs() {
+
+    let { id: linkId } = useParams();
+
+    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+
+    const { selectedClaimId, setSelectedClaimId, page, setPage, tab, setTab } = useContext(SelectedClaimContext);
+
+    const selectedClaim = referrals?.length > 0 && referrals.filter((row) => row.referralId === +linkId)[0];
+  
+    // const [tab, setTab] = useState(0);
+
+    console.log(tab);
+
+    const handleChange = (event, newValue) => {
+    setTab(selectedClaim ? newValue : 0);
+    };
+
+    return (
+    
+    <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+
+          <Grid container spacing={0.5}>
+            <Grid item>
+              <h3>
+                <Badge bg="secondary">
+                    {selectedClaim?.claimantBirthDate ? `${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst} | ${selectedClaim?.claimNumber}` : `${selectedClaim?.claimant}`}
+                </Badge>
+              </h3>
+            </Grid>
+          </Grid>
+
+          <Tabs value={tab} onChange={handleChange} aria-label="selectedClaim tabs">
+              <Tab icon={<InfoIcon />} {...a11yProps(0)} />
+              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+              <Tab icon={<RuleIcon />} {...a11yProps(1)} />
+              }
+              {selectedClaim && selectedClaim?.billingStatus !== null &&
+              <Tab icon={<RequestQuoteIcon />} {...a11yProps(2)} />
+              }
+          </Tabs>
+
+        </Box>
+
+        {/* Info Tab */}
+        {selectedClaim &&
+        <TabPanel value={tab} index={0}>
+          <Grid container spacing={2}>
+            {selectedClaim.serviceGeneral === "FCE" && selectedClaim.confirmAttend === "Yes" &&
+            <Grid item xs={12}>
+              <FceBilling />
+            </Grid>
+            }
+            <Grid item xs={12}>
+              <ReferralDetails />
+            </Grid>
+          </Grid>
+        </TabPanel>
+        }
+
+        {/* Appt Verif. Tab */}
+        {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+        <TabPanel value={tab} index={1}>
+            <Grid container>
+              <Grid item xs={7}>
+                <AuthorizationTable />
+              </Grid>
+              <Grid item xs={2}>
+                something here maybe?
+              </Grid>
+              <Grid item xs={3}>
+                Referral notes here
+              </Grid>
+              <Grid item xs={12}>
+                <ApptVerification />
+              </Grid>
+            </Grid>
+        </TabPanel>
+        }
+
+        {/* Billing Tab */}
+        {selectedClaim && selectedClaim?.billingStatus !== null &&
+        <TabPanel value={tab} index={selectedClaim.serviceGeneral === 'DPT' ? 2 : 1}>
+            {selectedClaim.serviceGeneral === "DPT" &&
+            <DptBilling />
+            }
+        </TabPanel>
+        }
+    </Box>
+    
+    );
+}
