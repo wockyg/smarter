@@ -84,8 +84,8 @@ export default function SelectedClaimTabs() {
     
     <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-
-          <Grid container spacing={0.5}>
+          {selectedClaim &&
+          <Grid container spacing={1.5}>
             <Grid item>
               <h3>
                 <Badge bg="secondary">
@@ -93,39 +93,30 @@ export default function SelectedClaimTabs() {
                 </Badge>
               </h3>
             </Grid>
-          </Grid>
-
-          <Tabs value={tab} onChange={handleChange} aria-label="selectedClaim tabs">
-              <Tab icon={<InfoIcon />} {...a11yProps(0)} />
-              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
-              <Tab icon={<RuleIcon />} {...a11yProps(1)} />
-              }
-              {selectedClaim && selectedClaim?.billingStatus !== null &&
-              <Tab icon={<RequestQuoteIcon />} {...a11yProps(2)} />
-              }
-          </Tabs>
-
-        </Box>
-
-        {/* Info Tab */}
-        {selectedClaim &&
-        <TabPanel value={tab} index={0}>
-          <Grid container spacing={2}>
             {selectedClaim.serviceGeneral === "FCE" && selectedClaim.confirmAttend === "Yes" &&
             <Grid item xs={12}>
               <FceBilling />
             </Grid>
             }
-            <Grid item xs={12}>
+             <Grid item xs={12}>
               <ReferralDetails />
             </Grid>
           </Grid>
-        </TabPanel>
-        }
+          }
+          <Tabs value={tab} onChange={handleChange} aria-label="selectedClaim tabs">
+              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.billingStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+              <Tab icon={<RuleIcon />} {...a11yProps(0)} />
+              }
+              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.billingStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+              <Tab icon={<RequestQuoteIcon />} {...a11yProps(1)} />
+              }
+          </Tabs>
+
+        </Box>
 
         {/* Appt Verif. Tab */}
         {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
-        <TabPanel value={tab} index={1}>
+        <TabPanel value={tab} index={0}>
             <Grid container>
               <Grid item xs={7}>
                 <AuthorizationTable />
@@ -134,7 +125,7 @@ export default function SelectedClaimTabs() {
                 something here maybe?
               </Grid>
               <Grid item xs={3}>
-                Referral notes here
+                SOMETHING ELSE here
               </Grid>
               <Grid item xs={12}>
                 <ApptVerification />
@@ -145,7 +136,7 @@ export default function SelectedClaimTabs() {
 
         {/* Billing Tab */}
         {selectedClaim && selectedClaim?.billingStatus !== null &&
-        <TabPanel value={tab} index={selectedClaim.serviceGeneral === 'DPT' ? 2 : 1}>
+        <TabPanel value={tab} index={1}>
             {selectedClaim.serviceGeneral === "DPT" &&
             <DptBilling />
             }

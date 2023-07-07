@@ -74,7 +74,8 @@ export default function MainTabs() {
             <Tab label="Schedule" {...a11yProps(0)} />
             <Tab label="Billing" {...a11yProps(1)} />
             <Tab label="Search" {...a11yProps(2)} />
-            <Tab label="TEST" {...a11yProps(3)} />
+            <Tab label="Calendars" {...a11yProps(3)} />
+            <Tab label="Reports" {...a11yProps(4)} />
         </Tabs>
         </Box>
         <TabPanel value={tab} index={0}>
