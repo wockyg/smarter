@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 const queryClient = new QueryClient();
 
 export const api = create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: 'https://smarter-nodejs.onrender.com/api',
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
