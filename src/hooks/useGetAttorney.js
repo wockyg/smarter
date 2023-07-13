@@ -9,15 +9,15 @@ const getAttorney = (id) => api
                         return data;
                         });
 
-export default function useGetAttorney() {
+export default function useGetAttorney(id) {
 
   async function getOneAttorney() {
-    const data = await getAttorney();
+    const data = await getAttorney(id);
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['attorney'], getOneAttorney, { 
+  return useQuery([`attorney${id}`], getOneAttorney, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

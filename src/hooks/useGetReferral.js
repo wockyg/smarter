@@ -9,10 +9,10 @@ const getReferral = (id) => api
                         return data;
                         });
 
-export default function useGetReferral() {
+export default function useGetReferral(id) {
 
   async function getOneReferral() {
-    const data = await getReferral();
+    const data = await getReferral(id);
     // console.log('data: ', data);
     return data;
   }

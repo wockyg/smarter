@@ -9,10 +9,10 @@ const getTherapist = (id) => api
                         return data;
                         });
 
-export default function useGetTherapist() {
+export default function useGetTherapist(id) {
 
   async function getOneTherapist() {
-    const data = await getTherapist();
+    const data = await getTherapist(id);
     // console.log('data: ', data);
     return data;
   }

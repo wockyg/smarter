@@ -9,15 +9,15 @@ const getClient = (id) => api
                         return data;
                         });
 
-export default function useGetClient() {
+export default function useGetClient(id) {
 
   async function getOneClient() {
-    const data = await getClient();
+    const data = await getClient(id);
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['client'], getOneClient, { 
+  return useQuery([`client${id}`], getOneClient, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

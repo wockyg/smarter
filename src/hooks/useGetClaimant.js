@@ -9,15 +9,15 @@ const getClaimant = (id) => api
                         return data;
                         });
 
-export default function useGetClaimant() {
+export default function useGetClaimant(id) {
 
   async function getOneClaimant() {
-    const data = await getClaimant();
+    const data = await getClaimant(id);
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['claimant'], getOneClaimant, { 
+  return useQuery([`claimant${id}`], getOneClaimant, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

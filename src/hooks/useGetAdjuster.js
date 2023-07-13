@@ -9,15 +9,15 @@ const getAdjuster = (id) => api
                         return data;
                         });
 
-export default function useGetAdjuster() {
+export default function useGetAdjuster(id) {
 
   async function getOneAdjuster() {
-    const data = await getAdjuster();
+    const data = await getAdjuster(id);
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery([`adjuster`], getOneAdjuster, { 
+  return useQuery([`adjuster${id}`], getOneAdjuster, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
   });
