@@ -1,0 +1,25 @@
+import {api} from '../index';
+import { useQuery } from "react-query";
+
+const getClaimant = (id) => api
+                        .get(`/claimantsView/${id}`)
+                        .then(response => {
+                        const data = response.data;
+                        // console.log(data);
+                        return data;
+                        });
+
+export default function useGetClaimant() {
+
+  async function getOneClaimant() {
+    const data = await getClaimant();
+    // console.log('data: ', data);
+    return data;
+  }
+    
+  return useQuery(['claimant'], getOneClaimant, { 
+    staleTime: (10 * (60 * 1000)), // 10 min
+    cacheTime: (15 * (60 * 1000)), // 15 min
+  });
+
+}
