@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsApptToday from '../hooks/useGetReferralsApptToday';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -68,24 +68,24 @@ export default function ApptToday(props) {
 
     const initialSort = 'apptDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsApptToday();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                const today = new Date();
-                                const newApptDate = new Date(row.apptDate);
-                                return (
-                                    newApptDate?.getUTCDate() === today.getDate() &&
-                                    newApptDate?.getMonth() === today.getMonth() &&
-                                    newApptDate?.getFullYear() === today.getFullYear()
-                                );});
+    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
+    //                           .filter((row) => {
+    //                             const today = new Date();
+    //                             const newApptDate = new Date(row.apptDate);
+    //                             return (
+    //                                 newApptDate?.getUTCDate() === today.getDate() &&
+    //                                 newApptDate?.getMonth() === today.getMonth() &&
+    //                                 newApptDate?.getFullYear() === today.getFullYear()
+    //                             );});
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

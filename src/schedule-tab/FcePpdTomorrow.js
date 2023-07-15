@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsFcePpdTomorrow from '../hooks/useGetReferralsFcePpdTomorrow';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -68,27 +68,27 @@ export default function FcePpdTomorrow(props) {
 
     const initialSort = 'apptDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsFcePpdTomorrow();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                const tomorrow = new Date();
-                                const oneDay = tomorrow.getDate() + 1;
-                                tomorrow.setDate(oneDay);
-                                const newApptDate = new Date(row.apptDate);
-                                return (
-                                    !row.service?.includes('DPT') &&
-                                    newApptDate?.getUTCDate() === tomorrow.getDate() &&
-                                    newApptDate?.getMonth() === tomorrow.getMonth() &&
-                                    newApptDate?.getFullYear() === tomorrow.getFullYear()
-                                );});
+    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
+    //                           .filter((row) => {
+    //                             const tomorrow = new Date();
+    //                             const oneDay = tomorrow.getDate() + 1;
+    //                             tomorrow.setDate(oneDay);
+    //                             const newApptDate = new Date(row.apptDate);
+    //                             return (
+    //                                 !row.service?.includes('DPT') &&
+    //                                 newApptDate?.getUTCDate() === tomorrow.getDate() &&
+    //                                 newApptDate?.getMonth() === tomorrow.getMonth() &&
+    //                                 newApptDate?.getFullYear() === tomorrow.getFullYear()
+    //                             );});
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

@@ -13,7 +13,7 @@ import TherapistFaxCoverPage from '../document-templates/TherapistFaxCoverPage';
 
 import { PDFDownloadLink } from '@react-pdf/renderer';
 
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferral from '../hooks/useGetReferral';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
@@ -23,14 +23,15 @@ export default function ReferralDetails(props) {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: selectedClaim, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferral(+linkId);
 
-    const { selectedClaimId, page, setPage } = useContext(SelectedClaimContext);
+    const { page, setPage } = useContext(SelectedClaimContext);
 
-    const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === +linkId);})[0];
+    // const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === +linkId);})[0];
 
     return (
     <>
+    {selectedClaim?.referralId &&
     <Grid container spacing={2.5}>
         {/* Referral Details */}
         <Grid item xs={2.5}>
@@ -93,6 +94,7 @@ export default function ReferralDetails(props) {
             </Box>
         </Grid>
     </Grid>
+    }
     </>
     );
 }

@@ -21,10 +21,6 @@ import useUpdateVisit from '../hooks/useUpdateVisit';
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
 
-import useGetReferrals from '../hooks/useGetReferrals';
-
-import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
@@ -38,15 +34,13 @@ export default function ApptVerification(props) {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-    const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === +linkId);})[0];
-
     const [editIDx, setEditIDx] = useState(-1);
     const [revertData, setRevertData] = useState({});
     const [currentEditRow, setCurrentEditRow] = useState({});
 
-    const [needPNvalue, setNeedPNValue] = useState(Boolean(selectedClaim.needPN));
+    const [needPNvalue, setNeedPNValue] = useState(Boolean(currentEditRow?.needPN));
+
+    // console.log(needPNvalue);
 
     let prevAttend = "";
     let visitNum = 0;
@@ -66,7 +60,7 @@ export default function ApptVerification(props) {
 
     const startEditing = (i, row) => {
         console.log("start editing");
-        console.log(row);
+        // console.log(row);
         setEditIDx(i);
         setRevertData(row);
         setCurrentEditRow(row);
@@ -86,7 +80,6 @@ export default function ApptVerification(props) {
         values.referralId = row.referralId;
         values.assign = row.assign;
         console.log(values);
-        console.log(row);
         Object.keys(values).length > 3 && mutationUpdate.mutate(values);
         setEditIDx(-1);
         setRevertData({});
@@ -105,13 +98,13 @@ export default function ApptVerification(props) {
         if (key === "needPN") {
             setNeedPNValue(!needPNvalue);
             newRow = {...currentEditRow, needPN: needPNvalue === false ? null : "Need PN"};
-            console.log(newRow);
+            // console.log(newRow);
         }
         else {
             newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
         }
         setCurrentEditRow(newRow);
-        console.log(key, newRow[key]);
+        // console.log(key, newRow[key]);
         // TODO: debud needPN
         // console.log(event.target.value);
     }

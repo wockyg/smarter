@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -18,21 +18,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import useGetReferrals from '../hooks/useGetReferrals';
-
-import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-
 import { useParams } from 'react-router-dom';
 
 export default function DptBilling(props) {
 
     let { id: linkId } = useParams();
-
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-    const { selectedClaimId } = useContext(SelectedClaimContext);
-
-    const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === linkId);})[0];
 
     const [editIDx, setEditIDx] = useState(-1);
     const [currentEditRow, setCurrentEditRow] = useState({});

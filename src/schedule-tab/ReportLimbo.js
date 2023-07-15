@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsReportLimbo from '../hooks/useGetReferralsReportLimbo';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -80,24 +80,24 @@ export default function ReportLimbo(props) {
 
     const initialSort = 'apptDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsReportLimbo();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                return (
+    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
+    //                           .filter((row) => {
+    //                             return (
 
-                                    row.confirmAttend === 'Yes' &&
-                                    row.reportReceivedDate !== null &&
-                                    (row.reportToAdjuster === null ||
-                                    row.reportToPhysician === null)
-                                );});
+    //                                 row.confirmAttend === 'Yes' &&
+    //                                 row.reportReceivedDate !== null &&
+    //                                 (row.reportToAdjuster === null ||
+    //                                 row.reportToPhysician === null)
+    //                             );});
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

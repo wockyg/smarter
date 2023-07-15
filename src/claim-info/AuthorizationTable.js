@@ -14,7 +14,7 @@ import { visitNumbers } from '../lookup-tables/lookup_visitNumbers';
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
 import useAddReferralAuth from '../hooks/useAddReferralAuth';
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferral from '../hooks/useGetReferral';
 import useUpdateReferral from '../hooks/useUpdateReferral';
 
 import { display } from '@mui/system';
@@ -29,9 +29,9 @@ export default function AuthorizationTable(props) {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: selectedClaim, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferral(+linkId);
 
-    const selectedClaim = referrals.length > 0 && referrals.filter((row) => row.referralId === +linkId)[0];
+    // const selectedClaim = referrals.length > 0 && referrals.filter((row) => row.referralId === +linkId)[0];
 
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
@@ -213,7 +213,7 @@ export default function AuthorizationTable(props) {
 
     return (
         <>
-        {auth?.length > 0 &&
+        {selectedClaim?.referralId && auth?.length > 0 &&
         <div>
             <Grid container spacing={2}>
                 <Grid item>

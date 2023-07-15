@@ -7,8 +7,7 @@ import { Page, Text, View, Document, StyleSheet, PDFViewer, Image, PDFDownloadLi
 
 import { useParams } from 'react-router-dom';
 
-import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferral from '../hooks/useGetReferral';
 
 import ConfirmationLetter from './ConfirmationLetter';
 import AuthorizationLetter from './AuthorizationLetter';
@@ -50,9 +49,7 @@ export default function DocumentTester(props) {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-    const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === +linkId);})[0];
+    const { status: statusReferrals, data: selectedClaim, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferral(+linkId);
 
     const MyDoc = () => (
         <Document>
@@ -138,7 +135,7 @@ export default function DocumentTester(props) {
                 {/* PDF VIEWER COL */}
                 <Grid item xs="auto">
                     <Grid item>
-                        {selectedClaim &&
+                        {selectedClaim?.referralId &&
                         <>
                         HelloAgain
                         <PDFViewer style={styles.viewer} showToolbar={false}>

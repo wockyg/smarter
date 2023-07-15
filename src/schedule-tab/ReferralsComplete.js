@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsComplete from '../hooks/useGetReferralsComplete';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -80,21 +80,14 @@ export default function ReferralsComplete(props) {
 
     const initialSort = 'referralDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                return (
-                                    row.referralStatus.includes('Complete') &&
-                                    row.ptStatus === null
-                                );});
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsComplete();
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

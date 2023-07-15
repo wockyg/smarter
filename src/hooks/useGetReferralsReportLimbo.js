@@ -1,23 +1,23 @@
 import {api} from '../index';
 import { useQuery } from "react-query";
 
-const getReferrals = () => api
-                        .get('/referralsView')
+const getReferralsReportLimbo = () => api
+                        .get('/referralsView/reportlimbo')
                         .then(response => {
                         const data = response.data;
                         // console.log(data);
                         return data;
                         });
 
-export default function useGetReferrals() {
+export default function useGetReferralsReportLimbo() {
 
-  async function getAllReferrals() {
-    const data = await getReferrals();
+  async function getAllReferralsReportLimbo() {
+    const data = await getReferralsReportLimbo();
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['referralsView'], getAllReferrals, { 
+  return useQuery(['reportlimbo'], getAllReferralsReportLimbo, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

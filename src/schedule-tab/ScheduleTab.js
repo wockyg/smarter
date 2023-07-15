@@ -12,21 +12,21 @@ import MissingReport from './MissingReport';
 import ReportLimbo from './ReportLimbo';
 import FollowupHold from './FollowupHold';
 
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
 
 import '../App.css';
 
 export default function ScheduleTab(props) {
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: referralsOpen, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsOpen();
 
-    const rowsOpen = rows?.filter((row) => {
+    const rowsOpenCount = referralsOpen?.filter((row) => {
                                 return (
                                     row.referralStatus?.includes('Open') || 
                                     row.referralStatus?.includes('Reschedule')
                                 );}).length;
 
-    const rowsHold = rows?.filter((row) => {
+    const rowsHoldCount = referralsOpen?.filter((row) => {
                                 return (
                                     row.referralStatus?.includes('Hold')
                                 );}).length;
@@ -49,10 +49,10 @@ export default function ScheduleTab(props) {
         aria-label="text alignment"
         >
             <ToggleButton value="open" aria-label="open">
-                Open ({rowsOpen})
+                Open ({rowsOpenCount})
             </ToggleButton>
             <ToggleButton value="hold" aria-label="hold">
-                Hold ({rowsHold})
+                Hold ({rowsHoldCount})
             </ToggleButton>
             <ToggleButton value="complete" aria-label="complete">
                 Complete

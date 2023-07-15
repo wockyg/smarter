@@ -21,19 +21,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 
-import useGetReferrals from '../hooks/useGetReferrals';
-
-import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-
 import "../App.css"
 
 export default function ClaimInfo(props) {
-
-    // const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-    // const { selectedClaimId } = useContext(SelectedClaimContext);
-
-    // const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === selectedClaimId);})[0];
 
     const {selectedClaim} = props;
 

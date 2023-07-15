@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsMissingReport from '../hooks/useGetReferralsMissingReport';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -62,21 +62,21 @@ export default function ApptToday(props) {
 
     const initialSort = 'apptDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsMissingReport();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                return (
-                                    row.confirmAttend === 'Yes' &&
-                                    row.reportReceivedDate === null
-                                );});
+    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
+    //                           .filter((row) => {
+    //                             return (
+    //                                 row.confirmAttend === 'Yes' &&
+    //                                 row.reportReceivedDate === null
+    //                             );});
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

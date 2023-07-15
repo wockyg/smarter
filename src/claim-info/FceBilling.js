@@ -19,7 +19,7 @@ import useGetFceppdBilling from '../hooks/useGetFceppdBilling';
 
 import { useParams } from 'react-router-dom';
 
-export default function FceBilling(props) {
+export default function FceBilling() {
 
     let { id: linkId } = useParams();
 

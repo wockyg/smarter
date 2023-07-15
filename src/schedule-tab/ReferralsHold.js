@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -80,7 +80,7 @@ export default function ReferralsHold(props) {
 
     const initialSort = 'referralDate';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsOpen();
 
     const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                               .filter((row) => {

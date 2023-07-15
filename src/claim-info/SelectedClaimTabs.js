@@ -15,7 +15,7 @@ import TranslateIcon from '@mui/icons-material/Translate';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferral from '../hooks/useGetReferral';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
@@ -66,30 +66,25 @@ export default function SelectedClaimTabs() {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
-    const { selectedClaimId, setSelectedClaimId, page, setPage, tab, setTab } = useContext(SelectedClaimContext);
-
-    const selectedClaim = referrals?.length > 0 && referrals.filter((row) => row.referralId === +linkId)[0];
-  
-    // const [tab, setTab] = useState(0);
-
-    console.log(tab);
+    const { tab, setTab } = useContext(SelectedClaimContext);
 
     const handleChange = (event, newValue) => {
     setTab(selectedClaim ? newValue : 0);
     };
 
     return (
-    
-    <Box sx={{ width: '100%' }}>
+      <>
+      {selectedClaim?.referralId &&
+      <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          {selectedClaim &&
+          
           <Grid container spacing={1.5}>
             <Grid item>
               <h3>
                 <Badge bg="secondary">
-                    {selectedClaim?.claimantBirthDate ? `${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst} | ${selectedClaim?.claimNumber}` : `${selectedClaim?.claimant}`}
+                    {selectedClaim.claimNumber ? `${selectedClaim.claimantLast}, ${selectedClaim.claimantFirst} | ${selectedClaim.claimNumber}` : `${selectedClaim.claimant}`}
                 </Badge>
               </h3>
             </Grid>
@@ -102,12 +97,12 @@ export default function SelectedClaimTabs() {
               <ReferralDetails />
             </Grid>
           </Grid>
-          }
+
           <Tabs value={tab} onChange={handleChange} aria-label="selectedClaim tabs">
-              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.billingStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+              {selectedClaim.ptStatus !== null && selectedClaim.billingStatus !== null && selectedClaim.serviceGeneral === "DPT" &&
               <Tab icon={<RuleIcon />} {...a11yProps(0)} />
               }
-              {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.billingStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+              {selectedClaim.ptStatus !== null && selectedClaim.billingStatus !== null && selectedClaim.serviceGeneral === "DPT" &&
               <Tab icon={<RequestQuoteIcon />} {...a11yProps(1)} />
               }
           </Tabs>
@@ -115,7 +110,7 @@ export default function SelectedClaimTabs() {
         </Box>
 
         {/* Appt Verif. Tab */}
-        {selectedClaim && selectedClaim?.ptStatus !== null && selectedClaim?.serviceGeneral === "DPT" &&
+        {selectedClaim.ptStatus !== null && selectedClaim.serviceGeneral === "DPT" &&
         <TabPanel value={tab} index={0}>
             <Grid container>
               <Grid item xs={7}>
@@ -135,14 +130,16 @@ export default function SelectedClaimTabs() {
         }
 
         {/* Billing Tab */}
-        {selectedClaim && selectedClaim?.billingStatus !== null &&
+        {selectedClaim.billingStatus !== null &&
         <TabPanel value={tab} index={1}>
             {selectedClaim.serviceGeneral === "DPT" &&
             <DptBilling />
             }
         </TabPanel>
         }
-    </Box>
+      </Box> 
+      }
+      </>
     
     );
 }

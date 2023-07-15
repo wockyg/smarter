@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsFollowUpHold from '../hooks/useGetReferralsFollowUpHold';
 import ReferralTable from '../table-components/ReferralTable';
 
 const headCells = [
@@ -74,21 +74,21 @@ export default function FollowupHold(props) {
 
     const initialSort = 'claimant';
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsFollowUpHold();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                              .filter((row) => {
-                                return (
-                                    row.ptStatus?.includes('Follow-Up') || 
-                                    row.ptStatus?.includes('Hold')
-                                );});
+    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
+    //                           .filter((row) => {
+    //                             return (
+    //                                 row.ptStatus?.includes('Follow-Up') || 
+    //                                 row.ptStatus?.includes('Hold')
+    //                             );});
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rows}
         />
         }
         </>

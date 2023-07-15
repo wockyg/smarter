@@ -1,4 +1,4 @@
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferralsSearch from '../hooks/useGetReferralsSearch';
 import SearchTable from './SearchTable';
 
 const headCells = [
@@ -106,7 +106,7 @@ export default function ReferralSearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetReferrals();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetReferralsSearch();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

@@ -3,16 +3,14 @@ import { useMutation, useQueryClient } from "react-query";
 import emailjs from '@emailjs/browser';
 import { careCoordinators } from '../lookup-tables/lookup_careCoordinators'
 
-import useGetReferrals from '../hooks/useGetReferrals';
+import useGetReferral from '../hooks/useGetReferral';
 import { useParams } from 'react-router-dom';
 
 export default function useUpdateReferral() {
 
   let { id: linkId } = useParams();
   
-  const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
-
-  const selectedClaim = referrals?.length > 0 && referrals?.filter((row) => {return (row.referralId === +linkId);})[0];
+  const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
   const queryClient = useQueryClient();
 

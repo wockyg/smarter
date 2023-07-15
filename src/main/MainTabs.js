@@ -6,10 +6,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
-import useGetReferrals from '../hooks/useGetReferrals';
-
-import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-
 import ScheduleTab from '../schedule-tab/ScheduleTab';
 import BillingTab from '../billing-tab/BillingTab';
 import SearchTab from '../search-tab/SearchTab';
