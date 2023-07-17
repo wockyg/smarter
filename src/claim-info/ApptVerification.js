@@ -145,7 +145,7 @@ export default function ApptVerification(props) {
                                     if(prevAttend !== "No"){
                                         visitNum = visitNum + 1;
                                     }
-                                    let au = auth && auth[authNum].approvedVisits;
+                                    let au = auth && auth[authNum]?.approvedVisits;
                                     if (visitNum > au){
                                         visitNum = 1;
                                         authNum = authNum + 1;

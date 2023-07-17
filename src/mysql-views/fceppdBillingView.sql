@@ -1,61 +1,61 @@
--- define20_smarter2.fceppdBillingview source
+-- define20_smarterbeta.fceppdBillingview source
 
 CREATE OR REPLACE
-ALGORITHM = UNDEFINED VIEW `define20_smarter2`.`fceppdBillingview` AS
+ALGORITHM = UNDEFINED VIEW `define20_smarterbeta`.`fceppdBillingview` AS
 select
-    `define20_smarter2`.`fceppdBilling`.`fceId` AS `fceId`,
-    `define20_smarter2`.`fceppdBilling`.`referralId` AS `referralId`,
-    `define20_smarter2`.`referralsNotification`.`assign` AS `assign`,
-    `define20_smarter2`.`referralsNotification`.`service` AS `service`,
-    `define20_smarter2`.`referralsNotification`.`claimNumber` AS `claimNumber`,
-    `define20_smarter2`.`referralsNotification`.`bodyPart` AS `bodyPart`,
-    concat(`define20_smarter2`.`claimants`.`lastName`, ', ', `define20_smarter2`.`claimants`.`firstName`) AS `claimant`,
-    `define20_smarter2`.`claimants`.`birthDate` AS `claimantBirthDate`,
-    concat(`define20_smarter2`.`adjusters`.`lastName`, ', ', `define20_smarter2`.`adjusters`.`firstName`) AS `adjuster`,
+    `define20_smarterbeta`.`fceppdBilling`.`fceId` AS `fceId`,
+    `define20_smarterbeta`.`fceppdBilling`.`referralId` AS `referralId`,
+    `define20_smarterbeta`.`referralsNotification`.`assign` AS `assign`,
+    `define20_smarterbeta`.`referralsNotification`.`service` AS `service`,
+    `define20_smarterbeta`.`referralsNotification`.`claimNumber` AS `claimNumber`,
+    `define20_smarterbeta`.`referralsNotification`.`bodyPart` AS `bodyPart`,
+    concat(`define20_smarterbeta`.`claimants`.`lastName`, ', ', `define20_smarterbeta`.`claimants`.`firstName`) AS `claimant`,
+    `define20_smarterbeta`.`claimants`.`birthDate` AS `claimantBirthDate`,
+    concat(`define20_smarterbeta`.`adjusters`.`lastName`, ', ', `define20_smarterbeta`.`adjusters`.`firstName`) AS `adjuster`,
     `clients1`.`client` AS `adjusterClient`,
-    concat(`define20_smarter2`.`casemanagers`.`lastName`, ', ', `define20_smarter2`.`casemanagers`.`firstName`) AS `casemanager`,
+    concat(`define20_smarterbeta`.`casemanagers`.`lastName`, ', ', `define20_smarterbeta`.`casemanagers`.`firstName`) AS `casemanager`,
     `clients2`.`client` AS `casemanagerClient`,
-    `define20_smarter2`.`therapists`.`name` AS `therapist`,
-    `define20_smarter2`.`therapists`.`address` AS `therapistAddress`,
-    `define20_smarter2`.`therapists`.`city` AS `therapistCity`,
-    `define20_smarter2`.`therapists`.`state` AS `therapistState`,
-    `define20_smarter2`.`therapists`.`zip` AS `therapistZip`,
-    `define20_smarter2`.`therapists`.`phone` AS `therapistPhone`,
-    `define20_smarter2`.`therapists`.`phoneExt` AS `therapistPhoneExt`,
-    `define20_smarter2`.`therapists`.`fax` AS `therapistFax`,
-    `define20_smarter2`.`referralsNotification`.`apptDate` AS `dos`,
-    `define20_smarter2`.`referralsNotification`.`reportReceivedDate` AS `reportReceivedDate`,
-    `define20_smarter2`.`fceppdBilling`.`v1500` AS `v1500`,
-    `define20_smarter2`.`fceppdBilling`.`d1500Sent` AS `d1500Sent`,
-    `define20_smarter2`.`fceppdBilling`.`d1500SendFormat` AS `d1500SendFormat`,
-    `define20_smarter2`.`fceppdBilling`.`adjusterRate` AS `adjusterRate`,
-    `define20_smarter2`.`fceppdBilling`.`adjusterRateAdjustment` AS `adjusterRateAdjustment`,
-    `define20_smarter2`.`fceppdBilling`.`paymentStatusDate` AS `paymentStatusDate`,
-    `define20_smarter2`.`fceppdBilling`.`paymentStatus` AS `paymentStatus`,
-    `define20_smarter2`.`fceppdBilling`.`rebillNeeded` AS `rebillNeeded`,
-    `define20_smarter2`.`fceppdBilling`.`dateRebilled` AS `dateRebilled`,
-    `define20_smarter2`.`fceppdBilling`.`rebillFormat` AS `rebillFormat`,
-    `define20_smarter2`.`fceppdBilling`.`adjusterDatePaid` AS `adjusterDatePaid`,
-    `define20_smarter2`.`fceppdBilling`.`adjusterAmountPaid` AS `adjusterAmountPaid`,
-    `define20_smarter2`.`fceppdBilling`.`facilityRate` AS `facilityRate`,
-    `define20_smarter2`.`fceppdBilling`.`facilityDatePaid` AS `facilityDatePaid`,
-    `define20_smarter2`.`fceppdBilling`.`facilityAmountPaid` AS `facilityAmountPaid`,
-    `define20_smarter2`.`fceppdBilling`.`checkNumber` AS `checkNumber`,
-    `define20_smarter2`.`fceppdBilling`.`writeOff` AS `writeOff`,
-    `define20_smarter2`.`fceppdBilling`.`dateAdded` AS `dateAdded`
+    `define20_smarterbeta`.`therapists`.`name` AS `therapist`,
+    `define20_smarterbeta`.`therapists`.`address` AS `therapistAddress`,
+    `define20_smarterbeta`.`therapists`.`city` AS `therapistCity`,
+    `define20_smarterbeta`.`therapists`.`state` AS `therapistState`,
+    `define20_smarterbeta`.`therapists`.`zip` AS `therapistZip`,
+    `define20_smarterbeta`.`therapists`.`phone` AS `therapistPhone`,
+    `define20_smarterbeta`.`therapists`.`phoneExt` AS `therapistPhoneExt`,
+    `define20_smarterbeta`.`therapists`.`fax` AS `therapistFax`,
+    `define20_smarterbeta`.`referralsNotification`.`apptDate` AS `dos`,
+    `define20_smarterbeta`.`referralsNotification`.`reportReceivedDate` AS `reportReceivedDate`,
+    `define20_smarterbeta`.`fceppdBilling`.`v1500` AS `v1500`,
+    `define20_smarterbeta`.`fceppdBilling`.`d1500Sent` AS `d1500Sent`,
+    `define20_smarterbeta`.`fceppdBilling`.`d1500SendFormat` AS `d1500SendFormat`,
+    `define20_smarterbeta`.`fceppdBilling`.`adjusterRate` AS `adjusterRate`,
+    `define20_smarterbeta`.`fceppdBilling`.`adjusterRateAdjustment` AS `adjusterRateAdjustment`,
+    `define20_smarterbeta`.`fceppdBilling`.`paymentStatusDate` AS `paymentStatusDate`,
+    `define20_smarterbeta`.`fceppdBilling`.`paymentStatus` AS `paymentStatus`,
+    `define20_smarterbeta`.`fceppdBilling`.`rebillNeeded` AS `rebillNeeded`,
+    `define20_smarterbeta`.`fceppdBilling`.`dateRebilled` AS `dateRebilled`,
+    `define20_smarterbeta`.`fceppdBilling`.`rebillFormat` AS `rebillFormat`,
+    `define20_smarterbeta`.`fceppdBilling`.`adjusterDatePaid` AS `adjusterDatePaid`,
+    `define20_smarterbeta`.`fceppdBilling`.`adjusterAmountPaid` AS `adjusterAmountPaid`,
+    `define20_smarterbeta`.`fceppdBilling`.`facilityRate` AS `facilityRate`,
+    `define20_smarterbeta`.`fceppdBilling`.`facilityDatePaid` AS `facilityDatePaid`,
+    `define20_smarterbeta`.`fceppdBilling`.`facilityAmountPaid` AS `facilityAmountPaid`,
+    `define20_smarterbeta`.`fceppdBilling`.`checkNumber` AS `checkNumber`,
+    `define20_smarterbeta`.`fceppdBilling`.`writeOff` AS `writeOff`,
+    `define20_smarterbeta`.`fceppdBilling`.`dateAdded` AS `dateAdded`
 from
-    (((((((`define20_smarter2`.`fceppdBilling`
-left join `define20_smarter2`.`referralsNotification` on
-    ((`define20_smarter2`.`fceppdBilling`.`referralId` = `define20_smarter2`.`referralsNotification`.`referralId`)))
-left join `define20_smarter2`.`claimants` on
-    ((`define20_smarter2`.`referralsNotification`.`claimantId` = `define20_smarter2`.`claimants`.`claimantId`)))
-left join `define20_smarter2`.`adjusters` on
-    ((`define20_smarter2`.`referralsNotification`.`adjusterId` = `define20_smarter2`.`adjusters`.`adjusterId`)))
-left join `define20_smarter2`.`casemanagers` on
-    ((`define20_smarter2`.`referralsNotification`.`casemanagerId` = `define20_smarter2`.`casemanagers`.`casemanagerId`)))
-left join `define20_smarter2`.`therapists` on
-    ((`define20_smarter2`.`referralsNotification`.`therapistId` = `define20_smarter2`.`therapists`.`therapistId`)))
-left join `define20_smarter2`.`clients` `clients1` on
-    ((`define20_smarter2`.`adjusters`.`clientId` = `clients1`.`clientId`)))
-left join `define20_smarter2`.`clients` `clients2` on
-    ((`define20_smarter2`.`casemanagers`.`clientId` = `clients2`.`clientId`)));
+    (((((((`define20_smarterbeta`.`fceppdBilling`
+left join `define20_smarterbeta`.`referralsNotification` on
+    ((`define20_smarterbeta`.`fceppdBilling`.`referralId` = `define20_smarterbeta`.`referralsNotification`.`referralId`)))
+left join `define20_smarterbeta`.`claimants` on
+    ((`define20_smarterbeta`.`referralsNotification`.`claimantId` = `define20_smarterbeta`.`claimants`.`claimantId`)))
+left join `define20_smarterbeta`.`adjusters` on
+    ((`define20_smarterbeta`.`referralsNotification`.`adjusterId` = `define20_smarterbeta`.`adjusters`.`adjusterId`)))
+left join `define20_smarterbeta`.`casemanagers` on
+    ((`define20_smarterbeta`.`referralsNotification`.`casemanagerId` = `define20_smarterbeta`.`casemanagers`.`casemanagerId`)))
+left join `define20_smarterbeta`.`therapists` on
+    ((`define20_smarterbeta`.`referralsNotification`.`therapistId` = `define20_smarterbeta`.`therapists`.`therapistId`)))
+left join `define20_smarterbeta`.`clients` `clients1` on
+    ((`define20_smarterbeta`.`adjusters`.`clientId` = `clients1`.`clientId`)))
+left join `define20_smarterbeta`.`clients` `clients2` on
+    ((`define20_smarterbeta`.`casemanagers`.`clientId` = `clients2`.`clientId`)));
