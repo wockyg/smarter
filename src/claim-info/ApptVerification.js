@@ -20,6 +20,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import useUpdateVisit from '../hooks/useUpdateVisit';
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
+import useDeleteVisit from '../hooks/useDeleteVisit';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -47,6 +48,7 @@ export default function ApptVerification(props) {
     let authNum = 0;
 
     const mutationUpdate = useUpdateVisit();
+    const mutationDelete = useDeleteVisit();
 
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
@@ -66,9 +68,10 @@ export default function ApptVerification(props) {
         setCurrentEditRow(row);
     }
 
-    const handleRemove = (i) => {
+    const handleRemove = (id) => {
         console.log("delete");
         //submit delete request
+        id && mutationDelete.mutate(id);
     }
 
     const stopEditing = (row) => {
@@ -334,7 +337,7 @@ export default function ApptVerification(props) {
                                                         <DeleteIcon
                                                         sx={{cursor: "pointer"}}
                                                         fontSize='small'
-                                                        onClick={() => handleRemove(j)}
+                                                        onClick={() => handleRemove(row.billingId)}
                                                         />
                                                         </>
                                                         }
