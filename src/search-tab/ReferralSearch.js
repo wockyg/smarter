@@ -113,8 +113,8 @@ export default function ReferralSearch(props) {
                                                         const claimantLastFirst = `${row.claimantLast}, ${row.claimantFirst}`;
                                                         const claimantFirstLast = `${row.claimantFirst} ${row.claimantLast}`;
                                                         return (
-                                                            claimantLastFirst?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            claimantFirstLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
+                                                            row.claimantLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
+                                                            row.claimantFirst?.toLowerCase().includes(searchVal.toLowerCase()) ||
                                                             row.claimNumber?.toLowerCase().includes(searchVal.toLowerCase())
                                                         );
                                                     });
