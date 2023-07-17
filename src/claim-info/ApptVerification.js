@@ -51,8 +51,6 @@ export default function ApptVerification(props) {
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
 
-    console.log(auth);
-
     const StyledTableCell = styled(TableCell)({
         padding: '0px 0px 0px 5px',
         // paddingLeft: 5,
