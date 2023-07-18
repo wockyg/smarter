@@ -121,7 +121,7 @@ export default function SearchTable(props) {
 
     const tableRef = useRef(null);
 
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date();
 
     const navigate = useNavigate();
 
