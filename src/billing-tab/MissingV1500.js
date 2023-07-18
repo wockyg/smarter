@@ -67,6 +67,7 @@ export default function MissingV1500(props) {
         headCells={headCells}
         rows={rowsFiltered}
         type='bil'
+        title='Missing V1500'
         />
         }
         </>

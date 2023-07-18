@@ -121,23 +121,23 @@ export default function SearchTable(props) {
 
     const tableRef = useRef(null);
 
-    const { onDownload } = useDownloadExcel({
-        currentTableRef: tableRef.current,
-        filename: 'Test table',
-        sheet: 'Users'
-    })
-
-    const timestamp = new Date();
+    const timestamp = new Date().toISOString();
 
     const navigate = useNavigate();
 
-    const { party, searchVal, rows, headCells, initialSort } = props;
+    const { party, searchVal, rows, headCells, initialSort, title } = props;
 
     const { searchId, setSearchId } = useContext(SearchContext);
 
     const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
     const { tab, setTab } = useContext(SelectedClaimContext);
+
+    const { onDownload } = useDownloadExcel({
+        currentTableRef: tableRef.current,
+        filename: `${title} Search ${timestamp}`,
+        sheet: 'Sheet1'
+    });
 
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState(initialSort ? initialSort : '');

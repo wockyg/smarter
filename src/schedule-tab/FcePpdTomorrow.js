@@ -89,6 +89,7 @@ export default function FcePpdTomorrow(props) {
         <ReferralTable
         headCells={headCells}
         rows={rows}
+        title='FCE PPD Tomorrow'
         />
         }
         </>

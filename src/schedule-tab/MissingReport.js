@@ -77,6 +77,7 @@ export default function ApptToday(props) {
         <ReferralTable
         headCells={headCells}
         rows={rows}
+        title='Missing Report'
         />
         }
         </>

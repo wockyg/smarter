@@ -44,7 +44,7 @@ export default function ReferralDetails(props) {
             <Box sx={{border: 1}}>
                 <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
             </Box>
-            {selectedClaim?.claimantVerbalConfirm && (!selectedClaim.confirmLetterToAdjuster || !selectedClaim.confirmLetterToClaimant) &&
+            {selectedClaim?.apptDate && selectedClaim?.apptTime &&
             <>
             <hr />
             <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>

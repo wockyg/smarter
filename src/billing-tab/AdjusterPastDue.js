@@ -121,6 +121,7 @@ export default function AdjusterPastDue(props) {
         headCells={headCells}
         rows={rowsFiltered}
         type='bil'
+        title='Adj Past Due'
         />
         }
         </>

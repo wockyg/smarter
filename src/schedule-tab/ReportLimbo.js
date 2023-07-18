@@ -98,6 +98,7 @@ export default function ReportLimbo(props) {
         <ReferralTable
         headCells={headCells}
         rows={rows}
+        title='Report Limbo'
         />
         }
         </>

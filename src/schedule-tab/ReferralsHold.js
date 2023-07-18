@@ -95,6 +95,7 @@ export default function ReferralsHold(props) {
         headCells={headCells}
         rows={rowsFiltered}
         removable={true}
+        title='Hold'
         />
         }
         </>

@@ -12,8 +12,9 @@ import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import RuleIcon from '@mui/icons-material/Rule';
 import LanguageIcon from '@mui/icons-material/Language';
 import TranslateIcon from '@mui/icons-material/Translate';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
 
 import useGetReferral from '../hooks/useGetReferral';
 
@@ -88,6 +89,32 @@ export default function SelectedClaimTabs() {
                 </Badge>
               </h3>
             </Grid>
+            {selectedClaim?.spanishSpeaking &&
+            <Grid item>
+              <h3>
+                <Badge bg="success">
+                    {selectedClaim.spanishSpeaking}
+                </Badge>
+              </h3>
+            </Grid>
+            }
+            {selectedClaim?.translationNeeded &&
+            <Grid item>
+                <Badge bg="primary">
+                  <InterpreterModeIcon />
+                </Badge>
+            </Grid>
+            }
+            {selectedClaim?.transportNeeded &&
+            <Grid item>
+              <h3>
+                <Badge bg="primary">
+                  <DirectionsCarIcon />
+                </Badge>
+              </h3>
+            </Grid>
+            }
+
             {selectedClaim.serviceGeneral === "FCE" && selectedClaim.confirmAttend === "Yes" &&
             <Grid item xs={12}>
               <FceBilling />

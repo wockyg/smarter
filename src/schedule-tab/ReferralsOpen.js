@@ -96,6 +96,7 @@ export default function ReferralsOpen(props) {
         headCells={headCells}
         rows={rowsFiltered}
         removable={true}
+        title='Open'
         />
         }
         </>

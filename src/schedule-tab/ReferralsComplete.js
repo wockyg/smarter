@@ -88,6 +88,7 @@ export default function ReferralsComplete(props) {
         <ReferralTable
         headCells={headCells}
         rows={rows}
+        title='Complete'
         />
         }
         </>

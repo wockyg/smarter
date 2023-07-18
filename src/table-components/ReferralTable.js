@@ -70,15 +70,9 @@ export default function ReferralTable(props) {
 
     const tableRef = useRef(null);
 
-    const { onDownload } = useDownloadExcel({
-        currentTableRef: tableRef.current,
-        filename: 'Test Referral table',
-        sheet: 'Users'
-    })
+    const timestamp = new Date().toISOString();
 
-    const timestamp = new Date();
-
-    const { rows, headCells, filter, initialSort, initialSortOrder, removable } = props;
+    const { rows, headCells, filter, initialSort, initialSortOrder, removable, title } = props;
 
     const { setPage: setNotesPage, setTab: setClaimTab } = useContext(SelectedClaimContext);
 
@@ -93,6 +87,12 @@ export default function ReferralTable(props) {
     const [deleteId, setDeleteId] = useState(null);
 
     const open = Boolean(anchorEl);
+
+    const { onDownload } = useDownloadExcel({
+        currentTableRef: tableRef.current,
+        filename: `Referrals ${title} ${timestamp}`,
+        sheet: 'Sheet1'
+    });
 
     const StyledTableCell = styled(TableCell)({
         padding: '5px 0px 5px 2px', 

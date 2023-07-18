@@ -123,7 +123,7 @@ export default function TherapistFaxCoverPage(props) {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={{...styles.text, backgroundColor: 'yellow'}}>{selectedClaim.therapist.includes("Benchmark") && benchmark}</Text>
+                    <Text style={{...styles.text, backgroundColor: 'yellow'}}>{selectedClaim?.therapist?.includes("Benchmark") && benchmark}</Text>
                 </View>
 
                 <View style={styles.section}>

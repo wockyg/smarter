@@ -89,6 +89,7 @@ export default function FollowupHold(props) {
         <ReferralTable
         headCells={headCells}
         rows={rows}
+        title='FollowUpHold'
         />
         }
         </>

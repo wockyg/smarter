@@ -103,6 +103,7 @@ export default function AdjusterPastDue(props) {
         headCells={headCells}
         rows={rowsFiltered}
         type='bil'
+        title='PT Past Due'
         />
         }
         </>
