@@ -3,7 +3,8 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import InfoFromAdjusterUpdateForm from './InfoFromAdjusterUpdateForm';
 import ClaimInfo from './ClaimInfo';
-import ClaimIdInfo from './ClaimIdInfo';
+import ClaimIdInfoTooltip from './ClaimIdInfoTooltip';
+import ClaimIdInfoAccordian from './ClaimIdInfoAccordian';
 import ReferralNotes from './ReferralNotes';
 
 import ConfirmationLetter from '../document-templates/ConfirmationLetter';
@@ -84,7 +85,7 @@ export default function ReferralDetails(props) {
         {/* Id Details */}
         <Grid item xs={3}>
             <Box sx={{border: 1}}>
-                <ClaimIdInfo selectedClaim={selectedClaim} />
+                <ClaimIdInfoTooltip selectedClaim={selectedClaim} />
             </Box>
         </Grid>
         {/* Referral Notes */}
