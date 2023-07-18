@@ -48,7 +48,7 @@ export default function useUpdateReferral() {
           // send email
           sendEmail();
         }
-        queryClient.invalidateQueries('referrals');
+        queryClient.invalidateQueries(`referral${+linkId}`);
         return data;
       });
   }

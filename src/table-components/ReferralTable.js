@@ -165,7 +165,7 @@ export default function ReferralTable(props) {
                                 {headCells.map((col) => (
                                     <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
                                         {col.id === 'claimNumber' ?
-                                        <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
+                                        <Link to={`/${+row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
                                             {row.claimNumber}
                                         </Link>
                                         :
