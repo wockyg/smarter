@@ -63,6 +63,12 @@ const headCells = [
     label: 'Adjuster',
   },
   {
+    id: 'adjusterClient',
+    numeric: false,
+    disablePadding: false,
+    label: 'Client',
+  },
+  {
     id: 'casemanager',
     numeric: false,
     disablePadding: false,

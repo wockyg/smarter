@@ -49,7 +49,7 @@ export default function ReferralNotes(props) {
     const [newNote, setNewNote] = useState();
     
     const inits = careCoordinators.map((row) => row.Initials);
-    inits.push('KS', 'DM', 'SM');
+    inits.push('KS', 'SM');
 
     const mutationAdd = useAddReferralNote();
     const mutationDelete = useDeleteReferralNote();

@@ -30,6 +30,12 @@ export const careCoordinators = [
     "phone": "(770) 881-2018"
   },
   {
+    "TeamMember": "Diane McCulloch",
+    "Initials": "DM",
+    "email": "dmcculloch@definedpt.com",
+    "phone": "(404) 863-9935"
+  },
+  {
     "TeamMember": "Trisha Dunston",
     "Initials": "PD",
     "email": "pdunston@definedpt.com",
@@ -46,5 +52,17 @@ export const careCoordinators = [
     "Initials": "WM",
     "email": "wmcclure@definedpt.com",
     "phone": "(770) 853-6079"
+  },
+  {
+    "TeamMember": "Nissan Slater",
+    "Initials": "NS",
+    "email": "nslater@definedpt.com",
+    "phone": "(XXX) XXX-XXXX"
+  },
+  {
+    "TeamMember": "Chelseay Mills",
+    "Initials": "CM",
+    "email": "cmills@definedpt.com",
+    "phone": "(XXX) XXX-XXXX"
   },
 ]
