@@ -22,9 +22,31 @@ import SearchDetails from './SearchDetails';
 
 import { SearchContext } from '../contexts/SearchContext'
 
+import useGetReferralsSearch from '../hooks/useGetReferralsSearch';
+import useGetAdjusters from '../hooks/useGetAdjusters';
+import useGetAttorneys from '../hooks/useGetAttorneys';
+import useGetCasemanagers from '../hooks/useGetCasemanagers';
+import useGetClaimants from '../hooks/useGetClaimants';
+import useGetClients from '../hooks/useGetClients';
+import useGetEmployers from '../hooks/useGetEmployers';
+import useGetPhysicians from '../hooks/useGetPhysicians';
+import useGetTherapists from '../hooks/useGetTherapists';
+
 import '../App.css';
 
 export default function SearchTab() {
+
+    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsSearch();
+    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjusters();
+    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneys();
+    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagers();
+    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimants();
+    const { status: statusClients, data: clients, error: errorClients, isFetching: isFetchingClients } = useGetClients();
+    const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployers();
+    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysicians();
+    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapists();
+
+    
 
     const { setSearchId } = useContext(SearchContext);
 
@@ -52,6 +74,7 @@ export default function SearchTab() {
 
     return (
         <>
+        {referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists &&
         <Grid container spacing={2}>
             <Grid item>
                 <TextField 
@@ -147,6 +170,7 @@ export default function SearchTab() {
             </Grid>
             }
         </Grid>
+        }
         </>
     );
 }
