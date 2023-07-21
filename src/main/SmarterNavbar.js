@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { AddFormContext } from '../contexts/AddFormContext';
 
+import { useNavigate } from "react-router-dom";
+
 export default function SmarterNavbar() {
 
   const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
+
+  const navigate = useNavigate();
 
   const handleOpen = (party) => {
     setModalParty(party);
@@ -35,6 +39,7 @@ export default function SmarterNavbar() {
               <NavDropdown.Item onClick={() => handleOpen('referral')}>Add referral</NavDropdown.Item>
               <NavDropdown.Item onClick={() => handleOpen('agreement')}>New Agreement</NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link onClick={() => navigate('/')}>Reset</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
