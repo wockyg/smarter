@@ -90,7 +90,7 @@ export default function AuthorizationTable(props) {
                                                 ${emailStatement1PN}
                                                 <br>
                                                 <ul style="none">
-                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.time ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
+                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.dosTime ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
                                                 </ul>
                                                 <br>
                                                 This has also been sent to the doctor.
@@ -131,7 +131,7 @@ export default function AuthorizationTable(props) {
                                                 ${emailStatement1IA}
                                                 <br>
                                                 <ul>
-                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.time ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
+                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.dosTime ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
                                                 </ul>
                                                 <br>
                                                 This has also been sent to the doctor.
