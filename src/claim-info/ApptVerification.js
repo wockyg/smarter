@@ -209,7 +209,7 @@ export default function ApptVerification(props) {
                                                 </select>
                                             </StyledTableCell>
 
-                                            {row.attend === "Yes" ?
+                                            {currentEditRow.attend === "Yes" ?
                                             <>
                                             {/* serviceType */}
                                             <StyledTableCell sx={{ borderRight: 1 }}>
@@ -231,7 +231,7 @@ export default function ApptVerification(props) {
                                             </>
                                             }
 
-                                            {row.attend === "Yes" ?
+                                            {currentEditRow.attend === "Yes" ?
                                             <>
                                             {/* notesReceived */}
                                             <StyledTableCell sx={{ borderRight: 1 }}>
@@ -253,7 +253,7 @@ export default function ApptVerification(props) {
                                             </>
                                             }
 
-                                            {row.attend === "Yes" ?
+                                            {currentEditRow.attend === "Yes" ?
                                             <>
                                             {/* v1500 */}
                                             <StyledTableCell sx={{ borderRight: 1 }}>
