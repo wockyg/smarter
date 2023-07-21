@@ -77,13 +77,11 @@ export default function AuthorizationTable(props) {
                                                         <td>Name</td>
                                                         <td>Authorized Visits</td>
                                                         <td>Attended Visits</td>
-                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) && '<td>ODG Recommendation</td>'}
                                                     </tr>
                                                     <tr>
                                                         <td>${selectedClaim?.claimant}</td>
                                                         <td>${totalAuthVisits}</td>
                                                         <td>${visitCountYes}</td>
-                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) && `<td>${selectedClaim.odg}</td>`}
                                                     </tr>
                                                 </table>
                                                 <br>
