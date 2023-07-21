@@ -247,6 +247,12 @@ export default function ClaimInfo(props) {
                 <label htmlFor="medNotesToPTFormat">Format:</label>
                 <div id="medNotesToPTFormat">{selectedClaim.medNotesToPTFormat ? selectedClaim.medNotesToPTFormat : "---"}</div>
             </Grid>
+            {selectedClaim.serviceGeneral === "FCE" && selectedClaim.reportReceivedDate && 
+            <Grid item>
+                <label htmlFor="fceApproved">FCE/PPD Approved:</label>
+                <div id="fceApproved">{selectedClaim.fceApproved ? selectedClaim.fceApprovedFormat : <ClickableInfo title="fceApproved" value="--/--/----" />}</div>
+            </Grid>
+            }
             <Box width="100%"/>
             <Grid item>
                 <label htmlFor="reportToAdjuster">Report to Adj:</label>
