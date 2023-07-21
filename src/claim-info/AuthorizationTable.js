@@ -77,18 +77,20 @@ export default function AuthorizationTable(props) {
                                                         <td>Name</td>
                                                         <td>Authorized Visits</td>
                                                         <td>Attended Visits</td>
+                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) ? '<td>ODG Recommendation</td>' : ''}
                                                     </tr>
                                                     <tr>
                                                         <td>${selectedClaim?.claimant}</td>
                                                         <td>${totalAuthVisits}</td>
                                                         <td>${visitCountYes}</td>
+                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) ? `<td>${selectedClaim.odg}</td>` : ''}
                                                     </tr>
                                                 </table>
                                                 <br>
                                                 ${emailStatement1PN}
                                                 <br>
-                                                <ul>
-                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat} at ${v.time}</li>`)}
+                                                <ul style="none">
+                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.time ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
                                                 </ul>
                                                 <br>
                                                 This has also been sent to the doctor.
@@ -116,20 +118,20 @@ export default function AuthorizationTable(props) {
                                                         <td>Name</td>
                                                         <td>Authorized Visits</td>
                                                         <td>Attended Visits</td>
-                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) && '<td>ODG Recommendation</td>'}
+                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) ? '<td>ODG Recommendation</td>' : ''}
                                                     </tr>
                                                     <tr>
                                                         <td>${selectedClaim?.claimant}</td>
                                                         <td>${totalAuthVisits}</td>
                                                         <td>${visitCountYes}</td>
-                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) && `<td>${selectedClaim.odg}</td>`}
+                                                        ${(visitCountYes >= 24 || selectedClaim.adjusterClientId === 68 || selectedClaim.claimantEmployerId === 317) ? `<td>${selectedClaim.odg}</td>` : ''}
                                                     </tr>
                                                 </table>
                                                 <br>
                                                 ${emailStatement1IA}
                                                 <br>
                                                 <ul>
-                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat} at ${v.time}</li>`)}
+                                                    ${adjUpdateVisits?.map((v) => v.attend ? `<li>${v.dosFormat} ${v.attend === 'Yes' ? ' - attended' : ' - did not attend'} </li>` : `<li>${v.dosFormat}${v.time ? ` at ${v.dosTime}` : ''}</li>`).join(" ")}
                                                 </ul>
                                                 <br>
                                                 This has also been sent to the doctor.
