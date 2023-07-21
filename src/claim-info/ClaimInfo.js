@@ -801,7 +801,7 @@ export default function ClaimInfo(props) {
                                             <option key={t.Time} value={t.Time}>{t.Time}</option>
                                         ))}
                                     </select>
-                                    {props.errors.apptTime && <div id="feedback">{props.errors.apptTime}</div>}
+                                    {/* {props.errors.apptTime && <div id="feedback">{props.errors.apptTime}</div>} */}
                                 </Grid>
                                 <Grid item>
                                     <SubmitButton />
