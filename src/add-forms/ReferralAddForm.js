@@ -35,6 +35,8 @@ export default function ReferralAddForm() {
     const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
 
     return (
+        <>
+        {claimants && adjusters && attorneys && casemanagers && physicians &&
         <div>
             <Formik
             initialValues={{
@@ -324,7 +326,7 @@ export default function ReferralAddForm() {
                                 <Autocomplete
                                 id="adjusterId"
                                 name="adjusterId"
-                                options={adjusters.sort((a, b) => -b.client.localeCompare(a.client))}
+                                options={adjusters.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
                                 getOptionLabel={(option) => `${option.lastFirst}`}
                                 style={{ width: 300 }}
@@ -347,7 +349,7 @@ export default function ReferralAddForm() {
                                 <Autocomplete
                                 id="casemanagerId"
                                 name="casemanagerId"
-                                options={casemanagers.sort((a, b) => -b.client.localeCompare(a.client))}
+                                options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
                                 getOptionLabel={(option) => `${option.lastFirst}`}
                                 style={{ width: 300 }}
@@ -370,7 +372,7 @@ export default function ReferralAddForm() {
                                 <Autocomplete
                                 id="casemanager2Id"
                                 name="casemanager2Id"
-                                options={casemanagers.sort((a, b) => -b.client.localeCompare(a.client))}
+                                options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
                                 getOptionLabel={(option) => `${option.lastFirst}`}
                                 style={{ width: 300 }}
@@ -394,7 +396,7 @@ export default function ReferralAddForm() {
                                 <Autocomplete
                                 id="physicianId"
                                 name="physicianId"
-                                options={physicians.sort((a, b) => -b.lastName.localeCompare(a.lastName))}
+                                options={physicians.sort((a, b) => -b.lastName?.localeCompare(a.lastName))}
                                 // groupBy={(option) => option.state}
                                 getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.physicianId}`}
                                 style={{ width: 500 }}
@@ -474,4 +476,6 @@ export default function ReferralAddForm() {
             )}
             </Formik>
         </div>
+        }
+        </>
     )};
