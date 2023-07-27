@@ -5,27 +5,24 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetCasemanagers from '../hooks/useGetCasemanagers';
-import useGetClients from '../hooks/useGetClients';
+import useGetCasemanager from '../hooks/useGetCasemanager';
+import useGetClientsDropdown from '../hooks/useGetClientsDropdown';
 import useUpdateCasemanager from '../hooks/useUpdateCasemanager';
 
 
 export default function CasemanagerDetails(props) {
 
-    const {detailsId: selectedCasemanagerId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedCasemanagerId, currentlyEditing, setCurrentlyEditing, searchBox, cm2} = props;
 
-    const { status: statusRowsNCM, data: rowsNCM, error: errorRowsNCM, isFetching: isFetchingRowsNCM } = useGetCasemanagers();
+    const { status: statusNCM, data: selectedCasemanager, error: errorNCM, isFetching: isFetchingNCM } = useGetCasemanager(+selectedCasemanagerId);
 
-    const selectedCasemanager = rowsNCM?.length > 0 && rowsNCM?.filter((row) => {return (row.casemanagerId === selectedCasemanagerId);})[0];
+    // const selectedCasemanager = rowsNCM?.length > 0 && rowsNCM?.filter((row) => {return (row.casemanagerId === selectedCasemanagerId);})[0];
 
-    const { status: statusRowsCLI, data: rowsCLI, error: errorRows, isFetching: isFetchingRowsCLI } = useGetClients();
-
-    const clientNames = rowsCLI?.map(n => {
-                                    return ({clientId: n.clientId, client: n.client})
-                                });
+    const { status: statusRowsCLI, data: clients, error: errorRows, isFetching: isFetchingRowsCLI } = useGetClientsDropdown();
 
     const mutationUpdate = useUpdateCasemanager();
 
@@ -95,11 +92,18 @@ export default function CasemanagerDetails(props) {
     >
         {formikProps => (
     <Form>
-        <EditToolbar
-        selectedParty='casemanager'
+        {searchBox ?
+        <EditToolbarSearchBox
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         />
+        :
+        <EditToolbar
+        selectedParty={cm2 ? 'casemanager2' : 'casemanager'}
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>
@@ -127,7 +131,7 @@ export default function CasemanagerDetails(props) {
                     label='Client'
                     type='select'
                     formikProps={formikProps}
-                    options={clientNames}
+                    options={clients}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
                     />

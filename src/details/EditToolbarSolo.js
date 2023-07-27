@@ -6,12 +6,12 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import ClearIcon from '@mui/icons-material/Clear';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import LoopIcon from '@mui/icons-material/Loop';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import useGetReferral from '../hooks/useGetReferral';
 import useUpdateReferral from '../hooks/useUpdateReferral';
@@ -26,7 +26,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useParams } from 'react-router-dom';
 
-export default function EditToolbar(props) {
+export default function EditToolbarSolo(props) {
 
     let { id: referralId } = useParams();
 
@@ -38,55 +38,30 @@ export default function EditToolbar(props) {
     const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneysDropdown();
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsDropdown();
 
-    const {selectedParty, currentlyEditing, setCurrentlyEditing, attorneyType} = props;
+    const {selectedParty} = props;
 
     const mutationUpdate = useUpdateReferral();
 
-    const { values: formValues, submitForm, resetForm } = useFormikContext();
-
-    const [fieldRemove, setFieldRemove] = useState("");
-
-    const [fieldSwap, setFieldSwap] = useState("");
+    const [fieldAdd, setFieldAdd] = useState("");
 
     const [anchorEl, setAnchorEl] = useState(null);
 
     const open = Boolean(anchorEl);
 
-    const startEditing = () => {
-        console.log("start editing");
-        setCurrentlyEditing(true);
-        handleCloseMenu();
-    }
-
-    const cancelEditing = () => {
-        console.log("cancel editing");
-        resetForm();
-        setCurrentlyEditing(false);
-    }
-
-    const stopEditing = () => {
-        console.log("done editing");
-        submitForm();
-        setCurrentlyEditing(false);
-    }
-
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
-        // console.log(selectedParty, selectedClaim.casemanager2Id);
     };
 
-    const handleClickMenuSwap = (secondary) => {
-        secondary ? setFieldSwap(secondary) : setFieldSwap(`${selectedParty}Id`);
-        // secondary ? console.log(secondary) : console.log(`${selectedParty}Id`);
+    const handleClickMenuAdd = (attType) => {
+        attType 
+        ? 
+        setFieldAdd(attType) 
+        : 
+        setFieldAdd(`${selectedParty}Id`);
     };
 
-    const handleClickMenuRemove = (secondary) => {
-        secondary ? setFieldRemove(`${secondary}Id`) : setFieldRemove(`${selectedParty}Id`);
-        // console.log(`${selectedParty}Id`);
-    };
-
-    const handleRemoveConfirm = () => {
-        const values = {referralId: referralId, [fieldRemove]: null};
+    const handleAddConfirm = () => {
+        const values = {referralId: referralId, [fieldAdd]: null};
         console.log(values);
         mutationUpdate.mutate(values);
         handleCloseMenu();
@@ -94,27 +69,11 @@ export default function EditToolbar(props) {
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
-        setFieldSwap("");
-        setFieldRemove("");
+        setFieldAdd("");
     };
 
     function SubmitButton(){
         return <button type="submit">Ok</button>
-    }
-
-    function ConfirmRemove(){
-        return(
-            <>
-            <Grid container spacing={1.0}>
-                <Grid item>
-                    {"Remove?"}
-                </Grid>
-                <Grid item>
-                    <button onClick={handleRemoveConfirm}>{"Yes"}</button>
-                </Grid>
-            </Grid>
-            </>
-        );
     }
 
     return(
@@ -125,14 +84,7 @@ export default function EditToolbar(props) {
             </Grid>
             <Grid item xs={6}>
                 <Box width="100%" sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                    {currentlyEditing ?
-                    <>
-                    <SaveIcon onClick={() => stopEditing()} />
-                    <ClearIcon onClick={() => cancelEditing()} />
-                    </>
-                    :
                     <MoreVertIcon onClick={(e) => handleOpenMenu(e)} />
-                    }
                 </Box>
             </Grid>
         </Grid>
@@ -142,43 +94,27 @@ export default function EditToolbar(props) {
             open={open}
             onClose={handleCloseMenu}
         >
-            {((fieldSwap === "") && (fieldRemove === "")) ?
+            {fieldAdd === '' ?
             <div>
-                <MenuItem  onClick={() => startEditing()}>
-                    Edit
-                </MenuItem>
-                {selectedParty !== 'claimant' &&
-                <div>
-                <MenuItem  onClick={() => handleClickMenuSwap(((selectedParty === 'attorney' && selectedClaim.defenseAttorneyId) ? 'defenseAttorneyId' : ((selectedParty === 'attorney' && selectedClaim.plaintiffAttorneyId) ? 'plaintiffAttorneyId' : null) ))}>
-                    Swap
-                </MenuItem>
-                {(selectedParty !== 'casemanager' || (selectedParty === 'casemanager' && !selectedClaim.casemanager2Id)) &&
-                <MenuItem  onClick={() => handleClickMenuRemove(attorneyType ? attorneyType : null)}>
-                    Remove
-                </MenuItem>
-                }
-                {selectedParty === 'casemanager' && !selectedClaim.casemanager2Id &&
-                <MenuItem  onClick={() => handleClickMenuSwap('casemanager2Id')}>
-                    Add NCM2
-                </MenuItem>
-                }
-                {selectedParty === 'attorney' && !selectedClaim.plaintiffAttorneyId &&
-                <MenuItem  onClick={() => handleClickMenuSwap('plaintiffAttorneyId')}>
-                    Add Plaintiff Attorney
-                </MenuItem>
-                }
-                {selectedParty === 'attorney' && !selectedClaim.defenseAttorneyId &&
-                <MenuItem  onClick={() => handleClickMenuSwap('defenseAttorneyId')}>
-                    Add Defense Attorney
-                </MenuItem>
-                }
-                </div>
-                }
+            {selectedParty === 'attorney' ?
+            <div>
+            <MenuItem  onClick={() => handleClickMenuAdd('plaintiffAttorneyId')}>
+                Add Plaintiff Attorney
+            </MenuItem>
+            <MenuItem  onClick={() => handleClickMenuAdd('defenseAttorneyId')}>
+                Add Defense Attorney
+            </MenuItem>
+            </div>
+            :
+            <MenuItem  onClick={() => handleClickMenuAdd()}>
+                Add
+            </MenuItem>
+            }
             </div>
             :
             <MenuItem>
 
-            {fieldSwap === 'adjusterId' &&
+            {fieldAdd === 'adjusterId' &&
                 <Formik
                 initialValues={{
                     referralId: referralId,
@@ -205,9 +141,9 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="adjusterIdInput"
                                     name="adjusterId"
-                                    options={adjusters.sort((a, b) => -b.client?.localeCompare(a.client) || -b.lastName?.localeCompare(a.lastName))}
+                                    options={adjusters.sort((a, b) => -b.client?.localeCompare(a.client))}
                                     groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
+                                    getOptionLabel={(option) => `${option.lastFirst}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("adjusterId", value?.adjusterId);
@@ -233,8 +169,8 @@ export default function EditToolbar(props) {
                     )}
                 </Formik>
             }
-
-            {fieldSwap === 'casemanagerId' &&
+            {fieldAdd === "casemanagerId" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -261,9 +197,9 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="casemanagerIdInput"
                                     name="casemanagerId"
-                                    options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client) || -b.lastName?.localeCompare(a.lastName))}
+                                    options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                     groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
+                                    getOptionLabel={(option) => `${option.lastFirst}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("casemanagerId", value?.casemanagerId);
@@ -288,9 +224,10 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
-
-            {fieldSwap === 'casemanager2Id' &&
+            {fieldAdd === "casemanager2Id" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -317,9 +254,9 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="casemanager2IdInput"
                                     name="casemanager2Id"
-                                    options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client) || -b.lastName?.localeCompare(a.lastName))}
+                                    options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                     groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
+                                    getOptionLabel={(option) => `${option.lastFirst}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("casemanager2Id", value?.casemanagerId);
@@ -344,9 +281,10 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
-
-            {fieldSwap === 'physicianId' &&
+            {fieldAdd === "physicianId" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -375,7 +313,7 @@ export default function EditToolbar(props) {
                                     name="physicianId"
                                     options={physicians.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                     // groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.physicianId}`}
+                                    getOptionLabel={(option) => `${option.lastFirst} | ${option.physicianId}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("physicianId", value?.physicianId);
@@ -400,9 +338,10 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
-
-            {fieldSwap === 'plaintiffAttorneyId' &&
+            {fieldAdd === "plaintiffAttorneyId" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -431,7 +370,7 @@ export default function EditToolbar(props) {
                                     name="plaintiffAttorneyId"
                                     options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                     // groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.attorneyId}`}
+                                    getOptionLabel={(option) => `${option.lastFirst} | ${option.attorneyId}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("plaintiffAttorneyId", value?.attorneyId);
@@ -456,9 +395,10 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
-
-            {fieldSwap === 'defenseAttorneyId' &&
+            {fieldAdd === "defenseAttorneyId" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -487,7 +427,7 @@ export default function EditToolbar(props) {
                                     name="defenseAttorneyId"
                                     options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                     // groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.attorneyId}`}
+                                    getOptionLabel={(option) => `${option.lastFirst} | ${option.attorneyId}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("defenseAttorneyId", value?.attorneyId);
@@ -512,9 +452,10 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
-
-            {fieldSwap === 'therapistId' &&
+            {fieldAdd === "therapistId" &&
+                <>
                 <Formik
                 initialValues={{
                     referralId: selectedClaim.referralId,
@@ -541,7 +482,7 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="therapistIdInput"
                                     name="therapistId"
-                                    options={therapists.sort((a, b) => (-b.name?.localeCompare(a.name) || -b.address?.localeCompare(a.address)))}
+                                    options={therapists.sort((a, b) => -b.name?.localeCompare(a.name))}
                                     // groupBy={(option) => option.client}
                                     getOptionLabel={(option) => `${option.name} | ${option.address}, ${option.city}, ${option.state} ${option.zip} (${option.therapistId})`}
                                     style={{ width: 600 }}
@@ -568,11 +509,9 @@ export default function EditToolbar(props) {
                         </Form>
                     )}
                 </Formik>
+                </>
             }
 
-            {fieldRemove !== "" &&
-                <ConfirmRemove />
-            }
             </MenuItem>
             }
         </Menu>

@@ -13,13 +13,13 @@ import { AddFormContext } from '../contexts/AddFormContext';
 import '../forms.css'
 import useAddClaimant from '../hooks/useAddClaimant';
 import {states} from '../lookup-tables/lookup_UsState'
-import useGetEmployers from '../hooks/useGetEmployers';
+import useGetEmployersDropdown from '../hooks/useGetEmployersDropdown';
 
 export default function ClaimantAddForm() {
 
     const mutationAdd = useAddClaimant();
 
-    const { status, data: employers, error, isFetching } = useGetEmployers();
+    const { status, data: employers, error, isFetching } = useGetEmployersDropdown();
 
     const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
 

@@ -71,7 +71,7 @@ export default function EditableGridItem(props) {
                     }
                     {field === 'employerId' &&
                     <>
-                    <option value={selectedRow.employerId}>{selectedRow.name}</option>
+                    <option value={selectedRow.employerId}>{selectedRow.employer}</option>
                     {options.filter((x) => x.employerId !== selectedRow.employerId).map((s) => (
                         <option key={s.employerId} value={s.employerId}>{s.name}</option>
                     ))}
@@ -99,7 +99,7 @@ export default function EditableGridItem(props) {
             <div id={field}>{selectedRow.client}</div>
             }
             {field === 'employerId' &&
-            <div id={field}>{selectedRow.name}</div>
+            <div id={field}>{selectedRow.employer}</div>
             }
             </>
             :

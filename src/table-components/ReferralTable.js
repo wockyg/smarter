@@ -21,6 +21,7 @@ import { styled } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
+import { SearchContext } from '../contexts/SearchContext';
 
 import { stableSort, getComparator, handleRequestSort, handleChangePage, handleChangeRowsPerPage } from './TableComponents';
 
@@ -75,6 +76,7 @@ export default function ReferralTable(props) {
     const { rows, headCells, filter, initialSort, initialSortOrder, removable, title } = props;
 
     const { setPage: setNotesPage, setTab: setClaimTab } = useContext(SelectedClaimContext);
+    const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
     const mutationDelete = useDeleteReferral();
 
@@ -104,10 +106,12 @@ export default function ReferralTable(props) {
     const handleClaimClicked = (event, claim) => {
         setNotesPage(0);
         setClaimTab(0);
+        setQuickSearchVal(null);
+        setQuickSearchInputVal('');
     };
 
     const handleOpenMenu = (event, id) => {
-        setAnchorEl(event.currentTarget?.parentNode);
+        setAnchorEl(event.currentTarget);
         console.log(event.currentTarget?.parentNode);
         setDeleteId(id);
     };
@@ -189,7 +193,7 @@ export default function ReferralTable(props) {
             </TableContainer>
             {`${rows.length} rows`}
         </Paper>
-        <Menu
+            <Menu
               id="delete-menu"
               anchorEl={anchorEl}
               open={open}
@@ -199,7 +203,7 @@ export default function ReferralTable(props) {
                   Delete referral?
               </MenuItem>
 
-            </Menu>
+          </Menu>
     </Box>
     
     );

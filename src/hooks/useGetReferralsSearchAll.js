@@ -1,24 +1,24 @@
 import {api} from '../index';
 import { useQuery } from "react-query";
 
-const getTherapist = (id) => api
-                        .get(`/therapists/${id}`)
+const getReferralsSearch = () => api
+                        .get('/referralsView/searchall')
                         .then(response => {
                         const data = response.data;
                         // console.log(data);
                         return data;
                         });
 
-export default function useGetTherapist(id) {
+export default function useGetReferralsSearchAll() {
 
-  async function getOneTherapist() {
-    const data = await getTherapist(id);
+  async function getAllReferralsSearch() {
+    const data = await getReferralsSearch();
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery([`therapist${id}`], getOneTherapist, { 
-    staleTime: (10 * (60 * 1000)), // 10 min
+  return useQuery(['referralsearchall'], getAllReferralsSearch, { 
+    staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });
 

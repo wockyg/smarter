@@ -14,11 +14,11 @@ import FormAutoComplete from '../form-components/FormAutocomplete';
 import {states} from '../lookup-tables/lookup_UsState';
 import { AddFormContext } from '../contexts/AddFormContext';
 import useAddReferral from '../hooks/useAddReferral';
-import useGetClaimants from '../hooks/useGetClaimants';
-import useGetAdjusters from '../hooks/useGetAdjusters';
-import useGetAttorneys from '../hooks/useGetAttorneys';
-import useGetCasemanagers from '../hooks/useGetCasemanagers';
-import useGetPhysicians from '../hooks/useGetPhysicians';
+import useGetClaimantsDropdown from '../hooks/useGetClaimantsDropdown';
+import useGetAdjustersDropdown from '../hooks/useGetAdjustersDropdown';
+import useGetAttorneysDropdown from '../hooks/useGetAttorneysDropdown';
+import useGetCasemanagersDropdown from '../hooks/useGetCasemanagersDropdown';
+import useGetPhysiciansDropdown from '../hooks/useGetPhysiciansDropdown';
 
 import '../forms.css'
 
@@ -26,11 +26,11 @@ export default function ReferralAddForm() {
 
     const mutationAdd = useAddReferral();
 
-    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimants();
-    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjusters();
-    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneys();
-    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagers();
-    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysicians();
+    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimantsDropdown();
+    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjustersDropdown();
+    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneysDropdown();
+    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagersDropdown();
+    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysiciansDropdown();
 
     const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
 
@@ -328,7 +328,7 @@ export default function ReferralAddForm() {
                                 name="adjusterId"
                                 options={adjusters.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
-                                getOptionLabel={(option) => `${option.lastFirst}`}
+                                getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
                                 style={{ width: 300 }}
                                 onChange={(event, value) => {
                                     setFieldValue("adjusterId", value?.adjusterId);
@@ -351,7 +351,7 @@ export default function ReferralAddForm() {
                                 name="casemanagerId"
                                 options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
-                                getOptionLabel={(option) => `${option.lastFirst}`}
+                                getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
                                 style={{ width: 300 }}
                                 onChange={(event, value) => {
                                     setFieldValue("casemanagerId", value?.casemanagerId);
@@ -374,7 +374,7 @@ export default function ReferralAddForm() {
                                 name="casemanager2Id"
                                 options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                 groupBy={(option) => option.client}
-                                getOptionLabel={(option) => `${option.lastFirst}`}
+                                getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
                                 style={{ width: 300 }}
                                 onChange={(event, value) => {
                                     setFieldValue("casemanager2Id", value?.casemanager2Id);

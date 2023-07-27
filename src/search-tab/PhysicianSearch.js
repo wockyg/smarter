@@ -1,18 +1,24 @@
-import useGetPhysicians from '../hooks/useGetPhysicians';
+import useGetPhysiciansSearchAll from '../hooks/useGetPhysiciansSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
   {
-    id: 'lastFirst',
+    id: 'lastName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Last Name'
+  },
+  {
+    id: 'firstName',
+    numeric: false,
+    disablePadding: false,
+    label: 'First Name'
   },
   {
     id: 'facility',
     numeric: false,
     disablePadding: false,
-    label: 'Facility',
+    label: 'Facility'
   },
 ];
 
@@ -22,7 +28,7 @@ export default function PhysicianSearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetPhysicians();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetPhysiciansSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

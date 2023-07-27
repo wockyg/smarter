@@ -14,37 +14,37 @@ import TherapistDetails from '../details/TherapistDetails';
 import { SearchContext } from '../contexts/SearchContext';
 import { DetailsContext } from '../contexts/DetailsContext';
 
-import useGetAdjusters from '../hooks/useGetAdjusters';
-import useGetCasemanagers from '../hooks/useGetCasemanagers';
-import useGetAttorneys from '../hooks/useGetAttorneys';
-import useGetClients from '../hooks/useGetClients';
-import useGetEmployers from '../hooks/useGetEmployers';
-import useGetPhysicians from '../hooks/useGetPhysicians';
-import useGetTherapists from '../hooks/useGetTherapists';
-import useGetClaimants from '../hooks/useGetClaimants';
+// import useGetAdjusters from '../hooks/useGetAdjusters';
+// import useGetCasemanagers from '../hooks/useGetCasemanagers';
+// import useGetAttorneys from '../hooks/useGetAttorneys';
+// import useGetClients from '../hooks/useGetClients';
+// import useGetEmployers from '../hooks/useGetEmployers';
+// import useGetPhysicians from '../hooks/useGetPhysicians';
+// import useGetTherapists from '../hooks/useGetTherapists';
+// import useGetClaimants from '../hooks/useGetClaimants';
 
 export default function SearchDetails(props) {
 
     const { selectedParty } = props;
 
-    const controller1 = {};
+    // const controller1 = {};
 
-    controller1.adjuster = useGetAdjusters;
-    controller1.casemanager = useGetCasemanagers;
-    controller1.attorney = useGetAttorneys;
-    controller1.client = useGetClients;
-    controller1.employer = useGetEmployers;
-    controller1.physician = useGetPhysicians;
-    controller1.therapist = useGetTherapists;
-    controller1.claimant = useGetClaimants;
+    // controller1.adjuster = useGetAdjusters;
+    // controller1.casemanager = useGetCasemanagers;
+    // controller1.attorney = useGetAttorneys;
+    // controller1.client = useGetClients;
+    // controller1.employer = useGetEmployers;
+    // controller1.physician = useGetPhysicians;
+    // controller1.therapist = useGetTherapists;
+    // controller1.claimant = useGetClaimants;
 
     const { searchId } = useContext(SearchContext);
 
     const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = controller1[selectedParty]();
+    // const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = controller1[selectedParty]();
 
-    const selectedRow = rows?.length > 0 && rows?.filter((row) => {return (row[`${selectedParty}Id`] === searchId);})[0];
+    // const selectedRow = rows?.length > 0 && rows?.filter((row) => {return (row[`${selectedParty}Id`] === searchId);})[0];
 
     // COME BACK TO THIS //
     // const ReusableDetailsModule = `${selectedParty}Details`;
@@ -69,6 +69,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'casemanager' &&
@@ -76,6 +77,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'claimant' &&
@@ -83,6 +85,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'physician' &&
@@ -90,6 +93,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'attorney' &&
@@ -97,6 +101,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'client' &&
@@ -104,6 +109,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'employer' &&
@@ -111,6 +117,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
         {selectedParty === 'therapist' &&
@@ -118,6 +125,7 @@ export default function SearchDetails(props) {
         detailsId={searchId}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        searchBox={true}
         />
         }
 

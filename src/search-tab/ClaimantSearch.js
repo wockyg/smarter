@@ -1,12 +1,18 @@
-import useGetClaimants from '../hooks/useGetClaimants';
+import useGetClaimantsSearchAll from '../hooks/useGetClaimantsSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
   {
-    id: 'lastFirst',
+    id: 'lastName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Last Name'
+  },
+  {
+    id: 'firstName',
+    numeric: false,
+    disablePadding: false,
+    label: 'First Name'
   },
   {
     id: 'birthDate',
@@ -34,7 +40,7 @@ export default function ClaimantSearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClaimants();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClaimantsSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

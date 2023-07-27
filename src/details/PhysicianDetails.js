@@ -5,20 +5,21 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetPhysicians from '../hooks/useGetPhysicians';
+import useGetPhysician from '../hooks/useGetPhysician';
 import useUpdatePhysician from '../hooks/useUpdatePhysician';
 
 
 export default function PhysicianDetails(props) {
 
-    const {detailsId: selectedPhysicianId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedPhysicianId, currentlyEditing, setCurrentlyEditing, searchBox} = props;
 
-    const { status: statusRowsCMT, data: rowsCMT, error: errorRowsCMT, isFetching: isFetchingRowsCMT } = useGetPhysicians();
+    const { status: statusPSC, data: selectedPhysician, error: errorPSC, isFetching: isFetchingPSC } = useGetPhysician(+selectedPhysicianId);
 
-    const selectedPhysician = rowsCMT?.length > 0 && rowsCMT?.filter((row) => {return (row.physicianId === selectedPhysicianId);})[0];
+    // const selectedPhysician = rowsCMT?.length > 0 && rowsCMT?.filter((row) => {return (row.physicianId === selectedPhysicianId);})[0];
 
     const mutationUpdate = useUpdatePhysician();
 
@@ -83,11 +84,18 @@ export default function PhysicianDetails(props) {
     >
         {formikProps => (
     <Form>
+        {searchBox ?
+        <EditToolbarSearchBox
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        :
         <EditToolbar
         selectedParty='physician'
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>

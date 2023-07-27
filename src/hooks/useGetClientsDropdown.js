@@ -1,23 +1,23 @@
 import {api} from '../index';
 import { useQuery } from "react-query";
 
-const getReferral = (id) => api
-                        .get(`/referralsView/${id}`)
+const getClientsDropdown = () => api
+                        .get('/clients/dropdown')
                         .then(response => {
                         const data = response.data;
                         // console.log(data);
                         return data;
                         });
 
-export default function useGetReferral(id) {
+export default function useGetClientsDropdown() {
 
-  async function getOneReferral() {
-    const data = await getReferral(id);
+  async function getAllClientsDropdown() {
+    const data = await getClientsDropdown();
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery([`referral${id}`], getOneReferral, { 
+  return useQuery(['clientsdropdown'], getAllClientsDropdown, { 
     staleTime: (5 * (60 * 1000)), // 5 min
     cacheTime: (10 * (60 * 1000)), // 10 min
   });

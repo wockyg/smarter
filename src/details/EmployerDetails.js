@@ -5,20 +5,21 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetEmployers from '../hooks/useGetEmployers';
+import useGetEmployer from '../hooks/useGetEmployer';
 import useUpdateEmployer from '../hooks/useUpdateEmployer';
 
 
 export default function EmployerDetails(props) {
 
-    const {detailsId: selectedEmployerId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedEmployerId, currentlyEditing, setCurrentlyEditing, searchBox} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetEmployers();
+    const { status: statusEMP, data: selectedEmployer, error: errorEMP, isFetching: isFetchingEMP } = useGetEmployer(+selectedEmployerId);
 
-    const selectedEmployer = rows?.length > 0 && rows?.filter((row) => {return (row.employerId === selectedEmployerId);})[0];
+    // const selectedEmployer = rows?.length > 0 && rows?.filter((row) => {return (row.employerId === selectedEmployerId);})[0];
 
     const mutationUpdate = useUpdateEmployer();
 
@@ -78,11 +79,18 @@ export default function EmployerDetails(props) {
     >
         {formikProps => (
     <Form>
+        {searchBox ?
+        <EditToolbarSearchBox
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        :
         <EditToolbar
         selectedParty='employer'
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>

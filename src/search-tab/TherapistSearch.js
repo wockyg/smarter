@@ -1,4 +1,4 @@
-import useGetTherapists from '../hooks/useGetTherapists';
+import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
@@ -34,7 +34,7 @@ export default function TherapistSearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetTherapists();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetTherapistsSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

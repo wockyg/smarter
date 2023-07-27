@@ -1,4 +1,4 @@
-import useGetEmployers from '../hooks/useGetEmployers';
+import useGetEmployersSearchAll from '../hooks/useGetEmployersSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
@@ -22,7 +22,7 @@ export default function EmployerSearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetEmployers();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetEmployersSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

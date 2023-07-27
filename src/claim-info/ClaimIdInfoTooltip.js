@@ -267,6 +267,7 @@ export default function ClaimIdInfo(props) {
             }
             
 
+            
             {((fieldUpdate !== "") || (fieldRemove !== "")) && 
                 <MenuItem>
                 {fieldUpdate === "adjusterId" &&
@@ -354,7 +355,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="casemanagerIdInput"
                                         name="casemanagerId"
-                                        options={casemanagers.sort((a, b) => -b.client.localeCompare(a.client))}
+                                        options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                         groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.lastFirst}`}
                                         style={{ width: 300 }}
@@ -411,7 +412,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="casemanager2IdInput"
                                         name="casemanager2Id"
-                                        options={casemanagers.sort((a, b) => -b.client.localeCompare(a.client))}
+                                        options={casemanagers.sort((a, b) => -b.client?.localeCompare(a.client))}
                                         groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.lastFirst}`}
                                         style={{ width: 300 }}
@@ -468,7 +469,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="physicianIdInput"
                                         name="physicianId"
-                                        options={physicians.sort((a, b) => -b.lastFirst.localeCompare(a.lastFirst))}
+                                        options={physicians.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                         // groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.lastFirst} | ${option.physicianId}`}
                                         style={{ width: 300 }}
@@ -525,7 +526,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="plaintiffAttorneyIdInput"
                                         name="plaintiffAttorneyId"
-                                        options={attorneys.sort((a, b) => -b.lastFirst.localeCompare(a.lastFirst))}
+                                        options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                         // groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.lastFirst} | ${option.attorneyId}`}
                                         style={{ width: 300 }}
@@ -582,7 +583,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="defenseAttorneyIdInput"
                                         name="defenseAttorneyId"
-                                        options={attorneys.sort((a, b) => -b.lastFirst.localeCompare(a.lastFirst))}
+                                        options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
                                         // groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.lastFirst} | ${option.attorneyId}`}
                                         style={{ width: 300 }}
@@ -639,7 +640,7 @@ export default function ClaimIdInfo(props) {
                                         <Autocomplete
                                         id="therapistIdInput"
                                         name="therapistId"
-                                        options={therapists.sort((a, b) => -b.name.localeCompare(a.name))}
+                                        options={therapists.sort((a, b) => -b.name?.localeCompare(a.name))}
                                         // groupBy={(option) => option.client}
                                         getOptionLabel={(option) => `${option.name} | ${option.address}, ${option.city}, ${option.state} ${option.zip} (${option.therapistId})`}
                                         style={{ width: 600 }}

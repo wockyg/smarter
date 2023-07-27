@@ -20,31 +20,31 @@ import EmployerSearch from './EmployerSearch';
 
 import SearchDetails from './SearchDetails';
 
-import { SearchContext } from '../contexts/SearchContext'
+import { SearchContext } from '../contexts/SearchContext';
 
-import useGetReferralsSearch from '../hooks/useGetReferralsSearch';
-import useGetAdjusters from '../hooks/useGetAdjusters';
-import useGetAttorneys from '../hooks/useGetAttorneys';
-import useGetCasemanagers from '../hooks/useGetCasemanagers';
-import useGetClaimants from '../hooks/useGetClaimants';
-import useGetClients from '../hooks/useGetClients';
-import useGetEmployers from '../hooks/useGetEmployers';
-import useGetPhysicians from '../hooks/useGetPhysicians';
-import useGetTherapists from '../hooks/useGetTherapists';
+import useGetReferralsSearchAll from '../hooks/useGetReferralsSearchAll';
+import useGetAdjustersSearchAll from '../hooks/useGetAdjustersSearchAll';
+import useGetAttorneysSearchAll from '../hooks/useGetAttorneysSearchAll';
+import useGetCasemanagersSearchAll from '../hooks/useGetCasemanagersSearchAll';
+import useGetClaimantsSearchAll from '../hooks/useGetClaimantsSearchAll';
+import useGetClientsSearchAll from '../hooks/useGetClientsSearchAll';
+import useGetEmployersSearchAll from '../hooks/useGetEmployersSearchAll';
+import useGetPhysiciansSearchAll from '../hooks/useGetPhysiciansSearchAll';
+import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 
 import '../App.css';
 
 export default function SearchTab() {
 
-    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsSearch();
-    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjusters();
-    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneys();
-    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagers();
-    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimants();
-    const { status: statusClients, data: clients, error: errorClients, isFetching: isFetchingClients } = useGetClients();
-    const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployers();
-    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysicians();
-    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapists();
+    const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsSearchAll();
+    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjustersSearchAll();
+    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneysSearchAll();
+    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagersSearchAll();
+    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimantsSearchAll();
+    const { status: statusClients, data: clients, error: errorClients, isFetching: isFetchingClients } = useGetClientsSearchAll();
+    const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployersSearchAll();
+    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysiciansSearchAll();
+    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
 
     
 
@@ -65,12 +65,12 @@ export default function SearchTab() {
         if (e.target.value < 1) {
             setSearchId(-1);
         }
-    }
+    };
 
     const handleClearSearch = () => {
         setSearchVal('');
         setSearchId(-1);
-    }
+    };
 
     return (
         <>

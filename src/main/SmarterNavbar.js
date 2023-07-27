@@ -4,12 +4,14 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { AddFormContext } from '../contexts/AddFormContext';
+import { SearchContext } from '../contexts/SearchContext';
 
 import { useNavigate } from "react-router-dom";
 
 export default function SmarterNavbar() {
 
   const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
+  const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
   const navigate = useNavigate();
 
@@ -39,7 +41,7 @@ export default function SmarterNavbar() {
               <NavDropdown.Item onClick={() => handleOpen('referral')}>Add referral</NavDropdown.Item>
               <NavDropdown.Item onClick={() => handleOpen('agreement')}>New Agreement</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link onClick={() => navigate('/')}>Reset</Nav.Link>
+            <Nav.Link onClick={() => {navigate('/'); setQuickSearchVal(null); setQuickSearchInputVal('');}}>Reset</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -127,7 +127,7 @@ export default function SearchTable(props) {
 
     const { party, searchVal, rows, headCells, initialSort, title } = props;
 
-    const { searchId, setSearchId } = useContext(SearchContext);
+    const { searchId, setSearchId, setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
     const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
@@ -147,8 +147,11 @@ export default function SearchTable(props) {
     const handleClickRow = (row) => {
       console.log("switch selected row");
       party !== 'referral' ? setSearchId(row[`${party}Id`]) : navigate(`/${row.referralId}`)
-      // party === 'referral' && setTab(0);
-      // setCurrentEditRow({});
+      if (party === 'referral') {
+        setQuickSearchVal(null);
+        setQuickSearchInputVal('');
+        // setTab(0);
+      }
       setCurrentlyEditing(false);
     }
 

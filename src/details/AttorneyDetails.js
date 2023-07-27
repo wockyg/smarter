@@ -5,20 +5,21 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetAttorneys from '../hooks/useGetAttorneys';
+import useGetAttorney from '../hooks/useGetAttorney';
 import useUpdateAttorney from '../hooks/useUpdateAttorney';
 
 
 export default function AttorneyDetails(props) {
 
-    const {detailsId: selectedAttorneyId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedAttorneyId, currentlyEditing, setCurrentlyEditing, searchBox, type} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetAttorneys();
+    const { status: statusATT, data: selectedAttorney, error: errorATT, isFetching: isFetchingATT } = useGetAttorney(+selectedAttorneyId);
 
-    const selectedAttorney = rows?.length > 0 && rows?.filter((row) => {return (row.attorneyId === selectedAttorneyId);})[0];
+    // const selectedAttorney = rows?.length > 0 && rows?.filter((row) => {return (row.attorneyId === selectedAttorneyId);})[0];
 
     const mutationUpdate = useUpdateAttorney();
 
@@ -78,11 +79,19 @@ export default function AttorneyDetails(props) {
     >
         {formikProps => (
     <Form>
+        {searchBox ?
+        <EditToolbarSearchBox
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        :
         <EditToolbar
         selectedParty='attorney'
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
+        attorneyType={type}
         />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>

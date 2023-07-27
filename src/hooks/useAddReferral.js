@@ -49,6 +49,7 @@ export default function useAddReferral() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('referrals');
+                                queryClient.invalidateQueries('referralsOpen');
                                 return data;
                               });
     

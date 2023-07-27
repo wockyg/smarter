@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 import ReferralsOpen from './ReferralsOpen';
 import ReferralsHold from './ReferralsHold';
@@ -13,12 +15,22 @@ import ReportLimbo from './ReportLimbo';
 import FollowupHold from './FollowupHold';
 
 import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
+import useGetReferralsDropdown from '../hooks/useGetReferralsDropdown';
+
+import { SearchContext } from '../contexts/SearchContext'
+
+import { useNavigate } from "react-router-dom";
 
 import '../App.css';
 
 export default function ScheduleTab(props) {
 
     const { status: statusReferrals, data: referralsOpen, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsOpen();
+    const { status: statusRows, data: referralsDropdown, error: errorRows, isFetching: isFetchingRows } = useGetReferralsDropdown();
+
+    const { quickSearchVal, setQuickSearchVal, quickSearchInputVal, setQuickSearchInputVal } = useContext(SearchContext);
+
+    const navigate = useNavigate();
 
     const rowsOpenCount = referralsOpen?.filter((row) => {
                                 return (
@@ -41,6 +53,26 @@ export default function ScheduleTab(props) {
 
     return (
         <>
+        {referralsDropdown &&
+        <Autocomplete
+        value={quickSearchVal}
+        onChange={(event, value) => {
+          value && value?.referralId !== null && navigate(`/${value.referralId}`);
+          setQuickSearchVal(null);
+          setQuickSearchInputVal('');
+        }}
+        inputValue={quickSearchInputVal}
+        onInputChange={(event, newInputValue) => {
+          setQuickSearchInputVal(newInputValue);
+        }}
+        id="quickSearch-autocomplete"
+        options={referralsDropdown?.sort((a, b) => -b.claimant.localeCompare(a.claimant))}
+        getOptionLabel={(option) => option.referralId ? `${option.referralId} (${option.service}) ${option.claimant} | ${option.claimNumber} | ${option.bodyPart} | ${option.ptStatus}` : ''}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Quick Search" />}
+        />
+        }
+
         <ToggleButtonGroup
         size="small"
         value={selectedFilter}

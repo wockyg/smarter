@@ -1,11 +1,8 @@
 import { useState, useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import Tooltip from '@mui/material/Tooltip';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -14,11 +11,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 import useUpdateReferral from '../hooks/useUpdateReferral';
-import useGetAdjusters from '../hooks/useGetAdjusters';
-import useGetCasemanagers from '../hooks/useGetCasemanagers';
-import useGetPhysicians from '../hooks/useGetPhysicians';
-import useGetAttorneys from '../hooks/useGetAttorneys';
-import useGetTherapists from '../hooks/useGetTherapists';
 
 import AdjusterDetails from '../details/AdjusterDetails';
 import CasemanagerDetails from '../details/CasemanagerDetails';
@@ -28,6 +20,7 @@ import EmployerDetails from '../details/EmployerDetails';
 import PhysicianDetails from '../details/PhysicianDetails';
 import TherapistDetails from '../details/TherapistDetails';
 import AttorneyDetails from '../details/AttorneyDetails';
+import EditToolbarSolo from '../details/EditToolbarSolo';
 
 import { DetailsContext } from '../contexts/DetailsContext';
 
@@ -36,196 +29,239 @@ import * as Yup from 'yup';
 
 import "../App.css"
 
-export default function ClaimIdInfo(props) {
+export default function ClaimIdInfAccordian(props) {
 
     const { selectedClaim } = props;
-
-    const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjusters();
-    const { status: statusCasemanagers, data: casemanagers, error: errorCasemanagers, isFetching: isFetchingCasemanagers } = useGetCasemanagers();
-    const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysicians();
-    const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneys();
-    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapists();
 
     const mutationUpdate = useUpdateReferral();
 
     const { currentlyEditingSelectedClaim: currentlyEditing, setCurrentlyEditingSelectedClaim: setCurrentlyEditing } = useContext(DetailsContext);
 
-    const [hoverStyle, setHoverStyle] = useState({});
-
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const [fieldUpdate, setFieldUpdate] = useState("");
-
-    const [fieldRemove, setFieldRemove] = useState("");
-
-    const open = Boolean(anchorEl);
-
-    const handleOpenMenu = (event) => {
-        selectedClaim.referralId && setAnchorEl(event.currentTarget?.parentNode);
-        // console.log(event.currentTarget.innerHTML);
-    };
-
-    const handleClickMenuUpdate = (cm2) => {
-        const field = cm2 ? cm2 : anchorEl?.id;
-        setFieldUpdate(field);
-        console.log(field);
-    };
-
-    const handleClickMenuRemove = () => {
-        const field = anchorEl?.id;
-        setFieldRemove(field);
-        console.log(fieldRemove);
-    };
-
-    const handleRemoveConfirm = () => {
-        const values = {referralId: selectedClaim.referralId, [fieldRemove]: null};
-        console.log(values);
-        mutationUpdate.mutate(values);
-        handleCloseMenu();
-    };
-
-    const handleCloseMenu = () => {
-        setHoverStyle({[anchorEl.id]: ""});
-        setAnchorEl(null);
-        setFieldUpdate("");
-        setFieldRemove("");
-    };
-
-    const handleMouseOver = (t) => {
-        hoverStyle[`${t}`] !== 'blink2' &&
-            setHoverStyle({[t]: "blink2"});
-            // console.log("over", t);
-            // console.log(hoverStyle);
-    };
-
-    const handleMouseOut = (t) => {
-        hoverStyle[`${t}`] !== 'blink1' &&
-            setHoverStyle({[t]: ""});
-            // console.log("out", t);
-            // console.log(hoverStyle);
-        
-    };
-
-    function ClickableInfo(props){
-
-        const {title, value, claim} = props;
-
-        return(
-            <>
-            {claim ?
-            <div id={`${title}Inside`} className={hoverStyle[`${title}`]} style={{cursor: "pointer"}} onClick={(event) => handleOpenMenu(event)} onMouseEnter={() => handleMouseOver(title)} onMouseLeave={() => handleMouseOut(title)}>
-                {`${props.claim.therapist}`}<br />
-                {`${props.claim.therapistAddress},${props.claim.therapistSuite ? ` Ste. ${props.claim.therapistSuite},` : ''} ${props.claim.therapistCity}, ${props.claim.therapistState} ${props.claim.therapistZip}`}<br />
-                {`P ${props.claim.therapistPhone}${props.claim.therapistPhoneExt ? ` x${props.claim.therapistPhoneExt}` : ''} :: F ${props.claim.therapistFax}`}
-            </div>
-            :
-            <div id={`${title}Inside`} className={hoverStyle[`${title}`]} style={{cursor: "pointer"}} onClick={(event) => handleOpenMenu(event)} onMouseEnter={() => handleMouseOver(title)} onMouseLeave={() => handleMouseOut(title)}>
-                {`${value}`}
-            </div>
-            }
-            </>
-        );
-    }
-
     function SubmitButton(){
         return <button type="submit">Ok</button>
-    }
-
-    function ConfirmRemove(){
-        return(
-            <>
-            <Grid container spacing={1.0}>
-                <Grid item>
-                    {"Remove?"}
-                </Grid>
-                <Grid item>
-                    <button onClick={handleRemoveConfirm}>{"Yes"}</button>
-                </Grid>
-            </Grid>
-            </>
-        );
     }
 
     return (
         <>
         {selectedClaim &&
+        <>
         <div>
-            <Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
-                expandIcon={<InsertEmoticonIcon />}
+                expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 >
-                <Typography>Adjuster:</Typography>
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="claimantId">Claimant:</label>
+                        </Grid>
+                        {selectedClaim.claimantId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="claimantId">{`${selectedClaim.claimant} | DOB: ${selectedClaim?.claimantBirthDateFormat} | DOI: ${selectedClaim?.claimantInjuryDate1Format}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                </Typography>
+                    <ClaimantDetails detailsId={selectedClaim.claimantId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
                 </AccordionDetails>
             </Accordion>
-            <Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="adjusterId">Adjuster:</label>
+                        </Grid>
+                        {selectedClaim.adjusterId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="adjusterId">{`${selectedClaim.adjuster} | ${selectedClaim.adjusterClient}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {selectedClaim.adjusterId ?
+                    <AdjusterDetails detailsId={selectedClaim.adjusterId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    :
+                    <EditToolbarSolo
+                    selectedParty='adjuster'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
+                    }
+                </AccordionDetails>
+            </Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
                 id="panel2a-header"
                 >
-                <Typography>Case Manager(s):</Typography>
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="casemanagerId">Case Manager(s):</label>
+                        </Grid>
+                        {selectedClaim.casemanagerId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="casemanagerId">{selectedClaim.casemanagerId ? `${selectedClaim.casemanager} | ${selectedClaim.casemanagerClient}` : <></>}</div>
+                        </Grid>
+                        </>
+                        }
+                        {selectedClaim.casemanager2Id &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="casemanager2Id">{`${selectedClaim.casemanager2} | ${selectedClaim.casemanager2Client}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                </Typography>
+                    {selectedClaim.casemanagerId ?
+                    <CasemanagerDetails detailsId={selectedClaim.casemanagerId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    :
+                    <EditToolbarSolo
+                    selectedParty='casemanager'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
+                    }
+                    {selectedClaim.casemanager2Id &&
+                    <CasemanagerDetails detailsId={selectedClaim.casemanager2Id} cm2={true} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    }
                 </AccordionDetails>
             </Accordion>
-            <Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel3a-content"
                 id="panel3a-header"
                 >
-                <Typography>Physician:</Typography>
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="physicianId">Physician:</label>
+                        </Grid>
+                        {selectedClaim.physicianId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="physicianId">{`${selectedClaim.physicianLast}, ${selectedClaim.physicianFirst} | ${selectedClaim.physicianFacility}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                </Typography>
+                    {selectedClaim.physicianId ?
+                    <PhysicianDetails detailsId={selectedClaim.physicianId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    :
+                    <EditToolbarSolo
+                    selectedParty='physician'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
+                    }
                 </AccordionDetails>
             </Accordion>
-            <Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel4a-content"
                 id="panel4a-header"
                 >
-                <Typography>Attorney(s):</Typography>
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="plaintiffAttorneyId">Attorney(s):</label>
+                        </Grid>
+                        {selectedClaim.plaintiffAttorneyId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="plaintiffAttorneyId">{`(P) ${selectedClaim.plaintiffAttorney} | ${selectedClaim.plaintiffAttorneyFirm}`}</div>
+                        </Grid>
+                        </>
+                        }
+                        {selectedClaim.defenseAttorneyId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="defenseAttorneyId">{`(D) ${selectedClaim.defenseAttorney} | ${selectedClaim.defenseAttorneyFirm}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                </Typography>
+                    {(!selectedClaim.defenseAttorneyId && !selectedClaim.plaintiffAttorneyId) ?
+                    <EditToolbarSolo
+                    selectedParty='attorney'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
+                    :
+                    <>
+                    {selectedClaim.defenseAttorney &&
+                    <AttorneyDetails type='defenseAttorney' detailsId={selectedClaim.defenseAttorneyId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    }
+                    {selectedClaim.plaintiffAttorneyId &&
+                    <AttorneyDetails type='plaintiffAttorney' detailsId={selectedClaim.plaintiffAttorneyId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    }
+                    </>
+                    }
                 </AccordionDetails>
             </Accordion>
-            <Accordion>
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel5a-content"
                 id="panel5a-header"
                 >
-                <Typography>Therapist:</Typography>
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="therapistId">Therapist:</label>
+                        </Grid>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="therapistId">
+                                {selectedClaim.therapistId && 
+                                <>
+                                {`${selectedClaim.therapist}`}<br />
+                                {`${selectedClaim.therapistAddress},${selectedClaim.therapistSuite ? ` Ste. ${selectedClaim.therapistSuite},` : ''} ${selectedClaim.therapistCity}, ${selectedClaim.therapistState} ${selectedClaim.therapistZip}`}<br />
+                                {`P ${selectedClaim.therapistPhone}${selectedClaim.therapistPhoneExt ? ` x${selectedClaim.therapistPhoneExt}` : ''} :: F ${selectedClaim.therapistFax}`}
+                                </> 
+                                }
+                            </div>
+                        </Grid>
+                    </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
-                <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-                    malesuada lacus ex, sit amet blandit leo lobortis eget.
-                </Typography>
+                    {selectedClaim.therapistId ?
+                    <TherapistDetails detailsId={selectedClaim.therapistId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    :
+                    <EditToolbarSolo
+                    selectedParty='therapist'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
+                    }
                 </AccordionDetails>
             </Accordion>
         </div>
+        </>
         }
         </>
     );

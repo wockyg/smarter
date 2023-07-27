@@ -5,20 +5,21 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetClients from '../hooks/useGetClients';
+import useGetClient from '../hooks/useGetClient';
 import useUpdateClient from '../hooks/useUpdateClient';
 
 
 export default function ClientDetails(props) {
 
-    const {detailsId: selectedClientId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedClientId, currentlyEditing, setCurrentlyEditing, searchBox} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClients();
+    const { status: statusCLI, data: selectedClient, error: errorCLI, isFetching: isFetchingCLI } = useGetClient(+selectedClientId);
 
-    const selectedClient = rows?.length > 0 && rows?.filter((row) => {return (row.clientId === selectedClientId);})[0];
+    // const selectedClient = rows?.length > 0 && rows?.filter((row) => {return (row.clientId === selectedClientId);})[0];
 
     const mutationUpdate = useUpdateClient();
 
@@ -70,11 +71,18 @@ export default function ClientDetails(props) {
     >
         {formikProps => (
     <Form>
+        {searchBox ?
+        <EditToolbarSearchBox
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        :
         <EditToolbar
         selectedParty='client'
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>

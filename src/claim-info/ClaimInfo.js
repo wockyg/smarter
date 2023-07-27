@@ -564,7 +564,7 @@ export default function ClaimInfo(props) {
                                         value={props.values.odg}
                                         name="odg"
                                         type="number"
-                                        min="1"
+                                        min="0"
                                         max="50"
                                     />
                                     {props.errors.odg && <div id="feedback">{props.errors.odg}</div>}

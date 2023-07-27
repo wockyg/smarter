@@ -1,12 +1,18 @@
-import useGetAttorneys from '../hooks/useGetAttorneys';
+import useGetAttorneysSearchAll from '../hooks/useGetAttorneysSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
   {
-    id: 'lastFirst',
+    id: 'lastName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Last Name'
+  },
+  {
+    id: 'firstName',
+    numeric: false,
+    disablePadding: false,
+    label: 'First Name'
   },
   {
     id: 'firm',
@@ -34,7 +40,7 @@ export default function AttorneySearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetAttorneys();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetAttorneysSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

@@ -1,4 +1,4 @@
-import useGetClients from '../hooks/useGetClients';
+import useGetClientsSearchAll from '../hooks/useGetClientsSearchAll';
 import SearchTable from './SearchTable';
 
 const headCells = [
@@ -22,7 +22,7 @@ export default function AttorneySearch(props) {
 
     const {searchVal} = props;
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClients();
+    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClientsSearchAll();
 
     const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
                                                     .filter((row) => {

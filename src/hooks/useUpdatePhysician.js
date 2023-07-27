@@ -1,7 +1,13 @@
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
+import { useParams } from 'react-router-dom';
+import useGetReferral from '../hooks/useGetReferral';
 
 export default function useUpdatePhysician() {
+
+  let { id: linkId } = useParams();
+
+  const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
   const queryClient = useQueryClient();
 
@@ -17,6 +23,10 @@ export default function useUpdatePhysician() {
         const data = response.data;
         console.log(data);
         console.log(values);
+        if (selectedClaim.physicianId === values.physicianId) {
+          queryClient.invalidateQueries(`referral${+linkId}`);
+        }
+        queryClient.invalidateQueries(`physician${+values.physicianId}`);
         queryClient.invalidateQueries('physicians');
         return data;
       });

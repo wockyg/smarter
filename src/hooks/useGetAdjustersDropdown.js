@@ -17,6 +17,9 @@ export default function useGetAdjustersDropdown() {
     return data;
   }
     
-  return useQuery(['adjustersdropdown'], getAllAdjustersDropdown);
+  return useQuery(['adjustersdropdown'], getAllAdjustersDropdown, { 
+    staleTime: (5 * (60 * 1000)), // 5 min
+    cacheTime: (10 * (60 * 1000)), // 10 min
+  });
 
 }

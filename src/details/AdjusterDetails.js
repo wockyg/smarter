@@ -5,27 +5,24 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
+import EditToolbarSearchBox from '../details/EditToolbarSearchBox';
 
 import EditableGridItem from '../form-components/EditableGridItem';
 
-import useGetAdjusters from '../hooks/useGetAdjusters';
-import useGetClients from '../hooks/useGetClients';
+import useGetAdjuster from '../hooks/useGetAdjuster';
+import useGetClientsDropdown from '../hooks/useGetClientsDropdown';
 import useUpdateAdjuster from '../hooks/useUpdateAdjuster';
 
 
 export default function AdjusterDetails(props) {
 
-    const {detailsId: selectedAdjusterId, currentlyEditing, setCurrentlyEditing} = props;
+    const {detailsId: selectedAdjusterId, currentlyEditing, setCurrentlyEditing, searchBox} = props;
 
-    const { status: statusRowsADJ, data: rowsADJ, error: errorRowsADJ, isFetching: isFetchingRowsADJ } = useGetAdjusters();
+    const { status: statusADJ, data: selectedAdjuster, error: errorADJ, isFetching: isFetchingADJ } = useGetAdjuster(+selectedAdjusterId);
 
-    const selectedAdjuster = rowsADJ?.length > 0 && rowsADJ?.filter((row) => {return (row.adjusterId === selectedAdjusterId);})[0];
+    // const selectedAdjuster = rowsADJ?.length > 0 && rowsADJ?.filter((row) => {return (row.adjusterId === selectedAdjusterId);})[0];
 
-    const { status: statusRowsCLI, data: rowsCLI, error: errorRows, isFetching: isFetchingRowsCLI } = useGetClients();
-
-    const clientNames = rowsCLI?.map(n => {
-                                    return ({clientId: n.clientId, client: n.client})
-                                });
+    const { status: statusRowsCLI, data: clients, error: errorRows, isFetching: isFetchingRowsCLI } = useGetClientsDropdown();
 
     const mutationUpdate = useUpdateAdjuster();
 
@@ -95,11 +92,18 @@ export default function AdjusterDetails(props) {
     >
         {formikProps => (
     <Form>
+        {searchBox ?
+        <EditToolbarSearchBox
+        currentlyEditing={currentlyEditing}
+        setCurrentlyEditing={setCurrentlyEditing}
+        />
+        :
         <EditToolbar
         selectedParty='adjuster'
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         />
+        }
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>
@@ -127,7 +131,7 @@ export default function AdjusterDetails(props) {
                     label='Client'
                     type='select'
                     formikProps={formikProps}
-                    options={clientNames}
+                    options={clients}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
                     />
