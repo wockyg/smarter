@@ -10,7 +10,7 @@ import FormTextarea from '../form-components/FormTextarea';
 import * as Yup from 'yup';
 import { AddFormContext } from '../contexts/AddFormContext';
 import '../forms.css'
-import useGetClients from '../hooks/useGetClients';
+import useGetClientsDropdown from '../hooks/useGetClientsDropdown';
 import useAddAdjuster from '../hooks/useAddAdjuster';
 import {states} from '../lookup-tables/lookup_UsState'
 
@@ -18,7 +18,7 @@ export default function AdjusterAddForm() {
 
     const mutationAdd = useAddAdjuster();
 
-    const { status, data: clients, error, isFetching } = useGetClients();
+    const { status, data: clients, error, isFetching } = useGetClientsDropdown();
 
     const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
 
