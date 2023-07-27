@@ -48,7 +48,7 @@ export default function ReferralDetails(props) {
             {selectedClaim?.apptDate && selectedClaim?.apptTime &&
             <>
             <hr />
-            {/* <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
+            <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
                         {({ blob, url, loading, error }) =>
                             loading ? 'Loading document...' : <button>DL Conf. Letter</button>
                         }
@@ -78,7 +78,7 @@ export default function ReferralDetails(props) {
                         {({ blob, url, loading, error }) =>
                             loading ? 'Loading document...' : <button>DL PT Fax Cover Page</button>
                         }
-            </PDFDownloadLink> */}
+            </PDFDownloadLink>
             </>
             }
         </Grid>
