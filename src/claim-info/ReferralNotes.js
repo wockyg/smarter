@@ -84,7 +84,7 @@ export default function ReferralNotes(props) {
         {selectedClaim?.referralId &&
         <>
         <TableContainer component={Paper}>
-            <Table size="small" aria-label="referralNotes table">
+            <Table size="small" aria-label="add ReferralNote table">
             <TableBody>
                 <TableRow>
                     <TableCell />
@@ -109,8 +109,13 @@ export default function ReferralNotes(props) {
                       <AddBoxIcon sx={{cursor: "pointer"}} onClick={() => handleAddNote()} />
                     </TableCell>
                 </TableRow>
-                
-                {referralNotes?.length > 0 && stableSort(referralNotes, getComparator('desc', 'timestamp')).slice(page * 3, page * 3 + 3).map((row) => (
+            </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer component={Paper} sx={{height: 350}}>
+            <Table size="small" aria-label="referralNotes table">
+              <TableBody>
+                {referralNotes?.length > 0 && stableSort(referralNotes, getComparator('desc', 'timestamp')).map((row) => (
                 <TableRow sx={{backgroundColor: row.flag === 'Important' && '#F5B7B1'}} key={row.noteId}>
                     <TableCell sx={{border: 1}} align="left">{row.timestampFormat}</TableCell>
                     <TableCell sx={{border: 1}} align="left">{row.initials}</TableCell>
@@ -127,14 +132,15 @@ export default function ReferralNotes(props) {
             </TableBody>
             </Table>
         </TableContainer>
-        {referralNotes?.length > 0 && <TablePagination
+        {/* {referralNotes?.length > 0 && 
+        <TablePagination
         component="div"
         count={referralNotes?.length ? referralNotes?.length : 0}
         rowsPerPageOptions={[]}
         rowsPerPage={3}
         page={page}
         onPageChange={handleChangePage}
-        />}
+        />} */}
         </>
         }
         </>

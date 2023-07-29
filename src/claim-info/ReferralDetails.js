@@ -6,6 +6,10 @@ import ClaimInfo from './ClaimInfo';
 import ClaimIdInfoTooltip from './ClaimIdInfoTooltip';
 import ClaimIdInfoAccordian from './ClaimIdInfoAccordian';
 import ReferralNotes from './ReferralNotes';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ConfirmationLetter from '../document-templates/ConfirmationLetter';
 import AuthorizationLetter from '../document-templates/AuthorizationLetter';
@@ -45,42 +49,53 @@ export default function ReferralDetails(props) {
             <Box sx={{border: 1}}>
                 <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
             </Box>
-            {selectedClaim?.apptDate && selectedClaim?.apptTime &&
-            <>
-            <hr />
-            <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                        {({ blob, url, loading, error }) =>
-                            loading ? 'Loading document...' : <button>DL Conf. Letter</button>
-                        }
-            </PDFDownloadLink>
-            <hr />
-            <PDFDownloadLink document={<AuthorizationLetter selectedClaim={selectedClaim} />} fileName={`SCH ${selectedClaim?.service} Authorization Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                        {({ blob, url, loading, error }) =>
-                            loading ? 'Loading document...' : <button>DL Auth. Letter</button>
-                        }
-            </PDFDownloadLink>
-            </>
-            }
-            {selectedClaim.serviceGeneral === "FCE" && selectedClaim.reportReceivedDate &&
-            <>
-            <hr />
-            <PDFDownloadLink document={<PhysicianApprovalForm selectedClaim={selectedClaim} />} fileName={`${selectedClaim?.service} MD Approval Form - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                        {({ blob, url, loading, error }) =>
-                            loading ? 'Loading document...' : <button>DL MD Approval Form</button>
-                        }
-            </PDFDownloadLink>
-            </>
-            }
-            {selectedClaim.serviceGeneral === "FCE" &&
-            <>
-            <hr />
-            <PDFDownloadLink document={<TherapistFaxCoverPage selectedClaim={selectedClaim} />} fileName={`SCH Fax Cover Page to PT for ${selectedClaim?.service} - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                        {({ blob, url, loading, error }) =>
-                            loading ? 'Loading document...' : <button>DL PT Fax Cover Page</button>
-                        }
-            </PDFDownloadLink>
-            </>
-            }
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                    Letters
+                </AccordionSummary>
+                <AccordionDetails>
+                    {selectedClaim?.apptDate && selectedClaim?.apptTime &&
+                    <>
+                    <hr />
+                    <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Loading document...' : <button>DL Conf. Letter</button>
+                                }
+                    </PDFDownloadLink>
+                    <hr />
+                    <PDFDownloadLink document={<AuthorizationLetter selectedClaim={selectedClaim} />} fileName={`SCH ${selectedClaim?.service} Authorization Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Loading document...' : <button>DL Auth. Letter</button>
+                                }
+                    </PDFDownloadLink>
+                    </>
+                    }
+                    {selectedClaim.serviceGeneral === "FCE" && selectedClaim.reportReceivedDate &&
+                    <>
+                    <hr />
+                    <PDFDownloadLink document={<PhysicianApprovalForm selectedClaim={selectedClaim} />} fileName={`${selectedClaim?.service} MD Approval Form - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Loading document...' : <button>DL MD Approval Form</button>
+                                }
+                    </PDFDownloadLink>
+                    </>
+                    }
+                    {selectedClaim.serviceGeneral === "FCE" &&
+                    <>
+                    <hr />
+                    <PDFDownloadLink document={<TherapistFaxCoverPage selectedClaim={selectedClaim} />} fileName={`SCH Fax Cover Page to PT for ${selectedClaim?.service} - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
+                                {({ blob, url, loading, error }) =>
+                                    loading ? 'Loading document...' : <button>DL PT Fax Cover Page</button>
+                                }
+                    </PDFDownloadLink>
+                    </>
+                    }            
+                </AccordionDetails>
+            </Accordion>
         </Grid>
         {/* Id Details */}
         <Grid item xs={3.5}>

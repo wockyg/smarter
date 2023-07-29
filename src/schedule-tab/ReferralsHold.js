@@ -1,5 +1,6 @@
 import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -90,13 +91,15 @@ export default function ReferralsHold(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rowsFiltered}
         removable={true}
         title='Hold'
         />
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

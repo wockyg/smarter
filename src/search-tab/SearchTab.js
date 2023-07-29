@@ -7,6 +7,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Skeleton from '@mui/material/Skeleton';
 
 import ReferralSearch from './ReferralSearch';
 import ClaimantSearch from './ClaimantSearch';
@@ -74,7 +75,8 @@ export default function SearchTab() {
 
     return (
         <>
-        {referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists &&
+        {(referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists) ?
+        <Box sx={{ width: '100%', height: 585 }}>
         <Grid container spacing={2}>
             <Grid item>
                 <TextField 
@@ -170,6 +172,9 @@ export default function SearchTab() {
             </Grid>
             }
         </Grid>
+        </Box>
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

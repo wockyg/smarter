@@ -1,5 +1,6 @@
 import useGetReferralsReportLimbo from '../hooks/useGetReferralsReportLimbo';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -94,12 +95,14 @@ export default function ReportLimbo(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rows}
         title='Report Limbo'
         />
+        :
+        <Skeleton variant="rectangular" animation='pulse' width='100%' height={475} />
         }
         </>
     );

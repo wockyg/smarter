@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Box from '@mui/material/Box';
 
 import MissingV1500 from './MissingV1500';
 import D1500NotSent from './D1500NotSent';
@@ -20,8 +21,7 @@ export default function BillingTab(props) {
     };
 
     return (
-        <>
-
+        <Box sx={{ width: '100%', height: 570 }}>
         <ToggleButtonGroup
         size="small"
         value={selectedFilter}
@@ -55,7 +55,6 @@ export default function BillingTab(props) {
         {selectedFilter === 'ptPastDue' &&
         <FacilityPastDue />
         }
-
-        </>
+        </Box>
     );
 }

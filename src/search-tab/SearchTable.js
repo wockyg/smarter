@@ -27,7 +27,11 @@ import PropTypes from 'prop-types';
 
 import { styled } from '@mui/material';
 
+import { useParams } from 'react-router-dom';
+
 import { stableSort, getComparator, handleRequestSort, handleChangePage, handleChangeRowsPerPage } from '../table-components/TableComponents';
+
+import '../table-components/ReferralTable.css'
 
 // function stableSort(array, comparator) {
 //   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -119,6 +123,8 @@ SearchTableHead.propTypes = {
 
 export default function SearchTable(props) {
 
+  let { id: linkId } = useParams();
+
     const tableRef = useRef(null);
 
     const timestamp = new Date();
@@ -169,7 +175,7 @@ export default function SearchTable(props) {
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
             <DownloadIcon onClick={onDownload} />
-            <TableContainer sx={{maxHeight: 350}}>
+            <TableContainer sx={{height: 450}}>
                 <Table
                 stickyHeader
                 sx={{ minWidth: 750 }}
@@ -197,7 +203,8 @@ export default function SearchTable(props) {
                             tabIndex={-1}
                             key={row[`${party}Id`]}
                             id={labelId}
-                            sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
+                            className={row.referralId ? (row.referralId === +linkId ? (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.serviceGeneral === "FCE" ? 'regularRowFCE' : '')): ''}
+                            // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
                             >
                                 {headCells.map((col) => (
                                     <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">{row[col.id]}</StyledTableCell>

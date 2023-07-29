@@ -1,5 +1,6 @@
 import useGetReferralsFollowUpHold from '../hooks/useGetReferralsFollowUpHold';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -85,12 +86,14 @@ export default function FollowupHold(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rows}
         title='FollowUpHold'
         />
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

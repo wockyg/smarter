@@ -58,7 +58,7 @@ export default function SearchDetails(props) {
     <Box
       sx={{
         width: '100%',
-        height: 400,
+        height: 480,
         backgroundColor: '#E6E6E6',
         padding: 2,
       }}

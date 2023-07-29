@@ -1,5 +1,6 @@
 import useGetReferralsApptToday from '../hooks/useGetReferralsApptToday';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -82,12 +83,14 @@ export default function ApptToday(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rows}
         title='Appt Today'
         />
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

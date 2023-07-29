@@ -1,5 +1,6 @@
 import useGetReferralsFcePpdTomorrow from '../hooks/useGetReferralsFcePpdTomorrow';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -85,12 +86,14 @@ export default function FcePpdTomorrow(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rows}
         title='FCE PPD Tomorrow'
         />
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

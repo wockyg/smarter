@@ -1,5 +1,6 @@
 import useGetReferralsComplete from '../hooks/useGetReferralsComplete';
 import ReferralTable from '../table-components/ReferralTable';
+import Skeleton from '@mui/material/Skeleton';
 
 const headCells = [
   {
@@ -84,12 +85,14 @@ export default function ReferralsComplete(props) {
 
     return (
         <>
-        {rows &&
+        {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rows}
         title='Complete'
         />
+        :
+        <Skeleton variant="rectangular" width='100%' height={475} />
         }
         </>
     );

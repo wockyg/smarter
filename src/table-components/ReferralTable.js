@@ -28,6 +28,10 @@ import { stableSort, getComparator, handleRequestSort, handleChangePage, handleC
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import useDeleteReferral from '../hooks/useDeleteReferral';
 
+import { useParams } from 'react-router-dom';
+
+import './ReferralTable.css'
+
 function ReferralTableHead(props) {
 
   const { headCells, order, orderBy, onRequestSort } = props;
@@ -69,6 +73,8 @@ function ReferralTableHead(props) {
 
 export default function ReferralTable(props) {
 
+    let { id: linkId } = useParams();
+
     const tableRef = useRef(null);
 
     const timestamp = new Date();
@@ -102,6 +108,13 @@ export default function ReferralTable(props) {
         // paddingRight: 5,
         fontSize: 11,
     });
+
+    const TableRowStyled = styled(TableRow)`
+      &:nth-of-type(even) {
+        background-color: #F0F0F0;
+      }
+
+    `;
 
     const handleClaimClicked = (event, claim) => {
         setNotesPage(0);
@@ -137,12 +150,12 @@ export default function ReferralTable(props) {
               <DownloadIcon />
             </Button>
 
-            <TableContainer sx={{ maxHeight: 400 }}>
+            <TableContainer sx={{ height: 400 }}>
                 <Table
                 stickyHeader
                 sx={{ minWidth: 750 }}
                 size="small" 
-                aria-label={`referrals-${filter}-table`}
+                aria-label={`referrals-${title}-table`}
                 ref={tableRef}
                 >
                     <ReferralTableHead
@@ -153,18 +166,17 @@ export default function ReferralTable(props) {
                     />
                     <TableBody>
                         {stableSort(rows ? rows : [], getComparator(order, orderBy))
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         .map((row, index) => {
 
-                        const labelId = `referrals-${filter}-table-${index}`;
+                        const labelId = `referrals-${title}-table-${index}`;
 
                         return (
-                            <TableRow
+                            <TableRowStyled
                             hover
                             tabIndex={-1}
                             key={props.type === 'bil' ? row.billingId : row.referralId}
                             id={labelId}
-                            sx={{ backgroundColor: row.serviceGeneral === "FCE" ? "#D8BFD8" : "white"}}
+                            className={row.referralId === +linkId ? (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.serviceGeneral === "FCE" && 'regularRowFCE')}
                             >
                                 {headCells.map((col) => (
                                     <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
@@ -185,7 +197,7 @@ export default function ReferralTable(props) {
                                   </div>
                                 </StyledTableCell>
                                 }
-                            </TableRow>
+                            </TableRowStyled>
                         );
                         })}
                     </TableBody>
