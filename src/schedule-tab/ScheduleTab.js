@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import ReferralsOpen from './ReferralsOpen';
 import ReferralsHold from './ReferralsHold';
+import ReferralsCancel from './ReferralsCancel';
 import ReferralsComplete from './ReferralsComplete';
 import FcePpdTomorrow from './FcePpdTomorrow';
 import ApptToday from './ApptToday';
@@ -86,6 +87,9 @@ export default function ScheduleTab(props) {
             <ToggleButton value="hold" aria-label="hold">
                 Hold ({rowsHoldCount})
             </ToggleButton>
+            <ToggleButton value="cancel" aria-label="cancel">
+                Cancel
+            </ToggleButton>
             <ToggleButton value="complete" aria-label="complete">
                 Complete
             </ToggleButton>
@@ -111,6 +115,9 @@ export default function ScheduleTab(props) {
         }
         {selectedFilter === 'hold' &&
         <ReferralsHold />
+        }
+        {selectedFilter === 'cancel' &&
+        <ReferralsCancel />
         }
         {selectedFilter === 'complete' &&
         <ReferralsComplete />
