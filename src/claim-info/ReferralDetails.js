@@ -49,6 +49,8 @@ export default function ReferralDetails(props) {
             <Box sx={{border: 1}}>
                 <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
             </Box>
+            <hr />
+            {((selectedClaim?.apptDate && selectedClaim?.apptTime) || selectedClaim?.serviceGeneral === "FCE")  &&
             <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -96,6 +98,7 @@ export default function ReferralDetails(props) {
                     }            
                 </AccordionDetails>
             </Accordion>
+            }
         </Grid>
         {/* Id Details */}
         <Grid item xs={3.5}>

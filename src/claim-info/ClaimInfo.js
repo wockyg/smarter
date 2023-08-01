@@ -15,6 +15,7 @@ import {services} from '../lookup-tables/lookup_service'
 import {visitNumbers} from '../lookup-tables/lookup_visitNumbers'
 import { states } from '../lookup-tables/lookup_UsState';
 import { times } from '../lookup-tables/lookup_times';
+import { reasons } from '../lookup-tables/lookup_fuHoldReasons';
 
 import Button from '@mui/material/Button';
 import SaveIcon from '@mui/icons-material/Save';
@@ -79,6 +80,9 @@ export default function ClaimInfo(props) {
             <>
             <div id={`${title}Inside`} className={hoverStyle[`${title}`]} style={{cursor: "pointer"}} onClick={(event) => handleOpenMenu(event)} onMouseEnter={() => handleMouseOver(title)} onMouseLeave={() => handleMouseOut(title)}>
                 {`${value}`}
+                {/* {title === "ptStatus" && value === "Follow-Up" &&
+                <div style={{fontSize: '10px'}}>{selectedClaim?.fuHoldNotes}</div>
+                } */}
             </div>
             </>
         );
@@ -396,21 +400,54 @@ export default function ClaimInfo(props) {
                 <>
                 <Formik
                 initialValues={{
-                    referralId: selectedClaim.referralId,
-                    ptStatus: '',
+                    referralId: selectedClaim?.referralId,
+                    ptStatus: selectedClaim?.ptStatus ? selectedClaim?.ptStatus : '',
+                    fuHoldNotes: selectedClaim?.fuHoldNotes ? selectedClaim?.fuHoldNotes : '',
                 }}
                 validationSchema={Yup.object({
-                    ptStatus: Yup.string().required(),
+                    ptStatus: (selectedClaim?.ptStatus === "Follow-Up" || selectedClaim?.ptStatus === "Hold") ? Yup.string() : Yup.string().required(),
+                    fuHoldNotes: Yup.string().required(),
                 })}
                 onSubmit={(values, actions) => {
-                    mutationUpdate.mutate(values);
-                    console.log("updating referral...", values);
-                    // alert(JSON.stringify(values, null, 2));
-                    // actions.resetForm();
-                    actions.setSubmitting(false);
-                    // setAddModalOpen(false);
-                    // setModalParty('');
-                    handleCloseMenu();
+                    if (values?.ptStatus === selectedClaim?.ptStatus) {
+                        if (values?.ptStatus === "Follow-Up" || values?.ptStatus === "Hold") {
+                            if (values?.fuHoldNotes !== selectedClaim?.fuHoldNotes) {
+                                values = {
+                                    referralId: values.referralId,
+                                    fuHoldNotes: values.fuHoldNotes
+                                };
+                                mutationUpdate.mutate(values);
+                                console.log("updating referral...", values);
+                                // alert(JSON.stringify(values, null, 2));
+                                // actions.resetForm();
+                                actions.setSubmitting(false);
+                                // setAddModalOpen(false);
+                                // setModalParty('');
+                                handleCloseMenu();
+                                return;
+                            }
+                            else {
+                                return;
+                            }
+                        }
+                        else {
+                            return;
+                        }
+                    }
+                    else {
+                        if (values?.ptStatus === "Active" || values?.ptStatus === "Discharge") {
+                            values.fuHoldNotes = null;
+                        }
+                        mutationUpdate.mutate(values);
+                        console.log("updating referral out of FU/H...", values);
+                        // alert(JSON.stringify(values, null, 2));
+                        // actions.resetForm();
+                        actions.setSubmitting(false);
+                        // setAddModalOpen(false);
+                        // setModalParty('');
+                        handleCloseMenu();
+                        return;
+                    }
                 }}
                 >
                     {props => (
@@ -429,6 +466,24 @@ export default function ClaimInfo(props) {
                                         ))}
                                     </select>
                                     {props.errors.ptStatus && <div id="feedback">{props.errors.ptStatus}</div>}
+                                    <br />
+                                    <br />
+                                    {(props.values?.ptStatus === "Follow-Up" || props.values?.ptStatus === "Hold") &&
+                                    <>
+                                        <select
+                                            onChange={props.handleChange}
+                                            onBlur={props.handleBlur}
+                                            value={props.values.fuHoldNotes}
+                                            name="fuHoldNotes"
+                                        >
+                                        <option value={selectedClaim.fuHoldNotes}>{selectedClaim.fuHoldNotes}</option>
+                                            {reasons.filter((x) => x.reason !== selectedClaim.fuHoldNotes).map((c) => (
+                                                <option key={c.reason} value={c.reason}>{c.reason}</option>
+                                            ))}
+                                        </select>
+                                        {props.errors.fuHoldNotes && <div id="feedback">{props.errors.fuHoldNotes}</div>}
+                                    </>
+                                    }
                                 </Grid>
                                 <Grid item>
                                     <SubmitButton />
@@ -788,7 +843,7 @@ export default function ClaimInfo(props) {
                                         name="apptDate"
                                         type="date"
                                     />
-                                    {props.errors.apptDate && <div id="feedback">{props.errors.apptDate}</div>}
+                                    {/* {props.errors.apptDate && <div id="feedback">{props.errors.apptDate}</div>} */}
                                 </Grid>
                                 <Grid item>
                                     {"@"}

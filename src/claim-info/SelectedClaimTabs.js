@@ -115,6 +115,16 @@ export default function SelectedClaimTabs() {
             </Grid>
             }
 
+            {(selectedClaim?.ptStatus === "Follow-Up" || selectedClaim?.ptStatus === "Hold") &&
+            <Grid item>
+              <h3>
+                <Badge bg="danger">
+                  {selectedClaim?.fuHoldNotes}
+                </Badge>
+              </h3>
+            </Grid>
+            }
+
             {selectedClaim.serviceGeneral === "FCE" && selectedClaim.confirmAttend === "Yes" &&
             <Grid item xs={12}>
               <FceBilling />
