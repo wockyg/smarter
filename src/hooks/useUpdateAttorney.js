@@ -27,6 +27,7 @@ export default function useUpdateAttorney() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`attorney${+values.attorneyId}`);
+        queryClient.invalidateQueries('attorneysearchall');
         queryClient.invalidateQueries('attorneys');
         return data;
       });

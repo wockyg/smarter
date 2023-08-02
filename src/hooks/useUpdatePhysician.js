@@ -27,6 +27,7 @@ export default function useUpdatePhysician() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`physician${+values.physicianId}`);
+        queryClient.invalidateQueries('physiciansearchall');
         queryClient.invalidateQueries('physicians');
         return data;
       });

@@ -27,6 +27,7 @@ export default function useUpdateAdjuster() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`adjuster${+values.adjusterId}`);
+        queryClient.invalidateQueries('adjustersearchall');
         queryClient.invalidateQueries('adjusters');
         return data;
       });

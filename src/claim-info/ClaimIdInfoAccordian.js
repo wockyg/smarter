@@ -29,7 +29,7 @@ import * as Yup from 'yup';
 
 import "../App.css"
 
-export default function ClaimIdInfAccordian(props) {
+export default function ClaimIdInfoAccordian(props) {
 
     const { selectedClaim } = props;
 

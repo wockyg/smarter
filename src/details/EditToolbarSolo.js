@@ -143,7 +143,7 @@ export default function EditToolbarSolo(props) {
                                     name="adjusterId"
                                     options={adjusters.sort((a, b) => -b.client?.localeCompare(a.client))}
                                     groupBy={(option) => option.client}
-                                    getOptionLabel={(option) => `${option.lastFirst}`}
+                                    getOptionLabel={(option) => `${option.lastName}, ${option.firstName}`}
                                     style={{ width: 300 }}
                                     onChange={(event, value) => {
                                         props.setFieldValue("adjusterId", value?.adjusterId);

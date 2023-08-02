@@ -27,6 +27,7 @@ export default function useUpdateCasemanager() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`casemanager${+values.casemanagerId}`);
+        queryClient.invalidateQueries('casemanagersearchall');
         queryClient.invalidateQueries('casemanagers');
         return data;
       });

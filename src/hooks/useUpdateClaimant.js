@@ -27,6 +27,7 @@ export default function useUpdateClaimant() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`claimant${+values.claimantId}`);
+        queryClient.invalidateQueries('claimantsearchall');
         queryClient.invalidateQueries('claimants');
         return data;
       });

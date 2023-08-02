@@ -50,6 +50,7 @@ export default function useUpdateReferral() {
         }
         queryClient.invalidateQueries(`referral${+linkId}`);
         queryClient.invalidateQueries('referralsOpen');
+        queryClient.invalidateQueries('referralsearchall');
         return data;
       });
   }

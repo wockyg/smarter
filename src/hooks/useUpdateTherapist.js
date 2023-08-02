@@ -28,6 +28,8 @@ export default function useUpdateTherapist() {
         }
         queryClient.invalidateQueries(`therapist${+values.therapistId}`);
         queryClient.invalidateQueries('therapists');
+        queryClient.invalidateQueries('therapistsearchall');
+        queryClient.invalidateQueries('referralsearchall');
         queryClient.invalidateQueries('referrals');
         return data;
       });

@@ -27,6 +27,7 @@ export default function useUpdateEmployer() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`employer${+values.physicianId}`);
+        queryClient.invalidateQueries('employersearchall');
         queryClient.invalidateQueries('employers');
         return data;
       });

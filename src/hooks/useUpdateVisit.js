@@ -96,6 +96,7 @@ export default function useUpdateVisit() {
             })
       }
       queryClient.invalidateQueries('referralVisits');
+      queryClient.invalidateQueries('referralsearchall');
       queryClient.invalidateQueries('referrals');
       return data;
     });

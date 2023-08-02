@@ -27,6 +27,7 @@ export default function useUpdateClient() {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }
         queryClient.invalidateQueries(`client${+values.clientId}`);
+        queryClient.invalidateQueries('clientsearchall');
         queryClient.invalidateQueries('clients');
         return data;
       });
