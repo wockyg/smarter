@@ -40,7 +40,7 @@ export default function MapTab(props) {
     const LAT = 38.88;
     const LON = -96;
     const ZOOM = 3.3;
-    const TOKEN = "pk.eyJ1Ijoid29ja3lnIiwiYSI6ImNsYmlkdTFkeTB6MTczdm1waGw5ODFqNmYifQ.z1PaPArkNWOe40Bd8EVU3A";
+    const TOKEN = "pk.eyJ1Ijoid29ja3lnIiwiYSI6ImNsbjk0amFjNTAzdXUybG56aGY4MW51OWgifQ.FHahp8Od7BRwsArJfP0YHw";
     const MAPSTYLE = "mapbox://styles/wockyg/clmur28fx021g01rca7s37o5j";
 
     const mapRef = useRef();
