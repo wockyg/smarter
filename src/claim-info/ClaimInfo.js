@@ -96,65 +96,65 @@ export default function ClaimInfo(props) {
         <>
         <Grid container spacing={2.0}>
             <Grid item>
-                <label htmlFor="assign">Assign:</label>
+                <label htmlFor="assign" style={{display: 'block'}}>Assign:</label>
                 <div id="assign">{selectedClaim.assign ? <ClickableInfo title="assign" value={selectedClaim.assign} /> : "??"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="referralStatus">Ref Status:</label>
+                <label htmlFor="referralStatus" style={{display: 'block'}}>Ref Status:</label>
                 <div id="referralStatus">{selectedClaim.referralStatus ? (selectedClaim.referralStatus !== "Complete" ? <ClickableInfo title="referralStatus" value={selectedClaim.referralStatus} /> : selectedClaim.referralStatus) : "???"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="ptStatus">PT Status:</label>
+                <label htmlFor="ptStatus" style={{display: 'block'}}>PT Status:</label>
                 <div id="ptStatus">{selectedClaim.ptStatus ? <ClickableInfo title="ptStatus" value={selectedClaim.ptStatus} /> : "----"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="billingStatus">Billing Status:</label>
+                <label htmlFor="billingStatus" style={{display: 'block'}}>Billing Status:</label>
                 <div id="billingStatus">{selectedClaim.billingStatus ? selectedClaim.billingStatus : "----"}</div>
             </Grid>
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="service">Service:</label>
+                <label htmlFor="service" style={{display: 'block'}}>Service:</label>
                 <div id="service">{selectedClaim.service ? <ClickableInfo title="service" value={selectedClaim.service} /> : "???"}</div>
             </Grid>
             {selectedClaim?.serviceGeneral === "DPT" &&
             <><Grid item>
-                <label htmlFor="approvedVisits">Visits:</label>
+                <label htmlFor="approvedVisits" style={{display: 'block'}}>Visits:</label>
                 <div id="approvedVisits">{selectedClaim.approvedVisits ? <ClickableInfo title="approvedVisits" value={selectedClaim.approvedVisits} /> : <ClickableInfo title="approvedVisits" value="---" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="odg">odg:</label>
+                <label htmlFor="odg" style={{display: 'block'}}>odg:</label>
                 <div id="odg">{selectedClaim.odg ? <ClickableInfo title="odg" value={selectedClaim.odg} /> : <ClickableInfo title="odg" value="--" />}</div>
             </Grid></>}
             <Grid item>
-                <label htmlFor="fuDrDate">FU w/ MD:</label>
+                <label htmlFor="fuDrDate" style={{display: 'block'}}>FU w/ MD:</label>
                 <div id="fuDrDate">{selectedClaim.fuDrDate ? <ClickableInfo title="fuDrDate" value={selectedClaim.fuDrDateFormat} /> : <ClickableInfo title="fuDrDate" value="--/--/----" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="jurisdiction">Juris:</label>
+                <label htmlFor="jurisdiction" style={{display: 'block'}}>Juris:</label>
                 <div id="jurisdiction">{selectedClaim.jurisdiction ? <ClickableInfo title="jurisdiction" value={selectedClaim.jurisdiction} /> : <ClickableInfo title="jurisdiction" value="--" />}</div>
             </Grid>
             <Box width="100%"/>
             {/* <Grid item xs={12}><hr /></Grid> */}
             <Grid item>
-                <label htmlFor="bodyPart">BodyPart:</label>
+                <label htmlFor="bodyPart" style={{display: 'block'}}>BodyPart:</label>
                 <div id="bodyPart">{selectedClaim.bodyPart ? <ClickableInfo title="bodyPart" value={selectedClaim.bodyPart} /> : <ClickableInfo title="bodyPart" value="-- --" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="icd10">ICD10:</label>
+                <label htmlFor="icd10" style={{display: 'block'}}>ICD10:</label>
                 <div id="icd10">{selectedClaim.icd10 ? <ClickableInfo title="icd10" value={selectedClaim.icd10} /> : <ClickableInfo title="icd10" value="-- --" />}</div>
             </Grid>
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="referralDate">Referred:</label>
+                <label htmlFor="referralDate" style={{display: 'block'}}>Referred:</label>
                 <div id="referralDate">{selectedClaim.referralDate ? selectedClaim.referralDateFormat : "???Uh-Oh???"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="scheduleDate">Scheduled:</label>
+                <label htmlFor="scheduleDate" style={{display: 'block'}}>Scheduled:</label>
                 <div id="scheduleDate">{selectedClaim.scheduleDate ? selectedClaim.scheduleDateFormat : "--/--/----"}</div>
             </Grid>
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="apptDate">Appointment:</label>
+                <label htmlFor="apptDate" style={{display: 'block'}}>Appointment:</label>
                 <div id="apptDate">
                     {(selectedClaim.apptDate && selectedClaim.apptTime) && <ClickableInfo title="apptTime" value={`${selectedClaim.apptDateFormat} @ ${selectedClaim.apptTime}`} />}
                     {(selectedClaim.apptDate && !selectedClaim.apptTime) && <ClickableInfo title="apptTime" value={`${selectedClaim.apptDateFormat} @ --:-- --`} />}
@@ -168,7 +168,7 @@ export default function ClaimInfo(props) {
             </Grid>
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="claimantVerbalConfirm">Verbal:</label>
+                <label htmlFor="claimantVerbalConfirm" style={{display: 'block'}}>Verbal:</label>
                 <div id="claimantVerbalConfirm">
                     {(selectedClaim.claimantVerbalConfirm === "Yes") ? <CheckIcon /> : <ClickableInfo title="claimantVerbalConfirm" value="--" />}
                 </div>
@@ -176,13 +176,13 @@ export default function ClaimInfo(props) {
             {selectedClaim?.serviceGeneral === "FCE" &&
             <>
             <Grid item>
-                <label htmlFor="claimantConfirmDayBefore">IW 24hr:</label>
+                <label htmlFor="claimantConfirmDayBefore" style={{display: 'block'}}>IW 24hr:</label>
                 <div id="claimantConfirmDayBefore">
                     {(selectedClaim.claimantConfirmDayBefore) ? <CheckIcon /> : (selectedClaim.referralStatus === "Complete" ? <ClickableInfo title="claimantConfirmDayBefore" value="--" /> : "--")}
                 </div>
             </Grid>
             <Grid item>
-                <label htmlFor="ptConfirmDayBefore">PT 24hr:</label>
+                <label htmlFor="ptConfirmDayBefore" style={{display: 'block'}}>PT 24hr:</label>
                 <div id="ptConfirmDayBefore">
                     {(selectedClaim.ptConfirmDayBefore) ? <CheckIcon /> : (selectedClaim.referralStatus === "Complete" ? <ClickableInfo title="ptConfirmDayBefore" value="--" /> : "--")}
                 </div>
@@ -190,7 +190,7 @@ export default function ClaimInfo(props) {
             </>
             }
             <Grid item>
-                <label htmlFor="confirmAttend">Attend:</label>
+                <label htmlFor="confirmAttend" style={{display: 'block'}}>Attend:</label>
                 <div id="confirmAttend">
                     {(selectedClaim.confirmAttend === 'Yes') ? <CheckIcon /> : ((selectedClaim.confirmAttend === 'No') ? <CloseIcon /> : (selectedClaim.referralStatus === "Complete" ? <ClickableInfo title="confirmAttend" value="--" /> : "--"))}
                 </div>
@@ -208,80 +208,80 @@ export default function ClaimInfo(props) {
             </Grid>
             }
             <Grid item>
-                <label htmlFor="reportReceivedDate">Report Rec'd:</label>
+                <label htmlFor="reportReceivedDate" style={{display: 'block'}}>Report Rec'd:</label>
                 <div id="reportReceivedDate">
                     {selectedClaim.reportReceivedDate ? selectedClaim.reportReceivedDate : (selectedClaim.confirmAttend === "Yes" ? <ClickableInfo title="reportReceivedDate" value="--/--/----" /> : "--/--/----")}
                 </div>
             </Grid>
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="confirmLetterToClaimant">CLetter to IW:</label>
+                <label htmlFor="confirmLetterToClaimant" style={{display: 'block'}}>CLetter to IW:</label>
                 <div id="confirmLetterToClaimant">{selectedClaim.confirmLetterToClaimant ? selectedClaim.confirmLetterToClaimantDateFormat : <ClickableInfo title="confirmLetterToClaimant" value="--/--/----" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="confirmLetterToClaimantFormat">Format:</label>
+                <label htmlFor="confirmLetterToClaimantFormat" style={{display: 'block'}}>Format:</label>
                 <div id="confirmLetterToClaimantFormat">{selectedClaim.confirmLetterToClaimantFormat ? selectedClaim.confirmLetterToClaimantFormat : "---"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="confirmLetterToAdjuster">CLetter to Adj:</label>
+                <label htmlFor="confirmLetterToAdjuster" style={{display: 'block'}}>CLetter to Adj:</label>
                 <div id="confirmLetterToAdjuster">{selectedClaim.confirmLetterToAdjuster ? selectedClaim.confirmLetterToAdjusterDateFormat : <ClickableInfo title="confirmLetterToAdjuster" value="--/--/----" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="confirmLetterToAdjusterFormat">Format:</label>
+                <label htmlFor="confirmLetterToAdjusterFormat" style={{display: 'block'}}>Format:</label>
                 <div id="confirmLetterToAdjusterFormat">{selectedClaim.confirmLetterToAdjusterFormat ? selectedClaim.confirmLetterToAdjusterFormat : "---"}</div>
             </Grid>
             <Box width="100%"/>
             {(selectedClaim.defenseAttorneyId || selectedClaim.plaintiffAttorneyId) &&
             <>
             <Grid item>
-                <label htmlFor="confirmLetterToAttorney">CLetter to Att:</label>
+                <label htmlFor="confirmLetterToAttorney" style={{display: 'block'}}>CLetter to Att:</label>
                 <div id="confirmLetterToAttorney">{selectedClaim.confirmLetterToAttorney ? selectedClaim.confirmLetterToAttorneyDateFormat : <ClickableInfo title="confirmLetterToAttorney" value="--/--/----" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="confirmLetterToAttorneyFormat">Format:</label>
+                <label htmlFor="confirmLetterToAttorneyFormat" style={{display: 'block'}}>Format:</label>
                 <div id="confirmLetterToAttorneyFormat">{selectedClaim.confirmLetterToAttorneyFormat ? selectedClaim.confirmLetterToAttorneyFormat : "---"}</div>
             </Grid>
             </>
             }
             <Grid item>
-                <label htmlFor="medNotesToPT">Docs to PT:</label>
+                <label htmlFor="medNotesToPT" style={{display: 'block'}}>Docs to PT:</label>
                 <div id="medNotesToPT">{selectedClaim.medNotesToPT ? selectedClaim.medNotesToPTDateFormat : <ClickableInfo title="medNotesToPT" value="--/--/----" />}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="medNotesToPTFormat">Format:</label>
+                <label htmlFor="medNotesToPTFormat" style={{display: 'block'}}>Format:</label>
                 <div id="medNotesToPTFormat">{selectedClaim.medNotesToPTFormat ? selectedClaim.medNotesToPTFormat : "---"}</div>
             </Grid>
             {selectedClaim.serviceGeneral === "FCE" && selectedClaim.reportReceivedDate && 
             <Grid item>
-                <label htmlFor="fceApproved">FCE/PPD Approved:</label>
+                <label htmlFor="fceApproved" style={{display: 'block'}}>FCE/PPD Approved:</label>
                 <div id="fceApproved">{selectedClaim.fceApproved ? selectedClaim.fceApprovedFormat : <ClickableInfo title="fceApproved" value="--/--/----" />}</div>
             </Grid>
             }
             <Box width="100%"/>
             <Grid item>
-                <label htmlFor="reportToAdjuster">Report to Adj:</label>
+                <label htmlFor="reportToAdjuster" style={{display: 'block'}}>Report to Adj:</label>
                 <div id="reportToAdjuster">{selectedClaim.reportToAdjuster ? selectedClaim.reportToAdjuster : (selectedClaim.reportReceivedDate ? <ClickableInfo title="reportToAdjuster" value="--/--/----" /> : "--/--/----")}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="reportToAdjusterFormat">Format:</label>
+                <label htmlFor="reportToAdjusterFormat" style={{display: 'block'}}>Format:</label>
                 <div id="reportToAdjusterFormat">{selectedClaim.reportToAdjusterFormat ? selectedClaim.reportToAdjusterFormat : "---"}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="reportToPhysician">Report to MD:</label>
+                <label htmlFor="reportToPhysician" style={{display: 'block'}}>Report to MD:</label>
                 <div id="reportToPhysician">{selectedClaim.reportToPhysician ? selectedClaim.reportToPhysician : (selectedClaim.reportReceivedDate ? <ClickableInfo title="reportToPhysician" value="--/--/----" /> : "--/--/----")}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="reportToPhysicianFormat">Format:</label>
+                <label htmlFor="reportToPhysicianFormat" style={{display: 'block'}}>Format:</label>
                 <div id="reportToPhysicianFormat">{selectedClaim.reportToPhysicianFormat ? selectedClaim.reportToPhysicianFormat : "---"}</div>
             </Grid>
             {(selectedClaim.defenseAttorneyId || selectedClaim.plaintiffAttorneyId) &&
             <>
             <Grid item>
-                <label htmlFor="reportToAttorney">Report to Att:</label>
+                <label htmlFor="reportToAttorney" style={{display: 'block'}}>Report to Att:</label>
                 <div id="reportToAttorney">{selectedClaim.reportToAttorney ? selectedClaim.reportToAttorney : (selectedClaim.reportReceivedDate ? <ClickableInfo title="reportToAttorney" value="--/--/----" /> : "--/--/----")}</div>
             </Grid>
             <Grid item>
-                <label htmlFor="reportToAttorneyFormat">Format:</label>
+                <label htmlFor="reportToAttorneyFormat" style={{display: 'block'}}>Format:</label>
                 <div id="reportToAttorneyFormat">{selectedClaim.reportToAttorneyFormat ? selectedClaim.reportToAttorneyFormat : "---"}</div>
             </Grid>
             </>
@@ -1273,7 +1273,7 @@ export default function ClaimInfo(props) {
                         <Form>
                             <Grid container spacing={1.0}>
                                 <Grid item>
-                                    <label htmlFor="confirmLetterToAttorney">Date:</label>
+                                    <label htmlFor="confirmLetterToAttorney" style={{display: 'block'}}>Date:</label>
                                     <input
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1284,7 +1284,7 @@ export default function ClaimInfo(props) {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <label htmlFor="confirmLetterToAttorneyFormat">Format:</label>
+                                    <label htmlFor="confirmLetterToAttorneyFormat" style={{display: 'block'}}>Format:</label>
                                     <select
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1342,7 +1342,7 @@ export default function ClaimInfo(props) {
                         <Form>
                             <Grid container spacing={1.0}>
                                 <Grid item>
-                                    <label htmlFor="medNotesToPT">Date:</label>
+                                    <label htmlFor="medNotesToPT" style={{display: 'block'}}>Date:</label>
                                     <input
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1353,7 +1353,7 @@ export default function ClaimInfo(props) {
                                     />                                    
                                 </Grid>
                                 <Grid item>
-                                    <label htmlFor="medNotesToPTFormat">Format:</label>
+                                    <label htmlFor="medNotesToPTFormat" style={{display: 'block'}}>Format:</label>
                                     <select
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1497,7 +1497,7 @@ export default function ClaimInfo(props) {
                         <Form>
                             <Grid container spacing={1.0}>
                                 <Grid item>
-                                    <label htmlFor="reportToAdjuster">Date:</label>
+                                    <label htmlFor="reportToAdjuster" style={{display: 'block'}}>Date:</label>
                                     <input
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1508,7 +1508,7 @@ export default function ClaimInfo(props) {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <label htmlFor="reportToAdjusterFormat">Format:</label>
+                                    <label htmlFor="reportToAdjusterFormat" style={{display: 'block'}}>Format:</label>
                                     <select
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1566,7 +1566,7 @@ export default function ClaimInfo(props) {
                         <Form>
                             <Grid container spacing={1.0}>
                                 <Grid item>
-                                    <label htmlFor="reportToPhysician">Date:</label>
+                                    <label htmlFor="reportToPhysician" style={{display: 'block'}}>Date:</label>
                                     <input
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1577,7 +1577,7 @@ export default function ClaimInfo(props) {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <label htmlFor="reportToPhysicianFormat">Format:</label>
+                                    <label htmlFor="reportToPhysicianFormat" style={{display: 'block'}}>Format:</label>
                                     <select
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1635,7 +1635,7 @@ export default function ClaimInfo(props) {
                         <Form>
                             <Grid container spacing={1.0}>
                                 <Grid item>
-                                    <label htmlFor="reportToAttorney">Date:</label>
+                                    <label htmlFor="reportToAttorney" style={{display: 'block'}}>Date:</label>
                                     <input
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}
@@ -1646,7 +1646,7 @@ export default function ClaimInfo(props) {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <label htmlFor="reportToAttorneyFormat">Format:</label>
+                                    <label htmlFor="reportToAttorneyFormat" style={{display: 'block'}}>Format:</label>
                                     <select
                                         onChange={props.handleChange}
                                         onBlur={props.handleBlur}

@@ -1,5 +1,5 @@
 import useGetMissingV1500 from '../hooks/useGetMisingV1500';
-import ReferralTable from '../table-components/ReferralTable';
+import MissingV1500Table from '../table-components/MissingV1500Table';
 
 const headCells = [
   {
@@ -15,7 +15,7 @@ const headCells = [
     label: 'Claim #',
   },
   {
-    id: 'therapistDisplay',
+    id: 'therapistDisplayShort',
     numeric: false,
     disablePadding: false,
     label: 'Therapist',
@@ -54,20 +54,21 @@ const headCells = [
 
 export default function MissingV1500(props) {
 
-    const initialSort = 'claimant';
+    const initialSort = 'therapistDisplayShort';
+    const secondSort = 'claimant';
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetMissingV1500();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]));
+    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]) || -b[secondSort]?.localeCompare(a[secondSort]));
 
     return (
         <>
         {rows &&
-        <ReferralTable
+        <MissingV1500Table
         headCells={headCells}
         rows={rowsFiltered}
-        type='bil'
         title='Missing V1500'
+        // initialSort='therapistDisplayShort'
         />
         }
         </>

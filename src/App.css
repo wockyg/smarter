@@ -37,6 +37,14 @@
   }
 }
 
+/* .MuiInputBase-input  {
+  background: #E67E22;
+}
+
+.MuiTextField-root {
+  background: #E67E22;
+} */
+
 .claimNumber-button {
   all: unset;
   cursor: pointer;
@@ -52,3 +60,89 @@
   /* border: 1px solid black; */
   background-color: #EAEDED;
 }
+
+.tester {
+    border: 1px solid green;
+}
+
+label {
+    display: block;
+    text-align: left;
+    font-size: .65em;
+}
+
+input {
+    display: block;
+    align-items: left;
+}
+
+.redBorder {
+    border-color: red;
+}
+
+#dos {
+    width: 14ch;
+}
+
+#pos {
+    width: 4ch;
+}
+
+#cpt {
+    width: 8ch;
+}
+
+#mod1 {
+    width: 3ch;
+}
+
+#mod2 {
+    width: 3ch;
+}
+
+#mod3 {
+    width: 3ch;
+}
+
+#mod4 {
+    width: 3ch;
+}
+
+#diag {
+    width: 6ch;
+}
+
+#charges {
+    width: 6ch;
+}
+
+#units {
+    width: 4ch;
+}
+
+#provider_npi {
+    width: 11ch;
+}
+
+#rank {
+    width: 2ch;
+}
+
+.smalltext {
+    font-size: 8px;
+}
+
+.container {
+    padding-left: 1ch;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.calendarEvent {
+  padding: 25;
+}
+
+/* .addRowButton {
+    vertical-align: middle;
+} */

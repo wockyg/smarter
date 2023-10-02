@@ -79,6 +79,13 @@ export default function ClaimantDetails(props) {
 
         changedValues.claimantId = selectedClaimant.claimantId;
 
+        if (changedValues.injuryDate1 === '') {
+            changedValues.injuryDate1 = null;
+        }
+        if (changedValues.injuryDate2 === '') {
+            changedValues.injuryDate2 = null;
+        }
+
         console.log(changedValues);
 
         mutationUpdate.mutate(changedValues);

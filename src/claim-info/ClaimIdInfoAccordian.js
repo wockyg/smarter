@@ -177,6 +177,36 @@ export default function ClaimIdInfoAccordian(props) {
                     }
                 </AccordionDetails>
             </Accordion>
+
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3a-content"
+                id="panel3a-header"
+                >
+                    <Grid container>
+                        <Grid item>
+                            <label htmlFor="claimantEmployerId">Employer:</label>
+                        </Grid>
+                        {selectedClaim.claimantEmployerId &&
+                        <>
+                        <Box width="100%"/>
+                        <Grid item>
+                            <div id="claimantEmployerId">{`${selectedClaim.employer}`}</div>
+                        </Grid>
+                        </>
+                        }
+                    </Grid>
+                </AccordionSummary>
+                <AccordionDetails>
+                    {selectedClaim.claimantEmployerId ?
+                    <EmployerDetails detailsId={selectedClaim?.claimantEmployerId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
+                    :
+                    ''
+                    }
+                </AccordionDetails>
+            </Accordion>
+
             <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}

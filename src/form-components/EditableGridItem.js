@@ -20,6 +20,7 @@ export default function EditableGridItem(props) {
             <>
             {/* Text Field */}
             {(type === 'text' || type === 'date') &&
+            <>
             <input 
                 type={type} 
                 name={field}
@@ -28,6 +29,20 @@ export default function EditableGridItem(props) {
                 onBlur={formikProps.handleBlur}
                 style={{width: width}}
             />
+            {field === 'injuryDate1' &&
+            <>
+            <label htmlFor='injuryDate2'><u>{`DOI2:`}</u></label>
+            <input 
+                type={type} 
+                name='injuryDate2'
+                value={formikProps.values.injuryDate2 ? formikProps.values.injuryDate2 : ''}
+                onChange={formikProps.handleChange}
+                onBlur={formikProps.handleBlur}
+                style={{width: width}}
+            />
+            </>
+            }
+            </>
             }
             {type === 'phone' &&
             <input 
@@ -93,13 +108,24 @@ export default function EditableGridItem(props) {
             </>
             :
             <>
-            {(field === 'clientId' || field === 'employerId') ?
+            {(field === 'clientId' || field === 'employerId' || field === 'injuryDate1') ?
             <>
             {field === 'clientId' &&
             <div id={field}>{selectedRow.client}</div>
             }
             {field === 'employerId' &&
             <div id={field}>{selectedRow.employer}</div>
+            }
+            {field === 'injuryDate1' &&
+            <>
+            <div id={field}>{selectedRow.injuryDate1}</div>
+            {selectedRow.injuryDate2 &&
+            <>
+            <label htmlFor='injuryDate2'><u>{`DOI2:`}</u></label>
+            <div id='injuryDate2'>{selectedRow.injuryDate2}</div>
+            </>
+            }
+            </>
             }
             </>
             :

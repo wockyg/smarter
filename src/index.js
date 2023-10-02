@@ -5,7 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { create } from 'apisauce';
 import { QueryClient, QueryClientProvider } from 'react-query';
- import { ReactQueryDevtools } from 'react-query/devtools'
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 const queryClient = new QueryClient();
 
@@ -13,13 +14,24 @@ export const api = create({
     baseURL: "https://smarter-nodejs.onrender.com/api",
 });
 
+const myDomain = "dev-n0vy5v6lid3mrxef.us.auth0.com";
+const myClientId = "fOAVzAkBTvPLvFMXHxLnujBMmUrSp4CQ";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-    <App />
-    <ReactQueryDevtools initialIsOpen={true} />
-    </QueryClientProvider>
+    <Auth0Provider
+    domain={myDomain}
+    clientId={myClientId}
+    authorizationParams={{
+      redirect_uri: window.location.origin
+    }}
+    >
+      <QueryClientProvider client={queryClient}>
+        <App />
+      <ReactQueryDevtools initialIsOpen={true} />
+      </QueryClientProvider>
+    </Auth0Provider>
   </React.StrictMode>
 );
 

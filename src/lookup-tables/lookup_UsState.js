@@ -32,10 +32,6 @@ export const states = [
         "abbrev": "DE"
     },
     {
-        "name": "District Of Columbia",
-        "abbrev": "DC"
-    },
-    {
         "name": "Florida",
         "abbrev": "FL"
     },

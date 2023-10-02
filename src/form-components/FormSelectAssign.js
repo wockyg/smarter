@@ -1,6 +1,6 @@
 import { useField } from 'formik';
-import '../forms.css'
-import {careCoordinators} from '../lookup-tables/lookup_careCoordinators'
+import '../forms.css';
+import {careCoordinators} from '../lookup-tables/lookup_careCoordinators';
 
 export default function FormSelectAssign({ label, ...props }) {
 

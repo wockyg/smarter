@@ -4,8 +4,8 @@ import Agreement from '../document-templates/Agreement';
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
-import useGetTherapists from '../hooks/useGetTherapists';
-import useGetClaimants from '../hooks/useGetClaimants';
+import useGetTherapistsDropdown from '../hooks/useGetTherapistsDropdown';
+import useGetClaimantsDropdown from '../hooks/useGetClaimantsDropdown';
 
 export default function AgreementAddForm ()  {
 
@@ -16,8 +16,8 @@ export default function AgreementAddForm ()  {
     const [inputValueTherapist, setInputValueTherapist] = useState('');
     const [inputValueClaimant, setInputValueClaimant] = useState('');
 
-    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapists();
-    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimants();
+    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsDropdown();
+    const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimantsDropdown();
 
     const handleChangeEdit = (event, key, value) => {
         const newValues = {...values, [key]: value === '' ? null : value};

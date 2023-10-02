@@ -1,7 +1,7 @@
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
 import { useParams } from 'react-router-dom';
-import useGetReferral from '../hooks/useGetReferral';
+import useGetReferral from './useGetReferral';
 
 export default function useUpdateEmployer() {
 

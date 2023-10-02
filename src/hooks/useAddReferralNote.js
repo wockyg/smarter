@@ -1,7 +1,7 @@
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
 
-export default function useAddAdjuster() {
+export default function useAddReferralNote() {
 
   const queryClient = useQueryClient();
 

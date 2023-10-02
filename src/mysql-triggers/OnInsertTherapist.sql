@@ -1,4 +1,4 @@
-CREATE DEFINER=`root`@`localhost` TRIGGER `OnInsertTherapist` BEFORE INSERT ON `therapists` FOR EACH ROW BEGIN
+CREATE TRIGGER `OnInsertTherapist` BEFORE INSERT ON `therapists` FOR EACH ROW BEGIN
 	IF NEW.name LIKE "%Benchmark%" THEN 
 		SET NEW.fceRate = 600;
 		SET NEW.ppdRate = 200;

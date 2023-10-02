@@ -23,22 +23,16 @@ import { Link } from 'react-router-dom';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import { SearchContext } from '../contexts/SearchContext';
 
-import { stableSort, getComparator, handleRequestSort, handleChangePage, handleChangeRowsPerPage } from './TableComponents';
-
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import useDeleteReferral from '../hooks/useDeleteReferral';
 
 import { useParams } from 'react-router-dom';
 
-import './ReferralTable.css'
+import './ReferralTable.css';
 
 function ReferralTableHead(props) {
 
   const { headCells, order, orderBy, onRequestSort } = props;
-
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
 
   return (
     <TableHead>
@@ -55,7 +49,7 @@ function ReferralTableHead(props) {
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
+              onClick={(e) => onRequestSort(e, headCell.id)}
             >
               <u>{headCell.label}</u>
               {orderBy === headCell.id ? (
@@ -79,9 +73,9 @@ export default function ReferralTable(props) {
 
     const timestamp = new Date();
 
-    const { rows, headCells, filter, initialSort, initialSortOrder, removable, title } = props;
+    const { rows, headCells, initialSort, initialSortOrder, removable, title } = props;
 
-    const { setPage: setNotesPage, setTab: setClaimTab } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
     const mutationDelete = useDeleteReferral();
@@ -95,6 +89,33 @@ export default function ReferralTable(props) {
     const [deleteId, setDeleteId] = useState(null);
 
     const open = Boolean(anchorEl);
+
+    const rowsSorted = rows.sort((a, b) => {
+      const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
+      const valueB = b[orderBy] === null ? '' : (typeof b[orderBy] === "string" ? b[orderBy].toUpperCase() : b[orderBy]);
+      if (order === 'asc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return -1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return 1;
+        }
+      }
+      if (order === 'desc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return 1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return -1;
+        }
+      }
+      // values must be equal
+      return 0;
+    });
 
     const { onDownload } = useDownloadExcel({
         currentTableRef: tableRef.current,
@@ -116,11 +137,21 @@ export default function ReferralTable(props) {
 
     `;
 
+    const handleRequestSort = (event, property) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    };
+
     const handleClaimClicked = (event, claim) => {
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
+        if (claim.billingStatus === null || !keepBillMode) {
+          setBillMode(false);
+          setKeepBillMode(false);
+        }
     };
 
     const handleOpenMenu = (event, id) => {
@@ -162,10 +193,10 @@ export default function ReferralTable(props) {
                     headCells={headCells}
                     order={order}
                     orderBy={orderBy}
-                    onRequestSort={(e, v) => handleRequestSort(v, orderBy, order, setOrder, setOrderBy)}
+                    onRequestSort={(e, v) => handleRequestSort(e, v)}
                     />
                     <TableBody>
-                        {stableSort(rows ? rows : [], getComparator(order, orderBy))
+                        {rowsSorted
                         .map((row, index) => {
 
                         const labelId = `referrals-${title}-table-${index}`;

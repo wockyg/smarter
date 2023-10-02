@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import FormInput from '../form-components/FormInput';
 import FormInputPhone from '../form-components/FormInputPhone';
 import FormSelectState from '../form-components/FormSelectState';
+import FormSelectAttorneyType from '../form-components/FormSelectAttorneyType';
 import * as Yup from 'yup';
 import { AddFormContext } from '../contexts/AddFormContext';
 import '../forms.css'
@@ -48,7 +49,7 @@ export default function AttorneyAddForm() {
                 fax: Yup.string(),
                 email: Yup.string().email(),
                 email2: Yup.string().email(),
-                type: Yup.string(),
+                type: Yup.string().required('Req'),
             })}
             onSubmit={(values, actions) => {
                 mutationAdd.mutate(values);
@@ -174,11 +175,11 @@ export default function AttorneyAddForm() {
                                 />
                             </Grid>
                             <Grid item xs="auto">
-                                <FormInput
+                                <FormSelectAttorneyType
                                     id="type"
-                                    label="Type:"
+                                    label="Type*:"
                                     name="type"
-                                    type="text"
+                                    // type="text"
                                 />
                             </Grid>
                             <Grid item xs={12}><button type="submit">Add</button></Grid>

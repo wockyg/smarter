@@ -2,7 +2,7 @@ import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
 import emailjs from '@emailjs/browser';
 import { careCoordinators } from '../lookup-tables/lookup_careCoordinators';
-import useGetReferral from '../hooks/useGetReferral';
+import useGetReferral from './useGetReferral';
 import { useParams } from 'react-router-dom';
 
 export default function useUpdateVisit() {
@@ -98,6 +98,7 @@ export default function useUpdateVisit() {
       queryClient.invalidateQueries('referralVisits');
       queryClient.invalidateQueries('referralsearchall');
       queryClient.invalidateQueries('referrals');
+      queryClient.invalidateQueries('missingV1500');
       return data;
     });
   }

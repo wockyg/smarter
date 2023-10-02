@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "react-query";
 import emailjs from '@emailjs/browser';
 import { careCoordinators } from '../lookup-tables/lookup_careCoordinators'
 
-import useGetReferral from '../hooks/useGetReferral';
+import useGetReferral from './useGetReferral';
 import { useParams } from 'react-router-dom';
 
 export default function useUpdateReferral() {
@@ -50,6 +50,14 @@ export default function useUpdateReferral() {
         }
         queryClient.invalidateQueries(`referral${+linkId}`);
         queryClient.invalidateQueries('referralsOpen');
+        queryClient.invalidateQueries('referralsComplete');
+        queryClient.invalidateQueries('referralsdropdown');
+        queryClient.invalidateQueries('referralscalendar');
+        queryClient.invalidateQueries('fceppdtomorrow');
+        queryClient.invalidateQueries('followuphold');
+        queryClient.invalidateQueries('missingreport');
+        queryClient.invalidateQueries('reportlimbo');
+        queryClient.invalidateQueries('today');
         queryClient.invalidateQueries('referralsearchall');
         return data;
       });

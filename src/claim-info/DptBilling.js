@@ -8,6 +8,18 @@ import TableHead from '@mui/material/TableHead';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import DehazeIcon from '@mui/icons-material/Dehaze';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+
+import Checkbox from '@mui/material/Checkbox';
+import Toolbar from '@mui/material/Toolbar';
+import { alpha } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
@@ -27,6 +39,11 @@ export default function DptBilling(props) {
     const [editIDx, setEditIDx] = useState(-1);
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
+    const [currentBulkEdit, setCurrentBulkEdit] = useState({});
+
+    const [selected, setSelected] = useState([]);
+    const [bulkModalOpen, setBulkModalOpen] = useState(false);
+    const [enabled, setEnabled] = useState({});
 
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
@@ -51,11 +68,6 @@ export default function DptBilling(props) {
         setEditIDx(i);
         setRevertData(row);
         setCurrentEditRow(row);
-    }
-
-    const handleRemove = (i) => {
-        console.log("delete");
-        //submit delete request
     }
 
     const stopEditing = (row) => {
@@ -84,15 +96,208 @@ export default function DptBilling(props) {
     const handleChangeEdit = (event, key) => {
         const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
         setCurrentEditRow(newRow);
+        // console.log(currentEditRow[key]);
         // console.log(event.target.value);
     }
 
+    const style = {
+        position: 'absolute',
+        // marginTop: '100px',
+        // marginLeft: '400px',
+        // marginRight: '400px',
+        bottom: '20%',
+        left: '35%',
+        overflowY: 'scroll',
+        // transform: 'translate(-20%, -20%)',
+        width: 500,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        maxHeight: 900,
+    };
+
+    const handleStartBulkEdit = () => {
+        console.log('BULK');
+        // open modal
+        setBulkModalOpen(true);
+        
+    }
+
+    const handleBulkSubmit = () => {
+        // submit data
+        console.log('SUBMIT THE BULKS');
+        console.log(currentBulkEdit);
+
+        const keys = Object.keys(currentBulkEdit);
+        const changedKeys = keys.filter(index => currentBulkEdit[index] !== -1);
+        const values = changedKeys.reduce((obj, key, index) => ({ ...obj, [key]: currentBulkEdit[key] }), {});
+
+        if (Object.keys(values).length > 0) {
+            console.log(values);
+            selected.forEach((billingId, i) => {
+                mutationUpdate.mutate({...values, billingId: billingId});
+            });
+        }
+        else {
+            console.log("nothing to update...")
+        }
+        // reset selected
+        setSelected([]);
+        // reset enabled
+        setEnabled({});
+        // reset BulkEdit Fields
+        setCurrentBulkEdit({});
+        
+        // close modal
+        handleModalClose();
+        
+    }
+
+    const handleEnableBulkField = (event, field) => {
+
+        setEnabled({...enabled, [field]: !enabled[field]});
+
+        if (!enabled[field]) {
+            setCurrentBulkEdit({...currentBulkEdit, [field]: null})
+        }
+        else if (enabled[field]) {
+            setCurrentBulkEdit({...currentBulkEdit, [field]: -1})
+        }
+    };
+
+    const handleChangeBulkEdit = (event, key) => {
+        let newValues;
+        newValues = {...currentBulkEdit, [key]: event.target.value === '' ? null : event.target.value};
+        setCurrentBulkEdit(newValues);
+        console.log(newValues?.writeOff);
+    }
+
+    const handleModalClose = (event, reason) => {
+        if (reason !== 'backdropClick') {
+            setBulkModalOpen(false);
+            setEnabled({});
+        }
+    };
+
+    const handleClickBox = (event, billingId) => {
+        const selectedIndex = selected.indexOf(billingId);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, billingId);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+        setSelected(newSelected);
+
+        setEditIDx(-1);
+        setRevertData({});
+        setCurrentEditRow({});
+
+        // console.log(selected);
+    };
+
+    const handleClearSelected = () => {
+
+        console.log('CLEAR SELECTION');
+
+        // reset selected
+        setSelected([]);      
+        
+    }
+
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+        const newSelected = visits?.filter((r) => r.attend === "Yes").map((v) => v.billingId);
+        setSelected(newSelected);
+        setEditIDx(-1);
+        setRevertData({});
+        setCurrentEditRow({});
+        return;
+        }
+        setSelected([]);
+        setEditIDx(-1);
+        setRevertData({});
+        setCurrentEditRow({});
+    };
+
+    const isSelected = (billingId) => selected.indexOf(billingId) !== -1;
+
+     // extract into reusable file
+    function EnhancedTableToolbar(props) {
+        const { numSelected } = props;
+
+        return (
+            <Toolbar
+            sx={{
+                pl: { sm: 2 },
+                pr: { xs: 1, sm: 1 },
+                ...(numSelected > 0 && {
+                bgcolor: (theme) =>
+                    alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+                }),
+            }}
+            >
+            {numSelected > 0 ? (
+                <Tooltip title="Bulk Edit">
+                <IconButton onClick={handleStartBulkEdit}>
+                    <DehazeIcon /><EditIcon />
+                </IconButton>
+                </Tooltip>
+            ) : ('')}
+
+            {numSelected > 0 ? (
+                <Typography
+                sx={{ flex: '1 1 100%' }}
+                color="inherit"
+                variant="subtitle1"
+                component="div"
+                >
+                {numSelected} selected
+                </Typography>
+            ) : ('')}
+
+            {numSelected > 0 ? (
+                <Tooltip title="Clear Selection">
+                <IconButton onClick={handleClearSelected}>
+                    <HighlightOffIcon />
+                </IconButton>
+                </Tooltip>
+            ) : ('')}
+            </Toolbar>
+        );
+    }
+    // extract into reusable file
+    EnhancedTableToolbar.propTypes = {
+        numSelected: PropTypes.number.isRequired,
+    };
+
     return(
     <>
-    <TableContainer component={Paper}>
+    <EnhancedTableToolbar numSelected={selected.length} />
+    <TableContainer component={Paper} sx={{ height: 500 }}>
         <Table stickyHeader size="small" aria-label="dptBilling table">
             <TableHead>
                 <TableRow>
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            indeterminate={selected?.length > 0 && selected?.length < visits?.filter((r) => r.attend === "Yes").length}
+                            checked={selected?.length > 0 && selected?.length === visits?.filter((r) => r.attend === "Yes").length}
+                            onChange={handleSelectAllClick}
+                            inputProps={{
+                            'aria-label': 'select all visitsB',
+                            }}
+                        />
+                    </TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Visit #</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>DOS</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Type</u></TableCell>
@@ -114,6 +319,7 @@ export default function DptBilling(props) {
                     <TableCell sx={{ fontSize: 12 }}><u>Check#</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Revenue</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Write-Off</u></TableCell>
+                    <TableCell sx={{ fontSize: 12 }}></TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -132,12 +338,25 @@ export default function DptBilling(props) {
                                 .map((row, j) => {
                                 visitNum = visitNum + 1;
                                 const currentlyEditing = editIDx === j;
+                                const isItemSelected = isSelected(row.billingId);
                                 return (
                                     <TableRow
+                                        hover
+                                        selected={isItemSelected}
                                         key={row.billingId}
                                         // sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                         // sx={{ backgroundColor: visitNum === 1 ? "#FFFACD" : "white"}}
                                     >
+                                        <TableCell padding="checkbox">
+                                            <Checkbox
+                                                onClick={(event) => handleClickBox(event, row.billingId)}
+                                                color="primary"
+                                                checked={isItemSelected}
+                                                inputProps={{
+                                                'aria-labelledby': 'editBoxB',
+                                                }}
+                                            />
+                                        </TableCell>
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{visitNum+" of "+totalAuthVisits}</TableCell>
 
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{row.dos && row.dosFormat}</TableCell>
@@ -369,7 +588,7 @@ export default function DptBilling(props) {
                                                     <EditIcon
                                                     sx={{cursor: "pointer"}}
                                                     fontSize='small'
-                                                    onClick={() => startEditing(j, row)}
+                                                    onClick={() => selected.length === 0 && startEditing(j, row)}
                                                     />
                                                     </Grid>}
                                                 </Grid>
@@ -380,5 +599,425 @@ export default function DptBilling(props) {
             </TableBody>
         </Table>
     </TableContainer>
+    <Modal
+        disableEscapeKeyDown
+        open={bulkModalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="modal-bulkEdit-apptVerif"
+        >
+        <>
+            <Box sx={style}>
+            <Grid container spacing={0.5}>
+                <Grid item xs={11}>
+                <h2>Edit {selected.length} row{selected.length > 1 ? 's' : ''}</h2>
+                </Grid>
+                <Grid item xs={1}>
+                <button onClick={handleModalClose}>x</button>
+                </Grid>
+            </Grid>
+            <Grid container spacing={1}>
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'serviceType')}
+                                color="primary"
+                                checked={enabled.serviceType ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'serviceTypeBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="serviceType" style={{display: 'block'}}>{"Type:"}</label>
+                            <select
+                                disabled={!enabled.serviceType}
+                                onChange={(event) => handleChangeBulkEdit(event, 'serviceType')}
+                                value={currentBulkEdit.serviceType ? currentBulkEdit.serviceType : -1}
+                                name="serviceType"
+                            >
+                                <option value={""}>{"---"}</option>
+                                {['Daily', 'InitialEval', 'Combined', 'Re-Eval', 'WC (2hr.)', 'WC (3hr.)', 'WH (2hr.)', 'WH (3hr.)'].map((n) => (
+                                    <option key={n} value={n}>{n}</option>
+                                ))}
+                            </select>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'v1500')}
+                                color="primary"
+                                checked={enabled.v1500 ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'v1500Box',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="v1500" style={{display: 'block'}}>{"V1500:"}</label>
+                            <input 
+                                disabled={!enabled.v1500}
+                                type="date" 
+                                name="v1500"
+                                value={currentBulkEdit.v1500 ? currentBulkEdit.v1500 : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'v1500')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'd1500Sent')}
+                                color="primary"
+                                checked={enabled.d1500Sent ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'd1500Box',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="d1500Sent" style={{display: 'block'}}>{"D1500:"}</label>
+                            <input 
+                                disabled={!enabled.d1500Sent}
+                                type="date" 
+                                name="d1500Sent"
+                                value={currentBulkEdit.d1500Sent ? currentBulkEdit.d1500Sent : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'd1500Sent')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'd1500SendFormat')}
+                                color="primary"
+                                checked={enabled.d1500SendFormat ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'd1500Box',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="d1500SendFormat" style={{display: 'block'}}>{"Format:"}</label>
+                            <select
+                                disabled={!enabled.d1500SendFormat}
+                                onChange={(event) => handleChangeBulkEdit(event, 'd1500SendFormat')}
+                                value={currentBulkEdit.d1500SendFormat ? currentBulkEdit.d1500SendFormat : -1}
+                                name="d1500SendFormat"
+                            >
+
+                                <option value={""}>{"---"}</option>
+                                {['Email', 'Fax', 'Mail'].map((n) => (
+                                    <option key={n} value={n}>{n}</option>
+                                ))}
+                            </select>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'adjusterRate')}
+                                color="primary"
+                                checked={enabled.adjusterRate ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'adjusterRateBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="adjusterRate" style={{display: 'block'}}>{"Adj. Rate:"}</label>
+                            <input 
+                                disabled={!enabled.adjusterRate}
+                                type="text" 
+                                name="adjusterRate"
+                                value={(currentBulkEdit.adjusterRate && currentBulkEdit.adjusterRate !== -1) ? currentBulkEdit.adjusterRate : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'adjusterRate')}
+                                style={{width: '8ch'}}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'paymentStatus')}
+                                color="primary"
+                                checked={enabled.paymentStatus ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'paymentStatusBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="paymentStatus" style={{display: 'block'}}>{"Pmt Status:"}</label>
+                            <select
+                                disabled={!enabled.paymentStatus}
+                                onChange={(event) => handleChangeBulkEdit(event, 'paymentStatus')}
+                                value={currentBulkEdit.paymentStatus ? currentBulkEdit.paymentStatus : -1}
+                                name="paymentStatus"
+                            >
+
+                                <option value={""}>{"---"}</option>
+                                {['NOF', 'IP', 'DEN', 'SP', 'DNC'].map((n) => (
+                                    <option key={n} value={n}>{n}</option>
+                                ))}
+                            </select>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'paymentStatusDate')}
+                                color="primary"
+                                checked={enabled.paymentStatusDate ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'paymentStatusDateBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="paymentStatusDate" style={{display: 'block'}}>{"Pmt Status Date:"}</label>
+                            <input 
+                                disabled={!enabled.paymentStatusDate}
+                                type="date" 
+                                name="paymentStatusDate"
+                                value={currentBulkEdit.paymentStatusDate ? currentBulkEdit.paymentStatusDate : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'paymentStatusDate')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'dateRebilled')}
+                                color="primary"
+                                checked={enabled.dateRebilled ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'dateRebilledBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="dateRebilled" style={{display: 'block'}}>{"Rebill Date:"}</label>
+                            <input 
+                                disabled={!enabled.dateRebilled}
+                                type="date" 
+                                name="dateRebilled"
+                                value={currentBulkEdit.dateReblled ? currentBulkEdit.dateReblled : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'dateRebilled')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'rebillFormat')}
+                                color="primary"
+                                checked={enabled.rebillFormat ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'rebillFormatBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="rebillFormat" style={{display: 'block'}}>{"Format:"}</label>
+                            <select
+                                disabled={!enabled.rebillFormat}
+                                onChange={(event) => handleChangeBulkEdit(event, 'rebillFormat')}
+                                value={currentBulkEdit.rebillFormat ? currentBulkEdit.rebillFormat : -1}
+                                name="rebillFormat"
+                            >
+
+                                <option value={""}>{"---"}</option>
+                                {['Email', 'Fax', 'Mail'].map((n) => (
+                                    <option key={n} value={n}>{n}</option>
+                                ))}
+                            </select>
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'adjusterDatePaid')}
+                                color="primary"
+                                checked={enabled.adjusterDatePaid ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'adjusterDatePaidBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="adjusterDatePaid" style={{display: 'block'}}>{"Adj Paid:"}</label>
+                            <input 
+                                disabled={!enabled.adjusterDatePaid}
+                                type="date" 
+                                name="adjusterDatePaid"
+                                value={currentBulkEdit.adjusterDatePaid ? currentBulkEdit.adjusterDatePaid : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'adjusterDatePaid')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                {/* <Box width="100%" /> */}
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'adjusterAmountPaid')}
+                                color="primary"
+                                checked={enabled.adjusterAmountPaid ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'adjusterAmountPaidBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="adjusterAmountPaid" style={{display: 'block'}}>{"Amt:"}</label>
+                            <input 
+                                disabled={!enabled.adjusterAmountPaid}
+                                type="text" 
+                                name="adjusterAmountPaid"
+                                value={(currentBulkEdit.adjusterAmountPaid && currentBulkEdit.adjusterAmountPaid !== -1) ? currentBulkEdit.adjusterAmountPaid : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'adjusterAmountPaid')}
+                                style={{width: '8ch'}}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'facilityDatePaid')}
+                                color="primary"
+                                checked={enabled.facilityDatePaid ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'facilityDatePaidBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="facilityDatePaid" style={{display: 'block'}}>{"PT Paid:"}</label>
+                            <input 
+                                disabled={!enabled.facilityDatePaid}
+                                type="date" 
+                                name="facilityDatePaid"
+                                value={currentBulkEdit.facilityDatePaid ? currentBulkEdit.facilityDatePaid : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'facilityDatePaid')}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                {/* <Box width="100%" /> */}
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'facilityAmountPaid')}
+                                color="primary"
+                                checked={enabled.facilityAmountPaid ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'facilityAmountPaidBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="facilityAmountPaid" style={{display: 'block'}}>{"Amt:"}</label>
+                            <input 
+                                disabled={!enabled.facilityAmountPaid}
+                                type="text" 
+                                name="facilityAmountPaid"
+                                value={(currentBulkEdit.facilityAmountPaid && currentBulkEdit.facilityAmountPaid !== -1) ? currentBulkEdit.facilityAmountPaid : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'facilityAmountPaid')}
+                                style={{width: '8ch'}}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'checkNumber')}
+                                color="primary"
+                                checked={enabled.checkNumber ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'checkNumberBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="checkNumber" style={{display: 'block'}}>{"Check #:"}</label>
+                            <input 
+                                disabled={!enabled.checkNumber}
+                                type="text" 
+                                name="checkNumber"
+                                value={(currentBulkEdit.checkNumber && currentBulkEdit.checkNumber !== -1) ? currentBulkEdit.checkNumber : ''}
+                                onChange={(event) => handleChangeBulkEdit(event, 'checkNumber')}
+                                style={{width: '8ch'}}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <Grid container>
+                        <Grid item>
+                            <Checkbox
+                                onClick={(event) => handleEnableBulkField(event, 'writeOff')}
+                                color="primary"
+                                checked={enabled.writeOff ? true : false}
+                                inputProps={{
+                                'aria-labelledby': 'writeOffBox',
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <label htmlFor="writeOff" style={{display: 'block'}}>{"Write-Off: (UNDER CONSTRUCTION)"}</label>
+                            <Checkbox 
+                                disabled={!enabled.writeOff}
+                                type="text" 
+                                name="writeOff"
+                                value={currentBulkEdit.writeOff ? currentBulkEdit.writeOff : ''}
+                                onClick={(event) => handleChangeBulkEdit(event, 'writeOff')}
+                                style={{width: '8ch'}}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+                <Box width="100%" />
+                <Grid item>
+                    <button onClick={handleBulkSubmit}>Update</button>
+                </Grid>
+            </Grid>
+            </Box>
+        </>
+        </Modal>
     </>);
 }

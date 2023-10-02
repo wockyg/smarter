@@ -1,15 +1,19 @@
 import { useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
 import InfoFromAdjusterUpdateForm from './InfoFromAdjusterUpdateForm';
 import ClaimInfo from './ClaimInfo';
 import ClaimIdInfoTooltip from './ClaimIdInfoTooltip';
 import ClaimIdInfoAccordian from './ClaimIdInfoAccordian';
 import ReferralNotes from './ReferralNotes';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AuthorizationTable from './AuthorizationTable';
+import AdjusterUpdateEmails from './AdjusterUpdateEmails';
+import VisitTally from './VisitTally';
 
 import ConfirmationLetter from '../document-templates/ConfirmationLetter';
 import AuthorizationLetter from '../document-templates/AuthorizationLetter';
@@ -99,13 +103,33 @@ export default function ReferralDetails(props) {
                 </AccordionDetails>
             </Accordion>
             }
+            {selectedClaim.ptStatus !== null && selectedClaim.serviceGeneral === "DPT" &&
+            <>
+            <hr />
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                >
+                    Adj Updates
+                </AccordionSummary>
+                <AccordionDetails>
+                    <AdjusterUpdateEmails />           
+                </AccordionDetails>
+            </Accordion>
+            <hr />
+            <AuthorizationTable />
+            </>
+            }
+
         </Grid>
         {/* Id Details */}
         <Grid item xs={3.5}>
             <Box sx={{border: 1}}>
                 <ClaimIdInfoAccordian selectedClaim={selectedClaim} />
             </Box>
-            
+            <VisitTally />
         </Grid>
         {/* Referral Notes */}
         <Grid item xs={3.5}>

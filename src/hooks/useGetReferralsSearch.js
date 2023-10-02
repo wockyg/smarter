@@ -1,25 +1,26 @@
 import {api} from '../index';
 import { useQuery } from "react-query";
 
-const getReferralsSearch = () => api
-                        .get('/referralsView/referralsearch')
+const getReferralsSearch = (values) => api
+                        .get('/referralsView/search', values)
                         .then(response => {
                         const data = response.data;
                         // console.log(data);
                         return data;
                         });
 
-export default function useGetReferralsSearch() {
+export default function useGetReferralsSearch(values) {
 
-  async function getAllReferralsSearch() {
-    const data = await getReferralsSearch();
+  async function getSpecificReferralsSearch() {
+    const data = await getReferralsSearch(values);
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['referralsearch'], getAllReferralsSearch, { 
-    staleTime: (10 * (60 * 1000)), // 10 min 
-    cacheTime: (15 * (60 * 1000)), // 15 min
+  return useQuery([`referralsearch`], getSpecificReferralsSearch, { 
+    staleTime: (1 * (60 * 1000)), // 1 min 
+    cacheTime: (5 * (60 * 1000)), // 5 min
+    enabled: false
   });
 
 }
