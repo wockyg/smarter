@@ -41,7 +41,7 @@ export default function MapTab(props) {
     const LON = -96;
     const ZOOM = 3.3;
     const TOKEN = "pk.eyJ1Ijoid29ja3lnIiwiYSI6ImNsbjk0amFjNTAzdXUybG56aGY4MW51OWgifQ.FHahp8Od7BRwsArJfP0YHw";
-    const MAPSTYLE = "mapbox://styles/wockyg/clmur28fx021g01rca7s37o5j";
+    const MAPSTYLE = "mapbox://styles/mapbox/streets-v12";
 
     const mapRef = useRef();
 
