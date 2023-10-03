@@ -88,11 +88,12 @@ export default function SearchTab() {
 
     return (
         <>
-        {(referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists && adjustersDD && claimantsDD && clientsDD && employersDD && therapistsDD) ?
+        {(referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists && 
+          adjustersDD && claimantsDD && clientsDD && employersDD && therapistsDD) ?
         <Box sx={{ width: '100%', height: 750 }}>
         <Grid container spacing={2}>
             <Grid item>
-                {/* <TextField 
+                <TextField 
                 type='text' 
                 style={{marginRight: 10, padding: 5}}
                 onChange={(e) => handleChangeSearch(e)}
@@ -108,7 +109,7 @@ export default function SearchTab() {
                     </IconButton>
                     )
                 }}
-                /> */}
+                />
             </Grid>
             <Grid item>
                 <ToggleButtonGroup
