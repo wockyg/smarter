@@ -34,6 +34,12 @@ import useGetEmployersSearchAll from '../hooks/useGetEmployersSearchAll';
 import useGetPhysiciansSearchAll from '../hooks/useGetPhysiciansSearchAll';
 import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 
+import useGetClaimantsDropdown from '../hooks/useGetClaimantsDropdown';
+import useGetTherapistsDropdown from '../hooks/useGetTherapistsDropdown';
+import useGetAdjustersDropdown from '../hooks/useGetAdjustersDropdown';
+import useGetClientsDropdown from '../hooks/useGetClientsDropdown';
+import useGetEmployersDropdown from '../hooks/useGetEmployersDropdown';
+
 import '../App.css';
 
 export default function SearchTab() {
@@ -47,6 +53,12 @@ export default function SearchTab() {
     const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployersSearchAll();
     const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysiciansSearchAll();
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
+
+    const { status: statusClaimantsDD, data: claimantsDD, error: errorClaimantsDD, isFetching: isFetchingClaimantsDD } = useGetClaimantsDropdown();
+    const { status: statusAdjustersDD, data: adjustersDD, error: errorAdjustersDD, isFetching: isFetchingAdjustersDD } = useGetAdjustersDropdown();
+    const { status: statusClientsDD, data: clientsDD, error: errorClientsDD, isFetching: isFetchingClientsDD } = useGetClientsDropdown();
+    const { status: statusTherapistsDD, data: therapistsDD, error: errorTherapistsDD, isFetching: isFetchingTherapistsDD } = useGetTherapistsDropdown();
+    const { status: statusEmployersDD, data: employersDD, error: errorEmployersDD, isFetching: isFetchingEmployersDD } = useGetEmployersDropdown();
 
     
 
@@ -76,7 +88,7 @@ export default function SearchTab() {
 
     return (
         <>
-        {(referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists) ?
+        {(referrals && adjusters && attorneys && casemanagers && claimants && clients && employers && physicians && therapists && adjustersDD && claimantsDD && clientsDD && employersDD && therapistsDD) ?
         <Box sx={{ width: '100%', height: 750 }}>
         <Grid container spacing={2}>
             <Grid item>
