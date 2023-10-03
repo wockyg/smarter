@@ -215,8 +215,23 @@ export default function ReferralSearchAdvanced(props) {
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetReferralsSearchAll();
 
-    const rowsFiltered = ((searchVal !== '') || Object.keys(searchValAdvanced).length > 0) && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
+    const rowsSorted = rows && rows?.sort((a, b) => {
+      const valueA = a[initialSort] === null ? '' : (typeof a[initialSort] === "string" ? a[initialSort].toUpperCase() : a[initialSort]);
+      const valueB = b[initialSort] === null ? '' : (typeof b[initialSort] === "string" ? b[initialSort].toUpperCase() : b[initialSort]);
+      if (valueA < valueB) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueA > valueB) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      // values must be equal
+      return 0;
+    });
+
+    const rowsFiltered = rowsSorted && ((searchVal !== '') || Object.keys(searchValAdvanced).length > 0) && rowsSorted?.filter((row) => {
+      
                                                         const claimantLastFirst = `${row.claimantLast}, ${row.claimantFirst}`;
                                                         const claimantFirstLast = `${row.claimantFirst} ${row.claimantLast}`;
 
