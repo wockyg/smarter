@@ -242,8 +242,10 @@ export default function HCFATemplate(props) {
                 
                 {/* Box 32 - SERVICE FACILITY LOCATION INFORMATION */}
                 <Text style={{ position: 'absolute', top: 702, left: 175, fontSize: 7 }}>DEFINED PT/{selectedClaim?.therapist.toUpperCase().substring(0,30)}</Text>
-                <Text style={{ position: 'absolute', top: 712, left: 175, fontSize: 7 }}>{selectedClaim?.therapistAddress.toUpperCase()}</Text>
-                <Text style={{ position: 'absolute', top: 722, left: 175, fontSize: 7 }}>{selectedClaim?.therapistCity.toUpperCase()}, {selectedClaim?.therapistState.toUpperCase()} {selectedClaim?.therapistZip.toUpperCase()}</Text>
+                {/* <Text style={{ position: 'absolute', top: 712, left: 175, fontSize: 7 }}>{selectedClaim?.therapistAddress.toUpperCase()}</Text> */}
+                {/* <Text style={{ position: 'absolute', top: 722, left: 175, fontSize: 7 }}>{selectedClaim?.therapistCity.toUpperCase()}, {selectedClaim?.therapistState.toUpperCase()} {selectedClaim?.therapistZip.toUpperCase()}</Text> */}
+                <Text style={{ position: 'absolute', top: 712, left: 175, fontSize: 7 }}>2001 DUNCAN DR</Text>
+                <Text style={{ position: 'absolute', top: 722, left: 175, fontSize: 7 }}>KENNESAW, GA 30144</Text>
                 
 
                 {/* ...CONSTANTS... */}

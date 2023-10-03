@@ -231,7 +231,7 @@ export default function ReferralSearchAdvanced(props) {
     });
 
     const rowsFiltered = rowsSorted && ((searchVal !== '') || Object.keys(searchValAdvanced).length > 0) && rowsSorted?.filter((row) => {
-      
+
                                                         const claimantLastFirst = `${row.claimantLast}, ${row.claimantFirst}`;
                                                         const claimantFirstLast = `${row.claimantFirst} ${row.claimantLast}`;
 

@@ -14,34 +14,6 @@ import { useState } from 'react';
 
 import { careCoordinators } from '../lookup-tables/lookup_careCoordinators';
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) {
-      return order;
-    }
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
-
 export default function ReferralNotes(props) {
 
     const { selectedClaim, page, setPage } = props;
@@ -56,6 +28,21 @@ export default function ReferralNotes(props) {
     
     const { status: statusReferralNotes, data: referralNotes, error: errorReferralNotes, isFetching: isFetchingReferralNotes } = useGetReferralNotes(selectedClaim?.referralId);
 
+    const notesSorted = referralNotes && referralNotes?.sort((a, b) => {
+      const valueA = a.timestamp === null ? '' : (typeof a.timestamp === "string" ? a.timestamp.toUpperCase() : a.timestamp);
+      const valueB = b.timestamp === null ? '' : (typeof b.timestamp === "string" ? b.timestamp.toUpperCase() : b.timestamp);
+      if (valueA < valueB) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueA > valueB) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      // values must be equal
+      return 0;
+    });
+    
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -115,7 +102,7 @@ export default function ReferralNotes(props) {
           <TableContainer component={Paper} sx={{height: 350}}>
             <Table size="small" aria-label="referralNotes table">
               <TableBody>
-                {referralNotes?.length > 0 && stableSort(referralNotes, getComparator('desc', 'timestamp')).map((row) => (
+                {notesSorted && notesSorted?.map((row) => (
                 <TableRow sx={{backgroundColor: row.flag === 'Important' && '#F5B7B1'}} key={row.noteId}>
                     <TableCell sx={{border: 1}} align="left">{row.timestampFormat}</TableCell>
                     <TableCell sx={{border: 1}} align="left">{row.initials}</TableCell>

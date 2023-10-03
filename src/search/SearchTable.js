@@ -236,7 +236,7 @@ export default function SearchTable(props) {
                             tabIndex={-1}
                             key={row[`${party}Id`]}
                             id={labelId}
-                            className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')): (row.doNotUse ? 'doNotUse' : '')}
+                            className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')): (row.doNotUseDPT ? 'doNotUse' : '')}
                             // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
                             >
                                 {headCells.map((col) => (

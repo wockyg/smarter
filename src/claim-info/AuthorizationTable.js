@@ -28,35 +28,22 @@ export default function AuthorizationTable(props) {
 
     const [newAuth, setNewAuth] = useState({});
 
-    const mutationUpdate = useAddReferralAuth(); 
+    const mutationUpdate = useAddReferralAuth();
 
-    function descendingComparator(a, b, orderBy) {
-        if (b[orderBy] < a[orderBy]) {
-            return -1;
-        }
-        if (b[orderBy] > a[orderBy]) {
-            return 1;
-        }
-        return 0;
-    }
-
-    function getComparator(order, orderBy) {
-        return order === 'desc'
-            ? (a, b) => descendingComparator(a, b, orderBy)
-            : (a, b) => -descendingComparator(a, b, orderBy);
-    }
-
-    function stableSort(array, comparator) {
-        const stabilizedThis = array.map((el, index) => [el, index]);
-        stabilizedThis.sort((a, b) => {
-            const order = comparator(a[0], b[0]);
-            if (order !== 0) {
-            return order;
-            }
-            return a[1] - b[1];
-        });
-        return stabilizedThis.map((el) => el[0]);
-    }
+    const authSorted = auth && auth?.sort((a, b) => {
+      const valueA = a.authId === null ? '' : (typeof a.authId === "string" ? a.authId.toUpperCase() : a.authId);
+      const valueB = b.authId === null ? '' : (typeof b.authId === "string" ? b.authId.toUpperCase() : b.authId);
+      if (valueA > valueB) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueA < valueB) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      // values must be equal
+      return 0;
+    });
 
     const handleChangeAuth = (e, key) => {
         setNewAuth({...newAuth, [key]: e.target.value});
@@ -100,7 +87,7 @@ export default function AuthorizationTable(props) {
                     <TableContainer component={Paper} sx={{border: 1, height: 200}}>
                         <Table size="small" aria-label="dptAuthorization table">
                         <TableBody>
-                            {stableSort(auth, getComparator('asc', 'authId')).map((row, i) => (
+                            {authSorted && authSorted?.map((row, i) => (
                             <TableRow key={row.authId}>
                                 <TableCell sx={{border: 1}} align="left">{i+1}</TableCell>
                                 <TableCell sx={{border: 1}} align="left">{row.approvedVisits}</TableCell>

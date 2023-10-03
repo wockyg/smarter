@@ -83,8 +83,8 @@ export default function TherapistAddForm() {
                 dpt_wc: [],
                 dpt_th: [],
                 dateAdded: '',
-                doNotUse: [],
-                doNotUseReason: '',
+                doNotUseDPT: [],
+                doNotUseDPTReason: '',
                 notes: '',
                 ptProfile: '',
             }}
@@ -147,8 +147,8 @@ export default function TherapistAddForm() {
                 dpt_wh: Yup.array(),
                 dpt_wc: Yup.array(),
                 dpt_th: Yup.array(),                
-                doNotUse: Yup.array(),
-                doNotUseReason: Yup.string(),
+                doNotUseDPT: Yup.array(),
+                doNotUseDPTReason: Yup.string(),
                 notes: Yup.string(),
                 ptProfile: Yup.string(),
             })}

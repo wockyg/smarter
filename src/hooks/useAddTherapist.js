@@ -66,8 +66,8 @@ export default function useAddTherapist() {
                                 'dpt_wc': values.dpt_wc.length > 0 ? values.dpt_wc[0] : null,
                                 'dpt_wh': values.dpt_wh.length > 0 ? values.dpt_wh[0] : null,
                                 'dpt_th': values.dpt_th.length > 0 ? values.dpt_th[0] : null,
-                                'doNotUse': values.doNotUse.length > 0 ? values.doNotUse[0] : null,
-                                'doNotUseReason': `${values.doNotUseReason}`,
+                                'doNotUseDPT': values.doNotUseDPT.length > 0 ? values.doNotUseDPT[0] : null,
+                                'doNotUseDPTReason': `${values.doNotUseDPTReason}`,
                                 'notes': `${values.notes}`,
                                 'ptProfile': `${values.ptProfile}`,
                               })
