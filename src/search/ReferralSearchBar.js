@@ -26,11 +26,11 @@ export default function ReferralSearchBar(props) {
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsDropdown();
     const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployersDropdown();
 
-    const claimantsSorted = claimants?.sort((a, b) => -b.lastName.localeCompare(a.lastName));
-    const adjustersSorted = adjusters?.sort((a, b) => -b.lastName.localeCompare(a.lastName) || -b?.firstName.localeCompare(a?.firstName));
-    const therapistsSorted = therapists?.sort((a, b) => -b.name.localeCompare(a.name) || -b.address.localeCompare(a.address));
-    const clientsSorted = clients?.sort((a, b) => -b.client.localeCompare(a.client));
-    const employersSorted = employers?.sort((a, b) => -b.name.localeCompare(a.name));
+    const claimantsSorted = claimants && claimants?.sort((a, b) => -b.lastName.localeCompare(a.lastName));
+    const adjustersSorted = adjusters && adjusters?.sort((a, b) => -b.lastName.localeCompare(a.lastName) || -b?.firstName.localeCompare(a?.firstName));
+    const therapistsSorted = therapists && therapists?.sort((a, b) => -b.name.localeCompare(a.name) || -b.address.localeCompare(a.address));
+    const clientsSorted = clients && clients?.sort((a, b) => -b.client.localeCompare(a.client));
+    const employersSorted = employers && employers?.sort((a, b) => -b.name.localeCompare(a.name));
 
     return (
          <Box sx={{border: 1, padding: 1}}>
