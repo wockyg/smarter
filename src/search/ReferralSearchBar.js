@@ -32,6 +32,46 @@ export default function ReferralSearchBar(props) {
     // const clientsSorted = clients && clients?.sort((a, b) => -b.client.localeCompare(a.client));
     // const employersSorted = employers && employers?.sort((a, b) => -b.name.localeCompare(a.name));
 
+    const claimantsSorted = claimants && claimants?.sort((a, b) => {
+      const valueA = a.lastName === null ? '' : (typeof a.lastName === "string" ? a.lastName.toUpperCase() : a.lastName);
+      const valueB = b.lastName === null ? '' : (typeof b.lastName === "string" ? b.lastName.toUpperCase() : b.lastName);
+      if (valueA < valueB) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueA > valueB) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      // values must be equal
+      return 0;
+    });
+
+    const adjustersSorted = adjusters && adjusters?.sort((a, b) => {
+      const valueA = a.lastName === null ? '' : (typeof a.lastName === "string" ? a.lastName.toUpperCase() : a.lastName);
+      const valueB = b.lastName === null ? '' : (typeof b.lastName === "string" ? b.lastName.toUpperCase() : b.lastName);
+      const valueC = a.firstName === null ? '' : (typeof a.firstName === "string" ? a.firstName.toUpperCase() : a.firstName);
+      const valueD = b.firstName === null ? '' : (typeof b.firstName === "string" ? b.firstName.toUpperCase() : b.firstName);
+      if (valueA < valueB) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueA > valueB) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      if (valueC < valueD) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (valueC > valueD) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      // values must be equal
+      return 0;
+    });
+
     return (
       <>
       {claimants && adjusters && clients && therapists && employers &&
@@ -149,7 +189,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {claimants?.filter((x) => `${x.lastName}, ${x.firstName}` !== searchValAdvanced.claimant).map((n) => (
+                  {claimantsSorted?.filter((x) => `${x.lastName}, ${x.firstName}` !== searchValAdvanced.claimant).map((n) => (
                       <option key={n.claimantId} value={`${n.lastName}, ${n.firstName}`}>
                         {`${n.lastName}, ${n.firstName}`}
                       </option>
@@ -282,7 +322,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {adjusters?.filter((x) => `${x.lastName}, ${x.firstName} | ${x.client}` !== searchValAdvanced.adjuster).map((n) => (
+                  {adjustersSorted?.filter((x) => `${x.lastName}, ${x.firstName} | ${x.client}` !== searchValAdvanced.adjuster).map((n) => (
                       <option key={n.adjusterId} value={`${n.lastName}, ${n.firstName} | ${n.client}`}>
                         {`${n.lastName}, ${n.firstName} | ${n.client}`}
                       </option>
