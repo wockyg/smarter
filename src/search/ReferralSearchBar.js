@@ -26,11 +26,11 @@ export default function ReferralSearchBar(props) {
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsDropdown();
     const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployersDropdown();
 
-    const claimantsSorted = claimants && claimants?.sort((a, b) => -b.lastName.localeCompare(a.lastName));
-    const adjustersSorted = adjusters && adjusters?.sort((a, b) => -b.lastName.localeCompare(a.lastName) || -b?.firstName.localeCompare(a?.firstName));
-    const therapistsSorted = therapists && therapists?.sort((a, b) => -b.name.localeCompare(a.name) || -b.address.localeCompare(a.address));
-    const clientsSorted = clients && clients?.sort((a, b) => -b.client.localeCompare(a.client));
-    const employersSorted = employers && employers?.sort((a, b) => -b.name.localeCompare(a.name));
+    // const claimantsSorted = claimants && claimants?.sort((a, b) => -b.lastName.localeCompare(a.lastName));
+    // const adjustersSorted = adjusters && adjusters?.sort((a, b) => -b.lastName.localeCompare(a.lastName) || -b?.firstName.localeCompare(a?.firstName));
+    // const therapistsSorted = therapists && therapists?.sort((a, b) => -b.name.localeCompare(a.name) || -b.address.localeCompare(a.address));
+    // const clientsSorted = clients && clients?.sort((a, b) => -b.client.localeCompare(a.client));
+    // const employersSorted = employers && employers?.sort((a, b) => -b.name.localeCompare(a.name));
 
     return (
       <>
@@ -149,7 +149,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {claimantsSorted?.filter((x) => `${x.lastName}, ${x.firstName}` !== searchValAdvanced.claimant).map((n) => (
+                  {claimants?.filter((x) => `${x.lastName}, ${x.firstName}` !== searchValAdvanced.claimant).map((n) => (
                       <option key={n.claimantId} value={`${n.lastName}, ${n.firstName}`}>
                         {`${n.lastName}, ${n.firstName}`}
                       </option>
@@ -197,7 +197,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {employersSorted?.filter((x) => `${x.name}` !== searchValAdvanced.employer)?.map((n) => (
+                  {employers?.filter((x) => `${x.name}` !== searchValAdvanced.employer)?.map((n) => (
                       <option key={n.employerId} value={`${n.name}`}>
                         {`${n.name}`}
                       </option>
@@ -282,7 +282,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {adjustersSorted?.filter((x) => `${x.lastName}, ${x.firstName} | ${x.client}` !== searchValAdvanced.adjuster).map((n) => (
+                  {adjusters?.filter((x) => `${x.lastName}, ${x.firstName} | ${x.client}` !== searchValAdvanced.adjuster).map((n) => (
                       <option key={n.adjusterId} value={`${n.lastName}, ${n.firstName} | ${n.client}`}>
                         {`${n.lastName}, ${n.firstName} | ${n.client}`}
                       </option>
@@ -330,7 +330,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {clientsSorted?.filter((x) => `${x.client}` !== searchValAdvanced.client)?.map((n) => (
+                  {clients?.filter((x) => `${x.client}` !== searchValAdvanced.client)?.map((n) => (
                       <option key={n.clientId} value={`${n.client}`}>
                         {`${n.client}`}
                       </option>
@@ -463,7 +463,7 @@ export default function ReferralSearchBar(props) {
                     {"Select"}
                   </option>
                   }
-                  {therapistsSorted?.filter((x) => `${x.name} :: ${x.address}, ${x.city}, ${x.state} ${x.zip}` !== searchValAdvanced.therapist).map((n) => (
+                  {therapists?.filter((x) => `${x.name} :: ${x.address}, ${x.city}, ${x.state} ${x.zip}` !== searchValAdvanced.therapist).map((n) => (
                       <option key={n.therapistId} value={`${n.name} :: ${n.address}, ${n.city}, ${n.state} ${n.zip}`}>
                         {`${n.name} :: ${n.address}, ${n.city}, ${n.state} ${n.zip}`}
                       </option>
