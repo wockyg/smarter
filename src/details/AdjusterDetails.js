@@ -41,8 +41,12 @@ export default function AdjusterDetails(props) {
         state: selectedAdjuster.state ? selectedAdjuster.state : '',
         zip: selectedAdjuster.zip ? selectedAdjuster.zip : '',
         phone: selectedAdjuster.phone ? selectedAdjuster.phone : '',
+        phoneExt: selectedAdjuster.phoneExt ? selectedAdjuster.phoneExt : '',
+        phone2: selectedAdjuster.phone2 ? selectedAdjuster.phone2 : '',
+        phone2Ext: selectedAdjuster.phone2Ext ? selectedAdjuster.phone2Ext : '',
         fax: selectedAdjuster.fax ? selectedAdjuster.fax : '',
         email: selectedAdjuster.email ? selectedAdjuster.email : '',
+        email2: selectedAdjuster.email2 ? selectedAdjuster.email2 : '',
         fceRate: selectedAdjuster.fceRate ? selectedAdjuster.fceRate : '',
         ppdRate: selectedAdjuster.ppdRate ? selectedAdjuster.ppdRate : '',
         ppdDiscountRate: selectedAdjuster.ppdDiscountRate ? selectedAdjuster.ppdDiscountRate : '',
@@ -209,6 +213,23 @@ export default function AdjusterDetails(props) {
                     selectedRow={selectedAdjuster}
                     width='5ch'
                     />
+                    <EditableGridItem
+                    field='phone2'
+                    label='Phone 2'
+                    type='phone'
+                    formikProps={formikProps}
+                    currentlyEditing={currentlyEditing}
+                    selectedRow={selectedAdjuster}
+                    />
+                    <EditableGridItem
+                    field='phone2Ext'
+                    label='Ext'
+                    type='text'
+                    formikProps={formikProps}
+                    currentlyEditing={currentlyEditing}
+                    selectedRow={selectedAdjuster}
+                    width='5ch'
+                    />
                     <Box width="100%"/>
                     <EditableGridItem
                     field='fax'
@@ -227,6 +248,16 @@ export default function AdjusterDetails(props) {
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
                     />
+                    {selectedAdjuster.email &&
+                    <EditableGridItem
+                    field='email2'
+                    label='Email 2'
+                    type='text'
+                    formikProps={formikProps}
+                    currentlyEditing={currentlyEditing}
+                    selectedRow={selectedAdjuster}
+                    />
+                    }
                     <Box width="100%"/>
                     <EditableGridItem
                     field='fceRate'

@@ -15,14 +15,21 @@ export default function useUpdateTherapist() {
 
     const asArray = Object.entries(values);
     const filtered = asArray.filter(([key, value]) => (key !== 'therapistId'));
-    const newValues = Object.fromEntries(filtered);
+    let newValues = Object.fromEntries(filtered);
+    
+    // if(values.dpt.length > 0) {
+    //   newValues.dpt = values.dpt[0];
+    // }
+    // else {
+    //   newValues.dpt = '';
+    // }
 
     api
       .put(`/therapists/${values.therapistId}`, newValues)
       .then(response => {
         const data = response.data;
         console.log(data);
-        console.log(values);
+        console.log({...newValues, therapistId: values.therapistId});
         if (selectedClaim.therapistId === values.therapistId) {
           queryClient.invalidateQueries(`referral${+linkId}`);
         }

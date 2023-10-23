@@ -1,41 +1,15 @@
 export const reasons = [
-  {
-    "reason": "MRI"
-  },
-  {
-    "reason": "Surgery"
-  },
-  {
-    "reason": "Awaiting auth"
-  },
-  {
-    "reason": "Need DC note"
-  },
-  {
-    "reason": "Need Upcoming appts"
-  },
-  {
-    "reason": "Pending MD appt"
-  },
-  {
-    "reason": "Lvm for MD"
-  },
-  {
-    "reason": "Other"
-  },
-  {
-    "reason": "COVID"
-  },
-  {
-    "reason": "Pending PN"
-  },
-  {
-    "reason": "Non-compliant"
-  },
-  {
-    "reason": "Pending signed PN"
-  },
-  {
-    "reason": "Pending Adj Response"
-  }
+    "MRI",
+    "Surgery",
+    "Awaiting auth",
+    "Need DC note",
+    "Need Upcoming appts",
+    "Pending MD appt",
+    "Lvm for MD",
+    "Other",
+    "COVID",
+    "Pending PN",
+    "Non-compliant",
+    "Pending signed PN",
+    "Pending Adj Response"
 ]

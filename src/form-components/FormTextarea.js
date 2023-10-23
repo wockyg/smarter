@@ -7,7 +7,7 @@ export default function FormTextarea({ label, ...props }) {
 
   return (
     <>
-        <label htmlFor={props.name}>{label}</label>
+        <label htmlFor={props.name} style={{display: 'block'}}>{label}</label>
         {meta.touched && meta.error ? (
          <textarea className="redBorder" {...field} {...props} />
        ) : <textarea {...field} {...props} />}

@@ -1,8 +1,7 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import useGetReferralsSearchAll from '../hooks/useGetReferralsSearchAll';
 import SearchTable from './SearchTable';
 import ReferralSearchBar from './ReferralSearchBar';
-import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -16,12 +15,16 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Assign',
+    enableSearch: true,
+    rank: 0
   },
   {
     id: 'service',
     numeric: false,
     disablePadding: false,
     label: 'Service',
+    enableSearch: true,
+    rank: 1
   },
   {
     id: 'approvedVisits',
@@ -46,30 +49,37 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Claimant',
+    enableSearch: true,
+    rank: 2
   },
   {
     id: 'claimNumber',
     numeric: false,
     disablePadding: false,
     label: 'Claim #',
+    enableSearch: true,
+    rank: 4
   },
   {
     id: 'therapistBeaver',
     numeric: false,
     disablePadding: false,
     label: 'Therapist',
+    enableSearch: true
   },
   {
     id: 'adjuster',
     numeric: false,
     disablePadding: false,
     label: 'Adjuster',
+    enableSearch: true
   },
   {
     id: 'adjusterClient',
     numeric: false,
     disablePadding: false,
     label: 'Client',
+    enableSearch: true
   },
   {
     id: 'casemanager',
@@ -82,24 +92,29 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Employer',
+    enableSearch: true,
+    rank: 3
   },
   {
     id: 'referralStatus',
     numeric: false,
     disablePadding: false,
     label: 'Ref Status',
+    enableSearch: true
   },
   {
     id: 'ptStatus',
     numeric: false,
     disablePadding: false,
     label: 'PT Status',
+    enableSearch: true
   },
   {
     id: 'billingStatus',
     numeric: false,
     disablePadding: false,
     label: 'Billing Status',
+    enableSearch: true
   },
   {
     id: 'bodyPart',
@@ -117,156 +132,43 @@ export default function ReferralSearchAdvanced(props) {
 
     const [searchValAdvanced, setSearchValAdvanced] = useState({});
 
-    const { setSearchId } = useContext(SearchContext);
-
     const handleChangeSearch = (e, field, inputType) => {
 
-        if (e.target.value === '') {
+      if (e.target.value === '') {
+        // remove field from object
+        const {[field]: remove, ...rest} = searchValAdvanced;
+        setSearchValAdvanced(rest);
+      }
+      else {
+        setSearchValAdvanced({...searchValAdvanced, [field]: e.target.value});
+      } 
 
-          // remove field from object
-
-          if (field === 'assign') {
-            const {assign, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'service') {
-            const {service, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'referralStatus') {
-            const {referralStatus, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'ptStatus') {
-            const {ptStatus, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'billingStatus') {
-            const {billingStatus, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'claimNumber') {
-            const {claimNumber, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'claimant') {
-            const {claimant, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'employer') {
-            const {employer, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'adjuster') {
-            const {adjuster, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'client') {
-            const {client, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-          if (field === 'therapist') {
-            const {therapist, ...rest} = searchValAdvanced;
-            setSearchValAdvanced(rest);
-          }
-
-        }
-        else {
-          setSearchValAdvanced({...searchValAdvanced, [field]: e.target.value});
-        }
-
-        // if (inputType === 'select') {
-        //   if (field === "claimant") {
-        //     setSearchValAdvanced({...searchValAdvanced, [field]: `${value.lastName}, ${value.firstName}`});
-        //   }
-        //   if (field === "therapist") {
-        //     setSearchValAdvanced({...searchValAdvanced, [field]: `${value.lastName}, ${value.firstName}`});
-        //   }
-        // }
-        // else{
-        //   setSearchValAdvanced({...searchValAdvanced, [field]: e.target.value});
-        // }
-        // console.log(searchValAdvanced);
-        // if (e.target.value < 1) {
-        //     setSearchId(-1);
-        // }
-
-        console.log(searchValAdvanced);
-        console.log(Object.keys(searchValAdvanced).length);
     };
 
     const handleClearSearch = (v) => {
-        console.log("cler search");
         setSearchValAdvanced({...searchValAdvanced, [v]: ''});
-        // console.log(searchValAdvanced);
-        // if (e.target.value < 1) {
-        //     setSearchId(-1);
-        // }
     };
 
     const handleClearEntireSearch = (v) => {
-        console.log("cler search");
         setSearchValAdvanced({});
-        // console.log(searchValAdvanced);
-        // if (e.target.value < 1) {
-        //     setSearchId(-1);
-        // }
     };
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetReferralsSearchAll();
 
-    const rowsSorted = rows && rows?.sort((a, b) => {
-      const valueA = a[initialSort] === null ? '' : (typeof a[initialSort] === "string" ? a[initialSort].toUpperCase() : a[initialSort]);
-      const valueB = b[initialSort] === null ? '' : (typeof b[initialSort] === "string" ? b[initialSort].toUpperCase() : b[initialSort]);
-      if (valueA < valueB) {
-        // console.log(`${valueA } < ${valueB}`);
-        return 1;
-      }
-      if (valueA > valueB) {
-        // console.log(`${valueA } > ${valueB}`);
-        return -1;
-      }
-      // values must be equal
-      return 0;
+
+    const rowsFiltered = rows && (Object.keys(searchValAdvanced).length === 0) 
+    ?
+    []
+    :
+    rows?.filter((row) => {
+
+      const keys = Object.keys(searchValAdvanced);
+
+      const matches = keys.filter(k => row[k]?.toLowerCase().includes(searchValAdvanced[k].toLowerCase()))
+
+      return matches.length > 0 && matches.length === keys.length;
+                                                      
     });
-
-    const rowsFiltered = rowsSorted && ((searchVal !== '') || Object.keys(searchValAdvanced).length > 0) && rowsSorted?.filter((row) => {
-
-                                                        const claimantLastFirst = `${row.claimantLast}, ${row.claimantFirst}`;
-                                                        const claimantFirstLast = `${row.claimantFirst} ${row.claimantLast}`;
-
-                                                        if (Object.keys(searchValAdvanced).length > 0) {
-                                                          return (
-                                                            (row.assign?.toLowerCase().includes(searchValAdvanced.assign ? searchValAdvanced.assign?.toLowerCase() : '')) &&
-                                                            (row.service?.toLowerCase().includes(searchValAdvanced.service ? searchValAdvanced.service?.toLowerCase() : '')) &&
-                                                            (row.claimant?.toLowerCase().includes(searchValAdvanced.claimant ? searchValAdvanced.claimant?.toLowerCase() : '')) &&
-                                                            (row.employer?.toLowerCase().includes(searchValAdvanced.employer ? searchValAdvanced.employer?.toLowerCase() : '')) &&
-                                                            (row.claimNumber?.toLowerCase().includes(searchValAdvanced.claimNumber ? searchValAdvanced.claimNumber?.toLowerCase() : '')) &&
-                                                            (row.adjusterBeaver?.toLowerCase().includes(searchValAdvanced.adjuster ? searchValAdvanced.adjuster?.toLowerCase() : '')) &&
-                                                            (row.adjusterClient?.toLowerCase().includes(searchValAdvanced.client ? searchValAdvanced.client?.toLowerCase() : '')) &&
-                                                            (row.referralStatus?.toLowerCase().includes(searchValAdvanced.referralStatus ? searchValAdvanced.referralStatus?.toLowerCase() : '')) &&
-                                                            (row.ptStatus?.toLowerCase().includes(searchValAdvanced.ptStatus ? searchValAdvanced.ptStatus?.toLowerCase() : '')) &&
-                                                            (row.billingStatus?.toLowerCase().includes(searchValAdvanced.billingStatus ? searchValAdvanced.billingStatus?.toLowerCase() : '')) &&
-                                                            (row.therapistBeaver?.toLowerCase().includes(searchValAdvanced.therapist ? searchValAdvanced.therapist?.toLowerCase() : ''))
-                                                          );
-                                                        }
-                                                        else {
-                                                          return [];
-                                                        }
-                                                        // if (searchValAdvanced.claimant === '') {
-                                                        //   return (
-                                                        //     // row.assign === searchValAdvanced.assign ||
-                                                        //     // row.service === searchValAdvanced.service ||
-                                                        //     []
-                                                            
-                                                        //   );
-                                                        // }
-                                                        // else{
-                                                        //   return row.claimant?.toLowerCase().includes(searchValAdvanced.claimant?.toLowerCase());
-                                                        // }
-                                                    });
-
-    // console.log(rowsFiltered);
 
     return (
          <>
@@ -285,6 +187,7 @@ export default function ReferralSearchAdvanced(props) {
         searchValAdvanced={searchValAdvanced}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

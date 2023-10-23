@@ -20,6 +20,8 @@ export default function useUpdateFceppdBilling() {
       const data = response.data;
       console.log(response);
       queryClient.invalidateQueries('fceppdBilling');
+      queryClient.invalidateQueries('fceppdBillingAdjPastDue');
+      queryClient.invalidateQueries('fceppdBillingFacilityPastDue');
       queryClient.invalidateQueries('referralsearchall');
       queryClient.invalidateQueries('referrals');
       return data;

@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 
 import MissingV1500 from './MissingV1500';
 import D1500NotSent from './D1500NotSent';
+import D1500NotSentNew from './D1500NotSentNew';
 import AdjusterPastDue from './AdjusterPastDue';
 import FacilityPastDue from './FacilityPastDue';
 
@@ -48,6 +49,7 @@ export default function BillingTab(props) {
         }
         {selectedFilter === 'd1500NotSent' &&
         <D1500NotSent />
+        // <D1500NotSentNew />
         }
         {selectedFilter === 'adjPastDue' &&
         <AdjusterPastDue />

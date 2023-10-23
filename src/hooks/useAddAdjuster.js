@@ -31,6 +31,8 @@ export default function useAddAdjuster() {
                                 const data = response.data;
                                 // console.log(data);
                                 queryClient.invalidateQueries('adjusters');
+                                queryClient.invalidateQueries('adjustersdropdown');
+                                queryClient.invalidateQueries('adjustersearchall');
                                 return data;
                               });
     

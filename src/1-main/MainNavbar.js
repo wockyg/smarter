@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,6 +36,7 @@ import useGetUser from '../hooks/useGetUser';
 import useGetUsers from '../hooks/useGetUsers';
 import useUpdateUser from '../hooks/useUpdateUser';
 import useAddBugReport from '../hooks/useAddBugReport';
+import useAddFeatureRequest from '../hooks/useAddFeatureRequest';
 
 import { deepOrange, deepPurple } from '@mui/material/colors';
 
@@ -43,6 +45,8 @@ export default function MainNavbar() {
   const [anchorEl0, setAnchorEl0] = useState(null);
   const [bugDialogOpen, setBugDialogOpen] = useState(false);
   const [bugForm, setBugForm] = useState({});
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false);
+  const [featureForm, setFeatureForm] = useState({});
 
   const open0 = Boolean(anchorEl0);
 
@@ -58,6 +62,7 @@ export default function MainNavbar() {
 
   const updateUser = useUpdateUser();
   const addBugReport = useAddBugReport();
+  const addFeatureRequest = useAddFeatureRequest();
 
   const navigate = useNavigate();
 
@@ -83,19 +88,73 @@ export default function MainNavbar() {
     setBugDialogOpen(true);
   };
 
+  const handleOpenFeatureDialog = () => {
+    setFeatureDialogOpen(true);
+  };
+
   const handleCloseBugDialog = () => {
     setBugDialogOpen(false);
     setBugForm({});
   };
 
+    const handleCloseFeatureDialog = () => {
+    setFeatureDialogOpen(false);
+    setFeatureForm({});
+  };
+
   const handleUpdateBugForm = (e, k) => {
-    setBugForm({...bugForm, [k]: e.target.value})
+    if (k === 'screenshot') {
+      setBugForm({...bugForm, screenshot: e.target.files[0]})
+    }
+    else {
+      setBugForm({...bugForm, [k]: e.target.value})
+    }
+    // console.log(e.target.files);
+  };
+
+    const handleUpdateFeatureForm = (e, k) => {
+    if (k === 'screenshot') {
+      setFeatureForm({...featureForm, screenshot: e.target.files[0]})
+    }
+    else {
+      setFeatureForm({...featureForm, [k]: e.target.value})
+    }
+    // console.log(e.target.files);
   };
 
   const handleSubmitBugReport = () => {
+
     // console.log({...bugForm, submittedBy: user?.initials});
-    addBugReport.mutate({...bugForm, submittedBy: user?.initials});
+    // bugForm.title && bugForm.description && addBugReport.mutate({...bugForm, submittedBy: user?.initials});
+
+    const formData = new FormData();
+    formData.append("title", bugForm.title);
+    formData.append("description", bugForm.description);
+    formData.append("screenshot", bugForm.screenshot);
+    formData.append("submittedBy", user?.initials);
+    // const test = [...formData.entries()];
+    // console.log(test);
+    bugForm.title && bugForm.description && addBugReport.mutate(formData);
+    
     handleCloseBugDialog();
+  };
+
+
+  const handleSubmitFeatureRequest = () => {
+
+    // console.log({...bugForm, submittedBy: user?.initials});
+    // bugForm.title && bugForm.description && addBugReport.mutate({...bugForm, submittedBy: user?.initials});
+
+    const formData = new FormData();
+    formData.append("title", featureForm.title);
+    formData.append("description", featureForm.description);
+    formData.append("screenshot", featureForm?.screenshot);
+    formData.append("submittedBy", user?.initials);
+    // const test = [...formData.entries()];
+    // console.log(test);
+    featureForm.title && featureForm.description && addFeatureRequest.mutate(formData);
+    
+    handleCloseFeatureDialog();
   };
 
   return (
@@ -130,8 +189,11 @@ export default function MainNavbar() {
             </NavDropdown>
             <Nav.Link onClick={() => {navigate('/'); setQuickSearchVal(null); setQuickSearchInputVal('');}}><IconButton sx={{background: '#FFFFFF', marginTop: 0.5}}><RestartAltIcon fontSize='small' /></IconButton></Nav.Link>
           </Nav>
-          <IconButton sx={{border: 1, width: 30, height: 30}} onClick={handleOpenBugDialog}>
+          <IconButton sx={{border: 1, width: 30, height: 30, marginRight: 1}} onClick={handleOpenBugDialog}>
             <BugReportIcon />
+          </IconButton>
+          <IconButton sx={{border: 1, width: 30, height: 30}} onClick={handleOpenFeatureDialog}>
+            <LightbulbIcon />
           </IconButton>
           <Nav className="justify-content-end">
             {users?.filter(r => r.lastLogout < r.lastLogin && r.initials !== user?.initials).map((row) => {
@@ -198,13 +260,59 @@ export default function MainNavbar() {
           type="file"
           id="screenshot"
           name="screenshot"
-          value={bugForm.screenshot || ''}
+          // value={bugForm.screenshot || ''}
           onChange={(e) => handleUpdateBugForm(e, 'screenshot')}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseBugDialog}>Cancel</Button>
           <Button onClick={handleSubmitBugReport}>Submit</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={featureDialogOpen} onClose={handleCloseFeatureDialog}>
+        <DialogTitle>Submit Feature Request</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            autoFocus
+            margin="dense"
+            id="title"
+            name="title"
+            label="Title"
+            value={featureForm.title || ''}
+            onChange={(e) => handleUpdateFeatureForm(e, 'title')}
+            // variant="standard"
+          />
+          <br /><br />
+          <DialogContentText>
+            Please describe the desired feature in as much detail as possible:
+          </DialogContentText>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            margin="dense"
+            id="description"
+            name="description"
+            label="Description"
+            value={featureForm.description || ''}
+            onChange={(e) => handleUpdateFeatureForm(e, 'description')}
+            // variant="standard"
+          />
+          <br /><br />
+          <label htmlFor="screenshot" style={{display: 'block', fontSize: 13}}>Upload screenshot:</label>
+          <input
+          type="file"
+          id="screenshot"
+          name="screenshot"
+          // value={bugForm.screenshot || ''}
+          onChange={(e) => handleUpdateFeatureForm(e, 'screenshot')}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseFeatureDialog}>Cancel</Button>
+          <Button onClick={handleSubmitFeatureRequest}>Submit</Button>
         </DialogActions>
       </Dialog>
     </Navbar>

@@ -1,4 +1,5 @@
 import Grid from '@mui/material/Grid';
+import FormInput from '../form-components/FormInput';
 
 const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
 
@@ -10,11 +11,11 @@ const handleInput = (value) => {
 
 export default function EditableGridItem(props) {
 
-    const {currentlyEditing, selectedRow, field, label, width, formikProps, type, options} = props;
+    const {currentlyEditing, selectedRow, field, label, width, formikProps, type, options, value} = props;
 
     return(
         <Grid item>
-            <label htmlFor={field}><u>{`${label}:`}</u></label>
+            <label htmlFor={field} style={{display: 'block'}}><u>{`${label}:`}</u></label>
             {/* {formikProps.values[field]} */}
             {currentlyEditing ?
             <>
@@ -31,7 +32,7 @@ export default function EditableGridItem(props) {
             />
             {field === 'injuryDate1' &&
             <>
-            <label htmlFor='injuryDate2'><u>{`DOI2:`}</u></label>
+            <label htmlFor='injuryDate2' style={{display: 'block'}}><u>{`DOI2:`}</u></label>
             <input 
                 type={type} 
                 name='injuryDate2'
@@ -105,6 +106,22 @@ export default function EditableGridItem(props) {
             {/* {props.errors[field] && <div id="feedback">{props.errors[field]}</div>} */}
             </>
             }
+
+            {/* Checkbox - NOT WORKING YET */}
+            
+            {/* {type === 'checkbox' &&
+            <>
+            {formikProps.values[field]}
+            {value}
+            <input
+                type={type}
+                name={field}
+                value={value}
+                onChange={formikProps.handleChange}
+                onBlur={formikProps.handleBlur}
+            /> 
+            </>
+            } */}
             </>
             :
             <>
@@ -121,7 +138,7 @@ export default function EditableGridItem(props) {
             <div id={field}>{selectedRow.injuryDate1}</div>
             {selectedRow.injuryDate2 &&
             <>
-            <label htmlFor='injuryDate2'><u>{`DOI2:`}</u></label>
+            <label htmlFor='injuryDate2' style={{display: 'block'}}><u>{`DOI2:`}</u></label>
             <div id='injuryDate2'>{selectedRow.injuryDate2}</div>
             </>
             }

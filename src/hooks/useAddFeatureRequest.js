@@ -2,7 +2,7 @@ import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
 import emailjs from '@emailjs/browser';
 
-export default function useAddBugReport() {
+export default function useAddFeatureRequest() {
 
   const queryClient = useQueryClient();
 
@@ -10,7 +10,7 @@ export default function useAddBugReport() {
     console.log(values);
     const params = {
       to_email: `wmcclure@definedpt.com`,
-      subject: `New Bug Report - SMARTER`, 
+      subject: `New Feature Request - SMARTER`, 
       message: `<u>Submitted By:</u> ${values.submittedBy}<br /><br /><u>Title:</u><br />${values.title}<br /><br /><u>Description:</u><br />${values.description}<br /><br /><u>Screenshot:</u><br />${values.screenshot || ''}`
     }
     emailjs.send('service_zl67u0w', 'template_a7ve3kt', params, '0mive5-lH56wNnNf7')
@@ -22,8 +22,8 @@ export default function useAddBugReport() {
     });
   };
 
-  const addBugReport = (values) => api
-                              .post('/bugReports', values,
+  const addFeatureRequest = (values) => api
+                              .post('/featureRequests', values,
                               {
                                 headers:
                                 {
@@ -34,15 +34,15 @@ export default function useAddBugReport() {
                               .then(response => {
                                 const data = response.data;
                                 console.log(data);
-                                queryClient.invalidateQueries('bugReports');
+                                queryClient.invalidateQueries('featureRequests');
                                 sendEmail(data);
-                                alert("Bug report submitted successfully.");
+                                alert("Feature Request submitted successfully.");
                                 return data;
                               });
     
-  return useMutation( (values) => addBugReport(values), 
+  return useMutation( (values) => addFeatureRequest(values), 
                       {onSuccess: () => {
-                      console.log('successfully added bugReport...');
+                      console.log('successfully added featureRequest...');
                       }});
 
 }

@@ -26,6 +26,30 @@ const headCells = [
     disablePadding: false,
     label: 'State',
   },
+  {
+    id: 'dpt',
+    numeric: false,
+    disablePadding: false,
+    label: 'DPT',
+  },
+  {
+    id: 'DPT_OT',
+    numeric: false,
+    disablePadding: false,
+    label: 'OT',
+  },
+  {
+    id: 'fce',
+    numeric: false,
+    disablePadding: false,
+    label: 'FCE',
+  },
+  {
+    id: 'ppd',
+    numeric: false,
+    disablePadding: false,
+    label: 'PPD',
+  },
 ];
 
 export default function TherapistSearch(props) {

@@ -9,7 +9,7 @@ export default function FormSelectAssign({ label, ...props }) {
 
   return (
     <>
-        <label htmlFor={props.name}>{label}</label>
+        <label htmlFor={props.name} style={{display: 'block'}}>{label}</label>
         {meta.touched && meta.error ? (
          <select className="redBorder" {...field} {...props}>
           <option value=''>-</option>

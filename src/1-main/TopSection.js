@@ -66,7 +66,7 @@ export default function TopSection() {
     };
 
     return (
-    // this is cool
+      
     <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={tab} onChange={handleChange} aria-label="referral tabs">

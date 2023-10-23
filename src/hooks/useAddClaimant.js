@@ -30,6 +30,8 @@ export default function useAddClaimant() {
                                 const data = response.data;
                                 // console.log(data);
                                 queryClient.invalidateQueries('claimants');
+                                queryClient.invalidateQueries('claimantsdropdown');
+                                queryClient.invalidateQueries('claimantsearchall');
                                 return data;
                               });
     

@@ -31,6 +31,8 @@ export default function useAddCasemanager() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('casemanagers');
+                                queryClient.invalidateQueries('casemanagersdropdown');
+                                queryClient.invalidateQueries('casemanagersearchall');
                                 return data;
                               });
     

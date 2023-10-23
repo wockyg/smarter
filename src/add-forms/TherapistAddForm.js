@@ -74,14 +74,17 @@ export default function TherapistAddForm() {
                 billingEmail2: '',
                 billsMonthly: [],
                 billingProfile: '',
-                dpt_an: [],
-                ppd_gl: [],
-                dpt_aq: [],
-                dpt_mt: [],
-                dpt_ot: [],
-                dpt_wh: [],
-                dpt_wc: [],
-                dpt_th: [],
+                DPT_AN: [],
+                PPD_GL: [],
+                DPT_AQ: [],
+                DPT_MT: [],
+                DPT_OT: [],
+                DPT_WH: [],
+                DPT_WC: [],
+                DPT_TH: [],
+                DPT_ST: [],
+                DPT_VT: [],
+                DPT_CHT: [],
                 dateAdded: '',
                 doNotUseDPT: [],
                 doNotUseDPTReason: '',
@@ -139,14 +142,17 @@ export default function TherapistAddForm() {
                 billingEmail2: Yup.string(),
                 billsMonthly: Yup.array(),
                 billingProfile: Yup.string(),
-                dpt_an: Yup.array(),
-                ppd_gl: Yup.array(),
-                dpt_aq: Yup.array(),
-                dpt_mt: Yup.array(),
-                dpt_ot: Yup.array(),
-                dpt_wh: Yup.array(),
-                dpt_wc: Yup.array(),
-                dpt_th: Yup.array(),                
+                DPT_AN: Yup.array(),
+                PPD_GL: Yup.array(),
+                DPT_AQ: Yup.array(),
+                DPT_MT: Yup.array(),
+                DPT_OT: Yup.array(),
+                DPT_WH: Yup.array(),
+                DPT_WC: Yup.array(),
+                DPT_TH: Yup.array(),
+                DPT_ST: Yup.array(),
+                DPT_VT: Yup.array(),
+                DPT_CHT: Yup.array(),
                 doNotUseDPT: Yup.array(),
                 doNotUseDPTReason: Yup.string(),
                 notes: Yup.string(),
@@ -358,7 +364,7 @@ export default function TherapistAddForm() {
                                     <Grid item>
                                     <FormInput
                                         id="dpt"
-                                        label="DPT:"
+                                        label="DPT"
                                         name="dpt"
                                         type="checkbox"
                                         value="DPT"
@@ -368,38 +374,65 @@ export default function TherapistAddForm() {
                                     <>
                                         <Grid item>
                                             <FormInput
-                                                id="dpt_ot"
-                                                label="OT:"
-                                                name="dpt_ot"
+                                                id="DPT_OT"
+                                                label="OT"
+                                                name="DPT_OT"
                                                 type="checkbox"
                                                 value="DPT_OT"
                                             /> 
                                         </Grid>
                                         <Grid item>
                                             <FormInput
-                                                id="dpt_aq"
-                                                label="Aquatic:"
-                                                name="dpt_aq"
+                                                id="DPT_AQ"
+                                                label="AQ"
+                                                name="DPT_AQ"
                                                 type="checkbox"
                                                 value="DPT_AQ"
                                             /> 
                                         </Grid>
                                         <Grid item>
                                             <FormInput
-                                                id="dpt_an"
-                                                label="Anodyne:"
-                                                name="dpt_an"
+                                                id="DPT_AN"
+                                                label="AN"
+                                                name="DPT_AN"
                                                 type="checkbox"
                                                 value="DPT_AN"
                                             /> 
                                         </Grid>
                                         <Grid item>
                                             <FormInput
-                                                id="dpt_mt"
-                                                label="Massage:"
-                                                name="dpt_mt"
+                                                id="DPT_MT"
+                                                label="MT"
+                                                name="DPT_MT"
                                                 type="checkbox"
                                                 value="DPT_MT"
+                                            /> 
+                                        </Grid>
+                                        <Grid item>
+                                            <FormInput
+                                                id="DPT_ST"
+                                                label="ST"
+                                                name="DPT_ST"
+                                                type="checkbox"
+                                                value="DPT_ST"
+                                            /> 
+                                        </Grid>
+                                        <Grid item>
+                                            <FormInput
+                                                id="DPT_VT"
+                                                label="VT"
+                                                name="DPT_VT"
+                                                type="checkbox"
+                                                value="DPT_VT"
+                                            /> 
+                                        </Grid>
+                                        <Grid item>
+                                            <FormInput
+                                                id="DPT_CHT"
+                                                label="CHT"
+                                                name="DPT_CHT"
+                                                type="checkbox"
+                                                value="DPT_CHT"
                                             /> 
                                         </Grid>
                                         <Box width="100%"/>
@@ -552,18 +585,18 @@ export default function TherapistAddForm() {
                                 <Grid container spacing={0.5}>
                                     <Grid item>
                                         <FormInput
-                                            id="dpt_wc"
+                                            id="DPT_WC"
                                             label="WC:"
-                                            name="dpt_wc"
+                                            name="DPT_WC"
                                             type="checkbox"
                                             value="DPT_WC"
                                         /> 
                                     </Grid>
                                     <Grid item>
                                         <FormInput
-                                            id="dpt_wh"
+                                            id="DPT_WH"
                                             label="WH:"
-                                            name="dpt_wh"
+                                            name="DPT_WH"
                                             type="checkbox"
                                             value="DPT_WH"
                                         /> 

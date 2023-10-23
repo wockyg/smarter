@@ -477,8 +477,8 @@ export default function ClaimInfo(props) {
                                             name="fuHoldNotes"
                                         >
                                         <option value={selectedClaim.fuHoldNotes}>{selectedClaim.fuHoldNotes}</option>
-                                            {reasons.filter((x) => x.reason !== selectedClaim.fuHoldNotes).map((c) => (
-                                                <option key={c.reason} value={c.reason}>{c.reason}</option>
+                                            {reasons.filter((r) => r !== selectedClaim.fuHoldNotes).map((c) => (
+                                                <option key={c} value={c}>{c}</option>
                                             ))}
                                         </select>
                                         {props.errors.fuHoldNotes && <div id="feedback">{props.errors.fuHoldNotes}</div>}

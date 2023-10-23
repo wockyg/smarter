@@ -60,8 +60,9 @@ export default function SearchDetails(props) {
         width: '100%',
         height: 480,
         backgroundColor: '#E6E6E6',
-        padding: 2,
-        overflow: 'scroll'
+        // paddingTop: 2,
+        // paddingRight: 2,
+        // overflow: 'scroll'
       }}
     >
         

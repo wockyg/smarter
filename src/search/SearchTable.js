@@ -1,4 +1,4 @@
-import { useState, useContext, useRef } from 'react';
+import { useState, useContext, useRef, Fragment } from 'react';
 
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -13,6 +13,7 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
 
 import DownloadIcon from '@mui/icons-material/Download';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 import { SearchContext } from '../contexts/SearchContext';
 import { DetailsContext } from '../contexts/DetailsContext';
@@ -31,49 +32,11 @@ import { useParams } from 'react-router-dom';
 
 // import { stableSort, getComparator, handleRequestSort, handleChangePage, handleChangeRowsPerPage } from '../table-components/TableComponents';
 
-import '../table-components/ReferralTable.css'
-
-// function stableSort(array, comparator) {
-//   const stabilizedThis = array.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) {
-//       return order;
-//     }
-//     return a[1] - b[1];
-//   });
-//   return stabilizedThis.map((el) => el[0]);
-// }
-
-// function descendingComparator(a, b, orderBy) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
-
-// function getComparator(order, orderBy) {
-//   return order === 'desc'
-//     ? (a, b) => descendingComparator(a, b, orderBy)
-//     : (a, b) => -descendingComparator(a, b, orderBy);
-// }
-
-// const handleRequestSort = (property, orderBy, order, setOrder, setOrderBy) => {
-//     const isAsc = orderBy === property && order === 'asc';
-//     setOrder(isAsc ? 'desc' : 'asc');
-//     setOrderBy(property);
-// };
+import '../table-components/ReferralTable.css';
 
 function SearchTableHead(props) {
 
   const { headCells, order, orderBy, onRequestSort } = props;
-
-  // const createSortHandler = (property) => (event) => {
-  //   onRequestSort(event, property);
-  // };
 
   return (
     <TableHead>
@@ -236,11 +199,21 @@ export default function SearchTable(props) {
                             tabIndex={-1}
                             key={row[`${party}Id`]}
                             id={labelId}
-                            className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')): (row.doNotUseDPT ? 'doNotUse' : '')}
+                            className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')) : ((party === 'therapist' && row.therapistId === searchId) ? 'clickedRow' : (row.doNotUseDPT ? 'doNotUse' : ''))}
                             // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
                             >
                                 {headCells.map((col) => (
-                                    <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">{row[col.id]}</StyledTableCell>
+                                  <Fragment key={col.id}>
+                                  {((col.id === 'dpt' && row.dpt === 'DPT') || (col.id === 'fce' && row.fce === 'FCE') || (col.id === 'ppd' && row.ppd === 'PPD')) ?
+                                  <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="center">
+                                  <CheckCircleOutlineIcon fontSize='small' />
+                                  </StyledTableCell>
+                                  :
+                                  <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
+                                  {row[col.id]}
+                                  </StyledTableCell>
+                                  }
+                                  </Fragment>
                                 )
                                 )}
                             </TableRow>
@@ -255,7 +228,7 @@ export default function SearchTable(props) {
                 </Table>
             </TableContainer>
         </Paper>
-        {(rows.length > 0) &&
+        
             <TablePagination
             rowsPerPageOptions={[25, 100, 250]}
             component="div"
@@ -265,7 +238,7 @@ export default function SearchTable(props) {
             onPageChange={(e, v) => handleChangePage(v, setPage)}
             onRowsPerPageChange={(e) => handleChangeRowsPerPage(e, setRowsPerPage, setPage)}
             />
-            }
+            
     </Box>
     );
 }

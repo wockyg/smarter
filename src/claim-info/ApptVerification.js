@@ -68,7 +68,24 @@ export default function ApptVerification(props) {
         // paddingLeft: 5,
         // paddingRight: 5,
         fontSize: 11,
-    })
+    });
+
+    const style = {
+        position: 'absolute',
+        // marginTop: '100px',
+        // marginLeft: '400px',
+        // marginRight: '400px',
+        bottom: '40%',
+        left: '35%',
+        overflowY: 'scroll',
+        // transform: 'translate(-20%, -20%)',
+        width: 500,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        maxHeight: 900,
+    };
 
     const startEditing = (i, row) => {
         console.log("start editing");
@@ -121,23 +138,6 @@ export default function ApptVerification(props) {
         // TODO: debud needPN
         // console.log(event.target.value);
     }
-
-    const style = {
-        position: 'absolute',
-        // marginTop: '100px',
-        // marginLeft: '400px',
-        // marginRight: '400px',
-        bottom: '40%',
-        left: '35%',
-        overflowY: 'scroll',
-        // transform: 'translate(-20%, -20%)',
-        width: 500,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-        maxHeight: 900,
-    };
 
     const handleStartBulkEdit = (event, key) => {
         console.log('BULK');

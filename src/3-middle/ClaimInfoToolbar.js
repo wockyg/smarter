@@ -20,6 +20,9 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import PreviewIcon from '@mui/icons-material/Preview';
+import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
@@ -36,10 +39,14 @@ export default function ClaimInfoToolbar() {
 
     const [anchorEl0, setAnchorEl0] = useState(null);
     const [anchorEl1, setAnchorEl1] = useState(null);
+    const [anchorEl2, setAnchorEl2] = useState(null);
     const [removeField, setRemoveField] = useState(null);
+    const [editClaimNumber, setEditClaimNumber] = useState(false);
+    const [tempClaimNumber, setTempClaimNumber] = useState('');
 
     const open0 = Boolean(anchorEl0);
     const open1 = Boolean(anchorEl1);
+    const open2 = Boolean(anchorEl2);
 
     let { id: linkId } = useParams();
 
@@ -54,16 +61,24 @@ export default function ClaimInfoToolbar() {
       if (n === 0) {
         setAnchorEl0(event.currentTarget);
         setAnchorEl1(null);
+        setAnchorEl2(null);
       }
       else if (n === 1) {
-        setAnchorEl1(event.currentTarget);
         setAnchorEl0(null);
+        setAnchorEl1(event.currentTarget);
+        setAnchorEl2(null);
+      }
+      else if (n === 2) {
+        setAnchorEl0(null);
+        setAnchorEl1(null);
+        setAnchorEl2(event.currentTarget);
       }
     };
 
     const handleCloseMenu = () => {
         setAnchorEl0(null);
         setAnchorEl1(null);
+        setAnchorEl2(null);
         // setFieldSwap("");
         // setFieldRemove("");
     };
@@ -75,6 +90,31 @@ export default function ClaimInfoToolbar() {
       }
       mutationUpdate.mutate(values);
       handleCloseMenu();
+    };
+
+    const handleUpdateClaimNumber = () => {
+      setEditClaimNumber(!editClaimNumber);
+      setTempClaimNumber(selectedClaim.claimNumber)
+      handleCloseMenu();
+    };
+
+    const handleChangeClaimNumber = (event) => {
+      setTempClaimNumber(event.target.value)
+      handleCloseMenu();
+    };
+
+    const cancelEdit = (event) => {
+      setTempClaimNumber('');
+      setEditClaimNumber(false);
+      handleCloseMenu();
+    };
+
+    const stopEditing = () => {
+        console.log("done editing");
+        const changedValue = tempClaimNumber !== selectedClaim.claimNumber;
+        changedValue && mutationUpdate.mutate({referralId: selectedClaim.referralId, claimNumber: tempClaimNumber});
+        setTempClaimNumber('');
+        setEditClaimNumber(false);
     };
 
     const handleToggleBillMode = (e, v) => {
@@ -97,8 +137,45 @@ export default function ClaimInfoToolbar() {
             <Grid item>
               <h3>
                 <Badge bg="secondary">
-                    {selectedClaim.claimNumber ? `${selectedClaim.claimantLast}, ${selectedClaim.claimantFirst} | ${selectedClaim.claimNumber}` : `${selectedClaim.claimant}`}
-                    
+                    {`${selectedClaim.claimant} | `}
+                    {editClaimNumber ?
+                    <Grid container>
+                        <Grid item>
+                          <input 
+                          type='text'
+                          name='claimNumber'
+                          value={tempClaimNumber ? tempClaimNumber : ''}
+                          onChange={(event) => handleChangeClaimNumber(event)}
+                          style={{width: '15ch'}}
+                          />
+                        </Grid>
+                        <Grid item>
+                            <CheckIcon
+                            sx={{cursor: "pointer"}}
+                            fontSize='small'
+                            onClick={() => stopEditing()}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <ClearIcon
+                            sx={{cursor: "pointer"}}
+                            fontSize='small'
+                            onClick={() => cancelEdit()}
+                            />
+                        </Grid>
+                    </Grid>
+                    :
+                    <div style={{cursor: 'pointer'}} onClick={(e) => handleOpenMenu(e, 2)}>
+                    <u>
+                    {selectedClaim.claimNumber 
+                    ?
+                    `${selectedClaim.claimNumber}`
+                    :
+                    'WILL GET'
+                    }
+                    </u>
+                    </div>
+                    }
                 </Badge>
               </h3>
             </Grid>
@@ -209,19 +286,31 @@ export default function ClaimInfoToolbar() {
         </MenuItem>
         }
             
-        </Menu>
-        <Menu
-        id="extras-remove-menu"
-        anchorEl={anchorEl1}
-        open={open1}
-        onClose={handleCloseMenu}
-      >
-        
-          <MenuItem  onClick={() => handleUpdate(removeField)}>
-              Remove
-          </MenuItem>
-   
-        </Menu>
+      </Menu>
+      <Menu
+      id="extras-remove-menu"
+      anchorEl={anchorEl1}
+      open={open1}
+      onClose={handleCloseMenu}
+    >
+      
+        <MenuItem  onClick={() => handleUpdate(removeField)}>
+            Remove
+        </MenuItem>
+  
+      </Menu>
+      <Menu
+      id="extras-remove-menu"
+      anchorEl={anchorEl2}
+      open={open2}
+      onClose={handleCloseMenu}
+    >
+      
+        <MenuItem  onClick={() => handleUpdateClaimNumber()}>
+            Update Claim Number
+        </MenuItem>
+  
+      </Menu>
       </>
       }
       </>

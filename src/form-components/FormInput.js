@@ -7,7 +7,7 @@ export default function FormInput({ label, ...props }) {
 
   return (
     <>
-        <label htmlFor={props.name}>{label}</label>
+        <label htmlFor={props.name} style={{display: 'block'}}><u>{label}</u></label>
         {meta.touched && meta.error ? (
          <input className="redBorder" {...field} {...props} />
        ) : <input {...field} {...props} />}

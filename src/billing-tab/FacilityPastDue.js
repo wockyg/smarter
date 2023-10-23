@@ -1,5 +1,15 @@
+import { useState } from 'react';
 import useGetFacilityPastDue from '../hooks/useGetFacilityPastDue';
+import useGetFceppdBillingAdjPastDue from '../hooks/useGetFceppdBillingAdjPastDue';
 import ReferralTable from '../table-components/ReferralTable';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Skeleton from '@mui/material/Skeleton';
+import { status } from '../lookup-tables/lookup_paymentStatus';
+
+import { handleChangeSearch } from '../7-util/HelperFunctions';
 
 const headCells = [
   {
@@ -27,7 +37,7 @@ const headCells = [
     label: 'BodyPart',
   },
   {
-    id: 'therapistDisplay',
+    id: 'therapistDisplayShort',
     numeric: false,
     disablePadding: false,
     label: 'Therapist',
@@ -61,18 +71,26 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'PT.Paid',
+    enableEdit: true,
+    inputType: 'date',
   },
   {
     id: 'facilityAmountPaid',
     numeric: false,
     disablePadding: false,
     label: 'Amt',
+    enableEdit: true,
+    inputType: 'text',
+    inputWidth: '8ch'
   },
   {
     id: 'checkNumber',
     numeric: false,
     disablePadding: false,
     label: 'Check#',
+    enableEdit: true,
+    inputType: 'text',
+    inputWidth: '8ch'
   },
   {
     id: 'adjuster',
@@ -92,20 +110,49 @@ export default function AdjusterPastDue(props) {
 
     const initialSort = 'claimant';
 
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetFacilityPastDue();
+    const [filter, setFilter] = useState({service: 'DPT'});
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]));
+    const { status: statusRows, data: rowsDPT, error: errorRows, isFetching: isFetchingRows } = useGetFacilityPastDue();
+
+    const { status: statusRowsFCE, data: rowsFCE, error: errorRowsFCE, isFetching: isFetchingRowsFCE } = useGetFceppdBillingAdjPastDue();
 
     return (
         <>
-        {rows &&
-        <ReferralTable
-        headCells={headCells}
-        rows={rowsFiltered}
-        type='bil'
-        title='PT Past Due'
-        />
-        }
+        {rowsDPT && rowsFCE ?
+        <Grid container spacing={1}>
+          <Grid item>
+            <ToggleButtonGroup
+            size="small"
+            value={filter.service || ''}
+            exclusive
+            onChange={(e) => handleChangeSearch(e, 'service', filter, setFilter)}
+            aria-label="serviceToggle"
+            >
+              <ToggleButton value='DPT' aria-label="DPT">
+                {'DPT'}
+              </ToggleButton>
+              <ToggleButton value='FCE' aria-label="FCE|PPD">
+                {'FCE|PPD'}
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+          <Box width="100%" />
+          <Grid item>
+            <ReferralTable
+            headCells={headCells}
+            rows={filter.service === "FCE" ? rowsFCE : rowsDPT}
+            type={filter.service === "DPT" ? 'bil' : null}
+            title='Adj Past Due'
+            initialSort={initialSort}
+            inlineEdit={true}
+            bulkEdit={true}
+            />
+          </Grid>
+        </Grid>
+        
+      :
+      <Skeleton variant="rectangular" width='100%' height={475} />
+      }
         </>
     );
 }

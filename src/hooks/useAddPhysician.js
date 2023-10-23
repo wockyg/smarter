@@ -28,6 +28,8 @@ export default function useAddPhysician() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('physicians');
+                                queryClient.invalidateQueries('physiciansdropdown');
+                                queryClient.invalidateQueries('physiciansearchall');
                                 return data;
                               });
     

@@ -1,3 +1,4 @@
+import { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
@@ -6,6 +7,10 @@ import IconButton from '@mui/material/IconButton';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import {careCoordinators} from '../lookup-tables/lookup_careCoordinators';
 import { services } from '../lookup-tables/lookup_service';
+
+import InputSelect from '../form-components-searchBar/InputSelect';
+
+import * as Helpers from '../7-util/HelperFunctions';
 
 import Paper from '@mui/material/Paper';
 
@@ -17,7 +22,11 @@ import useGetEmployersDropdown from '../hooks/useGetEmployersDropdown';
 
 export default function ReferralSearchBar(props) {
 
-    const {searchVal, searchValAdvanced, handleChangeSearch, handleClearSearch, handleClearEntireSearch} = props;
+    const { fields } = props;
+
+    const {handleChangeSearch} = Helpers;
+
+    const [searchVal, setSearchVal] = useState({});
 
     const { status: statusClaimants, data: claimants, error: errorClaimants, isFetching: isFetchingClaimants } = useGetClaimantsDropdown();
     const { status: statusAdjusters, data: adjusters, error: errorAdjusters, isFetching: isFetchingAdjusters } = useGetAdjustersDropdown();
@@ -123,40 +132,28 @@ export default function ReferralSearchBar(props) {
     return (
       <>
       {claimants && adjusters && clients && therapists && employers &&
-      <Paper elevation={3}>
+      <Paper>
       <Box sx={{borderRadius: 1, padding: 1, background: '#D5D8DC'}}>
         <Grid container spacing={1}>
           {/* assign */}
           <Grid item>
-            <label htmlFor="assign" style={{display: 'block'}}>Assign:</label>
-            <select
-            id='assign'
-            onChange={(e) => handleChangeSearch(e, 'assign')}
-            value={searchValAdvanced.assign ? searchValAdvanced.assign : ''}
-            >
-              <option value="">
-                {"--"}
-              </option>
-              {careCoordinators?.map((n) => (
-                  <option key={n.Initials} value={n.Initials}>{n.Initials}</option>
-              ))}
-            </select>
+            <InputSelect
+            searchVal={searchVal}
+            setSearchVal={setSearchVal}
+            field="assign"
+            Label="Assign:"
+            options={careCoordinators.map(c => c.Initials)}
+            />
           </Grid>
           {/* service */}
           <Grid item>
-            <label htmlFor="service" style={{display: 'block'}}>Service:</label>
-            <select
-            id='service'
-            onChange={(e) => handleChangeSearch(e, 'service')}
-            value={searchValAdvanced.service ? searchValAdvanced.service : ''}
-            >
-              <option value="">
-                {"Select"}
-              </option>
-              {services?.map((n) => (
-                  <option key={n.service} value={n.service}>{n.service}</option>
-              ))}
-            </select>
+            <InputSelect
+            searchVal={searchVal}
+            setSearchVal={setSearchVal}
+            field="service"
+            Label="Service:"
+            options={services}
+            />
           </Grid>
           {/* claimant */}
           <Grid item>
@@ -164,7 +161,7 @@ export default function ReferralSearchBar(props) {
             <select
             id='claimant'
             onChange={(e) => handleChangeSearch(e, 'claimant')}
-            value={searchValAdvanced.claimant ? searchValAdvanced.claimant : ''}
+            value={searchVal.claimant ? searchVal.claimant : ''}
             >
               <option value="">
                 {"Select"}
@@ -435,11 +432,14 @@ export default function ReferralSearchBar(props) {
               ))}
             </select>
           </Grid>
-          {Object.keys(searchValAdvanced).length > 0 &&
+
+          {/* clear search */}
+          {Object.keys(searchVal).length > 0 &&
           <Grid item sx={{paddingLeft: 1}}>
             <button onClick={handleClearEntireSearch}>Clear Search</button>
           </Grid>
           }
+
         </Grid>
       </Box>
       </Paper>

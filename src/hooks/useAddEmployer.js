@@ -25,6 +25,8 @@ export default function useAddEmployer() {
                                 const data = response.data;
                                 console.log(response);
                                 queryClient.invalidateQueries('employers');
+                                queryClient.invalidateQueries('employersdropdown');
+                                queryClient.invalidateQueries('employersearchall');
                                 return data;
                               });
     

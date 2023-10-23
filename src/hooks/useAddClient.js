@@ -21,6 +21,8 @@ export default function useAddClient() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('clients');
+                                queryClient.invalidateQueries('clientsdropdown');
+                                queryClient.invalidateQueries('clientsearchall');
                                 return data;
                               });
     

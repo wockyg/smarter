@@ -58,15 +58,17 @@ export default function useAddTherapist() {
                                 'billingEmail2': `${values.billingEmail2}`,
                                 'billsMonthly': values.billsMonthly.length > 0 ? values.billsMonthly[0] : null,
                                 'billingProfile': `${values.billingProfile}`,
-                                'dpt_an': values.dpt_an.length > 0 ? values.dpt_an[0] : null,
-                                'ppd_gl': values.ppd_gl.length > 0 ? values.ppd_gl[0] : null,
-                                'dpt_aq': values.dpt_aq.length > 0 ? values.dpt_aq[0] : null,
-                                'dpt_mt': values.dpt_mt.length > 0 ? values.dpt_mt[0] : null,
-                                'dpt_ot': values.dpt_ot.length > 0 ? values.dpt_ot[0] : null,
-                                'dpt_wc': values.dpt_wc.length > 0 ? values.dpt_wc[0] : null,
-                                'dpt_wh': values.dpt_wh.length > 0 ? values.dpt_wh[0] : null,
-                                'dpt_th': values.dpt_th.length > 0 ? values.dpt_th[0] : null,
+                                'DPT_AN': values.DPT_AN.length > 0 ? values.DPT_AN[0] : null,
+                                'PPD_GL': values.PPD_GL.length > 0 ? values.PPD_GL[0] : null,
+                                'DPT_AQ': values.DPT_AQ.length > 0 ? values.DPT_AQ[0] : null,
+                                'DPT_MT': values.DPT_MT.length > 0 ? values.DPT_MT[0] : null,
+                                'DPT_OT': values.DPT_OT.length > 0 ? values.DPT_OT[0] : null,
+                                'DPT_WC': values.DPT_WC.length > 0 ? values.DPT_WC[0] : null,
+                                'DPT_WH': values.DPT_WH.length > 0 ? values.DPT_WH[0] : null,
+                                'DPT_TH': values.DPT_TH.length > 0 ? values.DPT_TH[0] : null,
                                 'doNotUseDPT': values.doNotUseDPT.length > 0 ? values.doNotUseDPT[0] : null,
+                                'doNotUseFCE': values.doNotUseFCE.length > 0 ? values.doNotUseFCE[0] : null,
+                                'doNotUsePPD': values.doNotUsePPD.length > 0 ? values.doNotUsePPD[0] : null,
                                 'doNotUseDPTReason': `${values.doNotUseDPTReason}`,
                                 'notes': `${values.notes}`,
                                 'ptProfile': `${values.ptProfile}`,
@@ -75,6 +77,8 @@ export default function useAddTherapist() {
                                 const data = response.data;
                                 console.log("submit data:", data);
                                 queryClient.invalidateQueries('therapists');
+                                queryClient.invalidateQueries('therapistsearchall');
+                                queryClient.invalidateQueries('therapistsdropdown');
                                 return data;
                               });
     

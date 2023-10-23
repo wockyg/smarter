@@ -39,7 +39,7 @@ const headCells = [
     label: 'Claimant',
   },
   {
-    id: 'therapistDisplay',
+    id: 'therapistDisplayShort',
     numeric: false,
     disablePadding: false,
     label: 'Therapist',
@@ -73,12 +73,18 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'D1500',
+    enableEdit: true,
+    inputType: 'date',
+    // inputWidth: '10ch'
   },
   {
     id: 'adjusterRate',
     numeric: false,
     disablePadding: false,
     label: 'Adj.Rate',
+    enableEdit: true,
+    inputType: 'text',
+    inputWidth: '8ch'
   },
 ];
 
@@ -98,6 +104,8 @@ export default function MissingV1500(props) {
         rows={rowsFiltered}
         type='bil'
         title='D1500 Not Sent'
+        inlineEdit={true}
+        bulkEdit={true}
         />
         }
         </>

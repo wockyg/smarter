@@ -25,6 +25,8 @@ export default function useAddAdjuster() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('attorneys');
+                                queryClient.invalidateQueries('attorneysdropdown');
+                                queryClient.invalidateQueries('attorneysearchall');
                                 return data;
                               });
     

@@ -13,3 +13,7 @@
 .doNotUse {
   background-color: #FC3F53 !important;
 }
+
+.clickedRow {
+  background-color: #22C5E6 !important;
+}

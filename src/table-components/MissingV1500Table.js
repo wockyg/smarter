@@ -171,18 +171,6 @@ function removeDuplicates(rows) {
     return outputArray;
 }
 
-// function stableSort(array, comparator) {
-//   const stabilizedThis = array.map((el, index) => [el, index]);
-//   stabilizedThis.sort((a, b) => {
-//     const order = comparator(a[0], b[0]);
-//     if (order !== 0) {
-//       return order;
-//     }
-//     return a[1] - b[1];
-//   });
-//   return stabilizedThis.map((el) => el[0]);
-// }
-
 export default function MissingV1500Table(props) {
 
     let { id: linkId } = useParams();
@@ -423,6 +411,7 @@ export default function MissingV1500Table(props) {
       setBillingContactEdit(profile);
       setBillingEditModalOpen(true);
     }
+    
     const handleCloseBillingEditModal = (event, reason) => {
        if (reason !== 'backdropClick') {
           setBillingEditModalOpen(false);
@@ -801,7 +790,7 @@ export default function MissingV1500Table(props) {
                                   </TableCell>
                                   <TableCell sx={{ fontSize: 12, borderRight: 1, borderColor: '#D5D8DC'}}>
                                     <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
-                                            {row.claimNumber}
+                                            {row.claimNumber ? row.claimNumber : 'WILL GET'}
                                         </Link>
                                   </TableCell>
                                   <TableCell sx={{ fontSize: 12, borderRight: 1, borderColor: '#D5D8DC'}}>
