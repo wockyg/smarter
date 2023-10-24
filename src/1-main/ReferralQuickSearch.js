@@ -43,7 +43,7 @@ export default function ReferralQuickSearch(props) {
         }}
         id="quickSearch-autocomplete"
         options={referralsDropdown?.sort((a, b) => -b.claimant.localeCompare(a.claimant))}
-        getOptionLabel={(option) => option.referralId ? `${option.referralId} (${option.service}) ${option.claimant} | ${option.claimNumber} | ${option.bodyPart} | ${option.ptStatus}` : ''}
+        getOptionLabel={(option) => option.referralId ? `${option.referralId} (${option.service}) ${option.claimant} | ${option.claimNumber} | ${option.bodyPart} | ${option.ptStatus || option.referralStatus}` : ''}
         sx={{ width: 300, background: '#F8F9F9', padding: 0.4 }}
         renderInput={(params) => <TextField {...params} size="small" label="Quick Search" />}
         />
