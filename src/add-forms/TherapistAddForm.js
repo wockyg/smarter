@@ -602,7 +602,7 @@ export default function TherapistAddForm() {
                                         /> 
                                     </Grid>
                                     <Box width="100%"/>
-                                    {(values.dpt_wc.length !== 0 || values.dpt_wh.length !== 0) &&
+                                    {(values.DPT_WC.length !== 0 || values.DPT_WH.length !== 0) &&
                                         <>
                                             <Grid item>
                                                 <FormInput
