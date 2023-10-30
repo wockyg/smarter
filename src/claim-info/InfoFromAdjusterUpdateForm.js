@@ -114,7 +114,7 @@ export default function InfoFromAdjusterUpdateForm(props) {
                         </ListItemButton>
                     </ListItem>
                 }
-                {selectedClaim.service.includes("FCE" || "PPD") &&
+                {(selectedClaim.service.includes("FCE") || selectedClaim.service.includes("PPD")) &&
                     <>
                     {((selectedClaim.ptNotesFromAdjuster === "Yes") || (selectedClaim.ptNotesFromAdjuster === "-")) ? 
                         <ListItem disablePadding sx={{backgroundColor: '#EAECEE'}}>

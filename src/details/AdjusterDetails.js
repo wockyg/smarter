@@ -118,6 +118,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -127,6 +128,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -138,6 +140,7 @@ export default function AdjusterDetails(props) {
                     options={clients}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -148,6 +151,7 @@ export default function AdjusterDetails(props) {
                     options={['Active', 'Inactive', '']}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -157,6 +161,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <EditableGridItem
                     field='suite'
@@ -165,6 +170,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -175,6 +181,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -184,6 +191,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -193,6 +201,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -203,6 +212,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <EditableGridItem
                     field='phoneExt'
@@ -211,6 +221,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='5ch'
                     />
                     <EditableGridItem
@@ -220,6 +231,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <EditableGridItem
                     field='phone2Ext'
@@ -228,6 +240,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='5ch'
                     />
                     <Box width="100%"/>
@@ -238,6 +251,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -247,6 +261,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     {selectedAdjuster.email &&
                     <EditableGridItem
@@ -256,6 +271,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     }
                     <Box width="100%"/>
@@ -266,6 +282,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='5ch'
                     />
                     <EditableGridItem
@@ -275,6 +292,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='5ch'
                     />
                     <EditableGridItem
@@ -284,6 +302,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     width='5ch'
                     />
                 </Grid>
@@ -297,6 +316,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -306,6 +326,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -315,6 +336,7 @@ export default function AdjusterDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAdjuster}
+                    selectedParty='adjuster'
                     />
                 </Grid>
             </Grid>

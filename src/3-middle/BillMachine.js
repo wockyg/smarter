@@ -50,8 +50,8 @@ export default function BillMachine() {
             </Grid>
 
             <Grid item xs={2.4} sx={{borderLeft: 1}}>
-                <ICD10Table />
-                <hr />
+                {/* <ICD10Table /> */}
+                {/* <hr /> */}
                 {selectedClaim?.jurisdiction
                 ?
                 <CPTTable />

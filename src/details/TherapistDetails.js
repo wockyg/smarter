@@ -230,6 +230,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <EditableGridItem
                         field='suite'
@@ -238,6 +239,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='4ch'
                         />
                         <EditableGridItem
@@ -247,6 +249,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='10ch'
                         />
                         <EditableGridItem
@@ -256,6 +259,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='3ch'
                         />
                         <EditableGridItem
@@ -265,6 +269,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='6ch'
                         />
                         <Box width="100%"/>
@@ -275,6 +280,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <EditableGridItem
                         field='phoneExt'
@@ -283,6 +289,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='4ch'
                         />
                         <EditableGridItem
@@ -292,6 +299,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <Box width="100%"/>
                         <EditableGridItem
@@ -301,6 +309,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <EditableGridItem
                         field='email'
@@ -309,6 +318,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <Box width="100%"/>
                         <EditableGridItem
@@ -318,6 +328,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <EditableGridItem
                         field='billingPhoneExt'
@@ -326,6 +337,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         width='4ch'
                         />
                         <EditableGridItem
@@ -335,6 +347,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <Box width="100%"/>
                         <EditableGridItem
@@ -344,6 +357,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <EditableGridItem
                         field='billingEmail'
@@ -352,6 +366,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         <Box width="100%"/>
                     </Grid>
@@ -363,6 +378,7 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
                         {/* <Box width="100%"/> */}
                         <EditableGridItem
@@ -372,11 +388,12 @@ export default function TherapistDetails(props) {
                         formikProps={formikProps}
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
+                        selectedParty='therapist'
                         />
 
                         <Box width="100%"/>
                         
-                        {currentlyEditing &&
+                        {currentlyEditing === 'therapist' &&
                         <>
                         DDo Not Use:
                         <Box width="100%"/>
@@ -420,6 +437,7 @@ export default function TherapistDetails(props) {
                             options={reasons}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
                         </Grid>
                         }

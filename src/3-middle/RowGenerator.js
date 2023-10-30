@@ -76,7 +76,7 @@ export default function RowGenerator() {
     const [revertData, setRevertData] = useState({});
     const [d1500SendFormat, setD1500SendFormat] = useState('');
 
-    const { cptRows, setCptRows } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedD1500, setSelectedD1500 } = useContext(SelectedClaimContext);
 
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
@@ -203,10 +203,33 @@ export default function RowGenerator() {
     const handleDownload = (event) => {
         // console.log("ggglllllizzzyyy");
         if (cptRows.length > 0) {
-            const values = {referralId: selectedClaim.referralId, sendFormat: d1500SendFormat, cptRows: cptRows}
+            const values = {
+                referralId: selectedClaim.referralId, 
+                sendFormat: d1500SendFormat, 
+                cptRows: cptRows, 
+                dateApproved: new Date().toISOString(),
+                physician_name: selectedD1500?.physician_name,
+                physician_npi: selectedD1500?.physician_npi,
+                patient_account_no: selectedD1500?.patient_account_no,
+                diagnosis_a: selectedD1500?.diagnosis_a,
+                diagnosis_b: selectedD1500?.diagnosis_b,
+                diagnosis_c: selectedD1500?.diagnosis_c,
+                diagnosis_d: selectedD1500?.diagnosis_d,
+                diagnosis_e: selectedD1500?.diagnosis_e,
+                diagnosis_f: selectedD1500?.diagnosis_f,
+                diagnosis_g: selectedD1500?.diagnosis_g,
+                diagnosis_h: selectedD1500?.diagnosis_h,
+                diagnosis_i: selectedD1500?.diagnosis_i,
+                diagnosis_j: selectedD1500?.diagnosis_j,
+                diagnosis_k: selectedD1500?.diagnosis_k,
+                diagnosis_l: selectedD1500?.diagnosis_l,
+                v1500Id: selectedD1500?.v1500Id
+            }
+                
             hcfaAdd.mutate(values);
             setTimeout(() => {
               setCptRows([]);
+              setSelectedD1500(null);
               setD1500SendFormat('');
             }, "500");
         }

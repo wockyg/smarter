@@ -14,6 +14,7 @@ import ApptToday from './ApptToday';
 import MissingReport from './MissingReport';
 import ReportLimbo from './ReportLimbo';
 import FollowupHold from './FollowupHold';
+import PastAppts from './PastAppts';
 
 import ReferralQuickSearch from '../1-main/ReferralQuickSearch';
 
@@ -83,6 +84,9 @@ export default function ScheduleTab(props) {
             <ToggleButton value="apptToday" aria-label="apptToday">
                 Today
             </ToggleButton>
+            <ToggleButton value="pastAppts" aria-label="pastAppts">
+                Past Appts
+            </ToggleButton>
             <ToggleButton value="missingReport" aria-label="missingReport">
                 Missing Report
             </ToggleButton>
@@ -111,6 +115,9 @@ export default function ScheduleTab(props) {
         }
         {selectedFilter === 'apptToday' &&
         <ApptToday />
+        }
+        {selectedFilter === 'pastAppts' &&
+        <PastAppts />
         }
         {selectedFilter === 'missingReport' &&
         <MissingReport />

@@ -28,6 +28,8 @@ export default function CPTTable(props) {
     const rowCodes =  cptRows?.map((row) => row.cpt);
     const rowUnits = cptRows?.map((row) => row.units);
 
+    // console.log("rowCodes:", rowCodes);
+
     const jurisdiction = selectedClaim?.jurisdiction;
 
     return (
@@ -52,7 +54,7 @@ export default function CPTTable(props) {
                     let codeUnits = -1;
 
                     rowCodes?.forEach((code, index) => {
-                        if (code.includes(String(row.Code))) {
+                        if (+code === row.Code) {
                             hasCode = true;
                             codeUnits = +rowUnits[index];
                         }

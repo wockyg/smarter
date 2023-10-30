@@ -11,13 +11,13 @@ const handleInput = (value) => {
 
 export default function EditableGridItem(props) {
 
-    const {currentlyEditing, selectedRow, field, label, width, formikProps, type, options, value} = props;
+    const {currentlyEditing, selectedParty, selectedRow, field, label, width, formikProps, type, options, value} = props;
 
     return(
         <Grid item>
             <label htmlFor={field} style={{display: 'block'}}><u>{`${label}:`}</u></label>
             {/* {formikProps.values[field]} */}
-            {currentlyEditing ?
+            {currentlyEditing === selectedParty ?
             <>
             {/* Text Field */}
             {(type === 'text' || type === 'date') &&

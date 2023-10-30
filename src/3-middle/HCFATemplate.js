@@ -7,7 +7,7 @@ import blank1500 from '../document-templates/blank1500.jpg';
 
 export default function HCFATemplate(props) {
 
-    const {selectedClaim, codeList, cptRows} = props;
+    const {selectedClaim, codeList, cptRows, selectedD1500} = props;
 
     const num_codes = codeList?.length;
 
@@ -30,8 +30,8 @@ export default function HCFATemplate(props) {
 
     // console.log(cptRows);
 
-    const dos_dollars = cptRows?.map( (row) => {return row.charges.toString().substring(0, row.charges.toString().indexOf('.'));} );
-    const dos_cents = cptRows?.map( (row) => {return row.charges.toString().substring(row.charges.toString().indexOf('.')+1);} );
+    const dos_dollars = cptRows?.map( (row) => {return row?.charges.toString().substring(0, row?.charges.toString().indexOf('.'));} );
+    const dos_cents = cptRows?.map( (row) => {return row?.charges.toString().substring(row?.charges.toString().indexOf('.')+1);} );
 
     let total_charges = 0.0;
 
@@ -102,21 +102,23 @@ export default function HCFATemplate(props) {
                 <Text style={{ position: 'absolute', top: 385, left: 41, fontSize: 12 }}>{(doi1?.getDate()) < 10 ? `0${doi1?.getDate()}` : `${doi1?.getDate()}`}</Text>
                 <Text style={{ position: 'absolute', top: 385, left: 63, fontSize: 12 }}>{doi1?.getFullYear()}</Text>
                 {/* Box 17 - NAME OF REFERRING PROVIDER / NPI */}
-                <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedClaim?.physicianFirst.toUpperCase()} {selectedClaim?.physicianLast.toUpperCase()}, MD</Text>
-                <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedClaim?.physicianNPI}</Text>
+                {/* <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedClaim?.physicianFirst.toUpperCase()} {selectedClaim?.physicianLast.toUpperCase()}, MD</Text> */}
+                {/* <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedClaim?.physicianNPI}</Text> */}
+                <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedD1500 ? selectedD1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
+                <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedD1500 ? selectedD1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
                 {/* Box 21 - DIAGNOSIS OR NATURE OF ILLNESS OR INJURY */}
-                {num_codes > 0 && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{codeList[0].icd10}</Text>}
-                {num_codes > 1 && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{codeList[1].icd10}</Text>}
-                {num_codes > 2 && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{codeList[2].icd10}</Text>}
-                {num_codes > 3 && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{codeList[3].icd10}</Text>}
-                {num_codes > 4 && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{codeList[4].icd10}</Text>}
-                {num_codes > 5 && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{codeList[5].icd10}</Text>}
-                {num_codes > 6 && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{codeList[6].icd10}</Text>}
-                {num_codes > 7 && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{codeList[7].icd10}</Text>}
-                {num_codes > 8 && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{codeList[8].icd10}</Text>}
-                {num_codes > 9 && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{codeList[9].icd10}</Text>}
-                {num_codes > 10 && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{codeList[10].icd10}</Text>}
-                {num_codes > 11 && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{codeList[11].icd10}</Text>}
+                {(num_codes > 0 || selectedD1500?.diagnosis_a) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_a : codeList[0].icd10}</Text>}
+                {(num_codes > 1 || selectedD1500?.diagnosis_b) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_b : codeList[1].icd10}</Text>}
+                {(num_codes > 2 || selectedD1500?.diagnosis_c) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_c : codeList[2].icd10}</Text>}
+                {(num_codes > 3 || selectedD1500?.diagnosis_d) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_d : codeList[3].icd10}</Text>}
+                {(num_codes > 4 || selectedD1500?.diagnosis_e) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_e : codeList[4].icd10}</Text>}
+                {(num_codes > 5 || selectedD1500?.diagnosis_f) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_f : codeList[5].icd10}</Text>}
+                {(num_codes > 6 || selectedD1500?.diagnosis_g) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_g : codeList[6].icd10}</Text>}
+                {(num_codes > 7 || selectedD1500?.diagnosis_h) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_h : codeList[7].icd10}</Text>}
+                {(num_codes > 8 || selectedD1500?.diagnosis_i) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_i : codeList[8].icd10}</Text>}
+                {(num_codes > 9 || selectedD1500?.diagnosis_j) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_j : codeList[9].icd10}</Text>}
+                {(num_codes > 10 || selectedD1500?.diagnosis_k) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_k : codeList[10].icd10}</Text>}
+                {(num_codes > 11 || selectedD1500?.diagnosis_l) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_l : codeList[11].icd10}</Text>}
 
                 {/* Box 24 - DOS/CPT ROWS */}
 
@@ -127,10 +129,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 532, left: 14, fontSize: 10 }}>{dos_months[0]}   {dos_days[0]}    {dos_years[0]}     {dos_months[0]}   {dos_days[0]}    {dos_years[0]}</Text> 
                     <Text style={{ position: 'absolute', top: 532, left: 146, fontSize: 10 }}>{cptRows[0].pos}</Text>
                     <Text style={{ position: 'absolute', top: 532, left: 195, fontSize: 10 }}>{cptRows[0].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 532, left: 247, fontSize: 10 }}>{cptRows[0].mod1.length > 0 ? cptRows[0].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 532, left: 273, fontSize: 10 }}>{cptRows[0].mod2.length > 0 ? cptRows[0].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 532, left: 294, fontSize: 10 }}>{cptRows[0].mod3.length > 0 ? cptRows[0].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 532, left: 317, fontSize: 10 }}>{cptRows[0].mod4.length > 0 ? cptRows[0].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 532, left: 247, fontSize: 10 }}>{cptRows[0]?.mod1?.length > 0 ? cptRows[0].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 532, left: 273, fontSize: 10 }}>{cptRows[0]?.mod2?.length > 0 ? cptRows[0].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 532, left: 294, fontSize: 10 }}>{cptRows[0]?.mod3?.length > 0 ? cptRows[0].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 532, left: 317, fontSize: 10 }}>{cptRows[0]?.mod4?.length > 0 ? cptRows[0].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 532, left: 340, fontSize: 10 }}>{cptRows[0].diag}</Text>
                     <Text style={{ position: 'absolute', top: 532, left: dos_dollars[0].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[0]}  {dos_cents[0]}</Text>
                     <Text style={{ position: 'absolute', top: 532, left: 453, fontSize: 10 }}>{cptRows[0].units}</Text>
@@ -145,10 +147,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 557, left: 14, fontSize: 10 }}>{dos_months[1]}   {dos_days[1]}    {dos_years[1]}     {dos_months[1]}   {dos_days[1]}    {dos_years[1]}</Text>
                     <Text style={{ position: 'absolute', top: 557, left: 146, fontSize: 10 }}>{cptRows[1].pos}</Text>
                     <Text style={{ position: 'absolute', top: 557, left: 195, fontSize: 10 }}>{cptRows[1].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 557, left: 247, fontSize: 10 }}>{cptRows[1].mod1.length > 0 ? cptRows[1].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 557, left: 273, fontSize: 10 }}>{cptRows[1].mod2.length > 0 ? cptRows[1].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 557, left: 294, fontSize: 10 }}>{cptRows[1].mod3.length > 0 ? cptRows[1].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 557, left: 317, fontSize: 10 }}>{cptRows[1].mod4.length > 0 ? cptRows[1].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 557, left: 247, fontSize: 10 }}>{cptRows[1].mod1?.length > 0 ? cptRows[1].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 557, left: 273, fontSize: 10 }}>{cptRows[1].mod2?.length > 0 ? cptRows[1].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 557, left: 294, fontSize: 10 }}>{cptRows[1].mod3?.length > 0 ? cptRows[1].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 557, left: 317, fontSize: 10 }}>{cptRows[1].mod4?.length > 0 ? cptRows[1].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 557, left: 340, fontSize: 10 }}>{cptRows[1].diag}</Text>
                     <Text style={{ position: 'absolute', top: 557, left: dos_dollars[1].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[1]}  {dos_cents[1]}</Text>
                     <Text style={{ position: 'absolute', top: 557, left: 453, fontSize: 10 }}>{cptRows[1].units}</Text>
@@ -163,10 +165,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 581, left: 14, fontSize: 10 }}>{dos_months[2]}   {dos_days[2]}    {dos_years[2]}     {dos_months[2]}   {dos_days[2]}    {dos_years[2]}</Text>
                     <Text style={{ position: 'absolute', top: 581, left: 146, fontSize: 10 }}>{cptRows[2].pos}</Text>
                     <Text style={{ position: 'absolute', top: 581, left: 195, fontSize: 10 }}>{cptRows[2].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 581, left: 247, fontSize: 10 }}>{cptRows[2].mod1.length > 0 ? cptRows[2].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 581, left: 273, fontSize: 10 }}>{cptRows[2].mod2.length > 0 ? cptRows[2].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 581, left: 294, fontSize: 10 }}>{cptRows[2].mod3.length > 0 ? cptRows[2].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 581, left: 317, fontSize: 10 }}>{cptRows[2].mod4.length > 0 ? cptRows[2].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 581, left: 247, fontSize: 10 }}>{cptRows[2].mod1?.length > 0 ? cptRows[2].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 581, left: 273, fontSize: 10 }}>{cptRows[2].mod2?.length > 0 ? cptRows[2].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 581, left: 294, fontSize: 10 }}>{cptRows[2].mod3?.length > 0 ? cptRows[2].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 581, left: 317, fontSize: 10 }}>{cptRows[2].mod4?.length > 0 ? cptRows[2].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 581, left: 340, fontSize: 10 }}>{cptRows[2].diag}</Text>
                     <Text style={{ position: 'absolute', top: 581, left: dos_dollars[2].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[2]}  {dos_cents[2]}</Text>
                     <Text style={{ position: 'absolute', top: 581, left: 453, fontSize: 10 }}>{cptRows[2].units}</Text>
@@ -181,10 +183,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 607, left: 14, fontSize: 10 }}>{dos_months[3]}   {dos_days[3]}    {dos_years[3]}     {dos_months[3]}   {dos_days[3]}    {dos_years[3]}</Text>
                     <Text style={{ position: 'absolute', top: 607, left: 146, fontSize: 10 }}>{cptRows[3].pos}</Text>
                     <Text style={{ position: 'absolute', top: 607, left: 195, fontSize: 10 }}>{cptRows[3].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 607, left: 247, fontSize: 10 }}>{cptRows[3].mod1.length > 0 ? cptRows[3].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 607, left: 273, fontSize: 10 }}>{cptRows[3].mod2.length > 0 ? cptRows[3].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 607, left: 294, fontSize: 10 }}>{cptRows[3].mod3.length > 0 ? cptRows[3].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 607, left: 317, fontSize: 10 }}>{cptRows[3].mod4.length > 0 ? cptRows[3].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 607, left: 247, fontSize: 10 }}>{cptRows[3].mod1?.length > 0 ? cptRows[3].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 607, left: 273, fontSize: 10 }}>{cptRows[3].mod2?.length > 0 ? cptRows[3].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 607, left: 294, fontSize: 10 }}>{cptRows[3].mod3?.length > 0 ? cptRows[3].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 607, left: 317, fontSize: 10 }}>{cptRows[3].mod4?.length > 0 ? cptRows[3].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 607, left: 340, fontSize: 10 }}>{cptRows[3].diag}</Text>
                     <Text style={{ position: 'absolute', top: 607, left: dos_dollars[3].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[3]}  {dos_cents[3]}</Text>
                     <Text style={{ position: 'absolute', top: 607, left: 453, fontSize: 10 }}>{cptRows[3].units}</Text>
@@ -199,10 +201,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 630, left: 14, fontSize: 10 }}>{dos_months[4]}   {dos_days[4]}    {dos_years[4]}     {dos_months[4]}   {dos_days[4]}    {dos_years[4]}</Text>
                     <Text style={{ position: 'absolute', top: 630, left: 146, fontSize: 10 }}>{cptRows[4].pos}</Text>
                     <Text style={{ position: 'absolute', top: 630, left: 195, fontSize: 10 }}>{cptRows[4].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 630, left: 247, fontSize: 10 }}>{cptRows[4].mod1.length > 0 ? cptRows[4].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 630, left: 273, fontSize: 10 }}>{cptRows[4].mod2.length > 0 ? cptRows[4].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 630, left: 294, fontSize: 10 }}>{cptRows[4].mod3.length > 0 ? cptRows[4].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 630, left: 317, fontSize: 10 }}>{cptRows[4].mod4.length > 0 ? cptRows[4].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 630, left: 247, fontSize: 10 }}>{cptRows[4].mod1?.length > 0 ? cptRows[4].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 630, left: 273, fontSize: 10 }}>{cptRows[4].mod2?.length > 0 ? cptRows[4].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 630, left: 294, fontSize: 10 }}>{cptRows[4].mod3?.length > 0 ? cptRows[4].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 630, left: 317, fontSize: 10 }}>{cptRows[4].mod4?.length > 0 ? cptRows[4].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 630, left: 340, fontSize: 10 }}>{cptRows[4].diag}</Text>
                     <Text style={{ position: 'absolute', top: 630, left: dos_dollars[4].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[4]}  {dos_cents[4]}</Text>
                     <Text style={{ position: 'absolute', top: 630, left: 453, fontSize: 10 }}>{cptRows[4].units}</Text>
@@ -217,10 +219,10 @@ export default function HCFATemplate(props) {
                     <Text style={{ position: 'absolute', top: 655, left: 14, fontSize: 10 }}>{dos_months[5]}   {dos_days[5]}    {dos_years[5]}     {dos_months[5]}   {dos_days[5]}    {dos_years[5]}</Text>
                     <Text style={{ position: 'absolute', top: 655, left: 146, fontSize: 10 }}>{cptRows[5].pos}</Text>
                     <Text style={{ position: 'absolute', top: 655, left: 195, fontSize: 10 }}>{cptRows[5].cpt}</Text>
-                    <Text style={{ position: 'absolute', top: 655, left: 247, fontSize: 10 }}>{cptRows[5].mod1.length > 0 ? cptRows[5].mod1 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 655, left: 273, fontSize: 10 }}>{cptRows[5].mod2.length > 0 ? cptRows[5].mod2 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 655, left: 294, fontSize: 10 }}>{cptRows[5].mod3.length > 0 ? cptRows[5].mod3 : ' '}</Text>
-                    <Text style={{ position: 'absolute', top: 655, left: 317, fontSize: 10 }}>{cptRows[5].mod4.length > 0 ? cptRows[5].mod4 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 655, left: 247, fontSize: 10 }}>{cptRows[5].mod1?.length > 0 ? cptRows[5].mod1 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 655, left: 273, fontSize: 10 }}>{cptRows[5].mod2?.length > 0 ? cptRows[5].mod2 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 655, left: 294, fontSize: 10 }}>{cptRows[5].mod3?.length > 0 ? cptRows[5].mod3 : ' '}</Text>
+                    <Text style={{ position: 'absolute', top: 655, left: 317, fontSize: 10 }}>{cptRows[5].mod4?.length > 0 ? cptRows[5].mod4 : ' '}</Text>
                     <Text style={{ position: 'absolute', top: 655, left: 340, fontSize: 10 }}>{cptRows[5].diag}</Text>
                     <Text style={{ position: 'absolute', top: 655, left: dos_dollars[5].length < 3 ? 409 : 403, fontSize: 10 }}>{dos_dollars[5]}  {dos_cents[5]}</Text>
                     <Text style={{ position: 'absolute', top: 655, left: 453, fontSize: 10 }}>{cptRows[5].units}</Text>
@@ -229,7 +231,7 @@ export default function HCFATemplate(props) {
                 }
 
                 {/* Box 26 - PATIENT"S ACCOUNT NO */}
-                <Text style={{ position: 'absolute', top: 682, left: 175, fontSize: 8 }}>PATIENT ACCT#</Text>
+                <Text style={{ position: 'absolute', top: 682, left: 175, fontSize: 8 }}>{selectedD1500 ? selectedD1500.patient_account_no : ''}</Text>
 
                 {/* Box 28 - TOTAL CHARGE */}
 

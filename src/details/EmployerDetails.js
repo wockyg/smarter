@@ -101,6 +101,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -111,6 +112,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <EditableGridItem
                     field='suite'
@@ -119,6 +121,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -129,6 +132,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -138,6 +142,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -147,6 +152,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -157,6 +163,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <EditableGridItem
                     field='phoneExt'
@@ -165,6 +172,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -174,6 +182,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <EditableGridItem
                     field='phone2Ext'
@@ -182,6 +191,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -191,6 +201,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -200,6 +211,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                 </Grid>
             </Grid>
@@ -212,6 +224,7 @@ export default function EmployerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedEmployer}
+                    selectedParty='employer'
                     />
                 </Grid>
             </Grid>

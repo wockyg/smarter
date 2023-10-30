@@ -5,7 +5,7 @@ export const DetailsContext = createContext();
 const DetailsContextProvider = (props) => {
 
     const [currentlyEditingSearch, setCurrentlyEditingSearch] = useState(false);
-    const [currentlyEditingSelectedClaim, setCurrentlyEditingSelectedClaim] = useState(false);
+    const [currentlyEditingSelectedClaim, setCurrentlyEditingSelectedClaim] = useState(null);
     
     return (
         <DetailsContext.Provider 

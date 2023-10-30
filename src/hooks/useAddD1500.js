@@ -11,12 +11,29 @@ export default function useAddD1500() {
                               { 
                                 'referralId': `${+values.referralId}`,
                                 'sendFormat': `${values.sendFormat}`,
+                                'dateApproved': `${new Date().toISOString()}`,
+                                'physician_name': values.physician_name,
+                                'physician_npi': values.physician_npi,
+                                'patient_account_no': values.patient_account_no,
+                                'diagnosis_a': values.diagnosis_a,
+                                'diagnosis_b': values.diagnosis_b,
+                                'diagnosis_c': values.diagnosis_c,
+                                'diagnosis_d': values.diagnosis_d,
+                                'diagnosis_e': values.diagnosis_e,
+                                'diagnosis_f': values.diagnosis_f,
+                                'diagnosis_g': values.diagnosis_g,
+                                'diagnosis_h': values.diagnosis_h,
+                                'diagnosis_i': values.diagnosis_i,
+                                'diagnosis_j': values.diagnosis_j,
+                                'diagnosis_k': values.diagnosis_k,
+                                'diagnosis_l': values.diagnosis_l,
+                                'v1500Id': values.v1500Id
                               })
                               .then(response => {
                                 if (response.status === 200) {
                                   const data = response.data;
                                   const hcfaId = data.hcfaId;
-                                  console.log(data);
+                                  console.log("DATA:", data);
                                   // console.log(values);
                                   values.cptRows.forEach((row) => {
                                     console.log("adding cptRow...");
@@ -39,7 +56,8 @@ export default function useAddD1500() {
                                       console.log(res.status, data);
                                       if (res.status === 200) {
                                         console.log("addRow success");
-                                        queryClient.invalidateQueries(`d1500View_claim_${values.referralId}`);
+                                        queryClient.invalidateQueries(`D1500RowsView_claim_${values.referralId}`);
+                                        console.log(`d1500RowsView_claim_${values.referralId}`);
                                         // queryClient.invalidateQueries('d1500Rows');
                                         // update dptBilling for each DOS (d1500Generated, adjusterRate)
                                       }

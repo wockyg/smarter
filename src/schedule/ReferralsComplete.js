@@ -156,6 +156,7 @@ export default function ReferralsComplete(props) {
             rows={rowsFiltered}
             title='Complete'
             initialSort={initialSort}
+            initialSortOrder='desc'
             />
           </Grid>
         </Grid>

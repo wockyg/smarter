@@ -106,6 +106,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -115,6 +116,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -125,6 +127,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='10ch'
                     />
                     <Box width="100%"/>
@@ -135,6 +138,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -145,6 +149,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <EditableGridItem
                     field='suite'
@@ -153,6 +158,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -163,6 +169,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -172,6 +179,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -181,6 +189,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -191,6 +200,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -200,6 +210,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -209,6 +220,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <EditableGridItem
                     field='email'
@@ -217,6 +229,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -226,6 +239,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                 </Grid>
             </Grid>
@@ -238,6 +252,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -247,6 +262,7 @@ export default function PhysicianDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedPhysician}
+                    selectedParty='physician'
                     />
                 </Grid>
             </Grid>

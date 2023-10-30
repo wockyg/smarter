@@ -202,7 +202,11 @@ export default function ClaimIdInfoAccordian(props) {
                     {selectedClaim.claimantEmployerId ?
                     <EmployerDetails detailsId={selectedClaim?.claimantEmployerId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
                     :
-                    ''
+                    <EditToolbarSolo
+                    selectedParty='employer'
+                    currentlyEditing={currentlyEditing}
+                    setCurrentlyEditing={setCurrentlyEditing}
+                    />
                     }
                 </AccordionDetails>
             </Accordion>

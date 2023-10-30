@@ -5,6 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { AddFormContext } from '../contexts/AddFormContext';
 import { SearchContext } from '../contexts/SearchContext';
+import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
@@ -52,6 +53,7 @@ export default function MainNavbar() {
 
   const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
   const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
+  const { setPage: setNotesPage, setTab: setClaimTab , cptRows, setCptRows, setSelectedD1500 } = useContext(SelectedClaimContext);
 
   const { user: userAuth0, logout } = useAuth0();
 
@@ -65,6 +67,14 @@ export default function MainNavbar() {
   const addFeatureRequest = useAddFeatureRequest();
 
   const navigate = useNavigate();
+
+  const handleReset = () => {
+      navigate('/');
+      setQuickSearchVal(null);
+      setQuickSearchInputVal('');
+      setCptRows([]);
+      setSelectedD1500(null);
+  };
 
   const handleOpen = (party) => {
     setModalParty(party);
@@ -187,7 +197,7 @@ export default function MainNavbar() {
               <NavDropdown.Item onClick={() => handleOpen('referral')}>Add referral</NavDropdown.Item>
               <NavDropdown.Item onClick={() => handleOpen('agreement')}>New Agreement</NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link onClick={() => {navigate('/'); setQuickSearchVal(null); setQuickSearchInputVal('');}}><IconButton sx={{background: '#FFFFFF', marginTop: 0.5}}><RestartAltIcon fontSize='small' /></IconButton></Nav.Link>
+            <Nav.Link onClick={() => handleReset()}><IconButton sx={{background: '#FFFFFF', marginTop: 0.5}}><RestartAltIcon fontSize='small' /></IconButton></Nav.Link>
           </Nav>
           <IconButton sx={{border: 1, width: 30, height: 30, marginRight: 1}} onClick={handleOpenBugDialog}>
             <BugReportIcon />

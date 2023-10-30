@@ -15,7 +15,7 @@ export default function ReferralQuickSearch(props) {
     const { status: statusRows, data: referralsDropdown, error: errorRows, isFetching: isFetchingRows } = useGetReferralsDropdownCalendar();
 
     const { quickSearchVal, setQuickSearchVal, quickSearchInputVal, setQuickSearchInputVal } = useContext(SearchContext);
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, setCptRows } = useContext(SelectedClaimContext);
 
     const navigate = useNavigate();
     
@@ -32,6 +32,7 @@ export default function ReferralQuickSearch(props) {
           setClaimTab(0);
           setQuickSearchVal(null);
           setQuickSearchInputVal('');
+          setCptRows([]);
           if (claim.billingStatus === null || !keepBillMode) {
             setBillMode(false);
             setKeepBillMode(false);

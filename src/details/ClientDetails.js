@@ -93,6 +93,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -102,6 +103,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -112,6 +114,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -121,6 +124,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -130,6 +134,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -139,6 +144,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                 </Grid>
             </Grid>
@@ -151,6 +157,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -160,6 +167,7 @@ export default function ClientDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClient}
+                    selectedParty='client'
                     />
                 </Grid>
             </Grid>

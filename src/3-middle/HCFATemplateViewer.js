@@ -49,7 +49,7 @@ export default function HCFATemplateViewer() {
 
     // const num_codes = codeList?.length;
 
-    const { cptRows, setCptRows } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedD1500 } = useContext(SelectedClaimContext);
 
     // const numRows = cptRows?.length;
 
@@ -93,6 +93,7 @@ export default function HCFATemplateViewer() {
                     selectedClaim={selectedClaim} 
                     codeList={codeList} 
                     cptRows={cptRows} 
+                    selectedD1500={selectedD1500}
                     />
                 </PDFViewer>
                 </Grid>

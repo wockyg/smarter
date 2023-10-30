@@ -88,7 +88,7 @@ const headCells = [
   },
 ];
 
-export default function MissingV1500(props) {
+export default function D1500NotSent(props) {
 
     const initialSort = 'claimant';
 

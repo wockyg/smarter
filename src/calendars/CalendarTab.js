@@ -40,14 +40,14 @@ export default function CalendarTab(props) {
     // referrals && console.log(referrals);
 
     const dptReferrals = referrals?.filter(r => r.service.includes('DPT') && r.referralStatus === 'Complete');
-    const dptEvents = dptReferrals?.map(r => ({title: `${r.claimant} ${r.apptTime}`, date: r.apptDate, textColor: '#17202A', referralId: r.referralId}))
+    const dptEvents = dptReferrals?.map(r => ({title: `${r.assign} ${r.claimant} ${r.apptTime}`, date: r.apptDate, textColor: '#17202A', referralId: r.referralId}))
 
-    const referralEvents = referrals?.map(r => ({title: `${r.claimant} ${r.service}`, date: r.referralDate, textColor: '#17202A', referralId: r.referralId}))
+    const referralEvents = referrals?.map(r => ({title: `${r.assign} ${r.claimant} ${r.service}`, date: r.referralDate, textColor: '#17202A', referralId: r.referralId}))
 
     // referrals && console.log(dptEvents);
 
     const fceReferrals = referrals?.filter(r => (r.service.includes('FCE') || r.service.includes('PPD')) && r.referralStatus === 'Complete');
-    const fceEvents = fceReferrals?.map(r => ({title: `${r.claimant} ${r.apptTime}`, date: r.apptDate, backgroundColor: '#A569BD', referralId: r.referralId}))
+    const fceEvents = fceReferrals?.map(r => ({title: `${r.assign} ${r.claimant} ${r.apptTime}`, date: r.apptDate, backgroundColor: '#A569BD', referralId: r.referralId}))
 
     const [selectedFilter, setSelectedFilter] = useState("dpt");
     const [events, setEvents] = useState([]);
@@ -191,6 +191,8 @@ export default function CalendarTab(props) {
         initialView="dayGridMonth"
         weekends={false}
         events={selectedFilter === 'dpt' ? dptEvents : (selectedFilter === 'fceppd' ? fceEvents : (selectedFilter === 'referrals' ? referralEvents : null))}
+        eventOrder="referralDate"
+        eventOrderStrict={true}
         eventClick={(e) => handleEventClick(e)}
         />
         {/* </div> */}

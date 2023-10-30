@@ -84,9 +84,12 @@ export default function ClaimInfoToolbar() {
     };
 
     const handleUpdate = (field, value) => {
-      const values = {
+      let values = {
         referralId: selectedClaim.referralId,
         [field]: value ? value : null
+      }
+      if (field === "fuHoldNotes") {
+        values.ptStatus = "Active";
       }
       mutationUpdate.mutate(values);
       handleCloseMenu();
@@ -255,9 +258,11 @@ export default function ClaimInfoToolbar() {
             {(selectedClaim?.ptStatus === "Follow-Up" || selectedClaim?.ptStatus === "Hold") &&
             <Grid item>
               <h3>
-                <Badge bg="danger">
-                  {selectedClaim?.fuHoldNotes}
-                </Badge>
+                <IconButton onClick={(e) => handleOpenMenu(e, 1, 'fuHoldNotes')}>
+                  <Badge bg="danger">
+                    {selectedClaim?.fuHoldNotes}
+                  </Badge>
+                </IconButton>
               </h3>
             </Grid>
             }
@@ -292,10 +297,10 @@ export default function ClaimInfoToolbar() {
       anchorEl={anchorEl1}
       open={open1}
       onClose={handleCloseMenu}
-    >
+      >
       
         <MenuItem  onClick={() => handleUpdate(removeField)}>
-            Remove
+            {removeField === 'fuHoldNotes' ? "Move back to 'Active'" : "Remove"}
         </MenuItem>
   
       </Menu>

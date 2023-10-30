@@ -102,6 +102,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -111,6 +112,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -121,6 +123,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -131,6 +134,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                     <EditableGridItem
                     field='suite'
@@ -139,6 +143,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -149,6 +154,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -158,6 +164,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -167,6 +174,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -177,6 +185,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                     <EditableGridItem
                     field='phoneExt'
@@ -185,6 +194,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     width='5ch'
                     />
                     <Box width="100%"/>
@@ -195,6 +205,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -204,6 +215,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -213,6 +225,7 @@ export default function AttorneyDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                 </Grid>
             </Grid>
@@ -227,6 +240,7 @@ export default function AttorneyDetails(props) {
                     options={['Defense', 'Plaintiff', '']}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedAttorney}
+                    selectedParty='attorney'
                     />
                 </Grid>
             </Grid>

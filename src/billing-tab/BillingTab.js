@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 
 import MissingV1500 from './MissingV1500';
 import D1500NotSent from './D1500NotSent';
+import D1500NotApproved from './D1500NotApproved';
 import D1500NotSentNew from './D1500NotSentNew';
 import AdjusterPastDue from './AdjusterPastDue';
 import FacilityPastDue from './FacilityPastDue';
@@ -33,6 +34,9 @@ export default function BillingTab(props) {
             <ToggleButton value="missingV1500" aria-label="missingV1500">
                 Missing V1500
             </ToggleButton>
+            <ToggleButton value="d1500NotApproved" aria-label="D1500NotApproved">
+                D1500 Not Approved
+            </ToggleButton>
             <ToggleButton value="d1500NotSent" aria-label="D1500NotSent">
                 D1500 Not Sent
             </ToggleButton>
@@ -46,6 +50,9 @@ export default function BillingTab(props) {
         
         {selectedFilter === 'missingV1500' &&
         <MissingV1500 />
+        }
+        {selectedFilter === 'd1500NotApproved' &&
+        <D1500NotApproved />
         }
         {selectedFilter === 'd1500NotSent' &&
         <D1500NotSent />

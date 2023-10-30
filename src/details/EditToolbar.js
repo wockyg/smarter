@@ -20,6 +20,8 @@ import useGetCasemanagersDropdown from '../hooks/useGetCasemanagersDropdown';
 import useGetPhysiciansDropdown from '../hooks/useGetPhysiciansDropdown';
 import useGetAttorneysDropdown from '../hooks/useGetAttorneysDropdown';
 import useGetTherapistsDropdown from '../hooks/useGetTherapistsDropdown';
+import useGetEmployersDropdown from '../hooks/useGetEmployersDropdown';
+import useUpdateClaimant from '../hooks/useUpdateClaimant';
 
 import { useFormikContext } from 'formik';
 import { Formik, Form } from 'formik';
@@ -37,10 +39,12 @@ export default function EditToolbar(props) {
     const { status: statusPhysicians, data: physicians, error: errorPhysicians, isFetching: isFetchingPhysicians } = useGetPhysiciansDropdown();
     const { status: statusAttorneys, data: attorneys, error: errorAttorneys, isFetching: isFetchingAttorneys } = useGetAttorneysDropdown();
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsDropdown();
+    const { status: statusEmployers, data: employers, error: errorEmployers, isFetching: isFetchingEmployers } = useGetEmployersDropdown();
 
     const {selectedParty, currentlyEditing, setCurrentlyEditing, attorneyType} = props;
 
     const mutationUpdate = useUpdateReferral();
+    const claimantUpdate = useUpdateClaimant();
 
     const { values: formValues, submitForm, resetForm } = useFormikContext();
 
@@ -54,20 +58,20 @@ export default function EditToolbar(props) {
 
     const startEditing = () => {
         console.log("start editing");
-        setCurrentlyEditing(true);
+        setCurrentlyEditing(selectedParty);
         handleCloseMenu();
     }
 
     const cancelEditing = () => {
         console.log("cancel editing");
         resetForm();
-        setCurrentlyEditing(false);
+        setCurrentlyEditing(null);
     }
 
     const stopEditing = () => {
         console.log("done editing");
         submitForm();
-        setCurrentlyEditing(false);
+        setCurrentlyEditing(null);
     }
 
     const handleOpenMenu = (event) => {
@@ -86,9 +90,14 @@ export default function EditToolbar(props) {
     };
 
     const handleRemoveConfirm = () => {
-        const values = {referralId: referralId, [fieldRemove]: null};
-        console.log(values);
-        mutationUpdate.mutate(values);
+        if (selectedParty === 'employer') {
+            const values = {claimantId: selectedClaim.claimantId, employerId: null};
+            claimantUpdate.mutate(values)
+        }
+        else {
+            const values = {referralId: referralId, [fieldRemove]: null};
+            mutationUpdate.mutate(values);
+        }
         handleCloseMenu();
     };
 
@@ -125,7 +134,7 @@ export default function EditToolbar(props) {
             </Grid>
             <Grid item xs={6}>
                 <Box width="100%" sx={{display: 'flex', justifyContent: 'flex-end'}}>
-                    {currentlyEditing ?
+                    {currentlyEditing === selectedParty ?
                     <>
                     <SaveIcon onClick={() => stopEditing()} />
                     <ClearIcon onClick={() => cancelEditing()} />
@@ -217,7 +226,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Adjuster"
+                                        label="-Select Adjuster-"
                                         fullWidth
                                         value={props.values?.adjusterId}
                                         />
@@ -273,7 +282,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Case Manager"
+                                        label="-Select Case Manager-"
                                         fullWidth
                                         value={props.values?.casemanagerId}
                                         />
@@ -329,7 +338,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Case Manager 2"
+                                        label="-Select Case Manager 2-"
                                         fullWidth
                                         value={props?.values?.casemanager2Id}
                                         />
@@ -373,7 +382,7 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="physicianIdInput"
                                     name="physicianId"
-                                    options={physicians.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
+                                    options={physicians.sort((a, b) => -b.lastName?.localeCompare(a.lastName) || -b.firstName?.localeCompare(a.firstName))}
                                     // groupBy={(option) => option.client}
                                     getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.physicianId}`}
                                     style={{ width: 300 }}
@@ -385,13 +394,69 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Physician"
+                                        label="-Select Physician-"
                                         fullWidth
                                         value={props?.values?.physicianId}
                                         />
                                     )}
                                     />
                                     {props.errors.physicianId && <div id="feedback">{props.errors.physicianId}</div>}
+                                </Grid>
+                                <Grid item>
+                                    <SubmitButton />
+                                </Grid>
+                            </Grid>
+                        </Form>
+                    )}
+                </Formik>
+            }
+
+            {fieldSwap === 'employerId' &&
+                <Formik
+                initialValues={{
+                    claimantId: selectedClaim.claimantId,
+                    employerId: "",
+                }}
+                validationSchema={Yup.object({
+                    employerId: Yup.number().required(),
+                })}
+                onSubmit={(values, actions) => {
+                    claimantUpdate.mutate(values);
+                    console.log("updating claimant...", values);
+                    // alert(JSON.stringify(values, null, 2));
+                    // actions.resetForm();
+                    actions.setSubmitting(false);
+                    // setAddModalOpen(false);
+                    // setModalParty('');
+                    handleCloseMenu();
+                }}
+                >
+                    {props => (
+                        <Form>
+                            <Grid container spacing={1.0}>
+                                <Grid item>
+                                    <Autocomplete
+                                    id="employerIdInput"
+                                    name="employerId"
+                                    options={employers.sort((a, b) => -b.name?.localeCompare(a.name))}
+                                    // groupBy={(option) => option.client}
+                                    getOptionLabel={(option) => `${option.name} | ${option.employerId}`}
+                                    style={{ width: 300 }}
+                                    onChange={(event, value) => {
+                                        props.setFieldValue("employerId", value?.employerId);
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                        {...params}
+                                        onChange={props.handleChange}
+                                        margin="normal"
+                                        label="-Select Employer-"
+                                        fullWidth
+                                        value={props?.values?.employerId}
+                                        />
+                                    )}
+                                    />
+                                    {props.errors.employerId && <div id="feedback">{props.errors.employerId}</div>}
                                 </Grid>
                                 <Grid item>
                                     <SubmitButton />
@@ -429,7 +494,7 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="plaintiffAttorneyIdInput"
                                     name="plaintiffAttorneyId"
-                                    options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
+                                    options={attorneys.sort((a, b) => -b.lastName?.localeCompare(a.lastName) || -b.firstName?.localeCompare(a.firstName))}
                                     // groupBy={(option) => option.client}
                                     getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.attorneyId}`}
                                     style={{ width: 300 }}
@@ -441,7 +506,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Plaintiff Attorney"
+                                        label="-Select Plaintiff Attorney-"
                                         fullWidth
                                         value={props?.values?.plaintiffAttorneyId}
                                         />
@@ -485,7 +550,7 @@ export default function EditToolbar(props) {
                                     <Autocomplete
                                     id="defenseAttorneyIdInput"
                                     name="defenseAttorneyId"
-                                    options={attorneys.sort((a, b) => -b.lastFirst?.localeCompare(a.lastFirst))}
+                                    options={attorneys.sort((a, b) => -b.lastName?.localeCompare(a.lastName) || -b.firstName?.localeCompare(a.firstName))}
                                     // groupBy={(option) => option.client}
                                     getOptionLabel={(option) => `${option.lastName}, ${option.firstName} | ${option.attorneyId}`}
                                     style={{ width: 300 }}
@@ -497,7 +562,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Defense Attorney"
+                                        label="-Select Defense Attorney-"
                                         fullWidth
                                         value={props?.values?.defenseAttorneyId}
                                         />
@@ -553,7 +618,7 @@ export default function EditToolbar(props) {
                                         {...params}
                                         onChange={props.handleChange}
                                         margin="normal"
-                                        label="Therapist"
+                                        label="-Select Therapist-"
                                         fullWidth
                                         value={props?.values?.therapistId}
                                         />

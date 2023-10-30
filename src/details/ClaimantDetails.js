@@ -117,6 +117,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -126,6 +127,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -137,6 +139,7 @@ export default function ClaimantDetails(props) {
                     options={employers}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -146,6 +149,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -155,6 +159,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -164,6 +169,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -173,6 +179,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -183,6 +190,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -192,6 +200,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -201,6 +210,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -210,6 +220,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                 </Grid>
             </Grid>
@@ -223,6 +234,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     width='2ch'
                     />
                     <Box width="100%"/>
@@ -233,6 +245,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -242,6 +255,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -251,6 +265,7 @@ export default function ClaimantDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedClaimant}
+                    selectedParty='claimant'
                     />
                 </Grid>
             </Grid>

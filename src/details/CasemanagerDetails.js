@@ -114,6 +114,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='20ch'
                     />
                     <EditableGridItem
@@ -123,6 +124,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='20ch'
                     />
                     <Box width="100%"/>
@@ -134,6 +136,7 @@ export default function CasemanagerDetails(props) {
                     options={clients}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -144,6 +147,7 @@ export default function CasemanagerDetails(props) {
                     options={['Active', 'Inactive', '']}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -153,6 +157,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <EditableGridItem
                     field='suite'
@@ -161,6 +166,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -171,6 +177,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='10ch'
                     />
                     <EditableGridItem
@@ -180,6 +187,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='3ch'
                     />
                     <EditableGridItem
@@ -189,6 +197,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='6ch'
                     />
                     <Box width="100%"/>
@@ -199,6 +208,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <EditableGridItem
                     field='phoneExt'
@@ -207,6 +217,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='5ch'
                     />
                     <Box width="100%"/>
@@ -217,6 +228,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -226,6 +238,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -235,6 +248,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='5ch'
                     />
                     <EditableGridItem
@@ -244,6 +258,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='5ch'
                     />
                     <EditableGridItem
@@ -253,6 +268,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     width='5ch'
                     />
                 </Grid>
@@ -266,6 +282,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -275,6 +292,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                     <Box width="100%"/>
                     <EditableGridItem
@@ -284,6 +302,7 @@ export default function CasemanagerDetails(props) {
                     formikProps={formikProps}
                     currentlyEditing={currentlyEditing}
                     selectedRow={selectedCasemanager}
+                    selectedParty='casemanager'
                     />
                 </Grid>
             </Grid>

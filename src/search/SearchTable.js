@@ -91,7 +91,7 @@ export default function SearchTable(props) {
 
     const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
-    const { tab, setTab } = useContext(SelectedClaimContext);
+    const { tab, setTab, setCptRows, setSelectedD1500, keepBillMode, setBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
 
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState(initialSort ? initialSort : '');
@@ -137,6 +137,12 @@ export default function SearchTable(props) {
       if (party === 'referral') {
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
+        setCptRows([]);
+        setSelectedD1500(null);
+        if (row.billingStatus === null || !keepBillMode) {
+          setBillMode(false);
+          setKeepBillMode(false);
+        }
         // setTab(0);
       }
       setCurrentlyEditing(false);

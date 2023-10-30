@@ -32,8 +32,8 @@ import useGetCptForState from '../hooks/useGetCptForState';
 import useGetReferral_icd10 from '../hooks/useGetReferral_icd10';
 import useAddD1500 from '../hooks/useAddD1500';
 import useAddD1500Rows from '../hooks/useAddD1500Rows';
-import useGetD1500RowsViewClaim from '../hooks/useGetD1500RowsViewClaim';
-import useGetD1500RowsViewHcfa from '../hooks/useGetD1500RowsViewHcfa';
+import useGetD1500NotApproved from '../hooks/useGetD1500NotApproved';
+import useGetD1500ViewHcfa from '../hooks/useGetD1500RowsViewHcfa';
 
 import { useParams } from 'react-router-dom';
 
@@ -49,12 +49,16 @@ export default function ViewBills() {
 
     let { id: linkId } = useParams();
 
-    const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
-    const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetD1500RowsViewClaim(linkId);
-    const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
+    const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetD1500NotApproved();
+
+    // const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
+
+    // console.log(bills);
 
     const hcfaId_array = bills?.map(row => row.hcfaId);
     const uniqueHcfaIds = Array.from(new Set(hcfaId_array));
+
+    // console.log(uniqueHcfaIds);
 
     let realBills = [];
 
@@ -83,13 +87,16 @@ export default function ViewBills() {
             rowData: temp,
             uniqueDOS: uniqueDOS,
             tableHeader: `${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}`,
-            fileName: `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`,
+            fileName: `${`Last, First`} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`,
             sendFormat: temp[0].sendFormat,
             dateAdded: temp[0].dateAdded
             }
         );
 
     })
+
+    // console.log(realBills);
+
 
     const StyledTableCell = styled(TableCell)({
         padding: '0px 0px 0px 5px',

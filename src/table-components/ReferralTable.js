@@ -46,6 +46,8 @@ import { Link } from 'react-router-dom';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import { SearchContext } from '../contexts/SearchContext';
 
+import { useNavigate } from "react-router-dom";
+
 import { useDownloadExcel } from 'react-export-table-to-excel';
 import useDeleteReferral from '../hooks/useDeleteReferral';
 import useUpdateVisit from '../hooks/useUpdateVisit';
@@ -161,13 +163,15 @@ export default function ReferralTable(props) {
 
     const tableRef = useRef(null);
 
+    const navigate = useNavigate();
+
     const timestamp = new Date();
 
-    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type } = props;
+    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved } = props;
 
     // console.log(props);
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedD1500, setSelectedD1500 } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
     const mutationDelete = useDeleteReferral();
@@ -238,6 +242,8 @@ export default function ReferralTable(props) {
         background-color: #F0F0F0;
       }
 
+      cursor: pointer
+
     `;
 
     const handleRequestSort = (event, property) => {
@@ -251,10 +257,25 @@ export default function ReferralTable(props) {
         setClaimTab(0);
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
+        setCptRows([]);
+        setSelectedD1500(null);
         if (claim.billingStatus === null || !keepBillMode) {
           setBillMode(false);
           setKeepBillMode(false);
         }
+    };
+
+    const handleClickHcfa = (event, row) => {
+        navigate(`/${row.referralId}`)
+        setNotesPage(0);
+        setClaimTab(0);
+        setQuickSearchVal(null);
+        setQuickSearchInputVal('');
+        setBillMode(true);
+        const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
+        // console.log("NEW ROWS: ", newRows);
+        setCptRows(newRows);
+        setSelectedD1500(row);
     };
 
     const handleOpenMenu = (event, id) => {
@@ -494,9 +515,10 @@ export default function ReferralTable(props) {
                             <TableRowStyled
                             hover
                             tabIndex={-1}
-                            key={type === 'bil' ? row.billingId : row.referralId}
+                            key={type === 'bil' ? row.billingId : (type === 'hcfa' ? row.v1500Id : row.referralId)}
                             id={labelId}
                             className={row.referralId === +linkId ? (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.serviceGeneral === "FCE" && 'regularRowFCE')}
+                            onClick={(e) => type === 'hcfa' && handleClickHcfa(e, row)}
                             >
                                 {bulkEdit &&
                                 <TableCell padding="checkbox">
@@ -516,7 +538,7 @@ export default function ReferralTable(props) {
                                   return (
                                       <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
                                         
-                                          {col.id === 'claimNumber' ?
+                                          {col.id === 'claimNumber' && type !== 'hcfa' ?
                                           <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
                                               {row.claimNumber ? row.claimNumber : 'WILL GET'}
                                           </Link>

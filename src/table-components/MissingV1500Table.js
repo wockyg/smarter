@@ -181,7 +181,7 @@ export default function MissingV1500Table(props) {
 
     const { status: statusRows, data: bulkBillingTable, error: errorRows, isFetching: isFetchingRows } = useGetBulkBilling();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, billMode, keepBillMode, setBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, billMode, keepBillMode, setBillMode, setKeepBillMode, setCptRows, setSelectedD1500 } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
     const { rows, headCells, title } = props;
@@ -268,6 +268,8 @@ export default function MissingV1500Table(props) {
         setClaimTab(0);
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
+        setCptRows([]);
+        setSelectedD1500(null);
         if (claim.billingStatus === null || !keepBillMode) {
           setBillMode(false);
           setKeepBillMode(false);
