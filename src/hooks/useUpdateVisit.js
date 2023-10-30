@@ -14,7 +14,7 @@ export default function useUpdateVisit() {
   const queryClient = useQueryClient();
 
   const sendEmail = (values, type) => {
-    const path = 'http://localhost:3000';
+    const path = 'https://smarter-one.vercel.app';
     const ccEmail = careCoordinators.filter((el) => el.Initials === values.assign)[0].email;
     console.log(ccEmail);
     console.log(values);

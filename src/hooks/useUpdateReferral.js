@@ -15,7 +15,7 @@ export default function useUpdateReferral() {
   const queryClient = useQueryClient();
 
   const sendEmail = () => {
-    const path = 'http://localhost:3000';
+    const path = 'https://smarter-one.vercel.app';
     const ccEmail = careCoordinators.filter((el) => el.Initials === selectedClaim.assign)[0].email;
     console.log(ccEmail);
     const params = {
