@@ -153,7 +153,7 @@ export default function Agreement(props) {
     const daily4Units = values?.serviceTypes[0] === true ? 'Daily rate represents an expectation of 4 units per visit.' : '';
     // const daily4Units = "TEST";
 
-    console.log(values);
+    // console.log(values);
   
     const today = new Date();
     const month = today.getMonth() + 1;
@@ -205,13 +205,13 @@ export default function Agreement(props) {
                     <Text style={styles.textWhite}>SPACER</Text>
                     <Text style={styles.paragraphBoldUnderline}>{`Reimbursement schedule:`}</Text>
                     <Text style={styles.textWhite}>SPACER</Text>
-                    {values.therapist.dailyRate && <Text style={styles.paragraphBold}>{`$${values.therapist.dailyRate} daily maximum for CPT Codes 97004 to 97755 (Excluding Initial Evaluation [97161,97162,97163,97165,97166,97167]) (4 units).`}</Text>}
-                    {values.therapist.evalRate && <Text style={styles.paragraphBold}>{`$${values.therapist.evalRate} maximum for Initial Evaluation (CPT Codes 97161,97162,97163,97165,97166,9716.`}</Text>}
-                    {values.therapist.combinedRate && <Text style={styles.paragraphBold}>{`$${values.therapist.combinedRate} maximum for Initial Evaluation (CPT Codes 97161,97162,97163,97165,97166,97167) and Treatment on same date of service.`}</Text>}
-                    {values.therapist.wcwhFirst2Hrs && <Text style={styles.paragraphBold}>{`$${values.therapist.wcwhFirst2Hrs} maximum for CPT Code 97545 (first 2 hours).`}</Text>}
-                    {values.therapist.wcwhAdditionalHour && <Text style={styles.paragraphBold}>{`$${values.therapist.wcwhAdditionalHour} maximum for CPT Code 97546 (each additional hour).`}</Text>}
-                    {values.therapist.fceRate && <Text style={styles.paragraphBold}>{`$${values.therapist.fceRate} per NIOSH compliant Functional Capacity Evaluation final report submitted.`}</Text>}
-                    {values.therapist.ppdRate && <Text style={styles.paragraphBold}>{`$${values.therapist.ppdRate} per Impairment Rating submitted.`}</Text>}
+                    {values.serviceTypes[0] && values.therapist.dailyRate && <Text style={styles.paragraphBold}>{`$${values.therapist.dailyRate} daily maximum for CPT Codes 97004 to 97755 (Excluding Initial Evaluation [97161,97162,97163,97165,97166,97167]) (4 units).`}</Text>}
+                    {values.serviceTypes[0] && values.therapist.evalRate && <Text style={styles.paragraphBold}>{`$${values.therapist.evalRate} maximum for Initial Evaluation (CPT Codes 97161,97162,97163,97165,97166,9716.`}</Text>}
+                    {values.serviceTypes[0] && values.therapist.combinedRate && <Text style={styles.paragraphBold}>{`$${values.therapist.combinedRate} maximum for Initial Evaluation (CPT Codes 97161,97162,97163,97165,97166,97167) and Treatment on same date of service.`}</Text>}
+                    {values.serviceTypes[1] && values.therapist.wcwhFirst2Hrs && <Text style={styles.paragraphBold}>{`$${values.therapist.wcwhFirst2Hrs} maximum for CPT Code 97545 (first 2 hours).`}</Text>}
+                    {values.serviceTypes[1] && values.therapist.wcwhAdditionalHour && <Text style={styles.paragraphBold}>{`$${values.therapist.wcwhAdditionalHour} maximum for CPT Code 97546 (each additional hour).`}</Text>}
+                    {values.serviceTypes[2] && values.therapist.fceRate && <Text style={styles.paragraphBold}>{`$${values.therapist.fceRate} per NIOSH compliant Functional Capacity Evaluation final report submitted.`}</Text>}
+                    {values.serviceTypes[3] && values.therapist.ppdRate && <Text style={styles.paragraphBold}>{`$${values.therapist.ppdRate} per Impairment Rating submitted.`}</Text>}
                 </View>
 
                 <View style={styles.section}>

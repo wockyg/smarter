@@ -405,13 +405,13 @@ export default function ClaimInfo(props) {
                     fuHoldNotes: selectedClaim?.fuHoldNotes ? selectedClaim?.fuHoldNotes : '',
                 }}
                 validationSchema={Yup.object({
-                    ptStatus: (selectedClaim?.ptStatus === "Follow-Up" || selectedClaim?.ptStatus === "Hold") ? Yup.string() : Yup.string().required(),
-                    fuHoldNotes: Yup.string().required(),
+                    ptStatus: Yup.string(),
+                    fuHoldNotes: Yup.string(),
                 })}
                 onSubmit={(values, actions) => {
                     if (values?.ptStatus === selectedClaim?.ptStatus) {
                         if (values?.ptStatus === "Follow-Up" || values?.ptStatus === "Hold") {
-                            if (values?.fuHoldNotes !== selectedClaim?.fuHoldNotes) {
+                            if (values?.fuHoldNotes !== selectedClaim?.fuHoldNotes && values?.fuHoldNotes !== '') {
                                 values = {
                                     referralId: values.referralId,
                                     fuHoldNotes: values.fuHoldNotes
@@ -437,6 +437,9 @@ export default function ClaimInfo(props) {
                     else {
                         if (values?.ptStatus === "Active" || values?.ptStatus === "Discharge") {
                             values.fuHoldNotes = null;
+                        }
+                        if ((values?.ptStatus === "Follow-Up" || values?.ptStatus === "Hold") && values?.fuHoldNotes === '') {
+                            return;
                         }
                         mutationUpdate.mutate(values);
                         console.log("updating referral out of FU/H...", values);

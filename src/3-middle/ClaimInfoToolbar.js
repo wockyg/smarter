@@ -140,7 +140,7 @@ export default function ClaimInfoToolbar() {
             <Grid item>
               <h3>
                 <Badge bg="secondary">
-                    {`${selectedClaim.claimant} | `}
+                    {`${selectedClaim.claimant}`}
                     {editClaimNumber ?
                     <Grid container>
                         <Grid item>

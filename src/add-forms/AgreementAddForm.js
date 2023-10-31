@@ -24,7 +24,7 @@ export default function AgreementAddForm ()  {
         const resetServices = new Array(serviceTypes.length).fill(false);
         key === "therapist" ? setValues({...newValues, serviceTypes: resetServices}) : setValues(newValues);
         // console.log(key, ":" , value);
-        console.log(newValues);
+        // console.log(newValues);
     }
 
     const handleChangeEditServiceTypes = (index) => {
@@ -36,7 +36,7 @@ export default function AgreementAddForm ()  {
         const newValues = {...values, serviceTypes: [...updatedCheckedState]};
         setValues(newValues);
         // console.log(key, ":" , value);
-        console.log(newValues);
+        // console.log(newValues);
     }
 
     return(
@@ -83,16 +83,17 @@ export default function AgreementAddForm ()  {
             const isDisabledPPD = values.therapist.ppdRate ? false : true;
             return(
                 <div key={index} className="listItem">
-                    <input
-                    disabled={index === 0 ? isDisabledDPT : (index === 1 ? isDisabledWCWH : (index === 2 ? isDisabledFCE : (index === 3 && isDisabledPPD)))}
-                    type="checkbox"
-                    id={`serviceType-checkbox-${index}`}
-                    name={value}
-                    value={value}
-                    checked={values.serviceTypes[index]}
-                    onChange={() => handleChangeEditServiceTypes(index)}
-                    />
-                    <label htmlFor={`serviceType-checkbox-${index}`}>{serviceTypes[index]}</label>
+                    <label htmlFor={`serviceType-checkbox-${index}`}>{serviceTypes[index]}
+                        <input
+                        disabled={index === 0 ? isDisabledDPT : (index === 1 ? isDisabledWCWH : (index === 2 ? isDisabledFCE : (index === 3 && isDisabledPPD)))}
+                        type="checkbox"
+                        id={`serviceType-checkbox-${index}`}
+                        name={value}
+                        value={value}
+                        checked={values.serviceTypes[index]}
+                        onChange={() => handleChangeEditServiceTypes(index)}
+                        />
+                    </label>
                 </div>
             );
         })}
@@ -127,7 +128,7 @@ export default function AgreementAddForm ()  {
     }
 
     {values.agreementType && values.therapist && values.serviceTypes.includes(true) && (values.agreementType === 'Network' || values.claimant) &&
-    <PDFDownloadLink document={<Agreement values={values} />} fileName={`GA-DPT SCA-ATI Physical Therapy-Doe, John.pdf`}>
+    <PDFDownloadLink document={<Agreement values={values} />} fileName={`${values.therapist.state}-${serviceTypes.filter((s, i) => values.serviceTypes[i] === true).join('_')} ${values.agreementType === 'Single-Case' ? 'SCA' : 'NA'}-${values.therapist.name}${values.agreementType === 'Single-Case' ? `-${values.claimant.lastFirst}` : ''}.pdf`}>
         {({ blob, url, loading, error }) =>
             loading ? 'Loading document...' : <button>DL Agreement</button>
         }
