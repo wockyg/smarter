@@ -11,7 +11,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 const queryClient = new QueryClient();
 
 export const api = create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "https://smarter-nodejs.onrender.com/api",
 });
 
 const myDomain = "dev-n0vy5v6lid3mrxef.us.auth0.com";

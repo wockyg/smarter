@@ -62,7 +62,7 @@ export default function MapTab(props) {
     });
 
     setDefaults({
-    key: "AIzaSyDZTDhDWFKMSUkvPEzKEVEyNCzZh0SFTw4",
+    key: "AIzaSyCQNOZwCnZCsvWFGwPGVslj95iZiDy0FvU",
     language: "en",
     region: "es",
     });

@@ -94,14 +94,14 @@ export default function D1500NotSent(props) {
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetD1500NotSent();
 
-    const rowsSorted = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]));
+    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]));
 
     return (
         <>
         {rows &&
         <ReferralTable
         headCells={headCells}
-        rows={rowsSorted}
+        rows={rowsFiltered}
         type='bil'
         title='D1500 Not Sent'
         inlineEdit={true}

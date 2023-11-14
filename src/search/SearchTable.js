@@ -30,10 +30,6 @@ import { styled } from '@mui/material';
 
 import { useParams } from 'react-router-dom';
 
-import { useAuth0 } from "@auth0/auth0-react";
-import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
-import useGetUser from '../hooks/useGetUser';
-
 // import { stableSort, getComparator, handleRequestSort, handleChangePage, handleChangeRowsPerPage } from '../table-components/TableComponents';
 
 import '../table-components/ReferralTable.css';
@@ -83,181 +79,172 @@ export default function SearchTable(props) {
 
   let { id: linkId } = useParams();
 
-  const { user: userAuth0 } = useAuth0();
+    const tableRef = useRef(null);
 
-  const { email, nickname, updated_at } = userAuth0;
+    const timestamp = new Date();
 
-  const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
+    const navigate = useNavigate();
 
-  const userHistoryUpdate = useUpdateUserHistory();
+    const { party, searchVal, searchValAdvanced, rows, headCells, initialSort, title } = props;
 
-  const tableRef = useRef(null);
+    const { searchId, setSearchId, setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
 
-  const timestamp = new Date();
+    const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
-  const navigate = useNavigate();
+    const { tab, setTab, setCptRows, setSelectedD1500, keepBillMode, setBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
 
-  const { party, searchVal, searchValAdvanced, rows, headCells, initialSort, title } = props;
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState(initialSort ? initialSort : '');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
-  const { searchId, setSearchId, setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
-
-  const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
-
-  const { tab, setTab, setCptRows, setSelectedD1500, keepBillMode, setBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
-
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState(initialSort ? initialSort : '');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
-
-  const rowsSorted = rows && rows?.sort((a, b) => {
-    const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
-    const valueB = b[orderBy] === null ? '' : (typeof b[orderBy] === "string" ? b[orderBy].toUpperCase() : b[orderBy]);
-    if (order === 'asc') {
-      if (valueA < valueB) {
-        // console.log(`${valueA } < ${valueB}`);
-        return -1;
+    const rowsSorted = rows && rows?.sort((a, b) => {
+      const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
+      const valueB = b[orderBy] === null ? '' : (typeof b[orderBy] === "string" ? b[orderBy].toUpperCase() : b[orderBy]);
+      if (order === 'asc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return -1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return 1;
+        }
       }
-      if (valueA > valueB) {
-        // console.log(`${valueA } > ${valueB}`);
-        return 1;
+      if (order === 'desc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return 1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return -1;
+        }
       }
+      // values must be equal
+      return 0;
+    });
+
+    const { onDownload } = useDownloadExcel({
+        currentTableRef: tableRef.current,
+        filename: `${title} Search ${timestamp}`,
+        sheet: 'Sheet1'
+    });
+
+    const handleClickRow = (row) => {
+      console.log("switch selected row");
+      party !== 'referral' ? setSearchId(row[`${party}Id`]) : navigate(`/${row.referralId}`)
+      if (party === 'referral') {
+        setQuickSearchVal(null);
+        setQuickSearchInputVal('');
+        setCptRows([]);
+        setSelectedD1500(null);
+        if (row.billingStatus === null || !keepBillMode) {
+          setBillMode(false);
+          setKeepBillMode(false);
+        }
+        // setTab(0);
+      }
+      setCurrentlyEditing(false);
     }
-    if (order === 'desc') {
-      if (valueA < valueB) {
-        // console.log(`${valueA } < ${valueB}`);
-        return 1;
-      }
-      if (valueA > valueB) {
-        // console.log(`${valueA } > ${valueB}`);
-        return -1;
-      }
-    }
-    // values must be equal
-    return 0;
-  });
 
-  const { onDownload } = useDownloadExcel({
-      currentTableRef: tableRef.current,
-      filename: `${title} Search ${timestamp}`,
-      sheet: 'Sheet1'
-  });
+    const handleRequestSort = (event, property) => {
+      const isAsc = orderBy === property && order === 'asc';
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(property);
+    };
 
-  const handleClickRow = (row) => {
-    console.log("switch selected row");
-    party !== 'referral' ? setSearchId(row[`${party}Id`]) : navigate(`/${row.referralId}`)
-    if (party === 'referral') {
-      userHistoryUpdate.mutate({initials: user?.initials, newId: row.referralId});
-      setQuickSearchVal(null);
-      setQuickSearchInputVal('');
-      setCptRows([]);
-      setSelectedD1500(null);
-      if (row.billingStatus === null || !keepBillMode) {
-        setBillMode(false);
-        setKeepBillMode(false);
-      }
-      // setTab(0);
-    }
-    setCurrentlyEditing(false);
-  }
+    const handleChangePage = (newPage, setPage) => {
+      setPage(newPage);
+    };
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+    const handleChangeRowsPerPage = (event, setRowsPerPage, setPage) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
 
-  const handleChangePage = (newPage, setPage) => {
-    setPage(newPage);
-  };
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const handleChangeRowsPerPage = (event, setRowsPerPage, setPage) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    const StyledTableCell = styled(TableCell)({
+        padding: '5px', 
+        // paddingLeft: 5,
+        // paddingRight: 5,
+        fontSize: 11,
+    })
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    return (
+    <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+            <DownloadIcon onClick={onDownload} />
+            <TableContainer sx={{height: 450}}>
+                <Table
+                stickyHeader
+                sx={{ minWidth: 750 }}
+                aria-labelledby={`${party}SearchTable`}
+                size='small'
+                ref={tableRef}
+                >
+                    <SearchTableHead
+                    headCells={headCells}
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={(e, v) => handleRequestSort(e, v)}
+                    />
+                    <TableBody>
+                    {rowsSorted && rowsSorted
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row, index) => {
 
-  const StyledTableCell = styled(TableCell)({
-      padding: '5px', 
-      // paddingLeft: 5,
-      // paddingRight: 5,
-      fontSize: 11,
-  })
+                        const labelId = `${party}Search-table-${index}`;
 
-  return (
-  <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-          <DownloadIcon onClick={onDownload} />
-          <TableContainer sx={{height: 450}}>
-              <Table
-              stickyHeader
-              sx={{ minWidth: 750 }}
-              aria-labelledby={`${party}SearchTable`}
-              size='small'
-              ref={tableRef}
-              >
-                  <SearchTableHead
-                  headCells={headCells}
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={(e, v) => handleRequestSort(e, v)}
-                  />
-                  <TableBody>
-                  {rowsSorted && rowsSorted
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((row, index) => {
-
-                      const labelId = `${party}Search-table-${index}`;
-
-                      return (
-                          <TableRow
-                          hover
-                          onClick={() => handleClickRow(row)}
-                          tabIndex={-1}
-                          key={row[`${party}Id`]}
-                          id={labelId}
-                          className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')) : ((party === 'therapist' && row.therapistId === searchId) ? 'clickedRow' : (row.doNotUseDPT ? 'doNotUse' : ''))}
-                          // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
-                          >
-                              {headCells.map((col) => (
-                                <Fragment key={col.id}>
-                                {((col.id === 'dpt' && row.dpt === 'DPT') || (col.id === 'fce' && row.fce === 'FCE') || (col.id === 'ppd' && row.ppd === 'PPD')) ?
-                                <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="center">
-                                <CheckCircleOutlineIcon fontSize='small' />
-                                </StyledTableCell>
-                                :
-                                <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
-                                {row[col.id]}
-                                </StyledTableCell>
-                                }
-                                </Fragment>
-                              )
-                              )}
-                          </TableRow>
-                      );
-                      })}
-                  {emptyRows > 0 && (
-                      <TableRow style={{ height: 33 * emptyRows }}>
-                          <TableCell colSpan={6} />
-                      </TableRow>
-                  )}
-                  </TableBody>
-              </Table>
-          </TableContainer>
-      </Paper>
-      
-          <TablePagination
-          rowsPerPageOptions={[25, 100, 250]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(e, v) => handleChangePage(v, setPage)}
-          onRowsPerPageChange={(e) => handleChangeRowsPerPage(e, setRowsPerPage, setPage)}
-          />
-          
-  </Box>
-  );
+                        return (
+                            <TableRow
+                            hover
+                            onClick={() => handleClickRow(row)}
+                            tabIndex={-1}
+                            key={row[`${party}Id`]}
+                            id={labelId}
+                            className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')) : ((party === 'therapist' && row.therapistId === searchId) ? 'clickedRow' : (row.doNotUseDPT ? 'doNotUse' : ''))}
+                            // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
+                            >
+                                {headCells.map((col) => (
+                                  <Fragment key={col.id}>
+                                  {((col.id === 'dpt' && row.dpt === 'DPT') || (col.id === 'fce' && row.fce === 'FCE') || (col.id === 'ppd' && row.ppd === 'PPD')) ?
+                                  <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="center">
+                                  <CheckCircleOutlineIcon fontSize='small' />
+                                  </StyledTableCell>
+                                  :
+                                  <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
+                                  {row[col.id]}
+                                  </StyledTableCell>
+                                  }
+                                  </Fragment>
+                                )
+                                )}
+                            </TableRow>
+                        );
+                        })}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 33 * emptyRows }}>
+                            <TableCell colSpan={6} />
+                        </TableRow>
+                    )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
+        
+            <TablePagination
+            rowsPerPageOptions={[25, 100, 250]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={(e, v) => handleChangePage(v, setPage)}
+            onRowsPerPageChange={(e) => handleChangeRowsPerPage(e, setRowsPerPage, setPage)}
+            />
+            
+    </Box>
+    );
 }

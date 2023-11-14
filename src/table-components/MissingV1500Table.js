@@ -41,8 +41,6 @@ import { Link } from 'react-router-dom';
 import useGetBulkBilling from '../hooks/useGetBulkBilling';
 import useUpdateVisit from '../hooks/useUpdateVisit';
 import useUpdateBulkBilling from '../hooks/useUpdateBulkBilling';
-import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
-import useGetUser from '../hooks/useGetUser';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import { SearchContext } from '../contexts/SearchContext';
@@ -52,8 +50,6 @@ import { getComparator, handleChangePage, handleChangeRowsPerPage } from './Tabl
 import { useDownloadExcel } from 'react-export-table-to-excel';
 
 import { useParams } from 'react-router-dom';
-
-import { useAuth0 } from "@auth0/auth0-react";
 
 import './ReferralTable.css';
 
@@ -179,12 +175,6 @@ export default function MissingV1500Table(props) {
 
     let { id: linkId } = useParams();
 
-    const { user: userAuth0 } = useAuth0();
-
-    const { email, nickname, updated_at } = userAuth0;
-
-    const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
-
     const tableRef = useRef(null);
 
     const visitUpdate = useUpdateVisit();
@@ -226,8 +216,6 @@ export default function MissingV1500Table(props) {
     const bulkBillingIdList = removeDuplicates(billingIdArray);
 
     const updateBulkBilling = useUpdateBulkBilling();
-
-    const userHistoryUpdate = useUpdateUserHistory();
 
     const timestamp = new Date();
 
@@ -276,7 +264,6 @@ export default function MissingV1500Table(props) {
     };
 
     const handleClaimClicked = (event, claim) => {
-        userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);

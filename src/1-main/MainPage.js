@@ -43,11 +43,10 @@ export default function MainPage() {
     <>
     <MainNavbar />
     <TopSection />
-    {/* <DocumentTester /> */}
     <MiddleSection />
     <BottomSection />
     <AddFormModal />
-    
+    {/* <DocumentTester /> */}
     </>
   );
 }
