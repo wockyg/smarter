@@ -59,14 +59,14 @@ export default function MissingV1500(props) {
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetMissingV1500();
 
-    const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]) || -b[secondSort]?.localeCompare(a[secondSort]));
+    const rowsSorted = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]) || -b[secondSort]?.localeCompare(a[secondSort]));
 
     return (
         <>
         {rows &&
         <MissingV1500Table
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={rowsSorted}
         title='Missing V1500'
         // initialSort='therapistDisplayShort'
         />

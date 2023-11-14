@@ -96,6 +96,7 @@ export default function useUpdateVisit() {
             })
       }
       queryClient.invalidateQueries('referralVisits');
+      // queryClient.invalidateQueries('referralAuth');
       queryClient.invalidateQueries('referralsearchall');
       queryClient.invalidateQueries('referrals');
       queryClient.invalidateQueries('missingV1500');
