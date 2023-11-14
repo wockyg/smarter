@@ -23,9 +23,6 @@ import selectedPinFCE from '../img/selectedPinFCE.png';
 
 import { useParams } from 'react-router-dom';
 
-// eslint-disable-next-line
-import Map, {NavigationControl, Marker, Popup} from '!react-map-gl';
-
 import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
 
 import useGetReferral from '../hooks/useGetReferral';
@@ -35,6 +32,16 @@ import useUpdateReferral from '../hooks/useUpdateReferral';
 import { bbox, point } from '@turf/turf';
 
 import '../App.css';
+
+
+import Map, {NavigationControl, Marker, Popup} from 'react-map-gl';
+
+import mapboxgl from 'mapbox-gl';
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass =
+  require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default; /* eslint import/no-webpack-loader-syntax: off */
+
 
 export default function MapTab(props) {
 
