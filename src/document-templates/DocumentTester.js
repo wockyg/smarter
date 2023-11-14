@@ -14,6 +14,7 @@ import AuthorizationLetter from './AuthorizationLetter';
 import Agreement from './Agreement';
 import PhysicianApprovalForm from "./PhysicianApprovalForm";
 import TherapistFaxCoverPage from "./TherapistFaxCoverPage";
+import RecordsRequestLetter from "./RecordsRequestLetter";
 
 import logo from '../img/logo.png';
 
@@ -136,16 +137,14 @@ export default function DocumentTester(props) {
                 <Grid item xs="auto">
                     <Grid item>
                         {selectedClaim?.referralId &&
-                        <>
-                        HelloAgain
-                        <PDFViewer style={styles.viewer} showToolbar={false}>
+                        <PDFViewer style={styles.viewer} showToolbar={true}>
                             {/* <ConfirmationLetter selectedClaim={selectedClaim} /> */}
                             {/* <AuthorizationLetter selectedClaim={selectedClaim} /> */}
                             {/* <Agreement values={{...selectedClaim, agreementType: 'Single-Case', serviceType: 'DPT'}} /> */}
                             {/* <PhysicianApprovalForm selectedClaim={selectedClaim} /> */}
                             {/* <TherapistFaxCoverPage selectedClaim={selectedClaim} /> */}
+                            <RecordsRequestLetter selectedClaim={selectedClaim} />
                         </PDFViewer>
-                        </>
                         }
                     </Grid>
                 </Grid>

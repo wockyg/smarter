@@ -59,6 +59,9 @@ export default function useUpdateReferral() {
         queryClient.invalidateQueries('reportlimbo');
         queryClient.invalidateQueries('today');
         queryClient.invalidateQueries('referralsearchall');
+        queryClient.invalidateQueries('referralVisits');
+        queryClient.invalidateQueries('referralAuth');
+        queryClient.invalidateQueries('recordsRequest');
         return data;
       });
   }
