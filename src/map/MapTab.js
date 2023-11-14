@@ -23,8 +23,7 @@ import selectedPinFCE from '../img/selectedPinFCE.png';
 
 import { useParams } from 'react-router-dom';
 
-// eslint-disable-next-line
-import Map, {NavigationControl, Marker, Popup} from '!react-map-gl';
+import Map, {NavigationControl, Marker, Popup} from 'react-map-gl';
 
 import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
 
