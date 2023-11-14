@@ -157,6 +157,22 @@ function ReferralTableHead(props) {
         numSelected: PropTypes.number.isRequired,
     };
 
+    const StyledTableCell = styled(TableCell)({
+        padding: '5px 0px 5px 2px', 
+        // paddingLeft: 5,
+        // paddingRight: 5,
+        fontSize: 11,
+    });
+
+    const TableRowStyled = styled(TableRow)`
+      &:nth-of-type(even) {
+        background-color: #F0F0F0;
+      }
+
+      cursor: pointer
+
+    `;
+
 export default function ReferralTable(props) {
 
     let { id: linkId } = useParams();
@@ -229,22 +245,6 @@ export default function ReferralTable(props) {
         filename: `Referrals ${title} ${timestamp}`,
         sheet: 'Sheet1'
     });
-
-    const StyledTableCell = styled(TableCell)({
-        padding: '5px 0px 5px 2px', 
-        // paddingLeft: 5,
-        // paddingRight: 5,
-        fontSize: 11,
-    });
-
-    const TableRowStyled = styled(TableRow)`
-      &:nth-of-type(even) {
-        background-color: #F0F0F0;
-      }
-
-      cursor: pointer
-
-    `;
 
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
@@ -467,7 +467,6 @@ export default function ReferralTable(props) {
         handleModalClose();
         
     };
-
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
