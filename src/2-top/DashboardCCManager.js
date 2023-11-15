@@ -9,9 +9,9 @@ import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
 import CCPivot from './dashboard-widgets/CCPivot';
 import NextUpCC from './dashboard-widgets/NextUpCC';
 
-// import { PieChart } from '@mui/x-charts/PieChart';
-// import { BarChart } from '@mui/x-charts/BarChart';
-// import { LineChart } from '@mui/x-charts/LineChart';
+import { PieChart } from '@mui/x-charts/PieChart';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { LineChart } from '@mui/x-charts/LineChart';
 
 // flippin Heck
 
@@ -118,15 +118,15 @@ export default function DashboardCCManager(props) {
                     </Grid>
                     <Box sx={{ width: '100%'}} />
                     <Grid item xs={4}>
-                        {/* <BarChart
+                        <BarChart
                         xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
                         series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
                         width={500}
                         height={300}
-                        /> */}
+                        />
                     </Grid>
                     <Grid item xs={4}>
-                        {/* <LineChart
+                        <LineChart
                         xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
                         series={[
                             {
@@ -135,10 +135,10 @@ export default function DashboardCCManager(props) {
                         ]}
                         width={500}
                         height={300}
-                        /> */}
+                        />
                     </Grid>
                     <Grid item xs={4}>
-                        {/* <PieChart
+                        <PieChart
                         series={[
                             {
                             data: [
@@ -150,7 +150,7 @@ export default function DashboardCCManager(props) {
                         ]}
                         width={400}
                         height={250}
-                        /> */}
+                        />
                     </Grid>
                     
                     {/* <Grid item xs={2}>
