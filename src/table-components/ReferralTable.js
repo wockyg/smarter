@@ -58,7 +58,7 @@ import useUpdateReferral from '../hooks/useUpdateReferral';
 import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
 import useGetUser from '../hooks/useGetUser';
 
-import { saveAs } from 'file-saver';
+// import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
 import { BlobProvider, Document, Page, Text, pdf, usePDF } from '@react-pdf/renderer';
 
@@ -579,7 +579,7 @@ export default function ReferralTable(props) {
                 );
                 pdf(rrLetter).toBlob().then(blob => {
                     console.log(blob);
-                    saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`)
+                    // saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`)
                     referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp})
                 })
                 .catch(e => console.log("Error Generating Letters:", e))
