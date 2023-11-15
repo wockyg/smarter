@@ -156,7 +156,7 @@ export default function RecordsRequest(props) {
                             height={160}
                             /> */}
 
-                            {/* <PieChart
+                            <PieChart
                             sx={{background: '#DC8888'}}
                             slotProps={{ legend: { hidden: true } }}
                             series={[
@@ -171,7 +171,7 @@ export default function RecordsRequest(props) {
                             ]}
                             width={300}
                             height={160}
-                            /> */}
+                            />
 
                         </Box> 
                         
