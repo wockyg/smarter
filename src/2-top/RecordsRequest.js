@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import RecordsRequestTable from './RecordsRequestTable';
 import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
 
-// import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart } from '@mui/x-charts/PieChart';
 
 import '../App.css';
 
