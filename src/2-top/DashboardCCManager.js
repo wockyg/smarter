@@ -115,7 +115,7 @@ export default function DashboardCCManager(props) {
                         </Box> 
                     </Grid>
                     <Box sx={{ width: '100%'}} />
-                    <Grid item xs={4}>
+                    {/* <Grid item xs={4}>
                         <BarChart
                         xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
                         series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
@@ -149,7 +149,7 @@ export default function DashboardCCManager(props) {
                         width={400}
                         height={250}
                         />
-                    </Grid>
+                    </Grid> */}
                     
                     {/* <Grid item xs={2}>
                         <Box sx={{ width: '100%', height: 130 }}>
