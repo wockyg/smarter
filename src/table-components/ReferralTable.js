@@ -23,6 +23,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { visuallyHidden } from '@mui/utils';
 
@@ -52,6 +54,16 @@ import { useDownloadExcel } from 'react-export-table-to-excel';
 import useDeleteReferral from '../hooks/useDeleteReferral';
 import useUpdateVisit from '../hooks/useUpdateVisit';
 import useUpdateFceppdBilling from '../hooks/useUpdateFceppdBilling';
+import useUpdateReferral from '../hooks/useUpdateReferral';
+import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
+import useGetUser from '../hooks/useGetUser';
+
+import { saveAs } from 'file-saver';
+import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
+import { BlobProvider, Document, Page, Text, pdf, usePDF } from '@react-pdf/renderer';
+
+import { useAuth0 } from "@auth0/auth0-react";
+
 
 import { useParams } from 'react-router-dom';
 
@@ -109,53 +121,108 @@ function ReferralTableHead(props) {
 }
 
  // extract into reusable file
-    function EnhancedTableToolbar(props) {
-        const { numSelected, handleStartBulkEdit, handleClearSelected } = props;
+function EnhancedTableToolbar(props) {
+    const { numSelected, handleStartBulkEdit, handleClearSelected, type, preference, handlePreference, filter, handleFilter } = props;
 
-        return (
-            <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
-                bgcolor: (theme) =>
-                    alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-                }),
-            }}
+    return (
+        <Toolbar
+        sx={{
+            pl: { sm: 2 },
+            pr: { xs: 1, sm: 1 },
+            ...({
+            bgcolor: (theme) =>
+                alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
+            }),
+        }}
+        >
+            {/* {numSelected > 0 ? (
+            <Tooltip title="Bulk Edit">
+            <IconButton onClick={handleStartBulkEdit}>
+                <DehazeIcon /><EditIcon />
+            </IconButton>
+            </Tooltip>
+        ) : ('')} */}
+        
+            <Tooltip title="Bulk Edit">
+            <IconButton onClick={handleStartBulkEdit} disabled={numSelected === 0}>
+                <DehazeIcon /><EditIcon />
+            </IconButton>
+            </Tooltip>
+
+            {type === 'rr' &&
+            <>
+            <ToggleButtonGroup
+            size="small"
+            value={preference}
+            exclusive
+            onChange={handlePreference}
+            aria-label="text alignment"
             >
-            {numSelected > 0 ? (
-                <Tooltip title="Bulk Edit">
-                <IconButton onClick={handleStartBulkEdit}>
-                    <DehazeIcon /><EditIcon />
-                </IconButton>
-                </Tooltip>
-            ) : ('')}
+                <ToggleButton value="fax" aria-label="fax">
+                    Fax/None
+                </ToggleButton>
+                <ToggleButton value="phone" aria-label="phone">
+                    Phone
+                </ToggleButton>
+                <ToggleButton value="email" aria-label="email">
+                    Email
+                </ToggleButton>
+                <ToggleButton value="all" aria-label="all">
+                    All
+                </ToggleButton>
+            </ToggleButtonGroup>
 
-            {numSelected > 0 ? (
-                <Typography
-                sx={{ flex: '1 1 100%' }}
-                color="inherit"
-                variant="subtitle1"
-                component="div"
-                >
-                {numSelected} selected
-                </Typography>
-            ) : ('')}
+            <ToggleButtonGroup
+            size="small"
+            value={filter}
+            exclusive
+            onChange={handleFilter}
+            aria-label="text alignment"
+            >
+                <ToggleButton value="tbw" aria-label="tbw">
+                    TBW
+                </ToggleButton>
+                <ToggleButton value="worked" aria-label="worked">
+                    Worked
+                </ToggleButton>
+                <ToggleButton value="fuh" aria-label="fuh">
+                    FU/H
+                </ToggleButton>
+                <ToggleButton value="cu" aria-label="cu">
+                    Caught Up
+                </ToggleButton>
+                <ToggleButton value="" aria-label="all">
+                    All
+                </ToggleButton>
+            </ToggleButtonGroup>
+            </>
+            }
 
-            {numSelected > 0 ? (
-                <Tooltip title="Clear Selection">
-                <IconButton onClick={handleClearSelected}>
-                    <HighlightOffIcon />
-                </IconButton>
-                </Tooltip>
-            ) : ('')}
-            </Toolbar>
-        );
-    }
-    // extract into reusable file
-    EnhancedTableToolbar.propTypes = {
-        numSelected: PropTypes.number.isRequired,
-    };
+        {numSelected > 0 ? (
+            <Typography
+            sx={{ flex: '1 1 100%' }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+            >
+            {numSelected} selected
+            </Typography>
+        ) : ('')}
+
+        {numSelected > 0 ? (
+            <Tooltip title="Clear Selection">
+            <IconButton onClick={handleClearSelected}>
+                <HighlightOffIcon />
+            </IconButton>
+            </Tooltip>
+        ) : ('')}
+        </Toolbar>
+    );
+}
+// extract into reusable file
+EnhancedTableToolbar.propTypes = {
+    numSelected: PropTypes.number.isRequired,
+};
 
     const StyledTableCell = styled(TableCell)({
         padding: '5px 0px 5px 2px', 
@@ -175,7 +242,21 @@ function ReferralTableHead(props) {
 
 export default function ReferralTable(props) {
 
+    // const [instance, updateInstance] = usePDF({ document: rrLetter });
+
+    // const blob = pdf(rrLetter).toBlob();
+
+    // console.log(blob);
+
     let { id: linkId } = useParams();
+
+    const { user: userAuth0 } = useAuth0();
+
+    const { email, nickname, updated_at } = userAuth0;
+
+    const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
+
+    // console.log(nickname);
 
     const tableRef = useRef(null);
 
@@ -183,7 +264,7 @@ export default function ReferralTable(props) {
 
     const timestamp = new Date();
 
-    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved } = props;
+    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved, preference, handlePreference, filter, handleFilter } = props;
 
     // console.log(props);
 
@@ -193,6 +274,8 @@ export default function ReferralTable(props) {
     const mutationDelete = useDeleteReferral();
     const visitUpdate = useUpdateVisit();
     const fceUpdate = useUpdateFceppdBilling();
+    const referralUpdate = useUpdateReferral();
+    const userHistoryUpdate = useUpdateUserHistory();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -210,6 +293,10 @@ export default function ReferralTable(props) {
     const [selected, setSelected] = useState([]);
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
     const [enabled, setEnabled] = useState({});
+
+    const [generateRR, setGenerateRR] = useState(false);
+    const [includeIA, setIncludeIA] = useState(false);
+    const [includePN, setIncludePN] = useState(false);
 
     const open = Boolean(anchorEl);
 
@@ -252,7 +339,15 @@ export default function ReferralTable(props) {
       setOrderBy(property);
     };
 
+    // const handlePrevRowClassName = (className) => {
+    //     setPrevRowClassName(className);
+    // };
+    // const handlePrevRowId = (id) => {
+    //     setPrevRowId(id);
+    // };
+
     const handleClaimClicked = (event, claim) => {
+        userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);
@@ -359,7 +454,7 @@ export default function ReferralTable(props) {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-        const newSelected = rows?.map((v) => v.billingId);
+        const newSelected = rows?.map((v) => type === 'bil' ? v.billingId : v.referralId);
         setSelected(newSelected);
         setEditIDx(-1);
         setRevertData({});
@@ -372,14 +467,14 @@ export default function ReferralTable(props) {
         setCurrentEditRow({});
     };
 
-    const isSelected = (billingId) => selected.indexOf(billingId) !== -1;
+    const isSelected = (id) => selected.indexOf(id) !== -1;
 
-    const handleClickBox = (event, billingId) => {
-        const selectedIndex = selected.indexOf(billingId);
+    const handleClickBox = (event, id) => {
+        const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, billingId);
+            newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -431,10 +526,29 @@ export default function ReferralTable(props) {
         // console.log(newValues?.writeOff);
     };
 
+    const handleChangeRRIAPN = (key) => {
+        if (key === 'rr') {
+            setGenerateRR(!generateRR);
+            if (generateRR === false) {
+                setIncludeIA(false);
+                setIncludePN(false);
+            }
+        }
+        if (key === 'pn') {
+            setIncludePN(!includePN);
+        }
+        if (key === 'ia') {
+            setIncludeIA(!includeIA);
+        }
+    };
+
     const handleModalClose = (event, reason) => {
         if (reason !== 'backdropClick') {
             setBulkModalOpen(false);
             setEnabled({});
+            setIncludeIA(false);
+            setIncludePN(false);
+            setGenerateRR(false);
         }
     };
 
@@ -453,6 +567,50 @@ export default function ReferralTable(props) {
                 visitUpdate.mutate({...values, billingId: billingId});
             });
         }
+        else if (type === 'rr') {
+            console.log("Generating letter(s)...");
+
+            // --One File Per Patient--//
+            selected.forEach(s => {
+                const timestamp = new Date();
+                const referral = rows.filter(r => r.referralId === s)[0];
+                const rrLetter = (
+                    <RecordsRequestLetter selectedClaim={referral} />
+                );
+                pdf(rrLetter).toBlob().then(blob => {
+                    console.log(blob);
+                    saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`)
+                    referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp})
+                })
+                .catch(e => console.log("Error Generating Letters:", e))
+
+            })
+
+            // --One File Per Therapist--//
+            // let therapists = [];
+            // selected.forEach(s => {
+            //     const referral = rows.filter(r => r.referralId === s)[0];
+            //     therapists.push(referral.therapistId);
+            // });
+            // const uniqueTherapists = Array.from(new Set(therapists));
+            // uniqueTherapists.forEach(t => {
+            //     const referrals = rows.filter(r => r.therapistId === t);
+            //     // console.log(t);
+            //     // console.log(referrals);
+            //     const rrLetter = (
+            //     <Document>
+            //         {referrals.map(r => <RecordsRequestLetter key={r.referralId} selectedClaim={r} />)}
+            //     </Document>
+            //     );
+            //     pdf(rrLetter).toBlob().then(blob => {
+            //         // console.log("BLOB:", blob)
+            //         // console.log("referrals:", referrals)
+            //         saveAs(blob, `PT Patient Records Request - ${t}.pdf`);
+            //     });
+
+            // })
+            // console.log(uniqueTherapists);
+        }
         else {
             console.log("nothing to update...")
         }
@@ -467,6 +625,9 @@ export default function ReferralTable(props) {
         handleModalClose();
         
     };
+
+    let prevRowClassName = 'alternateColorA';
+
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
@@ -480,6 +641,11 @@ export default function ReferralTable(props) {
             numSelected={selected.length}
             handleStartBulkEdit={handleStartBulkEdit}
             handleClearSelected={handleClearSelected}
+            type={type}
+            preference={preference}
+            handlePreference={handlePreference}
+            filter={filter}
+            handleFilter={handleFilter}
             />
             }
 
@@ -504,129 +670,166 @@ export default function ReferralTable(props) {
                     />
                     <TableBody>
                         {rowsSorted
-                        .map((row, index) => {
+                        .map((row, index, arr) => {
 
-                        const labelId = `referrals-${title}-table-${index}`;
+                            const labelId = `referrals-${title}-table-${index}`;
 
-                        const currentlyEditing = editIDx === index;
-                        const isItemSelected = isSelected(row.billingId);
-                        return (
-                            <TableRowStyled
-                            hover
-                            tabIndex={-1}
-                            key={type === 'bil' ? row.billingId : (type === 'hcfa' ? row.v1500Id : row.referralId)}
-                            id={labelId}
-                            className={row.referralId === +linkId ? (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.serviceGeneral === "FCE" && 'regularRowFCE')}
-                            onClick={(e) => type === 'hcfa' && handleClickHcfa(e, row)}
-                            >
-                                {bulkEdit &&
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                    onClick={(event) => handleClickBox(event, row.billingId)}
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                    'aria-labelledby': 'editBoxB',
-                                    }}
-                                    />
-                                </TableCell>
+                            let rowColor;
+
+                            if (type === 'rr') {
+                                const sameId = arr[index - 1]?.therapistId === row.therapistId;
+                                if (!sameId) {
+                                    rowColor = prevRowClassName === 'alternateColorB' ? 'alternateColorA' : 'alternateColorB';
                                 }
+                                else {
+                                    rowColor = prevRowClassName;
+                                }
+                                prevRowClassName = rowColor;
+                            }
 
-                                {headCells.map((col) => {
-                                
-                                  return (
-                                      <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
+                            const currentlyEditing = editIDx === index;
+                            const isItemSelected = isSelected(type === 'bil' ? row.billingId : row.referralId);
+                            return (
+                                <TableRowStyled
+                                hover
+                                tabIndex={-1}
+                                key={type === 'bil' ? row.billingId : (type === 'hcfa' ? row.v1500Id : row.referralId)}
+                                id={labelId}
+                                className={
+                                    type === 'rr'
+                                    ?
+
                                         
-                                          {col.id === 'claimNumber' && type !== 'hcfa' ?
-                                          <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
-                                              {row.claimNumber ? row.claimNumber : 'WILL GET'}
-                                          </Link>
-                                          :
-                                          <>
-                                          {(col.enableEdit && currentlyEditing) ?
-                                          <>
-                                          {col.inputType === 'select' ?
-                                          <select
-                                          name={col.id}
-                                          value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
-                                          onChange={(event) => handleChangeEdit(event, col.id)}
-                                          style={{width: col.inputWidth || 'auto'}}
-                                          >
-                                                <option value=''>-</option>
-                                                {col.options.map((n) => (
-                                                    <option key={n} value={n}>{n}</option>
-                                                ))}
-                                          </select>
-                                          :
-                                          <input 
-                                          type={col.inputType}
-                                          name={col.id}
-                                          value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
-                                          onChange={(event) => handleChangeEdit(event, col.id)}
-                                          style={{width: col.inputWidth || 'auto'}}
-                                          />
-                                          }
-                                          </>
-                                          :
-                                          row[col.id]
-                                          }
-                                          </>
-                                          }
-                                      </StyledTableCell>
-                                )})}
-
-                                {removable &&
-                                <StyledTableCell sx={{ borderRight: 1 }} align="left">
-                                  <div className="buttonContainer">
-                                    <DeleteIcon onClick={(e) => handleOpenMenu(e, row.referralId)} />
-                                  </div>
-                                </StyledTableCell>
+                                        (row.referralId === +linkId 
+                                         ? 
+                                            'selectedClaimRowDPT'
+                                         :
+                                            `${rowColor}`
+                                        )
+                                    :
+                                        (row.referralId === +linkId 
+                                         ? 
+                                            (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') 
+                                         :
+                                            (row.serviceGeneral === "FCE" && 'regularRowFCE')
+                                        )
                                 }
+                                onClick={(e) => type === 'hcfa' && handleClickHcfa(e, row)}
+                                >
+                                    {bulkEdit &&
+                                    <TableCell padding="checkbox">
+                                        <Checkbox
+                                        onClick={(event) => handleClickBox(event, type === 'bil' ? row.billingId : row.referralId)}
+                                        color="primary"
+                                        checked={isItemSelected}
+                                        inputProps={{
+                                        'aria-labelledby': 'editBoxB',
+                                        }}
+                                        />
+                                    </TableCell>
+                                    }
 
-                                {inlineEdit &&
-                                <StyledTableCell sx={{ borderRight: 1 }} align="left">
-                                {currentlyEditing ?
-                                <Grid container>
-                                    <Grid item xs={6}>
-                                        <CheckIcon
-                                        sx={{cursor: "pointer"}}
-                                        fontSize='small'
-                                        onClick={() => stopEditing(row)}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <ClearIcon
-                                        sx={{cursor: "pointer"}}
-                                        fontSize='small'
-                                        onClick={() => cancelEdit()}
-                                        />
-                                    </Grid>
-                                </Grid>
-                                :
-                                <Grid container>
-                                    <Grid item xs={12}>
-                                        <EditIcon
-                                        sx={{cursor: "pointer"}}
-                                        fontSize='small'
-                                        onClick={() => startEditing(index, row)}
-                                        />
-                                    </Grid>
-                                    {/* <Grid item xs={6}>
-                                        <DeleteIcon
-                                        sx={{cursor: "pointer"}}
-                                        fontSize='small'
-                                        onClick={() => handleRemove(row.billingId)}
-                                        />
-                                    </Grid> */}
-                                </Grid>
-                                }
-                                </StyledTableCell>
+                                    {headCells.map((col) => {
+                                    
+                                    return (
+                                        <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
+                                            
+                                            {col.id === 'claimNumber' && type !== 'hcfa' ?
+                                            <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
+                                                {row.claimNumber ? row.claimNumber : 'WILL GET'}
+                                            </Link>
+                                            :
+                                            <>
+                                            {row[col.id] === true ?
+                                            <CheckIcon />
+                                            :
+                                            <>
+                                            {(col.enableEdit && currentlyEditing) ?
+                                            <>
+                                            {col.inputType === 'select' ?
+                                            <select
+                                            name={col.id}
+                                            value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                            onChange={(event) => handleChangeEdit(event, col.id)}
+                                            style={{width: col.inputWidth || 'auto'}}
+                                            >
+                                                    <option value=''>-</option>
+                                                    {col.options.map((n) => (
+                                                        <option key={n} value={n}>{n}</option>
+                                                    ))}
+                                            </select>
+                                            :
+                                            <input 
+                                            type={col.inputType}
+                                            name={col.id}
+                                            value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                            onChange={(event) => handleChangeEdit(event, col.id)}
+                                            style={{width: col.inputWidth || 'auto'}}
+                                            />
+                                            }
+                                            </>
+                                            :
+                                            row[col.id]
+                                            }
+                                            </>
+                                            }
+                                            </>
+                                            }
+                                        </StyledTableCell>
+                                    )})}
 
-                                  
-                                
-                                }
-                            </TableRowStyled>
-                        );
+                                    {removable &&
+                                    <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                                    <div className="buttonContainer">
+                                        <DeleteIcon onClick={(e) => handleOpenMenu(e, row.referralId)} />
+                                    </div>
+                                    </StyledTableCell>
+                                    }
+
+                                    {inlineEdit &&
+                                    <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                                    {currentlyEditing ?
+                                    <Grid container>
+                                        <Grid item xs={6}>
+                                            <CheckIcon
+                                            sx={{cursor: "pointer"}}
+                                            fontSize='small'
+                                            onClick={() => stopEditing(row)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <ClearIcon
+                                            sx={{cursor: "pointer"}}
+                                            fontSize='small'
+                                            onClick={() => cancelEdit()}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                    :
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <EditIcon
+                                            sx={{cursor: "pointer"}}
+                                            fontSize='small'
+                                            onClick={() => startEditing(index, row)}
+                                            />
+                                        </Grid>
+                                        {/* <Grid item xs={6}>
+                                            <DeleteIcon
+                                            sx={{cursor: "pointer"}}
+                                            fontSize='small'
+                                            onClick={() => handleRemove(row.billingId)}
+                                            />
+                                        </Grid> */}
+                                    </Grid>
+                                    }
+                                    </StyledTableCell>
+
+                                    
+                                    
+                                    }
+                                </TableRowStyled>
+                            );
                         })}
                     </TableBody>
                 </Table>
@@ -705,11 +908,51 @@ export default function ReferralTable(props) {
                     </Fragment>
                     );
                   }) }
+                  {type === 'rr' &&
+                  <>
+                  <Grid item>
+                        <label htmlFor='generateRR' style={{display: 'block'}}>{`Generate RR Letter:`}</label>
+                        <input 
+                            type='checkbox'
+                            name='generateRR'
+                            value={generateRR}
+                            onChange={() => handleChangeRRIAPN('rr')}
+                            style={{width: 'auto'}}
+                        />
+                    </Grid>
+                    <Box width="100%" />
+                    <Grid item>
+                        <label htmlFor='includeIA' style={{display: 'block'}}>{`Include IA Request:`}</label>
+                        <input
+                            disabled={!generateRR}
+                            type='checkbox'
+                            name='includeIA'
+                            value={includeIA}
+                            checked={includeIA}
+                            onChange={() => handleChangeRRIAPN('ia')}
+                            style={{width: 'auto'}}
+                        />
+                    </Grid>
+                    <Box width="100%" />
+                    <Grid item>
+                        <label htmlFor='includePN' style={{display: 'block'}}>{`Include PN Request:`}</label>
+                        <input
+                            disabled={!generateRR}
+                            type='checkbox'
+                            name='includePN'
+                            value={includePN}
+                            checked={includePN}
+                            onChange={() => handleChangeRRIAPN('pn')}
+                            style={{width: 'auto'}}
+                        />
+                    </Grid>
+                    </>
+                  }
                 </Grid>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleModalClose}>Cancel</Button>
-                <Button onClick={handleBulkSubmit}>Update</Button>
+                <Button onClick={handleBulkSubmit}>Generate</Button>
               </DialogActions>
             </Dialog>
     </Box>

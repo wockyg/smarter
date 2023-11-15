@@ -12,6 +12,8 @@ import SearchTab from '../search/SearchTab';
 import CalendarTab from '../calendars/CalendarTab';
 import ReportsTab from '../reports/ReportsTab';
 import MapTab from '../map/MapTab';
+import RecordsRequest from '../2-top/RecordsRequest';
+import DashboardCCManager from '../2-top/DashboardCCManager';
 
 import SampleTable from '../table-components/SampleTable';
 
@@ -70,35 +72,43 @@ export default function TopSection() {
     <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={tab} onChange={handleChange} aria-label="referral tabs">
-            <Tab label="Schedule" {...a11yProps(0)} />
-            <Tab label="Billing" {...a11yProps(1)} />
-            <Tab label="Search" {...a11yProps(2)} />
-            <Tab label="Calendars" {...a11yProps(3)} />
-            <Tab label="Reports" {...a11yProps(4)} />
-            <Tab label="Network Map" {...a11yProps(5)} />
-            {/* <Tab label="Bug Reports" {...a11yProps(6)} /> */}
+            <Tab label="Dashboard" {...a11yProps(0)} />
+            <Tab label="Schedule" {...a11yProps(1)} />
+            <Tab label="Records Req" {...a11yProps(2)} />
+            <Tab label="Billing" {...a11yProps(3)} />
+            <Tab label="Search" {...a11yProps(4)} />
+            <Tab label="Calendars" {...a11yProps(5)} />
+            <Tab label="Reports" {...a11yProps(6)} />
+            <Tab label="Network Map" {...a11yProps(7)} />
+            {/* <Tab label="Bug Reports" {...a11yProps(8)} /> */}
         </Tabs>
         </Box>
         <TabPanel value={tab} index={0}>
-            <ScheduleTab />
+            <DashboardCCManager />
         </TabPanel>
         <TabPanel value={tab} index={1}>
-            <BillingTab />
+            <ScheduleTab />
         </TabPanel>
-         <TabPanel value={tab} index={2}>
-            <SearchTab />
+        <TabPanel value={tab} index={2}>
+            <RecordsRequest />
         </TabPanel>
         <TabPanel value={tab} index={3}>
-            <CalendarTab />
+            <BillingTab />
         </TabPanel>
-        <TabPanel value={tab} index={4}>
-            <ReportsTab />
+         <TabPanel value={tab} index={4}>
+            <SearchTab />
         </TabPanel>
         <TabPanel value={tab} index={5}>
+            <CalendarTab />
+        </TabPanel>
+        <TabPanel value={tab} index={6}>
+            <ReportsTab />
+        </TabPanel>
+        <TabPanel value={tab} index={7}>
             <MapTab />
         </TabPanel>
-        {/* <TabPanel value={tab} index={6}>
-            <SampleTable />
+        {/* <TabPanel value={tab} index={8}>
+            <BugReportsTab />
         </TabPanel> */}
     </Box>
     
