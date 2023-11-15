@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import RecordsRequestTable from './RecordsRequestTable';
 import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
 
-import { PieChart } from '@mui/x-charts/PieChart';
+// import { PieChart } from '@mui/x-charts/PieChart';
 
 import '../App.css';
 
@@ -115,7 +115,7 @@ export default function RecordsRequest(props) {
                     <Grid item xs={3.5}>
                         <Box sx={{ width: '100%', height: 160 }}>
 
-                            <PieChart
+                            {/* <PieChart
                             sx={{background: '#DC8888'}}
                             slotProps={{ legend: { 
                                             hidden: false,
@@ -137,7 +137,7 @@ export default function RecordsRequest(props) {
                             margin={{
                                 left: -30,
                             }}
-                            />
+                            /> */}
 
                             {/* <PieChart
                             sx={{background: '#DC8888'}}
