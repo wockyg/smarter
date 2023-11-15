@@ -9,7 +9,7 @@ import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
 import CCPivot from './dashboard-widgets/CCPivot';
 import NextUpCC from './dashboard-widgets/NextUpCC';
 
-// import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart } from '@mui/x-charts/PieChart';
 // import { BarChart } from '@mui/x-charts/BarChart';
 // import { LineChart } from '@mui/x-charts/LineChart';
 
