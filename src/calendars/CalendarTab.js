@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 
+import PTOCalendar from './PTOCalendar';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -106,79 +107,7 @@ export default function CalendarTab(props) {
         } */}
         {selectedFilter === 'pto'
         ?
-        <Container style={{background: '#FFFFFF', height: 500, width: '100%'}}>
-            <Grid container spacing={2}>
-                <Grid item xs={8}>
-                    <FullCalendar
-                    // height={500}
-                    aspectRatio={1.5}
-                    contentHeight={500}
-                    plugins={[ dayGridPlugin ]}
-                    initialView="dayGridMonth"
-                    weekends={false}
-                    events={[
-                        {
-                        title: 'Amanda Off',
-                        start: '2023-10-02',
-                        end: '2023-10-05',
-                        },
-                        {
-                        title: 'Janisha Off',
-                        start: '2023-10-20',
-                        end: '2023-10-21',
-                        },
-                        {
-                        title: 'Erin Off',
-                        start: '2023-10-24',
-                        end: '2023-10-25',
-                        },
-                    ]}
-                    // eventClick={(e) => handleEventClick(e)}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <Box 
-                    sx={{ 
-                        // background: '#99A3A4', 
-                        width: '100%', 
-                        height: 565, 
-                        overflow: 'scroll', 
-                        border: '1px solid black'
-                        // paddingTop: 8 
-                    }}>
-                        {users && users.map((row, i) => {
-                            return (
-                                <Accordion expanded={expanded === `panel_${row.initials}`} onChange={handleChange(`panel_${row.initials}`)}>
-                                    <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls={`panel${row.initials}-content`}
-                                    id={`panel${row.initials}-header`}
-                                    >
-                                    <Typography>
-                                        <Grid container spacing={1}>
-                                            <Grid item>
-                                                {row.firstName} {row.lastName}
-                                            </Grid>
-                                            <Grid item>
-                                                <Chip label={fakeDaysOff[i]} color="primary" />
-                                            </Grid>
-                                        </Grid>
-                                    </Typography>
-                                    </AccordionSummary>
-                                    <AccordionDetails>
-                                    <Typography>
-                                        Total Days: 15<br />
-                                        Days Used:{15 - fakeDaysOff[i]}<br />
-                                        Days Remaining: {fakeDaysOff[i]}
-                                    </Typography>
-                                    </AccordionDetails>
-                                </Accordion>
-                            );
-                        })}
-                    </Box>
-                </Grid>
-            </Grid>
-        </Container>
+        <PTOCalendar />
         :
         <>
         <Container style={{background: '#FFFFFF', height: 500, width: '100%'}}>

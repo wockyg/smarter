@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import MainNavbar from './MainNavbar';
 import TopSection from './TopSection';
 import MiddleSection from './MiddleSection';
@@ -6,19 +6,15 @@ import BottomSection from './BottomSection';
 import AddFormModal from '../form-components/AddFormModal';
 import DocumentTester from '../document-templates/DocumentTester';
 
-import useGetUser from '../hooks/useGetUser';
 import useUpdateUser from '../hooks/useUpdateUser';
-import { useAuth0 } from "@auth0/auth0-react";
+
+import { UserContext } from '../contexts/UserContext';
 
 export default function MainPage() {
 
   const updateUser = useUpdateUser();
 
-  const { user: userAuth0 } = useAuth0();
-
-  const { email, nickname, updated_at } = userAuth0;
-
-  const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser, isIdle: isIdleUser} = useGetUser(email);
+  const { user, isFetchingUser, logout, nickname, updated_at, navbarTab, setNavbarTab } = useContext(UserContext);
 
   const [newLogin, setNewLogin] = useState(true);
 
@@ -40,14 +36,17 @@ export default function MainPage() {
   }
 
   return (
-    <>
+    <div style={{height: 'auto'}}>
     <MainNavbar />
+    {/* {navbarTab === 'schedule' || navbarTab === 'billing' &&
+    <SecondaryTabs />
+    } */}
     <TopSection />
     {/* <DocumentTester /> */}
     <MiddleSection />
     <BottomSection />
     <AddFormModal />
     
-    </>
+    </div>
   );
 }

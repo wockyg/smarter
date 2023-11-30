@@ -33,6 +33,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -62,6 +63,8 @@ import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
 import { BlobProvider, Document, Page, Text, pdf, usePDF } from '@react-pdf/renderer';
 
+import { UserContext } from '../contexts/UserContext';
+
 import { useAuth0 } from "@auth0/auth0-react";
 
 
@@ -71,7 +74,7 @@ import './ReferralTable.css';
 
 function ReferralTableHead(props) {
 
-  const { headCells, order, orderBy, onRequestSort, inlineEdit, bulkEdit, selected, rows, handleSelectAllClick } = props;
+  const { headCells, order, orderBy, onRequestSort, inlineEdit, bulkEdit, removable, selected, rows, handleSelectAllClick, reminders } = props;
 
   return (
     <TableHead>
@@ -113,6 +116,12 @@ function ReferralTableHead(props) {
           </TableCell>
         ))}
         {inlineEdit &&
+        <TableCell />
+        }
+        {removable &&
+        <TableCell />
+        }
+        {reminders &&
         <TableCell />
         }
       </TableRow>
@@ -224,37 +233,27 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-    const StyledTableCell = styled(TableCell)({
-        padding: '5px 0px 5px 2px', 
-        // paddingLeft: 5,
-        // paddingRight: 5,
-        fontSize: 11,
-    });
+const StyledTableCell = styled(TableCell)({
+    padding: '5px 0px 5px 2px', 
+    // paddingLeft: 5,
+    // paddingRight: 5,
+    fontSize: 11,
+});
 
-    const TableRowStyled = styled(TableRow)`
-      &:nth-of-type(even) {
-        background-color: #F0F0F0;
-      }
+const TableRowStyled = styled(TableRow)`
+    &:nth-of-type(even) {
+    background-color: #F0F0F0;
+    }
 
-      cursor: pointer
+    cursor: pointer
 
-    `;
+`;
 
 export default function ReferralTable(props) {
 
-    // const [instance, updateInstance] = usePDF({ document: rrLetter });
-
-    // const blob = pdf(rrLetter).toBlob();
-
-    // console.log(blob);
-
     let { id: linkId } = useParams();
 
-    const { user: userAuth0 } = useAuth0();
-
-    const { email, nickname, updated_at } = userAuth0;
-
-    const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
+    const { user, nickname, updated_at } = useContext(UserContext);
 
     // console.log(nickname);
 
@@ -264,7 +263,7 @@ export default function ReferralTable(props) {
 
     const timestamp = new Date();
 
-    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved, preference, handlePreference, filter, handleFilter } = props;
+    const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved, preference, handlePreference, filter, handleFilter, cc } = props;
 
     // console.log(props);
 
@@ -347,7 +346,7 @@ export default function ReferralTable(props) {
     // };
 
     const handleClaimClicked = (event, claim) => {
-        userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
+        claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);
@@ -626,15 +625,23 @@ export default function ReferralTable(props) {
         
     };
 
+    const handleReminderWorked = (e, referralId) => {
+        console.log("Reminder Worked");
+        const values  = {referralId: referralId, reminderDate: null, reminderNote: null};
+        referralUpdate.mutate(values);
+    };
+
     let prevRowClassName = 'alternateColorA';
 
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
           
+            {!cc &&
             <Button variant="text" onClick={onDownload}>
               <DownloadIcon />
             </Button>
+            }
 
             {bulkEdit &&
             <EnhancedTableToolbar
@@ -649,7 +656,7 @@ export default function ReferralTable(props) {
             />
             }
 
-            <TableContainer sx={{ height: 400 }}>
+            <TableContainer sx={{ height: cc ? 300 : 400 }}>
                 <Table
                 stickyHeader
                 sx={{ minWidth: 750 }}
@@ -661,6 +668,8 @@ export default function ReferralTable(props) {
                     headCells={headCells}
                     inlineEdit={inlineEdit}
                     bulkEdit={bulkEdit}
+                    removable={removable}
+                    reminders={title === 'Reminders' ? true : false}
                     selected={selected}
                     handleSelectAllClick={handleSelectAllClick}
                     rows={rows}
@@ -786,6 +795,16 @@ export default function ReferralTable(props) {
                                     </StyledTableCell>
                                     }
 
+                                    {title === 'Reminders' &&
+                                    <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                                    <div className="buttonContainer">
+                                        {/* <IconButton> */}
+                                            <CheckCircleIcon color='primary' fontSize='small' onClick={(e) => handleReminderWorked(e, row.referralId)} />
+                                        {/* </IconButton> */}
+                                    </div>
+                                    </StyledTableCell>
+                                    }
+
                                     {inlineEdit &&
                                     <StyledTableCell sx={{ borderRight: 1 }} align="left">
                                     {currentlyEditing ?
@@ -824,9 +843,6 @@ export default function ReferralTable(props) {
                                     </Grid>
                                     }
                                     </StyledTableCell>
-
-                                    
-                                    
                                     }
                                 </TableRowStyled>
                             );
@@ -835,6 +851,7 @@ export default function ReferralTable(props) {
                 </Table>
             </TableContainer>
             {`${rows.length} rows`}
+
         </Paper>
             <Menu
               id="delete-menu"

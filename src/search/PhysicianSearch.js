@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetPhysiciansSearchAll from '../hooks/useGetPhysiciansSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -20,34 +23,47 @@ const headCells = [
     disablePadding: false,
     label: 'Facility'
   },
+  {
+    id: 'npi',
+    numeric: false,
+    disablePadding: false,
+    label: 'NPI'
+  },
 ];
 
 export default function PhysicianSearch(props) {
 
     const initialSort = 'lastFirst';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetPhysiciansSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        const firstLast = `${row.firstName} ${row.lastName}`;
-                                                        return (
-                                                            firstLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            row.lastFirst?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            row.facility?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (searchVals.physician === '' && searchVals.physicianFacility === '' && searchVals.physicianNPI === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const physicianLastFirst = `${row.lastName}, ${row.firstName}`;
+                                    const physicianFirstLast = `${row.firstName} ${row.lastName}`;
+                                    
+                                    return (
+                                        (physicianLastFirst?.toLowerCase().includes(searchVals.physician.toLowerCase()) ||
+                                        physicianFirstLast?.toLowerCase().includes(searchVals.physician.toLowerCase())) &&
+                                        row.facility?.toLowerCase().includes(searchVals.physicianFacility.toLowerCase()) &&
+                                        (searchVals.physicianNPI.length > 0 ? row.npi?.toString().startsWith(searchVals.physicianNPI) : true)
+                                    );
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {((searchVals.physician.length > 0) || (searchVals.physicianFacility.length > 0) || (searchVals.physicianNPI.length > 0)) &&
         <SearchTable
         party='physician'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

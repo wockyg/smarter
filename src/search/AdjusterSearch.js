@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetAdjustersSearchAll from '../hooks/useGetAdjustersSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -38,28 +41,35 @@ export default function AdjusterSearch(props) {
 
     const initialSort = 'lastFirst';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetAdjustersSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        const firstLast = `${row.firstName} ${row.lastName}`;
-                                                        return (
-                                                            firstLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            row.lastFirst?.toLowerCase().includes(searchVal.toLowerCase()) || 
-                                                            row.client?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (!searchVals.adjusterClient && searchVals.adjuster === '' && searchVals.adjusterStatus === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const adjusterLastFirst = `${row.lastName}, ${row.firstName}`;
+                                    const adjusterFirstLast = `${row.firstName} ${row.lastName}`;
+
+                                    return (
+                                      (adjusterLastFirst?.toLowerCase().includes(searchVals.adjuster.toLowerCase()) || 
+                                      adjusterFirstLast?.toLowerCase().includes(searchVals.adjuster.toLowerCase())) &&
+                                      (searchVals.adjusterClient ? (row.clientId === searchVals.adjusterClient?.clientId) : true) &&
+                                      ((searchVals.adjusterStatus !== 'all' && searchVals.adjusterStatus !== '') ? (row.status === searchVals.adjusterStatus) : true)
+                                    )
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {(searchVals.adjusterClient || (searchVals.adjuster.length > 0) || (searchVals.adjusterStatus.length > 0)) &&
         <SearchTable
         party='adjuster'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

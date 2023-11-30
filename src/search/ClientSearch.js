@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetClientsSearchAll from '../hooks/useGetClientsSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -14,31 +17,50 @@ const headCells = [
     disablePadding: false,
     label: 'Notes',
   },
+  {
+    id: 'billingProtocol',
+    numeric: false,
+    disablePadding: false,
+    label: 'Protocol',
+  },
+  {
+    id: 'discount',
+    numeric: false,
+    disablePadding: false,
+    label: 'Notes',
+  },
 ];
 
-export default function AttorneySearch(props) {
+export default function ClientSearch(props) {
 
     const initialSort = 'client';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClientsSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        return (
-                                                            row.client?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (searchVals.client === '' && searchVals.clientBillingProtocol === '' && searchVals.clientDiscount === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const clientSpace = `${row.client}`;
+                                    
+                                    return (
+                                        (clientSpace?.toLowerCase().includes(`${searchVals.client.toLowerCase()}`)) &&
+                                        (searchVals.clientBillingProtocol !== '' ? (row.billingProtocol?.toLowerCase().startsWith(searchVals.clientBillingProtocol.toLowerCase())) : true)
+                                    );
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {((searchVals.client.length > 0) || (searchVals.clientBillingProtocol.length > 0) || (searchVals.clientDiscount.length > 0)) &&
         <SearchTable
         party='client'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

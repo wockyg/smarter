@@ -16,8 +16,6 @@ import ReportLimbo from './ReportLimbo';
 import FollowupHold from './FollowupHold';
 import PastAppts from './PastAppts';
 
-import ReferralQuickSearch from '../1-main/ReferralQuickSearch';
-
 import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
 import useGetReferralsDropdownCalendar from '../hooks/useGetReferralsDropdownCalendar';
 
@@ -57,8 +55,6 @@ export default function ScheduleTab(props) {
 
     return (
         <>
-        {/* <ReferralQuickSearch /> */}
-
         <ToggleButtonGroup
         size="small"
         value={selectedFilter}

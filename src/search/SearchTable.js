@@ -97,9 +97,9 @@ export default function SearchTable(props) {
 
   const navigate = useNavigate();
 
-  const { party, searchVal, searchValAdvanced, rows, headCells, initialSort, title } = props;
+  const { party, rows, headCells, initialSort } = props;
 
-  const { searchId, setSearchId, setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
+  const { setQuickSearchVal, setQuickSearchInputVal, detailsId, setDetailsId } = useContext(SearchContext);
 
   const { setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
@@ -139,15 +139,15 @@ export default function SearchTable(props) {
 
   const { onDownload } = useDownloadExcel({
       currentTableRef: tableRef.current,
-      filename: `${title} Search ${timestamp}`,
+      filename: `${party} search ${timestamp}`,
       sheet: 'Sheet1'
   });
 
   const handleClickRow = (row) => {
     console.log("switch selected row");
-    party !== 'referral' ? setSearchId(row[`${party}Id`]) : navigate(`/${row.referralId}`)
+    party !== 'referral' ? setDetailsId({...detailsId, [`${party}`]: row[`${party}Id`]}) : navigate(`/${row.referralId}`)
     if (party === 'referral') {
-      userHistoryUpdate.mutate({initials: user?.initials, newId: row.referralId});
+      row.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: row.referralId});
       setQuickSearchVal(null);
       setQuickSearchInputVal('');
       setCptRows([]);
@@ -218,7 +218,7 @@ export default function SearchTable(props) {
                           tabIndex={-1}
                           key={row[`${party}Id`]}
                           id={labelId}
-                          className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')) : ((party === 'therapist' && row.therapistId === searchId) ? 'clickedRow' : (row.doNotUseDPT ? 'doNotUse' : ''))}
+                          className={row.referralId ? (row.referralId === +linkId ? (row.service === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') : (row.service === "FCE" ? 'regularRowFCE' : '')) : (((party === 'therapist' && row.therapistId === detailsId?.therapist) || (party === 'claimant' && row.claimantId === detailsId?.claimant)) ? 'clickedRow' : (row.doNotUseDPT ? 'doNotUse' : ''))}
                           // sx={{ backgroundColor: row.serviceGeneral && row.serviceGeneral === "FCE" ? "#D8BFD8" : (row[`${party}Id`] === searchId ? "#E6E6E6" : "white")}}
                           >
                               {headCells.map((col) => (

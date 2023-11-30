@@ -133,7 +133,7 @@ export default function RecordsRequestTable(props) {
       }
     });
 
-    console.log(rowsFiltered2);
+    // console.log(rowsFiltered2);
 
     return (
         <>

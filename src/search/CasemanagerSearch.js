@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetCasemanagersSearchAll from '../hooks/useGetCasemanagersSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -38,28 +41,35 @@ export default function CasemanagerSearch(props) {
 
     const initialSort = 'lastFirst';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetCasemanagersSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        const firstLast = `${row.firstName} ${row.lastName}`;
-                                                        return (
-                                                            firstLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            row.lastFirst?.toLowerCase().includes(searchVal.toLowerCase()) || 
-                                                            row.client?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (!searchVals.casemanagerClient && searchVals.casemanager === '' && searchVals.casemanagerStatus === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const casemanagerLastFirst = `${row.lastName}, ${row.firstName}`;
+                                    const casemanagerFirstLast = `${row.firstName} ${row.lastName}`;
+
+                                    return (
+                                      (casemanagerLastFirst?.toLowerCase().includes(searchVals.casemanager.toLowerCase()) || 
+                                      casemanagerFirstLast?.toLowerCase().includes(searchVals.casemanager.toLowerCase())) &&
+                                      (searchVals.casemanagerClient ? (row.clientId === searchVals.casemanagerClient?.clientId) : true) &&
+                                      ((searchVals.casemanagerStatus !== 'all' && searchVals.casemanagerStatus !== '') ? (row.status === searchVals.casemanagerStatus) : true)
+                                    )
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {(searchVals.casemanagerClient || (searchVals.casemanager.length > 0) || (searchVals.casemanagerStatus.length > 0)) &&
         <SearchTable
         party='casemanager'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetAttorneysSearchAll from '../hooks/useGetAttorneysSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -38,28 +41,34 @@ export default function AttorneySearch(props) {
 
     const initialSort = 'lastFirst';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetAttorneysSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        const firstLast = `${row.firstName} ${row.lastName}`;
-                                                        return (
-                                                            firstLast?.toLowerCase().includes(searchVal.toLowerCase()) ||
-                                                            row.lastFirst?.toLowerCase().includes(searchVal.toLowerCase()) || 
-                                                            row.firm?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (searchVals.attorney === '' && searchVals.attorneyFirm === '' && searchVals.attorneyType === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const attorneyLastFirst = `${row.lastName}, ${row.firstName}`;
+                                    const attorneyFirstLast = `${row.firstName} ${row.lastName}`;
+                                    
+                                    return (
+                                        (attorneyLastFirst?.toLowerCase().includes(searchVals.attorney.toLowerCase()) ||
+                                        attorneyFirstLast?.toLowerCase().includes(searchVals.attorney.toLowerCase())) &&
+                                        (searchVals.attorneyType !== '' ? (row.type?.toLowerCase().includes(searchVals.attorneyType.toLowerCase())) : true)
+                                    );
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {((searchVals.attorney.length > 0) || (searchVals.attorneyFirm.length > 0) || (searchVals.attorneyType.length > 0)) &&
         <SearchTable
         party='attorney'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

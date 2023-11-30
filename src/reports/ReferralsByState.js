@@ -37,7 +37,7 @@ export default function ReferralsByState(props) {
 
 
 
-    const referralsFiltered = referrals?.filter(r => new Date(r.referralDate).getFullYear() === +year);
+    const referralsFiltered = referrals?.filter(r => year === 'All' ? true : (new Date(r.referralDate).getFullYear() === +year));
 
     // referrals && console.log(year, referralsFiltered);
 
@@ -69,7 +69,7 @@ export default function ReferralsByState(props) {
             value={year}
             style={{display: 'block'}}
             >
-                {years.map(r => {return (<option value={r}>{r}</option>)})}
+                {['All', ...years].map(r => {return (<option key={r} value={r}>{r}</option>)})}
             </select>
             <TableContainer
             component={Paper}
@@ -116,6 +116,7 @@ export default function ReferralsByState(props) {
                                         // total_charges = (Math.round(total_charges * 100) / 100).toFixed(2);
 
                                         return (
+                                            stateReferralsCount > 0 &&
                                             <TableRow
                                             // hover
                                             key={row.abbrev}

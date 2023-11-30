@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
@@ -21,6 +21,8 @@ import grayPin from '../img/grayPin.png';
 import selectedPinDPT from '../img/selectedPinDPT.png';
 import selectedPinFCE from '../img/selectedPinFCE.png';
 
+import TherapistDetails from '../details/TherapistDetails';
+
 import { useParams } from 'react-router-dom';
 
 import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
@@ -29,18 +31,71 @@ import useGetReferral from '../hooks/useGetReferral';
 import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 import useUpdateReferral from '../hooks/useUpdateReferral';
 
-import { bbox, point } from '@turf/turf';
+import { DetailsContext } from '../contexts/DetailsContext';
+
+import { bbox, point, circle } from '@turf/turf';
 
 import '../App.css';
 
 
-import Map, {NavigationControl, Marker, Popup} from 'react-map-gl';
+import Map, {NavigationControl, Marker, Popup, Source, Layer} from 'react-map-gl';
 
 import mapboxgl from 'mapbox-gl';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass =
   require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default; /* eslint import/no-webpack-loader-syntax: off */
+
+
+// // // // // // // //
+
+const circleLayer = {
+    "id": "polygon",
+    "type": "fill",
+    "source": "polygon",
+    "layout": {},
+    "paint": {
+        "fill-color": "blue",
+        "fill-opacity": 0.1
+    }
+};
+
+const createGeoJSONCircle = function(center, radiusInKm, points) {
+    if(!points) points = 64;
+
+    var coords = {
+        latitude: center[1],
+        longitude: center[0]
+    };
+
+    var km = radiusInKm;
+
+    var ret = [];
+    var distanceX = km/(111.320*Math.cos(coords.latitude*Math.PI/180));
+    var distanceY = km/110.574;
+
+    var theta, x, y;
+    for(var i=0; i<points; i++) {
+        theta = (i/points)*(2*Math.PI);
+        x = distanceX*Math.cos(theta);
+        y = distanceY*Math.sin(theta);
+
+        ret.push([coords.longitude+x, coords.latitude+y]);
+    }
+    ret.push(ret[0]);
+
+    return {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [ret]
+            }
+        }]
+    };
+};
+
 
 
 export default function MapTab(props) {
@@ -51,12 +106,44 @@ export default function MapTab(props) {
     const TOKEN = "pk.eyJ1Ijoid29ja3lnIiwiYSI6ImNsbjk0amFjNTAzdXUybG56aGY4MW51OWgifQ.FHahp8Od7BRwsArJfP0YHw";
     const MAPSTYLE = "mapbox://styles/mapbox/streets-v12";
 
+    // const circleFeature = circle([-81.1006649, 32.0127042], 5, {units: 'miles'});
+    // const circleSource = createGeoJSONCircle([LON, LAT], 10);
+
     const mapRef = useRef();
+
+    setDefaults({
+    key: "AIzaSyDZTDhDWFKMSUkvPEzKEVEyNCzZh0SFTw4",
+    language: "en",
+    region: "es",
+    });
+
+    // console.log(circleSource);
+
+    let { id: linkId } = useParams();
+
+    const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
+
+    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
+
+    const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
+
+    const therapistsFiltered = therapists?.filter(t => t.lat && t.lon);
+
+    const therapistsFilteredDPT = therapistsFiltered?.filter(t => t.dptAgreementStatus === 'Agreed');
+    const therapistsFilteredFCEPPD = therapistsFiltered?.filter(t => t.fceAgreementStatus === 'Agreed');
+    const therapistsFilteredWCWH = therapistsFiltered?.filter(t => t.wcwhAgreementStatus === 'Agreed');
+
+    const [selectedFilter, setSelectedFilter] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 'dpt' : (selectedClaim?.serviceGeneral === 'FCE' ? 'fceppd' : null));
+    const [filteredPins, setFilteredPins] = useState(selectedClaim?.serviceGeneral === 'DPT' ? therapistsFilteredDPT : (selectedClaim?.serviceGeneral === 'FCE' ? therapistsFilteredFCEPPD : null));
+    const [useIWChecked, setUseIWChecked] = useState(false);
 
     const [popupInfo, setPopupInfo] = useState(null);
     const [searchVal, setSearchVal] = useState('');
     const [searchLat, setSearchLat] = useState();
     const [searchLon, setSearchLon] = useState();
+    const [circleSource, setCircleSource] = useState();
+    const [circleRadius, setCircleRadius] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 16.09 : 80.47);
+    const [circleZoom, setCircleZoom] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 10.0 : 7.5);
     const [viewport, setViewport] = useState({
         longitude: LON,
         latitude: LAT,
@@ -68,28 +155,6 @@ export default function MapTab(props) {
         // doubleClickZoom: false,
         boxZoom: false,
     });
-
-    setDefaults({
-    key: "AIzaSyDZTDhDWFKMSUkvPEzKEVEyNCzZh0SFTw4",
-    language: "en",
-    region: "es",
-    });
-
-    let { id: linkId } = useParams();
-
-    const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
-
-    const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
-
-    const therapistsFiltered = therapists?.filter(t => t.lat && t.lon);
-
-    const therapistsFilteredDPT = therapistsFiltered?.filter(t => t.dptAgreementStatus === 'Agreed');
-    const therapistsFilteredFCEPPD = therapistsFiltered?.filter(t => t.fceAgreementStatus === 'Agreed');
-    const therapistsFilteredWCWH = therapistsFiltered?.filter(t => t.wcwhAgreementStatus === 'Agreed');
-
-    const [selectedFilter, setSelectedFilter] = useState();
-    const [filteredPins, setFilteredPins] = useState();
-    const [useIWChecked, setUseIWChecked] = useState(false);
 
     // const [selectedFilterIW, setSelectedFilterIW] = useState();
 
@@ -127,6 +192,36 @@ export default function MapTab(props) {
         }
     };
 
+    const handleRadius = (event, newRadius) => {
+        if (newRadius !== null){
+            // const radiusKm = newRadius * 1.609344;
+            console.log(newRadius);
+            setCircleRadius(newRadius);
+            setCircleSource(createGeoJSONCircle([searchLon, searchLat], newRadius));
+            if (newRadius === 16.09) {
+                setCircleZoom(10.0);
+                searchLat && searchLon && mapRef.current.flyTo({center: [searchLon, searchLat], zoom: 10.0});
+            }
+            else if (newRadius === 32.18) {
+                setCircleZoom(9.0);
+                searchLat && searchLon && mapRef.current.flyTo({center: [searchLon, searchLat], zoom: 9.0});
+            }
+            else if (newRadius === 48.28) {
+                setCircleZoom(8.3);
+                searchLat && searchLon && mapRef.current.flyTo({center: [searchLon, searchLat], zoom: 8.3});
+            }
+            else if (newRadius === 64.37) {
+                setCircleZoom(7.8);
+                searchLat && searchLon && mapRef.current.flyTo({center: [searchLon, searchLat], zoom: 7.8});
+            }
+            else if (newRadius === 80.47) {
+                setCircleZoom(7.5);
+                searchLat && searchLon && mapRef.current.flyTo({center: [searchLon, searchLat], zoom: 7.6});
+            }
+            
+        }
+    };
+
     // const handleSelectedFilterIW = (event, newFilter) => {
     //     if (newFilter !== null){
     //         setSelectedFilterIW(newFilter);
@@ -152,13 +247,17 @@ export default function MapTab(props) {
     };
 
     const handleClickPin = (event, row) => {
-        console.log("Pin click");
+        console.log("Pin click", row);
         event.originalEvent.stopPropagation();
         setPopupInfo(row);
     };
 
     const handleClickSearch = (event) => {
         console.log("Search:", searchVal);
+        selectedClaim?.serviceGeneral === 'DPT' && setSelectedFilter('dpt');
+        selectedClaim?.serviceGeneral === 'DPT' && setFilteredPins(therapistsFilteredDPT);
+        selectedClaim?.serviceGeneral === 'FCE' && setSelectedFilter('fceppd');
+        selectedClaim?.serviceGeneral === 'FCE' && setFilteredPins(therapistsFilteredFCEPPD)
         fromAddress(searchVal)
         .then(({ results }) => {
             const { lat, lng } = results[0].geometry.location;
@@ -168,7 +267,10 @@ export default function MapTab(props) {
             // const feature = point([lat, lng]);
             // const [minLng, minLat, maxLng, maxLat] = bbox(feature);
             // console.log("Box:", minLng, minLat, maxLng, maxLat);
-            mapRef.current.flyTo({center: [lng, lat], zoom: 13});
+            mapRef.current.flyTo({center: [lng, lat], zoom: circleZoom});
+            setCircleSource(createGeoJSONCircle([lng, lat], circleRadius));
+            console.log(circleRadius);
+
 
         })
         .catch(console.error);
@@ -183,67 +285,19 @@ export default function MapTab(props) {
         setSelectedFilter(null);
         setPopupInfo(null);
         mapRef.current.flyTo({center: [LON, LAT], zoom: ZOOM});
+        setCircleSource(null);
     };
 
     return(
+
         <Box sx={{ width: '100%', height: 500 }}>
         {/* <Container fluid style={{background: '#FFFFFF'}}> */}
             <Grid container spacing={2}>
                 <Grid item xs={2.3}>
                     <Box sx={{ background: '#99A3A4', width: '100%', height: 500 }}>
                         <Grid container sx={{paddingTop: 2}}>
-                            {selectedClaim && selectedClaim.claimantAddress && selectedClaim.claimantCity && selectedClaim.claimantState && selectedClaim.claimantZip &&
-                            <>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                // sx={{fontSize: 10}}
-                                control={<Checkbox checked={useIWChecked} onChange={handleChangeUseIWChecked} />}
-                                label="Use selected IW's Demographics" />
-                            </Grid>
-                            <Box width='100%' />
-                            {/* {useIWChecked &&
-                            <Grid item xs={12} sx={{paddingTop: 0.5}}>
-                                <ToggleButtonGroup
-                                size="small"
-                                value={selectedFilterIW}
-                                exclusive
-                                onChange={handleSelectedFilterIW}
-                                aria-label="text alignment"
-                                >
-                                    <ToggleButton value="home" aria-label="home">
-                                        Home
-                                    </ToggleButton>
-                                    <ToggleButton value="employer" aria-label="employer">
-                                        Employer
-                                    </ToggleButton>
-                                </ToggleButtonGroup>
-                            </Grid>
-                            } */}
-                            </>
-                            }
-                            <Grid item xs={12}>
-                                <Grid container spacing={1} sx={{paddingLeft: 2}}>
-                                    <Grid item>
-                                        <TextField 
-                                        size="small"
-                                        // type='text'
-                                        id="searchVal"
-                                        name="searchVal"
-                                        label="Search"
-                                        variant="outlined"
-                                        value={searchVal}
-                                        onChange={(e) => handleChangeSearch(e)}
-                                        sx={{borderRadius: 1, background: '#FFFFFF'}}
-                                        />
-                                    </Grid>
-                                    <Grid item>
-                                        <Button variant="contained" sx={{paddingLeft: 0, paddingRight: 0, width: 30}} onClick={(e) => handleClickSearch(e)}>
-                                            <SearchIcon />
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Box width='100%' />
+                            
+                            {/* service toggle */}
                             <Grid item xs={12} sx={{paddingTop: 2}}>
                                 <ToggleButtonGroup
                                 size="small"
@@ -279,6 +333,87 @@ export default function MapTab(props) {
                                 </ToggleButtonGroup>
                             </Grid>
                             <Box width='100%' />
+                            {/* radius toggle */}
+                            <Grid item xs={12} sx={{paddingTop: 2}}>
+                                <ToggleButtonGroup
+                                size="small"
+                                value={circleRadius}
+                                exclusive
+                                onChange={handleRadius}
+                                aria-label="radius length"
+                                >
+                                    <ToggleButton
+                                    value={16.09}
+                                    aria-label="10mi"
+                                    // disabled={(useIWChecked && !selectedClaim?.service.includes('DPT')) ? true : false}
+                                    >
+                                        10 mi
+                                    </ToggleButton>
+                                    <ToggleButton
+                                    value={32.18}
+                                    aria-label="20mi"
+                                    // disabled={(useIWChecked && !selectedClaim?.service.includes('FCE') && selectedClaim?.service.includes('PPD')) ? true : false}
+                                    >
+                                        20 mi
+                                    </ToggleButton>
+                                    <ToggleButton 
+                                    value={48.28}
+                                    aria-label="30mi"
+                                    // disabled={(useIWChecked && !selectedClaim?.service.includes('WC') && selectedClaim?.service.includes('WH')) ? true : false}
+                                    >
+                                        30 mi
+                                    </ToggleButton>
+                                    <ToggleButton 
+                                    value={64.37} 
+                                    aria-label="40mi">
+                                        40 mi
+                                    </ToggleButton>
+                                    <ToggleButton 
+                                    value={80.47} 
+                                    aria-label="50mi">
+                                        50 mi
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+                            </Grid>
+                            <Box width='100%' />
+                            <br />
+                            {selectedClaim && selectedClaim.claimantAddress && selectedClaim.claimantCity && selectedClaim.claimantState && selectedClaim.claimantZip &&
+                            <>
+                            {/* IW address checkbox */}
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                // sx={{fontSize: 10}}
+                                control={<Checkbox checked={useIWChecked} onChange={handleChangeUseIWChecked} />}
+                                label="Use selected IW's Address" />
+                            </Grid>
+                            <Box width='100%' />
+                            </>
+                            }
+                            {/* search bar */}
+                            <Grid item xs={12}>
+                                <Grid container spacing={1} sx={{paddingLeft: 2}}>
+                                    <Grid item>
+                                        <TextField 
+                                        size="small"
+                                        // type='text'
+                                        id="searchVal"
+                                        name="searchVal"
+                                        label="Search"
+                                        variant="outlined"
+                                        value={searchVal}
+                                        onChange={(e) => handleChangeSearch(e)}
+                                        sx={{borderRadius: 1, background: '#FFFFFF'}}
+                                        />
+                                    </Grid>
+                                    <Grid item>
+                                        <Button variant="contained" sx={{paddingLeft: 0, paddingRight: 0, width: 30}} onClick={(e) => handleClickSearch(e)}>
+                                            <SearchIcon />
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <Box width='100%' />
+                            
                         </Grid>
                         <hr />
                         <Grid item>
@@ -301,6 +436,12 @@ export default function MapTab(props) {
                     >
                         <NavigationControl />
 
+                        {circleSource &&
+                        <Source id="polygon" type="geojson" data={circleSource}>
+                            <Layer {...circleLayer} />
+                        </Source>
+                        }
+
                         {searchLat && searchLon &&
                         <Marker
                         longitude={searchLon}
@@ -311,7 +452,7 @@ export default function MapTab(props) {
                         </Marker>
                         }
 
-                        {therapists && filteredPins?.map((row, i) => {
+                        {therapists && filteredPins && filteredPins.map((row, i) => {
                             return (
                                 <Marker
                                 key={i}
@@ -367,7 +508,14 @@ export default function MapTab(props) {
                 </Grid>
                 <Grid item xs={4}>
                     <Box sx={{ background: '#99A3A4', width: '100%', height: 500 }}>
-
+                        {popupInfo &&
+                        <TherapistDetails
+                        detailsId={popupInfo?.therapistId}
+                        currentlyEditing={currentlyEditing}
+                        setCurrentlyEditing={setCurrentlyEditing}
+                        searchBox={true}
+                        />
+                        }
                     </Box>
                 </Grid>
             </Grid>

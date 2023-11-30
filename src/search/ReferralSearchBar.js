@@ -176,6 +176,23 @@ export default function ReferralSearchBar(props) {
               ))}
             </select>
 
+            {/* <Autocomplete
+            // open={claimantSearchInputVal.length > 0}
+            value={claimantSearchVal}
+            onChange={(event, claim) => {
+              setClaimantSearchVal(claim);
+            }}
+            inputValue={claimantSearchInputVal}
+            onInputChange={(event, newInputValue) => {
+              setClaimantSearchInputVal(newInputValue);
+            }}
+            id="claimantSearch-autocomplete"
+            options={claimantsSorted}
+            getOptionLabel={(option) => `${option.lastName}, ${option.firstName} :: DOB ${option.birthDate}`}
+            sx={{ width: 500, background: '#F8F9F9', padding: 0.4 }}
+            renderInput={(params) => <TextField {...params} size="small" label="Claimant Search" />}
+            /> */}
+
             {/* <TextField 
             type='text' 
             style={{marginRight: 10, padding: 5}}
@@ -194,28 +211,6 @@ export default function ReferralSearchBar(props) {
             }}
             /> */}
 
-            {/* <input 
-            type='text' 
-            style={{marginRight: 10, padding: 5}}
-            onChange={(e) => handleChangeSearch(e, 'claimant')}
-            value={searchValAdvanced.claimant ? searchValAdvanced.claimant : ''}
-            /> */}
-
-            {/* {claimants &&
-            <Autocomplete
-            value={searchValAdvanced.claimant ? searchValAdvanced.claimant : ''}
-            onChange={(e, v) => handleChangeSearch(e, 'claimant', v)}
-            inputValue={inputVal ? inputVal : ''}
-            onInputChange={(event, newInputValue) => {
-              setInputVal(newInputValue);
-            }}
-            id="claimant-autocomplete"
-            options={claimants?.sort((a, b) => -b.lastName.localeCompare(a.lastName))}
-            getOptionLabel={(option) => option.lastName ? `${option.lastName}, ${option.firstName} DOB ${option.birthDate}` : ''}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Claimant" />}
-            />
-            } */}
           </Grid>
           {/* employer */}
           <Grid item>

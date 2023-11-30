@@ -1,17 +1,24 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import RecordsRequestTable from './RecordsRequestTable';
 import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
+
+import { useAuth0 } from "@auth0/auth0-react";
+
+import useGetUser from '../hooks/useGetUser';
 
 import CCPivot from './dashboard-widgets/CCPivot';
 import NextUpCC from './dashboard-widgets/NextUpCC';
+import ReferralHistory from './dashboard-widgets/ReferralHistory';
+import RRSynopsis from './dashboard-widgets/RRSynopsis';
 
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { LineChart } from '@mui/x-charts/LineChart';
+
+import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 
 // flippin Heck
 
@@ -19,72 +26,39 @@ import '../App.css';
 
 export default function DashboardCCManager(props) {
 
-    const [preference, setPreference] = useState("fax");
-    const [filter, setFilter] = useState("tbw");
+    const { user, nickname, updated_at } = props;
 
-    const todayDate = new Date();
-    const todayWeekday = todayDate.getDay();
-    // console.log(todayDate);
-
-    const monday = new Date();
-    monday.setDate(monday.getDate() - (todayWeekday - 1));
-    const mondayISO = monday.toISOString().split('T')[0];
-    // console.log(monday);
-
-    const tuesday = new Date();
-    tuesday.setDate(tuesday.getDate() - (todayWeekday - 2));
-    const tuesdayISO = tuesday.toISOString().split('T')[0];
-    // console.log(tuesday);
-
-    const wednesday = new Date();
-    wednesday.setDate(wednesday.getDate() - (todayWeekday - 3));
-    const wednesdayISO = wednesday.toISOString().split('T')[0];
-    // console.log(wednesday);
-
-    const thursday = new Date();
-    thursday.setDate(thursday.getDate() - (todayWeekday - 4));
-    const thursdayISO = thursday.toISOString().split('T')[0];
-    // console.log(thursday);
-
-    const friday = new Date();
-    friday.setDate(friday.getDate() - (todayWeekday - 5));
-    const fridayISO = friday.toISOString().split('T')[0];
-    // console.log(friday);
-
-    
-    const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetRecordsRequest();
-
-
-    const handlePreference = (event, newPreference) => {
-        if (newPreference !== null){
-            setPreference(newPreference);
-        }
-    };
-
-    const handleFilter = (event, newFilter) => {
-        if (newFilter !== null){
-            setFilter(newFilter);
-        }
-    };
+    const {
+        todayWeekday,
+        monday, tuesday, wednesday, thursday, friday,
+        mondayISO, tuesdayISO, wednesdayISO, thursdayISO, fridayISO,
+        numWorked, numTBW, numPending, numFaxReceived, numActive, numFUH, numCaughtUp,
+        numWorkedMonday, numFaxReceivedMonday, 
+        numWorkedTuesday, numFaxReceivedTuesday, 
+        numWorkedWednesday, numFaxReceivedWednesday, 
+        numWorkedThursday, numFaxReceivedThursday, 
+        numWorkedFriday, numFaxReceivedFriday
+    } = useContext(RecordsRequestContext);
 
     return (
         <Box sx={{ width: '100%', height: 500 }}>
 
             {/* Dashboard */}
+            {user &&
             <Box sx={{ width: '100%'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={1}>
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>Referrals by CC</u>
                             <br />
-                            <CCPivot />
+                            <CCPivot user={user} />
                         </Box> 
                     </Grid>
                     <Grid item xs={2.5}>
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>Next Up CC/Most Recent Referrals</u>
                             <br />
-                            <NextUpCC />
+                            <NextUpCC user={user} />
                         </Box> 
                         
                     </Grid>
@@ -92,6 +66,7 @@ export default function DashboardCCManager(props) {
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>Recently Visited/History</u>
                             <br />
+                            <ReferralHistory user={user} />
                             
                         </Box> 
                     </Grid>
@@ -99,6 +74,7 @@ export default function DashboardCCManager(props) {
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>RR Synopsis</u>
                             <br />
+                            <RRSynopsis />
                             
                         </Box> 
                     </Grid>
@@ -113,6 +89,9 @@ export default function DashboardCCManager(props) {
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>Stats</u>
                             <br />
+                            # referrals rec'd today
+                            <br />
+                            
                             
                         </Box> 
                     </Grid>
@@ -138,7 +117,7 @@ export default function DashboardCCManager(props) {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <PieChart
+                        {/* <PieChart
                         series={[
                             {
                             data: [
@@ -150,7 +129,7 @@ export default function DashboardCCManager(props) {
                         ]}
                         width={400}
                         height={250}
-                        />
+                        /> */}
                     </Grid>
                     
                     {/* <Grid item xs={2}>
@@ -184,6 +163,7 @@ export default function DashboardCCManager(props) {
                     
                 </Grid>
             </Box>
+            }
 
         </Box>
     );

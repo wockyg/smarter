@@ -276,7 +276,7 @@ export default function MissingV1500Table(props) {
     };
 
     const handleClaimClicked = (event, claim) => {
-        userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
+        claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);

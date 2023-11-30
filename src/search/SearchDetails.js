@@ -14,47 +14,17 @@ import TherapistDetails from '../details/TherapistDetails';
 import { SearchContext } from '../contexts/SearchContext';
 import { DetailsContext } from '../contexts/DetailsContext';
 
-// import useGetAdjusters from '../hooks/useGetAdjusters';
-// import useGetCasemanagers from '../hooks/useGetCasemanagers';
-// import useGetAttorneys from '../hooks/useGetAttorneys';
-// import useGetClients from '../hooks/useGetClients';
-// import useGetEmployers from '../hooks/useGetEmployers';
-// import useGetPhysicians from '../hooks/useGetPhysicians';
-// import useGetTherapists from '../hooks/useGetTherapists';
-// import useGetClaimants from '../hooks/useGetClaimants';
-
 export default function SearchDetails(props) {
 
     const { selectedParty } = props;
 
-    // const controller1 = {};
-
-    // controller1.adjuster = useGetAdjusters;
-    // controller1.casemanager = useGetCasemanagers;
-    // controller1.attorney = useGetAttorneys;
-    // controller1.client = useGetClients;
-    // controller1.employer = useGetEmployers;
-    // controller1.physician = useGetPhysicians;
-    // controller1.therapist = useGetTherapists;
-    // controller1.claimant = useGetClaimants;
-
-    const { searchId } = useContext(SearchContext);
+    const { detailsId } = useContext(SearchContext);
 
     const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
-    // const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = controller1[selectedParty]();
-
-    // const selectedRow = rows?.length > 0 && rows?.filter((row) => {return (row[`${selectedParty}Id`] === searchId);})[0];
-
-    // COME BACK TO THIS //
-    // const ReusableDetailsModule = `${selectedParty}Details`;
-    // // // // // // //
-
-    // console.log(selectedRow);
-
     return (
     <>
-    {searchId !== -1 &&
+    {(Object.keys(detailsId).length > 0) && detailsId[selectedParty] > 0 &&
     <Box
       sx={{
         width: '100%',
@@ -65,10 +35,10 @@ export default function SearchDetails(props) {
         // overflow: 'scroll'
       }}
     >
-        
+
         {selectedParty === 'adjuster' &&
         <AdjusterDetails 
-        detailsId={searchId}
+        detailsId={detailsId?.adjuster}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -76,7 +46,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'casemanager' &&
         <CasemanagerDetails 
-        detailsId={searchId}
+        detailsId={detailsId?.casemanager}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -84,7 +54,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'claimant' &&
         <ClaimantDetails
-        detailsId={searchId}
+        detailsId={detailsId?.claimant}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -92,7 +62,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'physician' &&
         <PhysicianDetails
-        detailsId={searchId}
+        detailsId={detailsId?.physician}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -100,7 +70,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'attorney' &&
         <AttorneyDetails
-        detailsId={searchId}
+        detailsId={detailsId?.attorney}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -108,7 +78,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'client' &&
         <ClientDetails
-        detailsId={searchId}
+        detailsId={detailsId?.client}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -116,7 +86,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'employer' &&
         <EmployerDetails
-        detailsId={searchId}
+        detailsId={detailsId?.employer}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}
@@ -124,7 +94,7 @@ export default function SearchDetails(props) {
         }
         {selectedParty === 'therapist' &&
         <TherapistDetails
-        detailsId={searchId}
+        detailsId={detailsId?.therapist}
         currentlyEditing={currentlyEditing}
         setCurrentlyEditing={setCurrentlyEditing}
         searchBox={true}

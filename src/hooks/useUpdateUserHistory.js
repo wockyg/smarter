@@ -21,6 +21,7 @@ export default function useUpdateUserHistory() {
         console.log(data);
         console.log(values);
         queryClient.invalidateQueries(`user`);
+        queryClient.invalidateQueries(`userHistory`);
         return data;
       });
   }

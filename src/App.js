@@ -6,6 +6,8 @@ import AddFormContextProvider from "./contexts/AddFormContext";
 import SelectedClaimContextProvider from './contexts/SelectedClaimContext';
 import SearchContextProvider from './contexts/SearchContext';
 import DetailsContextProvider from './contexts/DetailsContext';
+import RecordsRequestContextProvider from "./contexts/RecordsRequestContext";
+import UserContextProvider from "./contexts/UserContext";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -50,7 +52,11 @@ function App() {
         <SearchContextProvider>
         <DetailsContextProvider>
         <AddFormContextProvider>
+        <RecordsRequestContextProvider>
+        <UserContextProvider>
             <RouterProvider router={router} />
+        </UserContextProvider>
+        </RecordsRequestContextProvider>
         </AddFormContextProvider>
         </DetailsContextProvider>
         </SearchContextProvider>

@@ -69,28 +69,22 @@ export default function FcePpdTomorrow(props) {
 
     const initialSort = 'apptDate';
 
+    const {cc, ccRows} = props;
+
     const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsFcePpdTomorrow();
 
-    // const rowsFiltered = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-    //                           .filter((row) => {
-    //                             const tomorrow = new Date();
-    //                             const oneDay = tomorrow.getDate() + 1;
-    //                             tomorrow.setDate(oneDay);
-    //                             const newApptDate = new Date(row.apptDate);
-    //                             return (
-    //                                 !row.service?.includes('DPT') &&
-    //                                 newApptDate?.getUTCDate() === tomorrow.getDate() &&
-    //                                 newApptDate?.getMonth() === tomorrow.getMonth() &&
-    //                                 newApptDate?.getFullYear() === tomorrow.getFullYear()
-    //                             );});
+    const rowsFiltered = ccRows ? ccRows : rows?.filter((row) => true);
 
     return (
         <>
         {rows ?
         <ReferralTable
         headCells={headCells}
-        rows={rows}
+        rows={rowsFiltered}
+        initialSort={initialSort}
+        initialSortOrder='asc'
         title='FCE PPD Tomorrow'
+        cc={cc}
         />
         :
         <Skeleton variant="rectangular" width='100%' height={475} />

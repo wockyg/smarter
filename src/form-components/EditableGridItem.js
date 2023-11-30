@@ -17,7 +17,7 @@ export default function EditableGridItem(props) {
         <Grid item>
             <label htmlFor={field} style={{display: 'block'}}><u>{`${label}:`}</u></label>
             {/* {formikProps.values[field]} */}
-            {currentlyEditing === selectedParty ?
+            {currentlyEditing === selectedParty || currentlyEditing === true ?
             <>
             {/* Text Field */}
             {(type === 'text' || type === 'date') &&

@@ -14,6 +14,7 @@ import ReferralNotes from './ReferralNotes';
 import AuthorizationTable from './AuthorizationTable';
 import AdjusterUpdateEmails from './AdjusterUpdateEmails';
 import VisitTally from './VisitTally';
+import ReminderForm from './ReminderForm';
 
 import ConfirmationLetter from '../document-templates/ConfirmationLetter';
 import AuthorizationLetter from '../document-templates/AuthorizationLetter';
@@ -42,18 +43,26 @@ export default function ReferralDetails(props) {
     <>
     {selectedClaim?.referralId &&
     <Grid container spacing={2.5}>
-        {/* Referral Details */}
+
         <Grid item xs={2.5}>
+
+            {/* Claim Info */}
             <Box sx={{border: 1}}>
                 <ClaimInfo selectedClaim={selectedClaim} />
             </Box>    
+
         </Grid>
-        {/* Notification Update */}
+
         <Grid item xs={1.5}>
+
+            {/* Info from Adjuster */}
             <Box sx={{border: 1}}>
                 <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
             </Box>
+
             <hr />
+
+            {/* Letter Generators */}
             {((selectedClaim?.apptDate && selectedClaim?.apptTime) || selectedClaim?.serviceGeneral === "FCE")  &&
             <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
@@ -119,6 +128,7 @@ export default function ReferralDetails(props) {
                 </AccordionDetails>
             </Accordion>
             <hr />
+            {/* Authorization Table */}
             <AuthorizationTable />
             </>
             }
@@ -133,9 +143,19 @@ export default function ReferralDetails(props) {
         </Grid>
         {/* Referral Notes */}
         <Grid item xs={3.5}>
-            <Box sx={{border: 1}}>
-                <ReferralNotes selectedClaim={selectedClaim} page={page} setPage={setPage} />
-            </Box>
+            <Grid container spacing={2}>
+                <Grid item>
+                    <Box sx={{border: 1}}>
+                        <ReferralNotes selectedClaim={selectedClaim} page={page} setPage={setPage} />
+                    </Box> 
+                </Grid>
+                <Box width='100%' />
+                <Grid item>
+                    {/* <Box width='100%' height={20}> */}
+                        <ReminderForm selectedClaim={selectedClaim} />
+                    {/* </Box>  */}
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
     }

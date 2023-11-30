@@ -14,7 +14,11 @@ import { useAuth0 } from "@auth0/auth0-react";
 import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
 import useGetUser from '../hooks/useGetUser';
 
+import { useParams } from 'react-router-dom';
+
 export default function ReferralQuickSearch(props) {
+
+    let { id: linkId } = useParams();
 
     const { user: userAuth0 } = useAuth0();
 
@@ -34,13 +38,13 @@ export default function ReferralQuickSearch(props) {
     return (
         <>
         {referralsDropdown &&
-        <Container sx={{padding: 1}}>
+        // <Container sx={{padding: 1}}>
         <Autocomplete
         open={quickSearchInputVal.length > 0}
         value={quickSearchVal}
         onChange={(event, claim) => {
           claim && claim?.referralId !== null && navigate(`/${claim.referralId}`);
-          claim && claim?.referralId !== null && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});;
+          claim && claim?.referralId !== null && claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});;
           setNotesPage(0);
           setClaimTab(0);
           setQuickSearchVal(null);
@@ -61,7 +65,7 @@ export default function ReferralQuickSearch(props) {
         sx={{ width: 300, background: '#F8F9F9', padding: 0.4 }}
         renderInput={(params) => <TextField {...params} size="small" label="Quick Search" />}
         />
-        </Container>
+        // </Container>
         }
         </>
     );

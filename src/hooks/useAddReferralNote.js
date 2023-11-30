@@ -17,6 +17,7 @@ export default function useAddReferralNote() {
                                 const data = response.data;
                                 console.log(data);
                                 queryClient.invalidateQueries('referralNotes');
+                                queryClient.invalidateQueries('14days');
                                 return data;
                               });
     

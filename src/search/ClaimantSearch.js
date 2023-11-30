@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import useGetClaimantsSearchAll from '../hooks/useGetClaimantsSearchAll';
 import SearchTable from './SearchTable';
 import ClaimantSearchBar from './ClaimantSearchBar';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -40,54 +44,41 @@ export default function ClaimantSearch(props) {
 
     const initialSort = 'lastName';
 
-    const {searchVal} = props;
-
-    const [filter, setFilter] = useState({});
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetClaimantsSearchAll();
 
     // rows && console.log(rows);
 
-    const rowsFiltered = rows && Object.keys(filter).length === 0
-    ?
-    []
-    :
-    rows?.filter((row) => {
+    const rowsFiltered = rows && (!searchVals.claimantEmployer && searchVals.claimant === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const claimantLastFirst = `${row.lastName}, ${row.firstName}`;
+                                    const claimantFirstLast = `${row.firstName} ${row.lastName}`;
 
-      const keys = Object.keys(filter);
-
-      const matches = keys.filter(k => row[k]?.toLowerCase().includes(filter[k].toLowerCase()))
-
-      return matches.length > 0 && matches.length === keys.length;
+                                    return (
+                                      (claimantLastFirst?.toLowerCase().includes(searchVals.claimant.toLowerCase()) || 
+                                      claimantFirstLast?.toLowerCase().includes(searchVals.claimant.toLowerCase())) &&
+                                      (searchVals.claimantEmployer ? (row.employerId === searchVals.claimantEmployer?.employerId) : true)
+                                    )
                                                       
     });
 
-    const rowsSmart = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        const claimantLastFirst = `${row.lastName}, ${row.firstName}`;
-                                                        const claimantFirstLast = `${row.firstName} ${row.lastName}`;
-                                                        return (
-                                                            claimantLastFirst?.toLowerCase().includes(searchVal.toLowerCase()) || 
-                                                            claimantFirstLast?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
-
     return (
-        <>
-        <ClaimantSearchBar
-         searchVal={filter}
-         setSearchVal={setFilter}
-        />
-        {(searchVal || (Object.keys(filter).length > 0)) &&
-        <SearchTable
-        party='claimant'
-        searchVal={searchVal}
-        rows={rowsFiltered}
-        // rowsSmart={rowsSmart}
-        headCells={headCells}
-        initialSort={initialSort}
-        />
-        }
-        </>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            {(searchVals.claimantEmployer || (searchVals.claimant.length > 0)) &&
+            <SearchTable
+            party='claimant'
+            rows={rowsFiltered}
+            headCells={headCells}
+            initialSort={initialSort}
+            />
+            }
+          </Grid>
+        
+        </Grid>
     );
 }

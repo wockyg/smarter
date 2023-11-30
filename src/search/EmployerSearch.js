@@ -1,5 +1,8 @@
+import { useState, useContext } from 'react';
 import useGetEmployersSearchAll from '../hooks/useGetEmployersSearchAll';
 import SearchTable from './SearchTable';
+
+import { SearchContext } from '../contexts/SearchContext';
 
 const headCells = [
   {
@@ -7,6 +10,12 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Name',
+  },
+  {
+    id: 'state',
+    numeric: false,
+    disablePadding: false,
+    label: 'State',
   },
   {
     id: 'phone',
@@ -20,25 +29,32 @@ export default function EmployerSearch(props) {
 
     const initialSort = 'name';
 
-    const {searchVal} = props;
+    const { searchVals } = useContext(SearchContext);
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetEmployersSearchAll();
 
-    const rowsFiltered = (searchVal !== '') && rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]))
-                                                    .filter((row) => {
-                                                        return (
-                                                            row.name?.toLowerCase().includes(searchVal.toLowerCase())
-                                                        );
-                                                    });
+    const rowsFiltered = rows && (searchVals.employer === '' && searchVals.employerState === '')
+                                  ?
+                                  []
+                                  :
+                                  rows?.filter((row) => {
+                                    const employerSpace = `${row.name}`;
+                                    
+                                    return (
+                                        (employerSpace?.toLowerCase().includes(`${searchVals.employer.toLowerCase()}`)) &&
+                                        row.state?.toLowerCase().includes(searchVals.employerState.toLowerCase())
+                                    );
+                                                      
+    });
 
     return (
         <>
-        {searchVal &&
+        {((searchVals.employer.length > 0) || (searchVals.employerState.length > 0)) &&
         <SearchTable
         party='employer'
-        searchVal={searchVal}
         rows={rowsFiltered}
         headCells={headCells}
+        initialSort={initialSort}
         />
         }
         </>

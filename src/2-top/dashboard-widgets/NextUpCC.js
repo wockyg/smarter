@@ -13,8 +13,11 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material';
 
 import useGetReferralsCalendar from '../../hooks/useGetReferralsCalendar';
+import useUpdateUserHistory from '../../hooks/useUpdateUserHistory';
 
 import { useNavigate } from "react-router-dom";
+
+import { useParams } from 'react-router-dom';
 
 import { careCoordinators } from '../../lookup-tables/lookup_careCoordinators';
 
@@ -24,7 +27,15 @@ import { ref } from 'yup';
 
 export default function NextUpCC(props) {
 
+    let { id: linkId } = useParams();
+
+    const { user } = props;
+
+    const navigate = useNavigate();
+
     const { status: statusRows, data: referrals, error: errorRows, isFetching: isFetchingRows } = useGetReferralsCalendar();
+
+    const userHistoryUpdate = useUpdateUserHistory();
 
     const last6Referrals = referrals?.slice(0, 6);
 
@@ -34,6 +45,13 @@ export default function NextUpCC(props) {
         // paddingRight: 5,
         fontSize: 11,
     });
+
+    const handleClick = (id) => {
+        console.log(id)
+        console.log(linkId)
+        id !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: id});
+        navigate(`/${id}`);
+    };
 
     return(
         <TableContainer
@@ -53,6 +71,7 @@ export default function NextUpCC(props) {
 
                                     return (
                                         <TableRow
+                                        onClick={() => handleClick(row.referralId)}
                                         hover
                                         key={row.referralId}
                                         sx={{ backgroundColor: '#E0ACF5'}}

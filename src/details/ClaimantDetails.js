@@ -107,6 +107,7 @@ export default function ClaimantDetails(props) {
         setCurrentlyEditing={setCurrentlyEditing}
         />
         }
+
         <Grid container spacing={0.5}>
             <Grid item xs={6}>
                 <Grid container spacing={0.5}>

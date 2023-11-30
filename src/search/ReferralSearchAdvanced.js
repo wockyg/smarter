@@ -27,24 +27,6 @@ const headCells = [
     rank: 1
   },
   {
-    id: 'approvedVisits',
-    numeric: true,
-    disablePadding: false,
-    label: 'Visits',
-  },
-  {
-    id: 'apptDate',
-    numeric: false,
-    disablePadding: false,
-    label: 'Date',
-  },
-  {
-    id: 'apptTime',
-    numeric: false,
-    disablePadding: false,
-    label: 'Time',
-  },
-  {
     id: 'claimant',
     numeric: false,
     disablePadding: false,

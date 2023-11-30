@@ -9,7 +9,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Skeleton from '@mui/material/Skeleton';
 
-import ReferralSearchSimple from './ReferralSearchSimple';
 import ReferralSearchAdvanced from './ReferralSearchAdvanced';
 import ClaimantSearch from './ClaimantSearch';
 import AdjusterSearch from './AdjusterSearch';
@@ -20,9 +19,19 @@ import AttorneySearch from './AttorneySearch';
 import ClientSearch from './ClientSearch';
 import EmployerSearch from './EmployerSearch';
 
+import ClaimantSearchBar from './ClaimantSearchBar';
+import AdjusterSearchBar from './AdjusterSearchBar';
+import CasemanagerSearchBar from './CasemanagerSearchBar';
+import PhysicianSearchBar from './PhysicianSearchBar';
+import TherapistSearchBar from './TherapistSearchBar';
+import AttorneySearchBar from './AttorneySearchBar';
+import ClientSearchBar from './ClientSearchBar';
+import EmployerSearchBar from './EmployerSearchBar';
+
 import SearchDetails from './SearchDetails';
 
 import { SearchContext } from '../contexts/SearchContext';
+import { DetailsContext } from '../contexts/DetailsContext';
 
 import useGetReferralsSearchAll from '../hooks/useGetReferralsSearchAll';
 import useGetAdjustersSearchAll from '../hooks/useGetAdjustersSearchAll';
@@ -60,30 +69,14 @@ export default function SearchTab() {
     const { status: statusTherapistsDD, data: therapistsDD, error: errorTherapistsDD, isFetching: isFetchingTherapistsDD } = useGetTherapistsDropdown();
     const { status: statusEmployersDD, data: employersDD, error: errorEmployersDD, isFetching: isFetchingEmployersDD } = useGetEmployersDropdown();
 
-    
-
-    const { setSearchId } = useContext(SearchContext);
-
-    const [selectedParty, setSelectedParty] = useState("referral");
-    const [searchVal, setSearchVal] = useState('');
+    const { selectedParty, setSelectedParty } = useContext(SearchContext);
+    const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
     const handleSelectedParty = (event, newParty) => {
         if (newParty !== null){
             setSelectedParty(newParty);
-            setSearchVal('');
+            setCurrentlyEditing(false);
         }
-    };
-
-    const handleChangeSearch = (e) => {
-        setSearchVal(e.target.value);
-        if (e.target.value < 1) {
-            setSearchId(-1);
-        }
-    };
-
-    const handleClearSearch = () => {
-        setSearchVal('');
-        setSearchId(-1);
     };
 
     return (
@@ -93,32 +86,16 @@ export default function SearchTab() {
         <Box sx={{ width: '100%', height: 750 }}>
         <Grid container spacing={2}>
             <Grid item>
-                <TextField 
-                type='text' 
-                style={{marginRight: 10, padding: 5}}
-                onChange={(e) => handleChangeSearch(e)}
-                value={searchVal}
-                placeholder={`Search ${selectedParty}s`}
-                InputProps={{
-                    endAdornment: (
-                    <IconButton 
-                    onClick={handleClearSearch} 
-                    sx={{visibility: searchVal !== '' ? 'visible' : 'hidden'}}
-                    >
-                        <HighlightOffIcon />
-                    </IconButton>
-                    )
-                }}
-                />
+                {/* Something here */}
             </Grid>
             <Grid item>
                 <ToggleButtonGroup
+                exclusive
                 size="small"
                 // sx={{padding: 0}}
                 value={selectedParty}
-                exclusive
                 onChange={handleSelectedParty}
-                onClick={(e) => e.target.value !== selectedParty && setSearchId(-1)}
+                // onClick={(e) => e.target.value !== selectedParty && setSearchId(-1)}
                 aria-label="text alignment"
                 >
                     <ToggleButton value="referral" aria-label="referral">
@@ -151,33 +128,60 @@ export default function SearchTab() {
                 </ToggleButtonGroup>
             </Grid>
             <Box width="100%"/>
-            <Grid item xs={selectedParty === 'referral' ? 12 : 8}>
-                {selectedParty === 'referral' &&
-                <ReferralSearchAdvanced searchVal={searchVal} />
-                }
+            <Grid item>
                 {selectedParty === 'claimant' &&
-                <ClaimantSearch searchVal={searchVal} />
+                <ClaimantSearchBar />
                 }
                 {selectedParty === 'adjuster' &&
-                <AdjusterSearch searchVal={searchVal} />
+                <AdjusterSearchBar />
                 }
                 {selectedParty === 'casemanager' &&
-                <CasemanagerSearch searchVal={searchVal} />
+                <CasemanagerSearchBar />
                 }
                 {selectedParty === 'physician' &&
-                <PhysicianSearch searchVal={searchVal} />
+                <PhysicianSearchBar />
                 }
                 {selectedParty === 'therapist' &&
-                <TherapistSearch searchVal={searchVal} />
+                <TherapistSearchBar />
                 }
                 {selectedParty === 'attorney' &&
-                <AttorneySearch searchVal={searchVal} />
+                <AttorneySearchBar />
                 }
                 {selectedParty === 'client' &&
-                <ClientSearch searchVal={searchVal} />
+                <ClientSearchBar />
                 }
                 {selectedParty === 'employer' &&
-                <EmployerSearch searchVal={searchVal} />
+                <EmployerSearchBar />
+                }
+            </Grid>
+            <Box width="100%"/>
+            <Grid item xs={selectedParty === 'referral' ? 12 : 8}>
+                {selectedParty === 'referral' &&
+                <ReferralSearchAdvanced />
+                }
+                {selectedParty === 'claimant' &&
+                <ClaimantSearch />
+                }
+                {selectedParty === 'adjuster' &&
+                <AdjusterSearch />
+                }
+                {selectedParty === 'casemanager' &&
+                <CasemanagerSearch />
+                }
+                {selectedParty === 'physician' &&
+                <PhysicianSearch />
+                }
+                {selectedParty === 'therapist' &&
+                <TherapistSearch />
+                }
+                {selectedParty === 'attorney' &&
+                <AttorneySearch />
+                }
+                {selectedParty === 'client' &&
+                <ClientSearch />
+                }
+                {selectedParty === 'employer' &&
+                <EmployerSearch />
                 }
             </Grid>
             {selectedParty !== 'referral' &&

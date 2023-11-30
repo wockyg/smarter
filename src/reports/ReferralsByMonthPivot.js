@@ -25,7 +25,7 @@ import { ref } from 'yup';
 const months = [ "January", "February", "March", "April", "May", "June", 
            "July", "August", "September", "October", "November", "December" ];
 
-export default function ReferralsByMonth(props) {
+export default function ReferralsByMonthPivot(props) {
 
     const [year, setYear] = useState(new Date().getFullYear());
 
@@ -72,7 +72,7 @@ export default function ReferralsByMonth(props) {
             value={year}
             style={{display: 'block'}}
             >
-                {years.map(r => {return (<option value={r}>{r}</option>)})}
+                {years.map(r => {return (<option key={r} value={r}>{r}</option>)})}
             </select>
             <TableContainer
             component={Paper}
