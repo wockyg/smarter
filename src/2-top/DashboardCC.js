@@ -111,7 +111,7 @@ export default function DashboardCC(props) {
         return new Date(r.reminderDate) >= new Date('2023-12-01')
     });
 
-    console.log(remindersFiltered);
+    // console.log(rowsFuHold);
 
     const {
         todayWeekday,
@@ -187,28 +187,28 @@ export default function DashboardCC(props) {
                             <br /> */}
                                 <Grid container spacing={1} sx={{paddingLeft: 1}}>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>9</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('needInfo')}>
                                         {` Need Info/Documents`}
                                     </Grid>
                                     <Box width="100%"/>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>45</Avatar>
+                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>3</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('pendingResponse')}>
                                         {` Pending ADJ/MD Response`}
                                     </Grid>
                                     <Box width="100%"/>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>1</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('surgery')}>
                                         {` MRI/Surgery/MD Appt`}
                                     </Grid>
                                     <Box width="100%"/>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>1</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('other')}>
                                         {` Other (covid, non-comp.)`}
@@ -237,7 +237,7 @@ export default function DashboardCC(props) {
                         <FcePpdTomorrow cc={user.initials} ccRows={rowsTomorrow} />
                         }
                         {(dashboardFilter === 'needInfo' || dashboardFilter === 'pendingResponse' || dashboardFilter === 'surgery' || dashboardFilter === 'other') &&
-                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} />
+                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsFuHold} />
                         }
                         
                     </Grid>
