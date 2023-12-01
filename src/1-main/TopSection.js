@@ -96,8 +96,11 @@ export default function TopSection() {
         </Tabs>
         </Box> */}
         <TabPanel value={navbarTab} index={0}>
-            {/* <DashboardCCManager user={user} /> */}
+            
+            {user &&
             <DashboardCC user={user} />
+            // <DashboardCCManager user={user} />
+            }
         </TabPanel>
         <TabPanel value={navbarTab} index={1}>
             <ScheduleTab />

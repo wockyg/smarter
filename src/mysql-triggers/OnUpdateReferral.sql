@@ -21,39 +21,39 @@ CREATE TRIGGER `OnUpdateReferral` BEFORE UPDATE ON `referralsNotification` FOR E
 		IF NEW.confirmAttend = "Yes" THEN
 			IF NEW.service LIKE 'DPT%' THEN
 				SET NEW.ptStatus = "Active";
-				INSERT INTO define20_smarterbeta2.dptAuthorization (referralId, approvedVisits, firstAuth, dateAdded) VALUES (NEW.referralId, NEW.approvedVisits, "Yes", CURDATE());
+				INSERT INTO dptAuthorization (referralId, approvedVisits, firstAuth, dateAdded) VALUES (NEW.referralId, NEW.approvedVisits, "Yes", CURDATE());
 			ELSEIF NEW.service LIKE '%FCE%' OR NEW.service LIKE '%PPD%' THEN
 				SET NEW.ptStatus = "Complete";
 				CASE
 					WHEN NEW.service = "FCE" THEN
 						SET @adjRate =
-							(SELECT fceRate FROM define20_smarterbeta2.adjusters a
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+							(SELECT fceRate FROM adjusters a
+							 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 							 WHERE referralId = NEW.referralId);
 						SET @facilityRate =
-							(SELECT fceRate FROM define20_smarterbeta2.therapists t
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+							(SELECT fceRate FROM therapists t
+							 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 							 WHERE referralId = NEW.referralId);
 					WHEN NEW.service = "FCE | PPD" THEN
 						SET @adjRate =
-							(SELECT fceRate + ppdDiscountRate FROM define20_smarterbeta2.adjusters a
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+							(SELECT fceRate + ppdDiscountRate FROM adjusters a
+							 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 							 WHERE referralId = NEW.referralId);
 						SET @facilityRate =
-							(SELECT fceRate + ppdRate FROM define20_smarterbeta2.therapists t
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+							(SELECT fceRate + ppdRate FROM therapists t
+							 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 							 WHERE referralId = NEW.referralId);
 					WHEN NEW.service = "PPD" OR NEW.service = "PPD-GL" THEN
 						SET @adjRate =
-							(SELECT ppdRate FROM define20_smarterbeta2.adjusters a
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+							(SELECT ppdRate FROM adjusters a
+							 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 							 WHERE referralId = NEW.referralId);
 						SET @facilityRate =
-							(SELECT ppdRate FROM define20_smarterbeta2.therapists t
-							 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+							(SELECT ppdRate FROM therapists t
+							 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 							 WHERE referralId = NEW.referralId);
 				END CASE;
-				INSERT INTO define20_smarterbeta2.fceppdBilling (referralId, adjusterRate, facilityRate, dateAdded) VALUES (NEW.referralId, @adjRate, @facilityRate, CURDATE());
+				INSERT INTO fceppdBilling (referralId, adjusterRate, facilityRate, dateAdded) VALUES (NEW.referralId, @adjRate, @facilityRate, CURDATE());
 			END IF;
 			SET NEW.billingStatus = "Active";
 		END IF;
@@ -65,34 +65,34 @@ CREATE TRIGGER `OnUpdateReferral` BEFORE UPDATE ON `referralsNotification` FOR E
 		CASE
 			WHEN NEW.service = "FCE" THEN
 				SET @adjRate =
-					(SELECT fceRate FROM define20_smarterbeta2.adjusters a
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+					(SELECT fceRate FROM adjusters a
+					 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 					 WHERE referralId = NEW.referralId);
 				SET @facilityRate =
-					(SELECT fceRate FROM define20_smarterbeta2.therapists t
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+					(SELECT fceRate FROM therapists t
+					 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 					 WHERE referralId = NEW.referralId);
-				UPDATE define20_smarterbeta2.fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
+				UPDATE fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
 			WHEN NEW.service = "FCE | PPD" THEN
 				SET @adjRate =
-					(SELECT fceRate + ppdDiscountRate FROM define20_smarterbeta2.adjusters a
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+					(SELECT fceRate + ppdDiscountRate FROM adjusters a
+					 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 					 WHERE referralId = NEW.referralId);
 				SET @facilityRate =
-					(SELECT fceRate + ppdRate FROM define20_smarterbeta2.therapists t
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+					(SELECT fceRate + ppdRate FROM therapists t
+					 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 					 WHERE referralId = NEW.referralId);
-				UPDATE define20_smarterbeta2.fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
+				UPDATE fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
 			WHEN NEW.service = "PPD" OR NEW.service = "PPD-GL" THEN
 				SET @adjRate =
-					(SELECT ppdRate FROM define20_smarterbeta2.adjusters a
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON a.adjusterId = rn.adjusterId
+					(SELECT ppdRate FROM adjusters a
+					 INNER JOIN referralsNotification rn ON a.adjusterId = rn.adjusterId
 					 WHERE referralId = NEW.referralId);
 				SET @facilityRate =
-					(SELECT ppdRate FROM define20_smarterbeta2.therapists t
-					 INNER JOIN define20_smarterbeta2.referralsNotification rn ON t.therapistId = rn.therapistId
+					(SELECT ppdRate FROM therapists t
+					 INNER JOIN referralsNotification rn ON t.therapistId = rn.therapistId
 					 WHERE referralId = NEW.referralId);
-				UPDATE define20_smarterbeta2.fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
+				UPDATE fceppdBilling SET adjusterRate = @adjRate, facilityRate  = @facilityRate WHERE referralId  = NEW.referralId;
 		END CASE;
 	END IF;
 	IF OLD.rescheduleDOS IS NULL AND NEW.rescheduleDOS IS NOT NULL THEN

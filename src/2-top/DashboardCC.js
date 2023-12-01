@@ -29,6 +29,7 @@ import useGetReferralsOpenDashboard from '../hooks/useGetReferralsOpenDashboard'
 import useGetRemindersDashboard from '../hooks/useGetRemindersDashboard';
 import useGetLastNote14DaysCC from '../hooks/useGetLastNote14DaysCC';
 import useGetFcePpdTomorrowDashboard from '../hooks/useGetFcePpdTomorrowDashboard';
+import useGetReferralsFollowUpHoldDashboard from '../hooks/useGetReferralsFollowUpHoldDashboard'
 
 import '../App.css';
 
@@ -69,10 +70,11 @@ export default function DashboardCC(props) {
 
     const { user } = props;
 
-    const { status: statusReferralsOpen, data: rowsOpen, error: errorReferralsOpen, isFetching: isFetchingReferralsOpen } = useGetReferralsOpenDashboard('SS');
-    const { status: statusReferralsReminders, data: rowsReminders, error: errorReferralsReminders, isFetching: isFetchingReferralsReminders } = useGetRemindersDashboard('SS');
-    const { status: statusReferrals14Days, data: rows14Days, error: errorReferrals14Days, isFetching: isFetchingReferrals14Days } = useGetLastNote14DaysCC('SS');
-    const { status: statusReferralsTomorrow, data: rowsTomorrow, error: errorReferralsTomorrow, isFetching: isFetchingReferralsTomorrow } = useGetFcePpdTomorrowDashboard('SS');
+    const { status: statusReferralsOpen, data: rowsOpen, error: errorReferralsOpen, isFetching: isFetchingReferralsOpen } = useGetReferralsOpenDashboard(user.initials);
+    const { status: statusReferralsReminders, data: rowsReminders, error: errorReferralsReminders, isFetching: isFetchingReferralsReminders } = useGetRemindersDashboard(user.initials);
+    const { status: statusReferrals14Days, data: rows14Days, error: errorReferrals14Days, isFetching: isFetchingReferrals14Days } = useGetLastNote14DaysCC(user.initials);
+    const { status: statusReferralsTomorrow, data: rowsTomorrow, error: errorReferralsTomorrow, isFetching: isFetchingReferralsTomorrow } = useGetFcePpdTomorrowDashboard(user.initials);
+    const { status: statusReferralsFuHold, data: rowsFuHold, error: errorReferralsFuHold, isFetching: isFetchingReferralsFuHold } = useGetReferralsFollowUpHoldDashboard(user.initials);
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -90,7 +92,7 @@ export default function DashboardCC(props) {
 
       return weekNumber > currentWeekNumber - 3;
 
-    })
+    });
     
     const superLate = rows14Days?.filter(r => {
 
@@ -102,7 +104,14 @@ export default function DashboardCC(props) {
 
       return weekNumber <= currentWeekNumber - 3;
 
-    })
+    });
+
+    const remindersFiltered = rowsReminders?.filter(r => {
+        
+        return new Date(r.reminderDate) >= new Date('2023-12-01')
+    });
+
+    console.log(remindersFiltered);
 
     const {
         todayWeekday,
@@ -133,7 +142,7 @@ export default function DashboardCC(props) {
                     />
 
                     <DashboardTile
-                    bigNumber={rowsReminders?.length}
+                    bigNumber={remindersFiltered?.length}
                     textUnderneath={'Reminders'}
                     handleChangeFilter={handleChangeFilter}
                     filter='reminders'
@@ -163,6 +172,52 @@ export default function DashboardCC(props) {
                     filter='tomorrow'
                     dashboardFilter={dashboardFilter}
                     />
+
+                    <DashboardTile
+                    bigNumber={rowsTomorrow?.length}
+                    textUnderneath={'FCE/PPD Tomorrow'}
+                    handleChangeFilter={handleChangeFilter}
+                    filter='tomorrow'
+                    dashboardFilter={dashboardFilter}
+                    />
+
+                    <Grid item xs={2}>
+                        <Box sx={{ width: '100%', background: '#BABEE5'}}>
+                            {/* <u>Follow-Up</u>
+                            <br /> */}
+                                <Grid container spacing={1} sx={{paddingLeft: 1}}>
+                                    <Grid item>
+                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                    </Grid>
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('needInfo')}>
+                                        {` Need Info/Documents`}
+                                    </Grid>
+                                    <Box width="100%"/>
+                                    <Grid item>
+                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>45</Avatar>
+                                    </Grid>
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('pendingResponse')}>
+                                        {` Pending ADJ/MD Response`}
+                                    </Grid>
+                                    <Box width="100%"/>
+                                    <Grid item>
+                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                    </Grid>
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('surgery')}>
+                                        {` MRI/Surgery/MD Appt`}
+                                    </Grid>
+                                    <Box width="100%"/>
+                                    <Grid item>
+                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>4</Avatar>
+                                    </Grid>
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('other')}>
+                                        {` Other (covid, non-comp.)`}
+                                    </Grid>
+                                </Grid>
+                            
+                            
+                        </Box> 
+                    </Grid> 
                     
                     <Box sx={{ width: '100%'}} />
                     <Grid item xs={12}>
@@ -170,7 +225,7 @@ export default function DashboardCC(props) {
                         <ReferralsOpen cc={user.initials} ccRows={rowsOpen} />
                         }
                         {dashboardFilter === 'reminders' &&
-                        <RemindersTable cc={user.initials} ccRows={rowsReminders} />
+                        <RemindersTable cc={user.initials} ccRows={remindersFiltered} />
                         }
                         {dashboardFilter === '14days' &&
                         <LastNote14DaysTable cc={user.initials} ccRows={late} />
