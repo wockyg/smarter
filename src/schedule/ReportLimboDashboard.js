@@ -1,47 +1,7 @@
-import useGetReminders from '../hooks/useGetReminders';
 import ReferralTable from '../table-components/ReferralTable';
 import Skeleton from '@mui/material/Skeleton';
 
-const headCellsCC = [
-  {
-    id: 'service',
-    numeric: false,
-    disablePadding: false,
-    label: 'Service',
-  },
-  {
-    id: 'bodyPart',
-    numeric: false,
-    disablePadding: false,
-    label: 'BodyPart',
-  },
-  {
-    id: 'claimNumber',
-    numeric: false,
-    disablePadding: false,
-    label: 'Claim #',
-  },
-  {
-    id: 'claimant',
-    numeric: false,
-    disablePadding: false,
-    label: 'Claimant',
-  },
-  {
-    id: 'reminderDate',
-    numeric: false,
-    disablePadding: false,
-    label: 'Date',
-  },
-  {
-    id: 'reminderNote',
-    numeric: false,
-    disablePadding: false,
-    label: 'Note',
-  },
-];
-
-const headCellsAdmin = [
+const headCells = [
   {
     id: 'assign',
     numeric: false,
@@ -55,10 +15,10 @@ const headCellsAdmin = [
     label: 'Service',
   },
   {
-    id: 'bodyPart',
+    id: 'claimant',
     numeric: false,
     disablePadding: false,
-    label: 'BodyPart',
+    label: 'Claimant',
   },
   {
     id: 'claimNumber',
@@ -67,43 +27,70 @@ const headCellsAdmin = [
     label: 'Claim #',
   },
   {
-    id: 'claimant',
+    id: 'reportReceivedDate',
     numeric: false,
     disablePadding: false,
-    label: 'Claimant',
+    label: `Report Rec'd`,
   },
   {
-    id: 'reminderDate',
+    id: 'fceApproved',
     numeric: false,
     disablePadding: false,
-    label: 'Date',
+    label: 'FCEApproved',
   },
   {
-    id: 'reminderNote',
+    id: 'adjusterDisplay',
     numeric: false,
     disablePadding: false,
-    label: 'Note',
+    label: 'Adjuster',
+  },
+  {
+    id: 'reportToAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'ReportToAdj',
+  },
+  {
+    id: 'reportToAdjusterFormat',
+    numeric: false,
+    disablePadding: false,
+    label: 'ReportToAdjFormat',
+  },
+  {
+    id: 'physicianDisplay',
+    numeric: false,
+    disablePadding: false,
+    label: 'Physician',
+  },
+  {
+    id: 'reportToPhysician',
+    numeric: false,
+    disablePadding: false,
+    label: 'ReportToPhys',
+  },
+  {
+    id: 'reportToPhysicianFormat',
+    numeric: false,
+    disablePadding: false,
+    label: 'ReportToPhysFormat',
   },
 ];
 
-export default function RemindersTable(props) {
+export default function ReportLimboDashboard(props) {
 
-    const initialSort = 'reminderDate';
+    const initialSort = 'apptDate';
 
     const {cc, ccRows} = props;
-
-    const rowsFiltered = ccRows?.filter((row) => (new Date (row.reminderDate) > new Date('2023-11-10')));
 
     return (
         <>
         {ccRows ?
         <ReferralTable
-        // headCells={cc ? headCellsCC : headCellsAdmin}
-        headCells={headCellsAdmin}
-        rows={rowsFiltered}
+        headCells={headCells}
+        rows={ccRows}
         initialSort={initialSort}
         initialSortOrder='asc'
-        title='Reminders'
+        title='Report Limbo Dashboard'
         cc={cc}
         />
         :

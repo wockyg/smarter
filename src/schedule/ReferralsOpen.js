@@ -166,7 +166,8 @@ export default function ReferralsOpen(props) {
         <>
         {rows ?
         <ReferralTable
-        headCells={cc ? headCellsCC : headCellsAdmin}
+        // headCells={cc ? headCellsCC : headCellsAdmin}
+        headCells={headCellsAdmin}
         rows={rowsFiltered}
         removable={true}
         initialSort={initialSort}

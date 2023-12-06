@@ -17,7 +17,7 @@ export default function useGetReferralsOpenDashboard(initials) {
     return data;
   }
     
-  return useQuery(['openDashboard'], getAllReferralsOpenDashboard, { 
+  return useQuery(['openDashboard', initials], getAllReferralsOpenDashboard, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

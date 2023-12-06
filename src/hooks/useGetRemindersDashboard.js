@@ -17,7 +17,7 @@ export default function useGetRemindersDashboard(initials) {
     return data;
   }
     
-  return useQuery(['remindersDashboard'], getAllRemindersDashboard, { 
+  return useQuery(['remindersDashboard', initials], getAllRemindersDashboard, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

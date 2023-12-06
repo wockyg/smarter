@@ -55,7 +55,7 @@ export default function Analytics(props) {
 
     return( selectedFilter === 'analytics' &&
 
-        <Box style={{background: '#FF2F4F', height: 550, width: '100%'}}>
+        <Box style={{background: 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))', height: 550, width: '100%'}}>
             <Grid container spacing={2}>
                 <Grid item>
                     <ReferralsByMonthLineChart />

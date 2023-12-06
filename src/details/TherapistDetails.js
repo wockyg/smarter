@@ -174,6 +174,12 @@ export default function TherapistDetails(props) {
         changedValues.therapistId = selectedTherapist.therapistId;
 
         if (changedKeys.length > 0) {
+            if (changedValues.address || changedValues.city || changedValues.state || changedValues.zip) {
+                changedValues.address = changedValues.address || selectedTherapist.address;
+                changedValues.city = changedValues.city || selectedTherapist.city;
+                changedValues.state = changedValues.address || selectedTherapist.state;
+                changedValues.zip = changedValues.zip || selectedTherapist.zip;
+            }
             console.log("updating therapist...");
             console.log(changedValues);
             mutationUpdate.mutate(changedValues);

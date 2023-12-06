@@ -5,12 +5,19 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Checkbox from '@mui/material/Checkbox';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 import ReferralsOpen from '../schedule/ReferralsOpen';
 import RemindersTable from './RemindersTable';
 import LastNote14DaysTable from './LastNote14DaysTable';
 import FcePpdTomorrow from '../schedule/FcePpdTomorrow';
 import FollowupHoldDashboard from '../schedule/FollowupHoldDashboard';
+import FcePpdNextWeek from '../schedule/FcePpdNextWeek';
+import ReportLimboDashboard from '../schedule/ReportLimboDashboard';
 
 import NextUpCC from './dashboard-widgets/NextUpCC';
 import ReferralHistory from './dashboard-widgets/ReferralHistory';
@@ -25,15 +32,24 @@ import { deepOrange, deepPurple } from '@mui/material/colors';
 import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 import { UserContext } from '../contexts/UserContext';
 
+import {careCoordinators} from '../lookup-tables/lookup_careCoordinators';
+
 import useGetReferralsOpenDashboard from '../hooks/useGetReferralsOpenDashboard';
 import useGetRemindersDashboard from '../hooks/useGetRemindersDashboard';
 import useGetLastNote14DaysCC from '../hooks/useGetLastNote14DaysCC';
+import useGetLastNote14Days from '../hooks/useGetLastNote14Days';
 import useGetFcePpdTomorrowDashboard from '../hooks/useGetFcePpdTomorrowDashboard';
-import useGetReferralsFollowUpHoldDashboard from '../hooks/useGetReferralsFollowUpHoldDashboard'
+import useGetFcePpdNextWeekDashboard from '../hooks/useGetFcePpdNextWeekDashboard';
+import useGetReferralsFollowUpHoldDashboard from '../hooks/useGetReferralsFollowUpHoldDashboard';
+import useGetReferralsReportLimbo from '../hooks/useGetReferralsReportLimbo';
+import useUpdateUser from '../hooks/useUpdateUser';
 
 import '../App.css';
 
 import { handleChangePage } from '../7-util/HelperFunctions';
+
+const selectedColor = '#4259E6';
+const baseColor = '#42AFE6';
 
 function DashboardTile(props) {
 
@@ -70,17 +86,26 @@ export default function DashboardCC(props) {
 
     const { user } = props;
 
-    const { status: statusReferralsOpen, data: rowsOpen, error: errorReferralsOpen, isFetching: isFetchingReferralsOpen } = useGetReferralsOpenDashboard(user.initials);
-    const { status: statusReferralsReminders, data: rowsReminders, error: errorReferralsReminders, isFetching: isFetchingReferralsReminders } = useGetRemindersDashboard(user.initials);
-    const { status: statusReferrals14Days, data: rows14Days, error: errorReferrals14Days, isFetching: isFetchingReferrals14Days } = useGetLastNote14DaysCC(user.initials);
-    const { status: statusReferralsTomorrow, data: rowsTomorrow, error: errorReferralsTomorrow, isFetching: isFetchingReferralsTomorrow } = useGetFcePpdTomorrowDashboard(user.initials);
-    const { status: statusReferralsFuHold, data: rowsFuHold, error: errorReferralsFuHold, isFetching: isFetchingReferralsFuHold } = useGetReferralsFollowUpHoldDashboard(user.initials);
+    const { status: statusReferralsOpen, data: rowsOpen, error: errorReferralsOpen, isFetching: isFetchingReferralsOpen } = useGetReferralsOpenDashboard(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferralsReminders, data: rowsReminders, error: errorReferralsReminders, isFetching: isFetchingReferralsReminders } = useGetRemindersDashboard(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferrals14Days, data: rows14Days, error: errorReferrals14Days, isFetching: isFetchingReferrals14Days } = useGetLastNote14DaysCC(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferralsTomorrow, data: rowsTomorrow, error: errorReferralsTomorrow, isFetching: isFetchingReferralsTomorrow } = useGetFcePpdTomorrowDashboard(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferralsNextWeek, data: rowsNextWeek, error: errorReferralsNextWeek, isFetching: isFetchingReferralsNextWeek } = useGetFcePpdNextWeekDashboard(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferralsFuHold, data: rowsFuHold, error: errorReferralsFuHold, isFetching: isFetchingReferralsFuHold } = useGetReferralsFollowUpHoldDashboard(`${user.initials}${user.covering || ''}`);
+    const { status: statusReferralsReportLimbo, data: rowsReportLimbo, error: errorReferralsReportLimbo, isFetching: isFetchingReferralsReportLimbo } = useGetReferralsReportLimbo();
+    
+    const userUpdate = useUpdateUser();
+
+    // console.log(rows14Days);
+    
+    const [isCovering, setIsCovering] = useState(Boolean(user?.covering));
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const startDate = new Date(year, 0, 1);
     const days = Math.floor(((currentDate - startDate) / (24 * 60 * 60 * 1000)) + 1);
     const currentWeekNumber = Math.ceil(days / 7);
+    // console.log(currentWeekNumber);
 
     const late = rows14Days?.filter(r => {
 
@@ -89,6 +114,7 @@ export default function DashboardCC(props) {
       const startDate = new Date(year, 0, 1);
       const days = Math.floor(((date - startDate) / (24 * 60 * 60 * 1000)) + 1);
       const weekNumber = Math.ceil(days / 7);
+    //   console.log(weekNumber);
 
       return weekNumber > currentWeekNumber - 3;
 
@@ -107,11 +133,28 @@ export default function DashboardCC(props) {
     });
 
     const remindersFiltered = rowsReminders?.filter(r => {
-        
-        return new Date(r.reminderDate) >= new Date('2023-12-01')
+
+        return r.reminderDate === new Date().toISOString().split('T')[0]
     });
 
-    // console.log(rowsFuHold);
+    const limboFiltered = rowsReportLimbo?.filter(r => (r.assign === user.initials || r.assign === user.covering) && r.reportToAdjuster !== null && r.reportToPhysician === null);
+
+    const rowsNeedUCA = rowsFuHold?.filter(r => r.fuHoldNotes === "Need Upcoming appts");
+
+    const rowsNeedPNDC = rowsFuHold?.filter(r => r.fuHoldNotes === "Need DC note" || r.fuHoldNotes === "Pending PN");
+
+    const rowsPendingResponse = rowsFuHold?.filter(r => r.fuHoldNotes === 'Lvm for MD' || 
+                                                       r.fuHoldNotes === 'Pending Adj Response' || 
+                                                       r.fuHoldNotes === 'Awaiting auth' || 
+                                                       r.fuHoldNotes === 'Pending signed PN');
+                                                       
+    const rowsOther = rowsFuHold?.filter(r => r.fuHoldNotes === 'Surgery' || 
+                                             r.fuHoldNotes === 'MRI' || 
+                                             r.fuHoldNotes === 'Pending MD appt' ||
+                                             r.fuHoldNotes === 'Other' || 
+                                             r.fuHoldNotes === 'COVID' || 
+                                             r.fuHoldNotes === 'Non-compliant')
+
 
     const {
         todayWeekday,
@@ -123,6 +166,19 @@ export default function DashboardCC(props) {
         if (newFilter !== null){
             setDashboardFilter(newFilter);
         }
+    };
+
+    const handleChangeIsCovering = (event) => {
+        setIsCovering(event.target.checked);
+        if(!event.target.checked) {
+            userUpdate.mutate({initials: user.initials, covering: null})
+        }
+    };
+
+    const handleChangeCoveringCC = (e) => {
+        // setCoveringCC(e.target.value);
+        userUpdate.mutate({initials: user.initials, covering: e.target.value})
+
     };
 
     return (
@@ -143,7 +199,7 @@ export default function DashboardCC(props) {
 
                     <DashboardTile
                     bigNumber={remindersFiltered?.length}
-                    textUnderneath={'Reminders'}
+                    textUnderneath={'Reminders Today'}
                     handleChangeFilter={handleChangeFilter}
                     filter='reminders'
                     dashboardFilter={dashboardFilter}
@@ -174,49 +230,110 @@ export default function DashboardCC(props) {
                     />
 
                     <DashboardTile
-                    bigNumber={rowsTomorrow?.length}
-                    textUnderneath={'FCE/PPD Tomorrow'}
+                    bigNumber={rowsNextWeek?.length}
+                    textUnderneath={'FCE/PPD Next Week'}
                     handleChangeFilter={handleChangeFilter}
-                    filter='tomorrow'
+                    filter='nextWeek'
+                    dashboardFilter={dashboardFilter}
+                    />
+
+                    <DashboardTile
+                    bigNumber={limboFiltered?.length}
+                    textUnderneath={'Reports to MD'}
+                    handleChangeFilter={handleChangeFilter}
+                    filter='limbo'
                     dashboardFilter={dashboardFilter}
                     />
 
                     <Grid item xs={2}>
-                        <Box sx={{ width: '100%', background: '#BABEE5'}}>
+                        <Paper square>
+                        <Box sx={{ width: '100%', background: 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}>
                             {/* <u>Follow-Up</u>
                             <br /> */}
                                 <Grid container spacing={1} sx={{paddingLeft: 1}}>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>9</Avatar>
+                                        <Avatar sx={{ bgcolor: dashboardFilter === 'needUCA' ? selectedColor : baseColor, width: 20, height: 20, fontSize: 12 }}>{rowsNeedUCA?.length}</Avatar>
                                     </Grid>
-                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('needInfo')}>
-                                        {` Need Info/Documents`}
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('needUCA')}>
+                                        {` Need Upcoming Appts`}
                                     </Grid>
                                     <Box width="100%"/>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: '#48A32C', width: 20, height: 20, fontSize: 12 }}>3</Avatar>
+                                        <Avatar sx={{ bgcolor: dashboardFilter === 'needPNDC' ? selectedColor : baseColor, width: 20, height: 20, fontSize: 12 }}>{rowsNeedPNDC?.length}</Avatar>
+                                    </Grid>
+                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('needPNDC')}>
+                                        {` Need PN/DC`}
+                                    </Grid>
+                                    <Box width="100%"/>
+                                    <Grid item>
+                                        <Avatar sx={{ bgcolor: dashboardFilter === 'pendingResponse' ? selectedColor : baseColor, width: 20, height: 20, fontSize: 12 }}>{rowsPendingResponse?.length}</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('pendingResponse')}>
                                         {` Pending ADJ/MD Response`}
                                     </Grid>
                                     <Box width="100%"/>
                                     <Grid item>
-                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>1</Avatar>
-                                    </Grid>
-                                    <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('surgery')}>
-                                        {` MRI/Surgery/MD Appt`}
-                                    </Grid>
-                                    <Box width="100%"/>
-                                    <Grid item>
-                                        <Avatar sx={{ bgcolor: deepOrange[500], width: 20, height: 20, fontSize: 12 }}>1</Avatar>
+                                        <Avatar sx={{ bgcolor: dashboardFilter === 'other' ? selectedColor : baseColor, width: 20, height: 20, fontSize: 12 }}>{rowsOther?.length}</Avatar>
                                     </Grid>
                                     <Grid item sx={{cursor: 'pointer'}} onClick={() => handleChangeFilter('other')}>
-                                        {` Other (covid, non-comp.)`}
+                                        {` Other`}
                                     </Grid>
                                 </Grid>
-                            
-                            
                         </Box> 
+                        </Paper>
+                    </Grid> 
+
+                    <Grid item xs={2.8}>
+                        <Paper square>
+                        <Box sx={{ width: '100%', background: 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}>
+                            
+                                <Grid container spacing={1} sx={{paddingLeft: 1}}>
+
+                                    <Grid item sx={{marginTop: 1}}>
+                                        <Checkbox
+                                        checked={isCovering}
+                                        onChange={handleChangeIsCovering}
+                                        inputProps={{ 'aria-label': 'controlled' }}
+                                        />
+                                    </Grid>
+
+                                    <Grid item sx={{marginTop: 2}}>
+                                        I am covering for 
+                                    </Grid>
+
+                                    <Grid item>
+                                        <FormControl >
+                                            <InputLabel id="demo-simple-select-label">CC</InputLabel>
+                                            <Select
+                                            disabled={!isCovering}
+                                            sx={{minWidth: '10ch'}}
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={user.covering || ''}
+                                            label="CC"
+                                            onChange={(e) => handleChangeCoveringCC(e)}
+                                            >
+                                                <MenuItem value={null}>{`---`}</MenuItem>
+                                                {careCoordinators.filter(c => c.Initials !== user.initials).map((c, i) => (
+                                                    <MenuItem key={i} value={c.Initials}>{`${c.Initials}`}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item sx={{marginTop: 2}}>
+                                        today
+                                    </Grid>
+                                    
+                                    <Box width="100%"/>
+
+                                    <Grid item>
+                                        
+                                    </Grid>
+                                    
+                                </Grid>
+                        </Box> 
+                        </Paper>
                     </Grid> 
                     
                     <Box sx={{ width: '100%'}} />
@@ -236,8 +353,23 @@ export default function DashboardCC(props) {
                         {dashboardFilter === 'tomorrow' &&
                         <FcePpdTomorrow cc={user.initials} ccRows={rowsTomorrow} />
                         }
-                        {(dashboardFilter === 'needInfo' || dashboardFilter === 'pendingResponse' || dashboardFilter === 'surgery' || dashboardFilter === 'other') &&
-                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsFuHold} />
+                        {dashboardFilter === 'nextWeek' &&
+                        <FcePpdNextWeek cc={user.initials} ccRows={rowsNextWeek} />
+                        }
+                        {dashboardFilter === 'limbo' &&
+                        <ReportLimboDashboard cc={user.initials} ccRows={limboFiltered} />
+                        }
+                        {dashboardFilter === 'needUCA' &&
+                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsNeedUCA} />
+                        }
+                        {dashboardFilter === 'needPNDC' &&
+                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsNeedPNDC} />
+                        }
+                        {dashboardFilter === 'pendingResponse' &&
+                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsPendingResponse} />
+                        }
+                        {dashboardFilter === 'other' &&
+                        <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsOther} />
                         }
                         
                     </Grid>

@@ -17,7 +17,7 @@ export default function useGetRemindersDashboardCC(initials) {
     return data;
   }
     
-  return useQuery(['14daysCC'], getAllRemindersDashboardCC, { 
+  return useQuery(['14daysCC', initials], getAllRemindersDashboardCC, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

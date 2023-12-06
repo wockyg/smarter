@@ -553,7 +553,7 @@ export default function MainNavbar() {
       anchorEl={anchorEl3}
       open={openAdd}
       onClose={handleCloseAdd}
-      MenuListProps={{ onMouseLeave: handleCloseAdd }}
+      // MenuListProps={{ onMouseLeave: handleCloseAdd }}
     >
 
       <MenuItem onClick={() => handleOpen('adjuster')}>Add adjuster</MenuItem>

@@ -17,7 +17,7 @@ export default function useGetFcePpdTomorrowDashboard(initials) {
     return data;
   }
     
-  return useQuery(['tomorrowCC'], getAllFcePpdTomorrowDashboard, { 
+  return useQuery(['tomorrowCC', initials], getAllFcePpdTomorrowDashboard, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
   });

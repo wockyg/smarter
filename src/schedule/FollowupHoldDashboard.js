@@ -81,37 +81,42 @@ export default function FollowupHoldDashboard(props) {
 
     // const rowsFiltered = ccRows?.filter((row) => (cc ? row.assign === 'SS' : true));
 
-    const rowsFilteredReason = 
-          filter === 'needInfo'
-          ? 
-          ccRows.filter(r => r.fuHoldNotes === 'Pending signed PN' || 
-                                   r.fuHoldNotes === 'Pending PN' || 
-                                   r.fuHoldNotes === 'Need Upcoming appts' || 
-                                   r.fuHoldNotes === 'Need DC note' || 
-                                   r.fuHoldNotes === 'Awaiting auth')
-          :
-          (filter === 'pendingResponse'
-          ?
-          ccRows.filter(r => r.fuHoldNotes === 'Lvm for MD' || r.fuHoldNotes === 'Pending Adj Response')
-          :
-          (filter === 'surgery'
-          ?
-          ccRows.filter(r => r.fuHoldNotes === 'Surgery' || r.fuHoldNotes === 'MRI' || r.fuHoldNotes === 'Pending MD appt')
-          :
-          (filter === 'other'
-          ?
-          ccRows.filter(r => r.fuHoldNotes === 'Other' || r.fuHoldNotes === 'COVID' || r.fuHoldNotes === 'Non-compliant')
-          :
-          ccRows
-          )
-          )
-           )
+    // const rowsFilteredReason = 
+    //       filter === 'needInfo'
+    //       ? 
+    //       ccRows.filter(r => r.fuHoldNotes === 'Pending PN' || 
+    //                          r.fuHoldNotes === 'Need Upcoming appts' || 
+    //                          r.fuHoldNotes === 'Need DC note')
+    //       :
+    //       (filter === 'pendingResponse'
+    //       ?
+    //       ccRows.filter(r => r.fuHoldNotes === 'Lvm for MD' || 
+    //                          r.fuHoldNotes === 'Pending Adj Response' || 
+    //                          r.fuHoldNotes === 'Awaiting auth' || 
+    //                          r.fuHoldNotes === 'Pending signed PN')
+    //       :
+    //       (filter === 'surgery'
+    //       ?
+    //       ccRows.filter(r => r.fuHoldNotes === 'Surgery' || 
+    //                          r.fuHoldNotes === 'MRI' || 
+    //                          r.fuHoldNotes === 'Pending MD appt')
+    //       :
+    //       (filter === 'other'
+    //       ?
+    //       ccRows.filter(r => r.fuHoldNotes === 'Other' || 
+    //                          r.fuHoldNotes === 'COVID' || 
+    //                          r.fuHoldNotes === 'Non-compliant')
+    //       :
+    //       ccRows
+    //       )
+    //       )
+    //        )
 
     return (
         ccRows ?
         <ReferralTable
         headCells={headCells}
-        rows={rowsFilteredReason}
+        rows={ccRows}
         title='FollowUpHold'
         initialSort={initialSort}
         initialSortOrder='asc'

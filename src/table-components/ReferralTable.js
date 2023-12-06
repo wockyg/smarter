@@ -58,6 +58,7 @@ import useUpdateFceppdBilling from '../hooks/useUpdateFceppdBilling';
 import useUpdateReferral from '../hooks/useUpdateReferral';
 import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
 import useGetUser from '../hooks/useGetUser';
+import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
 
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
@@ -275,6 +276,7 @@ export default function ReferralTable(props) {
     const fceUpdate = useUpdateFceppdBilling();
     const referralUpdate = useUpdateReferral();
     const userHistoryUpdate = useUpdateUserHistory();
+    const rrLastWorkedUpdate = useUpdateRRLastWorked();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -578,8 +580,9 @@ export default function ReferralTable(props) {
                 );
                 pdf(rrLetter).toBlob().then(blob => {
                     console.log(blob);
-                    saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`)
-                    referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp})
+                    saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`);
+                    referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp});
+                    rrLastWorkedUpdate.mutate({rrLastWorked: timestamp});
                 })
                 .catch(e => console.log("Error Generating Letters:", e))
 

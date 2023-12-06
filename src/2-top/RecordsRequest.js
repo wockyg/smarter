@@ -3,7 +3,13 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+
 import RecordsRequestTable from './RecordsRequestTable';
+
+import useGetRRLastWorked from '../hooks/useGetRRLastWorked';
+import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
 
 import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 
@@ -11,7 +17,42 @@ import { PieChart } from '@mui/x-charts/PieChart';
 
 import '../App.css';
 
+function DashboardTile(props) {
+
+  const { bigNumber, textUnderneath, handleChangeFilter, filter, dashboardFilter, weekday, todayWeekday } = props;
+
+  return (
+    <Grid item>
+        <Paper square>
+        <Box 
+        onClick={() => handleChangeFilter(filter)}
+        sx={{ 
+            width: 120, 
+            height: 120, 
+            paddingTop: 2, 
+            cursor: 'pointer', 
+            background: todayWeekday === weekday ? '#9CDC88' : '#BABEE5'
+            // backgroundImage: filter === dashboardFilter ? 'linear-gradient(to bottom right, rgba(66,89,230,0.5), rgba(66, 89, 230,1))' : 'linear-gradient(to bottom right, rgba(66,175,230,0.5), rgba(66,175,230,1))'
+        }}
+        >
+            <Typography variant="h4">
+                {bigNumber}
+            </Typography>
+            <Typography variant="h6">
+                {textUnderneath}
+            </Typography>
+        </Box> 
+        </Paper>
+    </Grid>
+  );
+}
+
+
 export default function RecordsRequest(props) {
+
+    const { status: statusRRLastWorked, data: rrLastWorked, error: errorRRLastWorked, isFetching: isFetchingRRLastWorked } = useGetRRLastWorked();
+
+    // console.log(rrLastWorked);
 
     const {
         todayWeekday,
@@ -40,24 +81,25 @@ export default function RecordsRequest(props) {
     };
 
     return (
+        rrLastWorked &&
         <Box sx={{ width: '100%', height: 700 }}>
 
             {/* Dashboard */}
             <Box sx={{ width: '100%'}}>
                 <Grid container spacing={2}>
                     <Grid item xs={2}>
-                        <Box sx={{ width: '100%', height: 160, padding: 2, fontSize: 14, background: '#BABEE5' }}>
-                            Last Worked: 10/31/2023 @ 5:00PM<br />
-                            Last Pulled: 10/31/2023 @ 3:00PM<br />
-                            <button>Re-Pull</button><br />
+                        <Box sx={{ width: '100%', height: 160, padding: 1, fontSize: 14, background: '#BABEE5' }}>
+                            <u>{`Last Worked:`}</u><br />
+                            {`${new Date(rrLastWorked)?.toISOString().split('T')[0]} @ ${new Date(rrLastWorked).toLocaleTimeString('en-US')}`}<br />
+                            <br />
                             {`This week: A->Z`}
                         </Box> 
                     </Grid>
                     <Grid item xs={3.5}>
-                        <Box sx={{ width: '100%', height: 160 }}>
-
-                            {/* <PieChart
-                            sx={{background: '#DC8888'}}
+                        <Box sx={{ width: '100%', height: 180 }}>
+                            {/* <Typography>This Week</Typography> */}
+                            <PieChart
+                            // sx={{background: '#DC8888'}}
                             slotProps={{ legend: { 
                                             hidden: false,
                                             padding: 0
@@ -78,7 +120,7 @@ export default function RecordsRequest(props) {
                             margin={{
                                 left: -30,
                             }}
-                            /> */}
+                            />
 
                             {/* <PieChart
                             sx={{background: '#DC8888'}}
@@ -117,51 +159,66 @@ export default function RecordsRequest(props) {
                         </Box> 
                         
                     </Grid>
-                    <Grid item xs={1.3}>
-                        <Box sx={{ width: '100%', height: 160, background: todayWeekday === 1 ? '#9CDC88' : '#BABEE5' }}>
-                            <u>Monday {mondayISO}</u>
-                            <br />
-                            {`${numWorkedMonday} sent`}
-                            <br />
-                            {`${numFaxReceivedMonday} received`}
-                        </Box> 
-                    </Grid>
-                    <Grid item xs={1.3}>
-                        <Box sx={{ width: '100%', height: 160, background: todayWeekday === 2 ? '#9CDC88' : '#BABEE5' }}>
-                            <u>Tuesday</u>
-                            <br />
-                            {`${numWorkedTuesday} sent`}
-                            <br />
-                            {`${numFaxReceivedTuesday} received`}
-                        </Box> 
-                    </Grid>
-                    <Grid item xs={1.3}>
-                        <Box sx={{ width: '100%', height: 160, background: todayWeekday === 3 ? '#9CDC88' : '#BABEE5' }}>
-                            <u>Wednesday</u>
-                            <br />
-                            {`${numWorkedWednesday} sent`}
-                            <br />
-                            {`${numFaxReceivedWednesday} received`}
-                        </Box> 
-                    </Grid>
-                    <Grid item xs={1.3}>
-                        <Box sx={{ width: '100%', height: 160, background: todayWeekday === 4 ? '#9CDC88' : '#BABEE5' }}>
-                            <u>Thursday</u>
-                            <br />
-                            {`${numWorkedThursday} sent`}
-                            <br />
-                            {`${numFaxReceivedThursday} received`}
-                        </Box> 
-                    </Grid>
-                    <Grid item xs={1.3}>
+                    <DashboardTile
+                    bigNumber={numWorkedMonday}
+                    textUnderneath={'Monday'}
+                    filter='monday'
+                    weekday={1}
+                    todayWeekday={todayWeekday}
+                    // dashboardFilter={dashboardFilter}
+                    // handleChangeFilter={handleChangeFilter}
+                    />
+                    <DashboardTile
+                    bigNumber={numWorkedTuesday}
+                    textUnderneath={'Tuesday'}
+                    filter='tuesday'
+                    weekday={2}
+                    todayWeekday={todayWeekday}
+                    // dashboardFilter={dashboardFilter}
+                    // handleChangeFilter={handleChangeFilter}
+                    />
+
+                    <DashboardTile
+                    bigNumber={numWorkedWednesday}
+                    textUnderneath={'Wednesday'}
+                    filter='wednesday'
+                    weekday={3}
+                    todayWeekday={todayWeekday}
+                    // dashboardFilter={dashboardFilter}
+                    // handleChangeFilter={handleChangeFilter}
+                    />
+
+                    <DashboardTile
+                    bigNumber={numWorkedThursday}
+                    textUnderneath={'Thursday'}
+                    filter='thursday'
+                    weekday={4}
+                    todayWeekday={todayWeekday}
+                    // dashboardFilter={dashboardFilter}
+                    // handleChangeFilter={handleChangeFilter}
+                    />
+
+                    <DashboardTile
+                    bigNumber={numWorkedFriday}
+                    textUnderneath={'Friday'}
+                    filter='friday'
+                    weekday={5}
+                    todayWeekday={todayWeekday}
+                    // dashboardFilter={dashboardFilter}
+                    // handleChangeFilter={handleChangeFilter}
+                    />
+                    
+                    
+                    {/* <Grid item xs={1.3}>
                         <Box sx={{ width: '100%', height: 160, background: todayWeekday === 5 ? '#9CDC88' : '#BABEE5' }}>
                             <u>Friday</u>
                             <br />
-                            {`${numWorkedFriday} sent`}
+                            {`${numWorkedFriday}`}
                             <br />
-                            {`${numFaxReceivedFriday} received`}
+                            {`sent`}
                         </Box> 
-                    </Grid>
+                    </Grid> */}
+
                     {/* <Grid item xs={2}>
                         <Box sx={{ width: '100%', height: 130 }}>
                             <Box sx={{ width: '100%', height: ((130/5)-3), background: '#CECFD3', borderRadius: 1, marginBottom: .5 }}>

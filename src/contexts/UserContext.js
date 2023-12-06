@@ -6,6 +6,12 @@ export const UserContext = createContext();
 
 const UserContextProvider = (props) => {
 
+    const { user: userAuth0, logout } = useAuth0();
+
+    const { email, nickname, updated_at } = userAuth0;
+
+    const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
+
     const [dashboardFilter, setDashboardFilter] = useState('open');
 
     const [navbarTab, setNavbarTab] = useState(0);
@@ -23,13 +29,9 @@ const UserContextProvider = (props) => {
                                                         reports: 0       
                                                      });
 
-    const { user: userAuth0, logout } = useAuth0();
 
-    const { email, nickname, updated_at } = userAuth0;
-
-    const { status: statusUser, data: user, error: errorUser, isFetching: isFetchingUser } = useGetUser(email);
     
-    return (
+    return ( user &&
         <UserContext.Provider 
         value={{ dashboardFilter, setDashboardFilter, navbarTab, setNavbarTab, user, nickname, updated_at, logout, isFetchingUser }}>
             {props.children}

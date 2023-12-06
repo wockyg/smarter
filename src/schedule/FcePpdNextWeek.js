@@ -1,4 +1,3 @@
-import useGetReferralsFcePpdTomorrow from '../hooks/useGetReferralsFcePpdTomorrow';
 import ReferralTable from '../table-components/ReferralTable';
 import Skeleton from '@mui/material/Skeleton';
 
@@ -55,35 +54,33 @@ const headCells = [
     id: 'claimantConfirmDayBefore',
     numeric: false,
     disablePadding: false,
-    label: 'Claimant Conf Day Before',
+    label: 'Claimant DB',
   },
   {
     id: 'ptConfirmDayBefore',
     numeric: false,
     disablePadding: false,
-    label: 'PT Conf Day Before',
+    label: 'PT DB',
   },
 ];
 
-export default function FcePpdTomorrow(props) {
+export default function FcePpdNextWeek(props) {
 
     const initialSort = 'apptDate';
 
     const {cc, ccRows} = props;
 
-    const { status: statusReferrals, data: rows, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferralsFcePpdTomorrow();
-
-    const rowsFiltered = ccRows ? ccRows : rows?.filter((row) => true);
+    
 
     return (
         <>
-        {rows ?
+        {ccRows ?
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered}
+        rows={ccRows}
         initialSort={initialSort}
         initialSortOrder='asc'
-        title='FCE PPD Tomorrow'
+        title='FCE PPD Next Week'
         cc={cc}
         />
         :

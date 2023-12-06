@@ -60,7 +60,7 @@ export default function ViewBills() {
 
     uniqueHcfaIds.forEach((row) => {
 
-        const temp = bills.filter(r => r.hcfaId === row).sort((a, b) => {
+        const temp = bills?.filter(r => r.hcfaId === row).sort((a, b) => {
                                         if (a.dos === null){
                                             return 1;
                                         }

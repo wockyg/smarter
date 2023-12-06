@@ -44,12 +44,6 @@ const headCellsAdmin = [
     label: 'CC',
   },
   {
-    id: 'service',
-    numeric: false,
-    disablePadding: false,
-    label: 'Service',
-  },
-  {
     id: 'bodyPart',
     numeric: false,
     disablePadding: false,
@@ -68,16 +62,10 @@ const headCellsAdmin = [
     label: 'Claimant',
   },
   {
-    id: 'reminderDate',
+    id: 'lastNote',
     numeric: false,
     disablePadding: false,
-    label: 'Date',
-  },
-  {
-    id: 'reminderNote',
-    numeric: false,
-    disablePadding: false,
-    label: 'Note',
+    label: 'Last Note',
   },
 ];
 
@@ -94,7 +82,8 @@ export default function LastNote14DaysTable(props) {
     return (
         ccRows ?
         <ReferralTable
-        headCells={cc ? headCellsCC : headCellsAdmin}
+        // headCells={cc ? headCellsCC : headCellsAdmin}
+        headCells={headCellsAdmin}
         rows={ccRows}
         initialSort={initialSort}
         initialSortOrder='desc'

@@ -1,23 +1,23 @@
 import {api} from '../index';
 import { useQuery } from "react-query";
 
-const getLastNote14Days = () => api
-                        .get('/referralsView/dashboard/14days')
+const getRRLastWorked = () => api
+                        .get('/timestamps/rrlastworked')
                         .then(response => {
                         const data = response.data;
                         // console.log(data);
                         return data;
                         });
 
-export default function useGetLastNote14Days() {
+export default function useGetRRLastWorked() {
 
-  async function getAllLastNote14Days() {
-    const data = await getLastNote14Days();
+  async function getAllRRLastWorked() {
+    const data = await getRRLastWorked();
     // console.log('data: ', data);
     return data;
   }
     
-  return useQuery(['14days'], getAllLastNote14Days, { 
+  return useQuery(['rrlastworked'], getAllRRLastWorked, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
   });
