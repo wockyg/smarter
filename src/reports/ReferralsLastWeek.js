@@ -95,7 +95,7 @@ export default function ReferralsLastWeek(props) {
                                                       
                                                       const weekNumberRef = Math.ceil(days1 / 7);
 
-                                                      return (weekNumberRef === weekNumber && yearRef === year)
+                                                      return (weekNumberRef === (weekNumber - 1) && yearRef === year)
     });
 
     return (

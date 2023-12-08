@@ -95,7 +95,7 @@ export default function ReportsToAdjLastWeek(props) {
                                                       
                                                       const weekNumberRef = Math.ceil(days1 / 7);
 
-                                                      return ((row.service.includes('FCE') || row.service.includes('PPD')) && weekNumberRef === weekNumber && yearRef === year)
+                                                      return ((row.service.includes('FCE') || row.service.includes('PPD')) && weekNumberRef === (weekNumber - 1) && yearRef === year)
     });
 
     return (

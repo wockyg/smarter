@@ -90,7 +90,7 @@ export default function ScheduleTab(props) {
                 Report Limbo
             </ToggleButton>
             <ToggleButton value="fuHold" aria-label="fuHold">
-                Attending
+                FU/Hold
             </ToggleButton>
         </ToggleButtonGroup>
 
