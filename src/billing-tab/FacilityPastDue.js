@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import useGetFacilityPastDue from '../hooks/useGetFacilityPastDue';
 import useGetFceppdBillingAdjPastDue from '../hooks/useGetFceppdBillingAdjPastDue';
+import useGetFceppdBillingFacilityPastDue from '../hooks/useGetFceppdBillingFacilityPastDue'
 import ReferralTable from '../table-components/ReferralTable';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -114,7 +115,7 @@ export default function AdjusterPastDue(props) {
 
     const { status: statusRows, data: rowsDPT, error: errorRows, isFetching: isFetchingRows } = useGetFacilityPastDue();
 
-    const { status: statusRowsFCE, data: rowsFCE, error: errorRowsFCE, isFetching: isFetchingRowsFCE } = useGetFceppdBillingAdjPastDue();
+    const { status: statusRowsFCE, data: rowsFCE, error: errorRowsFCE, isFetching: isFetchingRowsFCE } = useGetFceppdBillingFacilityPastDue();
 
     return (
         <>

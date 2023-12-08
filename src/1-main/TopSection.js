@@ -112,13 +112,14 @@ export default function TopSection() {
             <ScheduleTab />
         </TabPanel>
         <TabPanel value={navbarTab} index={2}>
-            <RecordsRequest />
+            <MapTab />
+            
         </TabPanel>
         <TabPanel value={navbarTab} index={3}>
-            <BillingTab />
+            <RecordsRequest />
         </TabPanel>
          <TabPanel value={navbarTab} index={4}>
-            <SearchTab />
+            <BillingTab />
         </TabPanel>
         <TabPanel value={navbarTab} index={5}>
             <CalendarTab />
@@ -127,7 +128,7 @@ export default function TopSection() {
             <ReportsTab />
         </TabPanel>
         <TabPanel value={navbarTab} index={7}>
-            <MapTab />
+            <SearchTab />
         </TabPanel>
         {/* <TabPanel value={tab} index={8}>
             <BugReportsTab />

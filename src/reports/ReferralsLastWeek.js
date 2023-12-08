@@ -105,6 +105,7 @@ export default function ReferralsLastWeek(props) {
         rows={rowsFiltered}
         headCells={headCells}
         initialSort={initialSort}
+        title="Last Week"
         />
     );
 }

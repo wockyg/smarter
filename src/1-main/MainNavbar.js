@@ -374,12 +374,12 @@ export default function MainNavbar() {
             aria-label="referral tabs">
                 <StyledTab label={<div><GridViewIcon />{` Dashboard`}</div>} {...a11yProps(0)} />
                 <StyledTab label={<div><PendingActionsIcon />{` Schedule`}</div>} {...a11yProps(1)} />
+                <StyledTab label={<div><LocationOnIcon />{` Network Map`}</div>} {...a11yProps(7)} />
                 <StyledTab label={<div><FaxIcon />{` Records Req.`}</div>} {...a11yProps(2)} />
                 <StyledTab label={<div><RequestQuoteIcon />{` Billing`}</div>} {...a11yProps(3)} />
-                <StyledTab label={<div><SearchIcon />{` Search`}</div>} {...a11yProps(4)} />
                 <StyledTab label={<div><CalendarMonthIcon />{` Calendars`}</div>} {...a11yProps(5)} />
                 <StyledTab label={<div><AssessmentIcon />{` Reports`}</div>} {...a11yProps(6)} />
-                <StyledTab label={<div><LocationOnIcon />{` Network Map`}</div>} {...a11yProps(7)} />
+                <StyledTab label={<div><SearchIcon />{` Search`}</div>} {...a11yProps(4)} />
                 {/* <Tab label="Bug Reports" {...a11yProps(8)} /> */}
             </Tabs>
             </Box>

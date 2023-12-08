@@ -105,6 +105,7 @@ export default function ReportsToAdjLastWeek(props) {
         rows={rowsFiltered}
         headCells={headCells}
         initialSort={initialSort}
+        title="FCE to ADJ Last Week"
         />
     );
 }

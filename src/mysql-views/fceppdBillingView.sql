@@ -17,6 +17,7 @@ select
     `clients2`.`client` AS `casemanagerClient`,
     `define20_smarterbeta120623`.`therapists`.`name` AS `therapist`,
     `define20_smarterbeta120623`.`therapists`.`address` AS `therapistAddress`,
+    `define20_smarterbeta120723`.`therapists`.`suite` AS `therapistSuite`,
     `define20_smarterbeta120623`.`therapists`.`suite` AS `therapistSuite`,
     `define20_smarterbeta120623`.`therapists`.`city` AS `therapistCity`,
     `define20_smarterbeta120623`.`therapists`.`state` AS `therapistState`,
