@@ -50,6 +50,7 @@ export default function useAddReferral() {
                                 console.log(data);
                                 queryClient.invalidateQueries('referrals');
                                 queryClient.invalidateQueries('referralsOpen');
+                                queryClient.invalidateQueries('openDashboard');
                                 queryClient.invalidateQueries('referralsView');
                                 queryClient.invalidateQueries('referralscalendar');
                                 queryClient.invalidateQueries('referralsearch');

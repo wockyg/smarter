@@ -228,7 +228,8 @@ export default function ClaimInfoToolbar() {
               <h3>
                 <IconButton onClick={(e) => handleOpenMenu(e, 1, 'spanishSpeaking')}>
                   <Badge bg="success">
-                      {selectedClaim.spanishSpeaking}
+                      {/* {selectedClaim.spanishSpeaking} */}
+                      Spanish
                   </Badge>
                 </IconButton>
               </h3>

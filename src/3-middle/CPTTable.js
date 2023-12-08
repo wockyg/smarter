@@ -7,8 +7,14 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import IconButton from '@mui/material/IconButton';
+
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
-import { Tooltip } from '@mui/material';
 
 import { useParams } from 'react-router-dom';
 
@@ -35,12 +41,22 @@ export default function CPTTable(props) {
     return (
         <div>
         {selectedClaim && 
-        
+        <>
+        <Grid container>
+            <Grid item xs={10} sx={{textAlign: 'left', paddingLeft: 1}}>
+                <u>Fee Schedule</u> ({selectedClaim.jurisdiction})
+            </Grid>
+            <Grid item xs={2}>
+                <IconButton>
+                <AddBoxIcon fontSize='small' />
+                </IconButton>
+            </Grid>
+        </Grid>
         <TableContainer component={Paper}>
             <Table aria-label="cpt table" size='small'>
                 <TableHead>
             <TableRow>
-                <TableCell sx={{ paddingLeft: 0.5 }}>{selectedClaim && selectedClaim.jurisdiction}</TableCell>
+                <TableCell sx={{ paddingLeft: 0.5 }}>CPT</TableCell>
                 <TableCell sx={{ paddingLeft: 0.5, paddingRight: 0 }}>x1</TableCell>
                 <TableCell sx={{ paddingLeft: 0.5, paddingRight: 0 }}>x2</TableCell>
                 <TableCell sx={{ paddingLeft: 0.5, paddingRight: 0 }}>x3</TableCell>
@@ -105,6 +121,7 @@ export default function CPTTable(props) {
             </TableBody>
             </Table>
         </TableContainer>
+        </>
         }
         </div>
     )

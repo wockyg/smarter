@@ -62,14 +62,14 @@ export default function DashboardCCManager(props) {
                         </Box> 
                         
                     </Grid>
-                    <Grid item xs={2}>
+                    {/* <Grid item xs={2}>
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>Recently Visited/History</u>
                             <br />
                             <ReferralHistory user={user} />
                             
                         </Box> 
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={2}>
                         <Box sx={{ width: '100%', height: 160, background: '#BABEE5' }}>
                             <u>RR Synopsis</u>

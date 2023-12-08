@@ -49,6 +49,8 @@ import useGetPTOUser from '../hooks/useGetPTOUser';
 import useGetPTOAllUsers from '../hooks/useGetPTOAllUsers';
 import useUpdatePTO from '../hooks/useUpdatePTO';
 
+import { careCoordinators } from '../lookup-tables/lookup_careCoordinators';
+
 import { UserContext } from '../contexts/UserContext';
 
 import { useNavigate } from "react-router-dom";
@@ -87,7 +89,7 @@ export default function PTOCalendar(props) {
     const ptoPending = ptoAll?.filter(p => p.status === 'pending');
     const ptoApproved = pto?.filter(p => p.status === 'approved');
 
-    const ptoFilteredTitle = ptoAll?.map(p => {return ({...p, title: `${user.firstName} ${user.lastName}`})});
+    const ptoFilteredTitle = ptoAll?.map(p => {return ({...p, title: `${careCoordinators.filter(c => c.userId === p.userId)[0].TeamMember}`})});
 
     // console.log(ptoFilteredTitle);
 
@@ -311,7 +313,7 @@ export default function PTOCalendar(props) {
                                     <ListItemAvatar>
                                         <Badge  sx={{paddingLeft: 2}} badgeContent={p.numDays} color='warning' />
                                     </ListItemAvatar>
-                                    <ListItemText primary={`${user.firstName} ${user.lastName}`} secondary={`${p.start}${p.end ? ` - ${p.end}` : ''}`} />
+                                    <ListItemText primary={`${careCoordinators.filter(c => c.userId === p.userId)[0].TeamMember}`} secondary={`${p.start}${p.end ? ` - ${p.end}` : ''}`} />
                                     <Tooltip title="Approve">
                                     <IconButton onClick={() => handleClickApprove(p.ptoId)}>
                                         <CheckBoxIcon/>

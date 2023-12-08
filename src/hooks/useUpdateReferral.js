@@ -63,6 +63,7 @@ export default function useUpdateReferral() {
         queryClient.invalidateQueries('referralAuth');
         queryClient.invalidateQueries('recordsRequest');
         queryClient.invalidateQueries('reminders');
+        queryClient.invalidateQueries('remindersDashboard');
         return data;
       });
   }
