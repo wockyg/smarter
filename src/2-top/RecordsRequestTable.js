@@ -94,7 +94,7 @@ export default function RecordsRequestTable(props) {
     const initialSort = 'therapistBeaver';
     const secondSort = 'claimant';
 
-    const {filter, handleFilter, preference, handlePreference} = props;
+    const {filter, handleFilter, preference, handlePreference, ascending} = props;
 
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetRecordsRequest();
 
@@ -137,12 +137,13 @@ export default function RecordsRequestTable(props) {
 
     return (
         <>
+        {ascending}
         {rows ?
         <ReferralTable
         headCells={headCells}
         rows={rowsFiltered2}
         initialSort={initialSort}
-        initialSortOrder='asc'
+        initialSortOrder={ascending ? 'asc' : 'desc'}
         title='RecordsRequest'
         bulkEdit={true}
         type='rr'

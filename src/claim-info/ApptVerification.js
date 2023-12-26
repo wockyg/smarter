@@ -385,18 +385,18 @@ export default function ApptVerification(props) {
                                             </TableCell>
                                             <StyledTableCell sx={{ borderRight: 1 }}>{authNum+1}</StyledTableCell>
                                             <StyledTableCell sx={{ borderRight: 1 }}>{visitNum+" of "+au}</StyledTableCell>
+                                            
                                             {currentlyEditing ? 
                                             <>
                                             {/* dos */}
-                                            <StyledTableCell sx={{ borderRight: 1 }}>
+                                            <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                                 <input 
                                                     type="date" 
                                                     name="dos"
                                                     value={currentEditRow.dos ? currentEditRow.dos : ''}
                                                     onChange={(event) => handleChangeEdit(event, 'dos')}
-                                                >
-                                                </input>
-                                            </StyledTableCell>
+                                                />
+                                            </TableCell>
 
                                             {/* dosTime */}
                                             <StyledTableCell sx={{ borderRight: 1 }}>
@@ -473,14 +473,14 @@ export default function ApptVerification(props) {
                                             {currentEditRow.attend === "Yes" ?
                                             <>
                                             {/* v1500 */}
-                                            <StyledTableCell sx={{ borderRight: 1 }}>
+                                            <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                                 <input 
                                                     type="date" 
                                                     name="v1500"
                                                     value={currentEditRow.v1500 ? currentEditRow.v1500 : ''}
                                                     onChange={(event) => handleChangeEdit(event, 'v1500')}
                                                 />
-                                            </StyledTableCell>
+                                            </TableCell>
                                             </>
                                             :
                                             <>

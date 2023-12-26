@@ -10,6 +10,7 @@ import RecordsRequestTable from './RecordsRequestTable';
 
 import useGetRRLastWorked from '../hooks/useGetRRLastWorked';
 import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
+import useGetAscending from '../hooks/useGetAscending'
 
 import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 
@@ -51,8 +52,9 @@ function DashboardTile(props) {
 export default function RecordsRequest(props) {
 
     const { status: statusRRLastWorked, data: rrLastWorked, error: errorRRLastWorked, isFetching: isFetchingRRLastWorked } = useGetRRLastWorked();
+    const { status: statusAscending, data: ascending, error: errorAscending, isFetching: isFetchingAscending } = useGetAscending();
 
-    // console.log(rrLastWorked);
+    // console.log(ascending);
 
     const {
         todayWeekday,
@@ -92,7 +94,7 @@ export default function RecordsRequest(props) {
                             <u>{`Last Worked:`}</u><br />
                             {`${new Date(rrLastWorked)?.toISOString().split('T')[0]} @ ${new Date(rrLastWorked).toLocaleTimeString('en-US')}`}<br />
                             <br />
-                            {`This week: A->Z`}
+                            {ascending ? `This week: A->Z` : `This week: Z->A`}
                         </Box> 
                     </Grid>
                     <Grid item xs={3.5}>
@@ -256,6 +258,7 @@ export default function RecordsRequest(props) {
             handleFilter={handleFilter}
             preference={preference}
             handlePreference={handlePreference}
+            ascending={ascending}
             />
 
         </Box>

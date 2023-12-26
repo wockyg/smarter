@@ -443,7 +443,6 @@ export default function ReferralTable(props) {
             }
             else {
                 values.referralId = row.referralId;
-                console.log(values);
                 fceUpdate.mutate(values);
             }
         }
@@ -581,7 +580,7 @@ export default function ReferralTable(props) {
                 pdf(rrLetter).toBlob().then(blob => {
                     console.log(blob);
                     saveAs(blob, `Records Request - ${referral.therapistBeaver} - ${referral.claimant}`);
-                    referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp});
+                    referralUpdate.mutate({referralId: referral.referralId, rrLastWorked: timestamp, rrFaxReceived: null});
                     rrLastWorkedUpdate.mutate({rrLastWorked: timestamp});
                 })
                 .catch(e => console.log("Error Generating Letters:", e))

@@ -63,6 +63,7 @@ export default function useUpdateVisit() {
     .then(response => {
       const data = response.data;
       console.log("Update log", response);
+      queryClient.invalidateQueries('referralVisits');
       if (response.status === 200 && values.attend && values.attend === 'No'){
         api.post('/dptBillingVisits',
         {
@@ -70,6 +71,7 @@ export default function useUpdateVisit() {
         }).then(res => {
           const newVisit = res.data;
           console.log("Post log", newVisit);
+          queryClient.invalidateQueries('referralVisits');
           if (res.status === 200) {
             // send email
             sendEmail(selectedClaim, "missed");
@@ -84,7 +86,7 @@ export default function useUpdateVisit() {
               if (res.status === 200 && visits.length > 0) {
                 // alert("visits retrieved");
                 const attended = visits.filter((v) => v.attend === "Yes").length;
-                alert(attended);
+                // alert(attended);
                 if (attended >= 24 && !selectedClaim.odgLimitEmailSent) {
                   // send email
                   sendEmail(selectedClaim, "odg");
@@ -95,7 +97,6 @@ export default function useUpdateVisit() {
               }
             })
       }
-      queryClient.invalidateQueries('referralVisits');
       // queryClient.invalidateQueries('referralAuth');
       queryClient.invalidateQueries('referralsearchall');
       queryClient.invalidateQueries('referrals');

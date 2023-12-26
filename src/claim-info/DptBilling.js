@@ -45,6 +45,8 @@ export default function DptBilling(props) {
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
     const [enabled, setEnabled] = useState({});
 
+    const [writeOffValue, setWriteOffValue] = useState(Boolean(currentEditRow?.writeOff));
+
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
 
@@ -81,7 +83,8 @@ export default function DptBilling(props) {
     };
 
     const startEditing = (i, row) => {
-        console.log("start editing");
+        console.log("start editing row:");
+        console.log(row);
         setEditIDx(i);
         setRevertData(row);
         setCurrentEditRow(row);
@@ -111,7 +114,18 @@ export default function DptBilling(props) {
     };
 
     const handleChangeEdit = (event, key) => {
-        const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
+
+        let newRow = {};
+
+        if (key === "writeOff") {
+            setWriteOffValue(!writeOffValue);
+            newRow = {...currentEditRow, writeOff: writeOffValue === false ? null : "Yes"};
+            // console.log(newRow);
+        }
+        else {
+            newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
+        }
+        
         setCurrentEditRow(newRow);
         // console.log(currentEditRow[key]);
         // console.log(event.target.value);
@@ -167,8 +181,13 @@ export default function DptBilling(props) {
     };
 
     const handleChangeBulkEdit = (event, key) => {
-        let newValues;
-        newValues = {...currentBulkEdit, [key]: event.target.value === '' ? null : event.target.value};
+        let newValues = {};
+        if (key === "writeOff") {
+            newValues = {...currentBulkEdit, writeOff: event.target.value === false ? null : "Yes"}
+        }
+        else {
+            newValues = {...currentBulkEdit, [key]: event.target.value === '' ? null : event.target.value};
+        }
         setCurrentBulkEdit(newValues);
         console.log(newValues?.writeOff);
     };
@@ -280,6 +299,7 @@ export default function DptBilling(props) {
     return(
     <>
     <EnhancedTableToolbar numSelected={selected.length} />
+    
     <TableContainer component={Paper} sx={{ height: 500 }}>
         <Table stickyHeader size="small" aria-label="dptBilling table">
             <TableHead>
@@ -553,11 +573,12 @@ export default function DptBilling(props) {
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                             {currentlyEditing ?
                                             <input 
-                                                type="checkbox"
-                                                name="writeOff"
-                                                value="Write-Off"
-                                                onChange={(event) => handleChangeEdit(event, 'writeOff')}
-                                            />
+                                                    type="checkbox"
+                                                    name="writeOff"
+                                                    value={currentEditRow.writeOff ? true : false}
+                                                    checked={currentEditRow.writeOff ? true : false}
+                                                    onChange={(event) => handleChangeEdit(event, 'writeOff')}
+                                                />
                                             : row.writeOff}
                                         </TableCell>
 
@@ -596,6 +617,7 @@ export default function DptBilling(props) {
             </TableBody>
         </Table>
     </TableContainer>
+
     <Modal
     disableEscapeKeyDown
     open={bulkModalOpen}
@@ -996,12 +1018,13 @@ export default function DptBilling(props) {
                         />
                     </Grid>
                     <Grid item>
-                        <label htmlFor="writeOff" style={{display: 'block'}}>{"Write-Off: (UNDER CONSTRUCTION)"}</label>
+                        <label htmlFor="writeOff" style={{display: 'block'}}>{"Write-Off:"}</label>
                         <Checkbox 
                             disabled={!enabled.writeOff}
                             type="text" 
                             name="writeOff"
-                            value={currentBulkEdit.writeOff ? currentBulkEdit.writeOff : ''}
+                            checked={currentBulkEdit.writeOff ? true : false}
+                            // value={currentBulkEdit.writeOff ? currentBulkEdit.writeOff : ''}
                             onClick={(event) => handleChangeBulkEdit(event, 'writeOff')}
                             style={{width: '8ch'}}
                         />

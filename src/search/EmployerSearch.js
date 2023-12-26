@@ -38,11 +38,12 @@ export default function EmployerSearch(props) {
                                   []
                                   :
                                   rows?.filter((row) => {
-                                    const employerSpace = `${row.name}`;
+                                    const nameSpace = ` ${row.name}`;
+                                    const state = `${row.state || ''}`;
                                     
                                     return (
-                                        (employerSpace?.toLowerCase().includes(`${searchVals.employer.toLowerCase()}`)) &&
-                                        row.state?.toLowerCase().includes(searchVals.employerState.toLowerCase())
+                                        (nameSpace?.toLowerCase().includes(`${searchVals.employer.toLowerCase()}`)) &&
+                                        state?.toLowerCase().includes(searchVals.employerState.toLowerCase())
                                     );
                                                       
     });

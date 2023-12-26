@@ -15,6 +15,7 @@ import MissingReport from './MissingReport';
 import ReportLimbo from './ReportLimbo';
 import FollowupHold from './FollowupHold';
 import PastAppts from './PastAppts';
+import Active from './Active';
 
 import useGetReferralsOpen from '../hooks/useGetReferralsOpen';
 import useGetReferralsDropdownCalendar from '../hooks/useGetReferralsDropdownCalendar';
@@ -92,6 +93,9 @@ export default function ScheduleTab(props) {
             <ToggleButton value="fuHold" aria-label="fuHold">
                 FU/Hold
             </ToggleButton>
+            <ToggleButton value="active" aria-label="active">
+                Active
+            </ToggleButton>
         </ToggleButtonGroup>
 
         {selectedFilter === 'open' &&
@@ -123,6 +127,9 @@ export default function ScheduleTab(props) {
         }
         {selectedFilter === 'fuHold' &&
         <FollowupHold />
+        }
+        {selectedFilter === 'active' &&
+        <Active />
         }
         </>
     );

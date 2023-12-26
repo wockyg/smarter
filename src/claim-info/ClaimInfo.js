@@ -143,6 +143,18 @@ export default function ClaimInfo(props) {
                 <label htmlFor="icd10" style={{display: 'block'}}>ICD10:</label>
                 <div id="icd10">{selectedClaim.icd10 ? <ClickableInfo title="icd10" value={selectedClaim.icd10} /> : <ClickableInfo title="icd10" value="-- --" />}</div>
             </Grid>
+            {selectedClaim.rrLastWorked && 
+            <Grid item>
+                <label htmlFor="rrLastWorked" style={{display: 'block'}}>RR Last Worked:</label>
+                <div id="rrLastWorked">{selectedClaim.rrLastWorked}</div>
+            </Grid>
+            }
+            {selectedClaim.rrLastWorked && 
+            <Grid item>
+                <label htmlFor="rrFaxReceived" style={{display: 'block'}}>RR Fax Rec'd:</label>
+                <div id="rrFaxReceived">{selectedClaim.rrFaxReceived ? <ClickableInfo title="rrFaxReceived" value={selectedClaim.rrFaxReceived} /> : <ClickableInfo title="rrFaxReceived" value="--" />}</div>
+            </Grid>
+            }
             <Box width="100%"/>
             <Grid item>
                 <label htmlFor="referralDate" style={{display: 'block'}}>Referred:</label>
@@ -812,6 +824,52 @@ export default function ClaimInfo(props) {
                 </Formik>  
                 </>
                 }
+                
+                {/* rrFaxReceived goes HERE */}
+                {fieldUpdate === "rrFaxReceived" && 
+                <>
+                <Formik
+                initialValues={{
+                    referralId: selectedClaim.referralId,
+                    rrFaxReceived: (selectedClaim.rrFaxReceived !== null) ? selectedClaim.rrFaxReceived : "",
+                }}
+                validationSchema={Yup.object({
+                    rrFaxReceived: Yup.date().required(),
+                })}
+                onSubmit={(values, actions) => {
+                    mutationUpdate.mutate(values);
+                    console.log("updating referral...", values);
+                    // alert(JSON.stringify(values, null, 2));
+                    // actions.resetForm();
+                    actions.setSubmitting(false);
+                    // setAddModalOpen(false);
+                    // setModalParty('');
+                    handleCloseMenu();
+                }}
+                >
+                    {props => (
+                        <Form>
+                            <Grid container spacing={1.0}>
+                                <Grid item>
+                                    <input
+                                        onChange={props.handleChange}
+                                        onBlur={props.handleBlur}
+                                        value={(props.values.rrFaxReceived !== null) ? props.values.rrFaxReceived : ""}
+                                        name="rrFaxReceived"
+                                        type="date"
+                                    />
+                                    {props.errors.rrFaxReceived && <div id="feedback">{props.errors.rrFaxReceived}</div>}
+                                </Grid>
+                                <Grid item>
+                                    <SubmitButton />
+                                </Grid>
+                            </Grid>
+                        </Form>
+                    )}
+                </Formik>  
+                </>
+                }
+
                 {fieldUpdate === "apptDate" && 
                 <>
                 <Formik

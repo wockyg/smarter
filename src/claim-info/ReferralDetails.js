@@ -13,15 +13,11 @@ import ClaimIdInfoAccordian from './ClaimIdInfoAccordian';
 import ReferralNotes from './ReferralNotes';
 import AuthorizationTable from './AuthorizationTable';
 import AdjusterUpdateEmails from './AdjusterUpdateEmails';
+import AuthConfLetters from './AuthConfLetters';
 import VisitTally from './VisitTally';
 import ReminderForm from './ReminderForm';
 
-import ConfirmationLetter from '../document-templates/ConfirmationLetter';
-import AuthorizationLetter from '../document-templates/AuthorizationLetter';
-import PhysicianApprovalForm from '../document-templates/PhysicianApprovalForm';
-import TherapistFaxCoverPage from '../document-templates/TherapistFaxCoverPage';
 
-import { PDFDownloadLink } from '@react-pdf/renderer';
 
 import useGetReferral from '../hooks/useGetReferral';
 
@@ -73,42 +69,7 @@ export default function ReferralDetails(props) {
                     Letters
                 </AccordionSummary>
                 <AccordionDetails>
-                    {selectedClaim?.apptDate && selectedClaim?.apptTime &&
-                    <>
-                    <hr />
-                    <PDFDownloadLink document={<ConfirmationLetter selectedClaim={selectedClaim} />} fileName={`SCH Confirmation Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                                {({ blob, url, loading, error }) =>
-                                    loading ? 'Loading document...' : <button>DL Conf. Letter</button>
-                                }
-                    </PDFDownloadLink>
-                    <hr />
-                    <PDFDownloadLink document={<AuthorizationLetter selectedClaim={selectedClaim} />} fileName={`SCH ${selectedClaim?.service} Authorization Letter - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                                {({ blob, url, loading, error }) =>
-                                    loading ? 'Loading document...' : <button>DL Auth. Letter</button>
-                                }
-                    </PDFDownloadLink>
-                    </>
-                    }
-                    {selectedClaim.serviceGeneral === "FCE" && selectedClaim.reportReceivedDate &&
-                    <>
-                    <hr />
-                    <PDFDownloadLink document={<PhysicianApprovalForm selectedClaim={selectedClaim} />} fileName={`${selectedClaim?.service} MD Approval Form - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                                {({ blob, url, loading, error }) =>
-                                    loading ? 'Loading document...' : <button>DL MD Approval Form</button>
-                                }
-                    </PDFDownloadLink>
-                    </>
-                    }
-                    {selectedClaim.serviceGeneral === "FCE" &&
-                    <>
-                    <hr />
-                    <PDFDownloadLink document={<TherapistFaxCoverPage selectedClaim={selectedClaim} />} fileName={`SCH Fax Cover Page to PT for ${selectedClaim?.service} - ${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}.pdf`}>
-                                {({ blob, url, loading, error }) =>
-                                    loading ? 'Loading document...' : <button>DL PT Fax Cover Page</button>
-                                }
-                    </PDFDownloadLink>
-                    </>
-                    }            
+                    <AuthConfLetters />
                 </AccordionDetails>
             </Accordion>
             }

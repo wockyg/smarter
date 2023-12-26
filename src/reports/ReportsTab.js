@@ -12,6 +12,7 @@ import QuarterlyReports from './QuarterlyReports';
 import Analytics from './Analytics';
 import ReferralsLastWeek from './ReferralsLastWeek';
 import ReportsToAdjLastWeek from './ReportsToAdjLastWeek';
+import BugReports from './BugReports';
 
 import '../App.css';
 
@@ -47,6 +48,9 @@ export default function ReportsTab(props) {
                 <ToggleButton value="referralsLW" aria-label="referralsLW">
                     Referrals LW
                 </ToggleButton>
+                <ToggleButton value="bugReports" aria-label="bugReports">
+                    Bug Reports
+                </ToggleButton>
             </ToggleButtonGroup>
 
             <br /><br />
@@ -62,6 +66,9 @@ export default function ReportsTab(props) {
             }
             {selectedFilter === 'referralsLW' &&
             <ReferralsLastWeek />
+            }
+            {selectedFilter === 'bugReports' &&
+            <BugReports />
             }
         </Box>
     );
