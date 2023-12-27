@@ -366,7 +366,9 @@ export default function MainNavbar() {
 
 
             <Box sx={{ paddingLeft: 2 }}>
-            <Tabs 
+            <Tabs
+            variant="scrollable"
+            scrollButtons={false}
             value={tab} 
             onChange={handleChange} 
             // textColor="secondary"
