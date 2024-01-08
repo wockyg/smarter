@@ -64,6 +64,8 @@ export default function useUpdateReferral() {
         queryClient.invalidateQueries('recordsRequest');
         queryClient.invalidateQueries('reminders');
         queryClient.invalidateQueries('remindersDashboard');
+        queryClient.invalidateQueries('trackedFiles');
+        queryClient.invalidateQueries('trackedFilescc');
         return data;
       });
   }

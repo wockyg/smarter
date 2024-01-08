@@ -8,6 +8,7 @@ const RecordsRequestContextProvider = (props) => {
 
     const [preference, setPreference] = useState("fax");
     const [filter, setFilter] = useState("tbw");
+    const [rria, setRria] = useState("rr");
 
     const todayDate = new Date();
     const todayWeekday = todayDate.getDay();
@@ -87,6 +88,7 @@ const RecordsRequestContextProvider = (props) => {
             todayWeekday, 
             preference, setPreference, 
             filter, setFilter, 
+            rria, setRria,
             monday, tuesday, wednesday, thursday, friday,
             mondayISO, tuesdayISO, wednesdayISO, thursdayISO, fridayISO,
             numWorked, numTBW, numPending, numFaxReceived, numActive, numFUH, numCaughtUp,
@@ -94,7 +96,7 @@ const RecordsRequestContextProvider = (props) => {
             numWorkedTuesday, numFaxReceivedTuesday, 
             numWorkedWednesday, numFaxReceivedWednesday, 
             numWorkedThursday, numFaxReceivedThursday, 
-            numWorkedFriday, numFaxReceivedFriday 
+            numWorkedFriday, numFaxReceivedFriday,
         }}>
             {props.children}
         </RecordsRequestContext.Provider>

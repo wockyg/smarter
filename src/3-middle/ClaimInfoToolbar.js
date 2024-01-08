@@ -223,11 +223,22 @@ export default function ClaimInfoToolbar() {
             }
             </>
             }
+            {selectedClaim?.betaTest &&
+            <Grid item>
+              <h3>
+                <IconButton onClick={(e) => handleOpenMenu(e, 1, 'betaTest')}>
+                  <Badge bg="success">
+                    Tracked
+                  </Badge>
+                </IconButton>
+              </h3>
+            </Grid>
+            }
             {selectedClaim?.spanishSpeaking &&
             <Grid item>
               <h3>
                 <IconButton onClick={(e) => handleOpenMenu(e, 1, 'spanishSpeaking')}>
-                  <Badge bg="success">
+                  <Badge bg="primary">
                       {/* {selectedClaim.spanishSpeaking} */}
                       Spanish
                   </Badge>
@@ -276,6 +287,11 @@ export default function ClaimInfoToolbar() {
         open={open0}
         onClose={handleCloseMenu}
       >
+        {!selectedClaim.betaTest && 
+        <MenuItem  onClick={() => handleUpdate('betaTest', true)}>
+            Add to Tracked Files
+        </MenuItem>
+        }
         {!selectedClaim.transportNeeded && 
         <MenuItem  onClick={() => handleUpdate('transportNeeded', "Transport Needed")}>
             Need Transportation

@@ -25,6 +25,7 @@ import MapTab from '../map/MapTab';
 import RecordsRequest from '../2-top/RecordsRequest';
 import DashboardCCManager from '../2-top/DashboardCCManager';
 import DashboardCC from '../2-top/DashboardCC';
+import DashboardCCAdmin from '../2-top/DashboardCCAdmin';
 
 import SampleTable from '../table-components/SampleTable';
 
@@ -100,7 +101,9 @@ export default function TopSection() {
             {user &&
             <>
             {user.admin ?
-            <DashboardCCManager user={user} />
+            <DashboardCCAdmin user={user} />
+            // <DashboardCCManager user={user} />
+            // <DashboardCC user={user} />
             :
             <DashboardCC user={user} />
             }

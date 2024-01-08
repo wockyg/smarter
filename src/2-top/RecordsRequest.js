@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import RecordsRequestTable from './RecordsRequestTable';
+import RecordsRequestIA from './RecordsRequestIA';
 
 import useGetRRLastWorked from '../hooks/useGetRRLastWorked';
 import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
@@ -59,7 +60,8 @@ export default function RecordsRequest(props) {
     const {
         todayWeekday,
         preference, setPreference, 
-        filter, setFilter, 
+        filter, setFilter,
+        rria, setRria, 
         monday, tuesday, wednesday, thursday, friday,
         mondayISO, tuesdayISO, wednesdayISO, thursdayISO, fridayISO,
         numWorked, numTBW, numPending, numFaxReceived, numActive, numFUH, numCaughtUp,
@@ -82,6 +84,12 @@ export default function RecordsRequest(props) {
         }
     };
 
+    const handleRria = (event, newVal) => {
+        if (newVal !== null){
+            setRria(newVal);
+        }
+    };
+
     return (
         rrLastWorked &&
         <Box sx={{ width: '100%', height: 700 }}>
@@ -95,6 +103,21 @@ export default function RecordsRequest(props) {
                             {`${new Date(rrLastWorked)?.toISOString().split('T')[0]} @ ${new Date(rrLastWorked).toLocaleTimeString('en-US')}`}<br />
                             <br />
                             {ascending ? `This week: A->Z` : `This week: Z->A`}
+                            <br /><br />
+                            <ToggleButtonGroup
+                            size="small"
+                            value={rria}
+                            exclusive
+                            onChange={handleRria}
+                            aria-label="text alignment"
+                            >
+                                <ToggleButton value="ia" aria-label="ia">
+                                    IA
+                                </ToggleButton>
+                                <ToggleButton value="rr" aria-label="rr">
+                                    RR
+                                </ToggleButton>
+                            </ToggleButtonGroup>
                         </Box> 
                     </Grid>
                     <Grid item xs={3.5}>
@@ -253,6 +276,7 @@ export default function RecordsRequest(props) {
                 </Grid>
             </Box>
 
+            {rria === 'rr' &&
             <RecordsRequestTable 
             filter={filter}
             handleFilter={handleFilter}
@@ -260,6 +284,11 @@ export default function RecordsRequest(props) {
             handlePreference={handlePreference}
             ascending={ascending}
             />
+            }
+
+            {rria === 'ia' &&
+            <RecordsRequestIA />
+            }
 
         </Box>
     );

@@ -45,6 +45,7 @@ import useGetReferralsFollowUpHoldDashboard from '../hooks/useGetReferralsFollow
 import useGetReferralsReportLimbo from '../hooks/useGetReferralsReportLimbo';
 import useUpdateUser from '../hooks/useUpdateUser';
 import useGetTrackedFilesCC from '../hooks/useGetTrackedFilesCC';
+import useGetTrackedFilesAll from '../hooks/useGetTrackedFilesAll';
 
 import '../App.css';
 
@@ -82,7 +83,7 @@ function DashboardTile(props) {
   );
 }
 
-export default function DashboardCC(props) {
+export default function DashboardCCAdmin(props) {
 
     const { dashboardFilter, setDashboardFilter } = useContext(UserContext);
 
@@ -95,13 +96,18 @@ export default function DashboardCC(props) {
     const { status: statusReferralsNextWeek, data: rowsNextWeek, error: errorReferralsNextWeek, isFetching: isFetchingReferralsNextWeek } = useGetFcePpdNextWeekDashboard(`${user.initials}${user.covering || ''}`);
     const { status: statusReferralsFuHold, data: rowsFuHold, error: errorReferralsFuHold, isFetching: isFetchingReferralsFuHold } = useGetReferralsFollowUpHoldDashboard(`${user.initials}${user.covering || ''}`);
     const { status: statusReferralsReportLimbo, data: rowsReportLimbo, error: errorReferralsReportLimbo, isFetching: isFetchingReferralsReportLimbo } = useGetReferralsReportLimbo();
-    const { status: statusReferralsTracked, data: rowsTracked, error: errorReferralsTracked, isFetching: isFetchingReferralsTracked } = useGetTrackedFilesCC(`${user.initials}` || '');
+    
+    const { status: statusReferralsTracked, data: rowsTracked, error: errorReferralsTracked, isFetching: isFetchingReferralsTracked } = useGetTrackedFilesAll();
 
     const userUpdate = useUpdateUser();
 
     // console.log(rowsTracked);
     
     const [isCovering, setIsCovering] = useState(Boolean(user?.covering));
+
+    const [showDashCC, setShowDashCC] = useState('');
+
+    const [trackedFilter, setTrackedFilter] = useState('');
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -184,6 +190,18 @@ export default function DashboardCC(props) {
 
     };
 
+    const handleChangeShowDash = (e) => {
+        // setCoveringCC(e.target.value);
+        setShowDashCC(e.target.value);
+
+    };
+
+    const handleTrackedFilter = (event, newFilter) => {
+        if (newFilter !== null){
+            setTrackedFilter(newFilter);
+        }
+    };
+
     return (
         <Box sx={{ width: '100%', height: 500 }}>
 
@@ -247,6 +265,25 @@ export default function DashboardCC(props) {
                     filter='limbo'
                     dashboardFilter={dashboardFilter}
                     />
+
+                    <Grid item>
+                        {/* <FormControl >
+                            <InputLabel id="demo-simple-select-label">CC</InputLabel>
+                            <Select
+                            sx={{minWidth: '10ch'}}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={showDashCC || ''}
+                            label="CC"
+                            onChange={(e) => handleChangeShowDash(e)}
+                            >
+                                <MenuItem value={null}>{`---`}</MenuItem>
+                                {careCoordinators.filter(c => c.Initials !== user.initials).map((c, i) => (
+                                    <MenuItem key={i} value={c.Initials}>{`${c.Initials}`}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl> */}
+                    </Grid>
 
                     <Grid item xs={2}>
                         <Paper square>
@@ -343,7 +380,7 @@ export default function DashboardCC(props) {
                             sx={{ width: '100%', cursor: 'pointer', marginTop: 3, background: dashboardFilter === 'tracked' ? 'linear-gradient(to bottom right, rgba(66,89,230,0.5), rgba(66, 89, 230,1))' : 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}
                             onClick={() => handleChangeFilter('tracked')}
                             >
-                                {rowsTracked?.length} tracked file{rowsTracked?.length !== 1 && 's'}
+                                Tracked files
                             </Box>
                         </Paper>
 
@@ -385,7 +422,27 @@ export default function DashboardCC(props) {
                         <FollowupHoldDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsOther} />
                         }
                         {dashboardFilter === 'tracked' &&
-                        <TrackedDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsTracked} />
+                        <>
+                        {user.admin && 
+
+                        <ToggleButtonGroup
+                        size="small"
+                        value={trackedFilter}
+                        exclusive
+                        onChange={handleTrackedFilter}
+                        aria-label="text alignment"
+                        >
+                            {careCoordinators.filter(c => c.Initials !== 'NS' && c.Initials !== 'CM' && c.Initials !== 'DM' && c.Initials !== 'KF' && c.Initials !== 'WM').map(c => (
+                            <ToggleButton value={c.Initials} aria-label="open">
+                                {c.Initials} ({rowsTracked.filter(r => r.assign === c.Initials).length})
+                            </ToggleButton>
+                            ))}
+                            
+                        </ToggleButtonGroup>
+
+                        }
+                        <TrackedDashboard filter={dashboardFilter} cc={user.initials} ccRows={rowsTracked.filter(r => r.assign === trackedFilter)} />
+                        </>
                         }
                         
                     </Grid>
