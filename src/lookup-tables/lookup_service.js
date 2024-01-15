@@ -49,7 +49,7 @@ export const services = [
     },
     {
         "service": "FCE | PPD",
-        "serviceSpelledOut": "Functional Capacity Evaluation an Impairment Rating",
+        "serviceSpelledOut": "Functional Capacity Evaluation and Impairment Rating",
     },
     {
         "service": "PPD",

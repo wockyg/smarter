@@ -2,8 +2,13 @@ import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/render
 
 import { careCoordinators } from '../lookup-tables/lookup_careCoordinators';
 import { services } from '../lookup-tables/lookup_service';
+import { weekdays } from '../lookup-tables/lookup_weekdays';
 
 import logo from '../img/logo.png';
+
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 // Create styles
 const styles = StyleSheet.create({
@@ -53,6 +58,18 @@ export default function ConfirmationLetter(props) {
     const month = today.getMonth() + 1; 
     const day = today.getDate();
     const year = today.getFullYear();
+
+    const weekday = today.getDay();
+
+    const apptDate = new Date(selectedClaim.apptDate)
+    const apptWeekday = apptDate.getDay();
+    const apptMonth = apptDate.getMonth();
+    const apptDay = apptDate.getDate();
+
+    const apptDaySuffix = (apptDay === 1 || apptDay === 21 || apptDay === 31) ? 'st' : ((apptDay === 2 || apptDay === 22) ? 'nd' : (apptDay === 3 || apptDay === 23) ? 'rd' : 'th')
+
+
+    const weekdayString = weekdays.filter(w => w.day === weekday)[0].dayString;
 
     const serviceSpelledOut = services?.filter((s) => s.service === selectedClaim?.service)[0]?.serviceSpelledOut;
     const serviceSpelledOutFinal = `${serviceSpelledOut} ${selectedClaim?.service !== 'PPD' && !selectedClaim?.service !== 'PPD-GL' && 'Evaluation'}`
@@ -199,7 +216,7 @@ export default function ConfirmationLetter(props) {
                     <Text style={styles.textGray}>Dummy</Text>
                     <Text style={styles.text}>{contactHeading}</Text>
 
-                    <Text style={{ position: 'absolute', top: 10, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{selectedClaim.apptDateFormat}</Text>
+                    <Text style={{ position: 'absolute', top: 10, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{weekdayString}, {monthNames[apptMonth]} {apptDay}{apptDaySuffix}</Text>
                     <Text style={{ position: 'absolute', top: 28, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{selectedClaim.apptTime} {arriveEarly}</Text>
                     <Text style={{ position: 'absolute', top: 45, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{selectedClaim.therapist}</Text>
                     <Text style={{ position: 'absolute', top: 55, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{selectedClaim.therapistAddress}</Text>

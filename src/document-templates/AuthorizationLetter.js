@@ -133,7 +133,7 @@ export default function AuthorizationLetter(props) {
 
                     <Text style={{ position: 'absolute', top: 10, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>{`${selectedClaim?.claimantLast}, ${selectedClaim?.claimantFirst}`}</Text>
                     <Text style={{ position: 'absolute', top: 28, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>
-                        {`DOB: ${selectedClaim?.claimantBirthDateFormat} | DOI: ${selectedClaim?.claimantInjuryDate1Format} | CLM#: ${selectedClaim?.claimNumber}`}
+                        {`DOB: ${selectedClaim?.claimantBirthDateFormat || '--'} | DOI: ${selectedClaim?.claimantInjuryDate1Format || '--'} | CLM#: ${selectedClaim?.claimNumber || '--'}`}
                     </Text>
                     <Text style={{ position: 'absolute', top: 45, left: 100, fontSize: 8, fontFamily: 'Helvetica' }}>
                         {`${selectedClaim?.apptDateFormat} at ${selectedClaim?.apptTime}`}
