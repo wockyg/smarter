@@ -81,8 +81,8 @@ export default function AuthConfLetters(props) {
         const ccEmail = careCoordinators.filter((el) => el.Initials === selectedClaim.assign)[0].email;
 
         const params = {
-            to_email: 'wmcclure@definedpt.com',
-            // to_email: ccOverride !== '' ? ccOverride : ccEmail,
+            // to_email: 'wmcclure@definedpt.com',
+            to_email: ccOverride !== '' ? ccOverride : ccEmail,
             subject: `CLM# ${selectedClaim.claimNumber} ${selectedClaim.claimant} - ${serviceSpelledOut} ${selectedClaim.serviceGeneral === 'DPT' ? 'Evaluation' : ''} Scheduled`,
             message: emailBodyConf ? emailBodyConf : 'ERROR- PLEASE CONTACT SYSTEM ADMIN'
         }
