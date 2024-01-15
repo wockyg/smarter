@@ -226,6 +226,7 @@ export default function DashboardCCAdmin(props) {
 
     const handleSwitchCC = (e, cc) => {
         cc.initials === realUser.initials ? setShowCCDash(null) : setShowCCDash(cc.initials);
+        setTrackedFilter(cc.initials);
         handleCloseMenu();
     };
 
