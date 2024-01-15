@@ -376,7 +376,6 @@ export default function ReferralTable(props) {
 
     const handleOpenMenu = (event, id) => {
         setAnchorEl(event.currentTarget);
-        console.log(event.currentTarget?.parentNode);
         setDeleteId(id);
     };
 

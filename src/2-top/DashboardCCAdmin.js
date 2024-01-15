@@ -7,9 +7,12 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import Select from '@mui/material/Select';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
+import IconButton from '@mui/material/IconButton';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import ReferralsOpen from '../schedule/ReferralsOpen';
 import RemindersTable from './RemindersTable';
@@ -46,6 +49,7 @@ import useGetReferralsReportLimbo from '../hooks/useGetReferralsReportLimbo';
 import useUpdateUser from '../hooks/useUpdateUser';
 import useGetTrackedFilesCC from '../hooks/useGetTrackedFilesCC';
 import useGetTrackedFilesAll from '../hooks/useGetTrackedFilesAll';
+import useGetUsers from '../hooks/useGetUsers';
 
 import '../App.css';
 
@@ -85,7 +89,7 @@ function DashboardTile(props) {
 
 export default function DashboardCCAdmin(props) {
 
-    const { dashboardFilter, setDashboardFilter } = useContext(UserContext);
+    const { dashboardFilter, setDashboardFilter, showCCDash, setShowCCDash, user: realUser } = useContext(UserContext);
 
     const { user } = props;
 
@@ -99,15 +103,28 @@ export default function DashboardCCAdmin(props) {
     
     const { status: statusReferralsTracked, data: rowsTracked, error: errorReferralsTracked, isFetching: isFetchingReferralsTracked } = useGetTrackedFilesAll();
 
+    const { status: statusUsers, data: users, error: errorUsers, isFetching: isFetchingUsers } = useGetUsers();
+
     const userUpdate = useUpdateUser();
 
     // console.log(rowsTracked);
+
+    // console.log("re-render Dashboard");
+    // console.log("(Dash) user.initials:", user.initials);
+    // console.log("(Dash) user.covering:", user.covering);
+    // console.log(Boolean(user?.covering));
     
     const [isCovering, setIsCovering] = useState(Boolean(user?.covering));
 
-    const [showDashCC, setShowDashCC] = useState('');
+    // let isCovering = Boolean(user.covering);
+
+    // console.log("(Dash) isCovering:", isCovering);
 
     const [trackedFilter, setTrackedFilter] = useState('');
+
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const open = Boolean(anchorEl);
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -179,20 +196,17 @@ export default function DashboardCCAdmin(props) {
 
     const handleChangeIsCovering = (event) => {
         setIsCovering(event.target.checked);
-        if(!event.target.checked) {
+        // isCovering = event.target.checked;
+        if(!event.target.checked && user.covering) {
             userUpdate.mutate({initials: user.initials, covering: null})
         }
+        // console.log(isCovering);
     };
 
     const handleChangeCoveringCC = (e) => {
         // setCoveringCC(e.target.value);
-        userUpdate.mutate({initials: user.initials, covering: e.target.value})
-
-    };
-
-    const handleChangeShowDash = (e) => {
-        // setCoveringCC(e.target.value);
-        setShowDashCC(e.target.value);
+        userUpdate.mutate({initials: user.initials, covering: e.target.value});
+        // setIsCovering(user.covering ? true : false);
 
     };
 
@@ -200,6 +214,24 @@ export default function DashboardCCAdmin(props) {
         if (newFilter !== null){
             setTrackedFilter(newFilter);
         }
+    };
+
+    const handleOpenMenu = (event, id) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleSwitchCC = (e, cc) => {
+        cc.initials === realUser.initials ? setShowCCDash(null) : setShowCCDash(cc.initials);
+        handleCloseMenu();
+    };
+
+    const handleResetDash = () => {
+        setShowCCDash(null);
+        handleCloseMenu();
     };
 
     return (
@@ -332,6 +364,7 @@ export default function DashboardCCAdmin(props) {
                                     <Grid item sx={{marginTop: 1}}>
                                         <Checkbox
                                         checked={isCovering}
+                                        // checked={user?.covering ? true : false}
                                         onChange={handleChangeIsCovering}
                                         inputProps={{ 'aria-label': 'controlled' }}
                                         />
@@ -345,6 +378,7 @@ export default function DashboardCCAdmin(props) {
                                         <FormControl >
                                             <InputLabel id="demo-simple-select-label">CC</InputLabel>
                                             <Select
+                                            // disabled={!isCovering}
                                             disabled={!isCovering}
                                             sx={{minWidth: '10ch'}}
                                             labelId="demo-simple-select-label"
@@ -375,15 +409,47 @@ export default function DashboardCCAdmin(props) {
                         </Box>
 
                         </Paper>
-                        <Paper square>
-                            <Box 
-                            sx={{ width: '100%', cursor: 'pointer', marginTop: 3, background: dashboardFilter === 'tracked' ? 'linear-gradient(to bottom right, rgba(66,89,230,0.5), rgba(66, 89, 230,1))' : 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}
-                            onClick={() => handleChangeFilter('tracked')}
-                            >
-                                Tracked files
-                            </Box>
-                        </Paper>
+                        
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    <Paper square>
+                                    <Box 
+                                    sx={{ width: '100%', cursor: 'pointer', marginTop: 3, background: dashboardFilter === 'tracked' ? 'linear-gradient(to bottom right, rgba(66,89,230,0.5), rgba(66, 89, 230,1))' : 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}
+                                    onClick={() => handleChangeFilter('tracked')}
+                                    >
+                                        Tracked files
+                                    </Box>
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Paper square sx={{marginLeft: 1}}>
+                                    <Box 
+                                    sx={{ width: '100%', cursor: 'pointer', marginTop: 3, background: 'linear-gradient(to bottom right, rgba(178, 186, 187 ,0.5), rgba(178, 186, 187 ,1))'}}
+                                    onClick={handleOpenMenu}
+                                    >
+                                        Showing: {showCCDash || `You (${realUser?.initials})`}
+                                        
+                                    </Box>
+                                    {showCCDash && <IconButton><CancelIcon fontSize='small' onClick={handleResetDash} /></IconButton>}
+                                    <Menu
+                                        id="delete-menu"
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={handleCloseMenu}
+                                        >
+                                            {users.filter(u => u.role === 'CC' && u.initials !== user.initials && u.initials !== 'DM' && u.initials !== 'CM' && u.initials !== 'DM' && u.initials !== 'WM' && u.initials !== 'NS' && u.initials !== 'KF').map((c, i) => (
+                                            <MenuItem
+                                            key={i}
+                                            onClick={(e) => handleSwitchCC(e, c)}
+                                            >
+                                                Switch to {c?.initials}
+                                            </MenuItem>
+                                            ))}
 
+                                        </Menu>
+                                    </Paper>
+                                </Grid>
+                            </Grid>
                     </Grid> 
                     
                     <Box sx={{ width: '100%'}} />
@@ -432,9 +498,9 @@ export default function DashboardCCAdmin(props) {
                         onChange={handleTrackedFilter}
                         aria-label="text alignment"
                         >
-                            {careCoordinators.filter(c => c.Initials !== 'NS' && c.Initials !== 'CM' && c.Initials !== 'DM' && c.Initials !== 'KF' && c.Initials !== 'WM').map(c => (
-                            <ToggleButton value={c.Initials} aria-label="open">
-                                {c.Initials} ({rowsTracked.filter(r => r.assign === c.Initials).length})
+                            {users.filter(u => u.role === 'CC' && u.initials !== 'NS' && u.initials !== 'CM' && u.initials !== 'DM' && u.initials !== 'KF' && u.initials !== 'WM').map(c => (
+                            <ToggleButton value={c.initials} aria-label="open">
+                                {c.initials} ({rowsTracked.filter(r => r.assign === c.initials).length})
                             </ToggleButton>
                             ))}
                             

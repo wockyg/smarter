@@ -71,6 +71,7 @@ export default function ReferralAddForm() {
                 jdFromAdjuster: [],
                 mriFromAdjuster: [],
                 postOpFromAdjuster: [],
+                betaTest: [],
             }}
             validationSchema={Yup.object({
                 claimantId: Yup.number().required('Req'),
@@ -104,6 +105,7 @@ export default function ReferralAddForm() {
                 jdFromAdjuster: Yup.array(),
                 mriFromAdjuster: Yup.array(),
                 postOpFromAdjuster: Yup.array(),
+                betaTest: Yup.array(),
             })}
             onSubmit={(values, actions) => {
                 let newValues = {...values};
@@ -221,6 +223,15 @@ export default function ReferralAddForm() {
                                     id="postOpFromAdjuster"
                                     label="Post-Op Report:"
                                     name="postOpFromAdjuster"
+                                    type="checkbox"
+                                    value="Yes"
+                                /> 
+                            </Grid>
+                            <Grid item>
+                                <FormInput
+                                    id="betaTest"
+                                    label="Add to Tracked Files:"
+                                    name="betaTest"
                                     type="checkbox"
                                     value="Yes"
                                 /> 

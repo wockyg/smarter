@@ -555,7 +555,7 @@ export default function ReferralsByMonthLineChart(props) {
     
     // referrals && console.log(year, referralsFiltered);
 
-    const referralsPivot = monthsShort.filter((f, j) => (+year === currentYear) ? (j < currentMonth) : true)
+    const referralsPivot = monthsShort.filter((f, j) => (+year === currentYear) ? (j <= currentMonth) : true)
                                       .map((m, i) => {
                                         const numReferrals = referralsFiltered?.filter(r => new Date(r.referralDate).getMonth() === i).length;
                                         return ({month: (i + 1), label: m, numReferrals: numReferrals});

@@ -307,6 +307,7 @@ export default function TherapistDetails(props) {
                         selectedRow={selectedTherapist}
                         selectedParty='therapist'
                         />
+                        
                         <Box width="100%"/>
                         <EditableGridItem
                         field='fax'
@@ -326,6 +327,21 @@ export default function TherapistDetails(props) {
                         selectedRow={selectedTherapist}
                         selectedParty='therapist'
                         />
+                        <Box width="100%"/>
+
+                        {/* RR Preference radio buttons and text field go here */}
+
+                        {/* <EditableGridItem
+                        field='rrPreference'
+                        label='RR Preference'
+                        type='radio'
+                        formikProps={formikProps}
+                        currentlyEditing={currentlyEditing}
+                        selectedRow={selectedTherapist}
+                        selectedParty='therapist'
+                        />
+                        <Box width="100%"/> */}
+
                         <Box width="100%"/>
                         <EditableGridItem
                         field='billingPhone'
@@ -704,6 +720,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -715,6 +732,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -726,6 +744,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -739,6 +758,7 @@ export default function TherapistDetails(props) {
                             options={['Network', 'Single-Case', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             <EditableGridItem
@@ -749,6 +769,7 @@ export default function TherapistDetails(props) {
                             options={['Agreed', 'Prospect', 'Denied', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             {/* <Box width="100%"/> */}
@@ -760,6 +781,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
                         </Grid>
                     </Grid>
@@ -832,6 +854,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -843,6 +866,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -856,6 +880,7 @@ export default function TherapistDetails(props) {
                             options={['Network', 'Single-Case', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             <EditableGridItem
@@ -866,6 +891,7 @@ export default function TherapistDetails(props) {
                             options={['Agreed', 'Prospect', 'Denied', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             {/* <Box width="100%"/> */}
@@ -877,6 +903,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                         </Grid>
@@ -934,6 +961,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -945,6 +973,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             width='6ch'
                             />
 
@@ -958,6 +987,7 @@ export default function TherapistDetails(props) {
                             options={['Network', 'Single-Case', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             <EditableGridItem
@@ -968,6 +998,7 @@ export default function TherapistDetails(props) {
                             options={['Agreed', 'Prospect', 'Denied', '']}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                             {/* <Box width="100%"/> */}
@@ -979,6 +1010,7 @@ export default function TherapistDetails(props) {
                             formikProps={formikProps}
                             currentlyEditing={currentlyEditing}
                             selectedRow={selectedTherapist}
+                            selectedParty='therapist'
                             />
 
                         </Grid>

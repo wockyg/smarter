@@ -14,6 +14,8 @@ const UserContextProvider = (props) => {
 
     const [dashboardFilter, setDashboardFilter] = useState('open');
 
+    const [showCCDash, setShowCCDash] = useState(null);
+
     const [navbarTab, setNavbarTab] = useState(0);
     const [secondaryTabSchedule, setSecondaryTabSchedule] = useState(0);
     const [secondaryTabBilling, setSecondaryTabBilling] = useState(0);
@@ -33,7 +35,7 @@ const UserContextProvider = (props) => {
     
     return ( user &&
         <UserContext.Provider 
-        value={{ dashboardFilter, setDashboardFilter, navbarTab, setNavbarTab, user, nickname, updated_at, logout, isFetchingUser }}>
+        value={{ dashboardFilter, setDashboardFilter, showCCDash, setShowCCDash, navbarTab, setNavbarTab, user, nickname, updated_at, logout, isFetchingUser }}>
             {props.children}
         </UserContext.Provider>
     );

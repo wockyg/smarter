@@ -18,8 +18,8 @@ export default function useGetTrackedFilesCC(initials) {
   }
     
   return useQuery(['trackedFilescc', initials], getAllTrackedFilesCC, { 
-    staleTime: (10 * (60 * 1000)), // 10 min 
-    cacheTime: (15 * (60 * 1000)), // 15 min
+    staleTime: (5 * (60 * 1000)), // 5 min 
+    cacheTime: (6 * (60 * 1000)), // 6 min
   });
 
 }

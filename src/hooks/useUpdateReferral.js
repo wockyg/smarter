@@ -54,6 +54,8 @@ export default function useUpdateReferral() {
         queryClient.invalidateQueries('referralsdropdown');
         queryClient.invalidateQueries('referralscalendar');
         queryClient.invalidateQueries('fceppdtomorrow');
+        queryClient.invalidateQueries('nextweekCC');
+        queryClient.invalidateQueries('tomorrowCC');
         queryClient.invalidateQueries('followuphold');
         queryClient.invalidateQueries('missingreport');
         queryClient.invalidateQueries('reportlimbo');

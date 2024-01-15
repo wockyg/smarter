@@ -17,6 +17,14 @@ export default function useDeleteReferral() {
     const data = await deleteReferral(id);
     console.log('data: ', data);
     queryClient.invalidateQueries('referrals');
+    queryClient.invalidateQueries('referralsOpen');
+    queryClient.invalidateQueries('openDashboard');
+    queryClient.invalidateQueries('referralsView');
+    queryClient.invalidateQueries('referralscalendar');
+    queryClient.invalidateQueries('referralsearch');
+    queryClient.invalidateQueries('referralsearchall');
+    queryClient.invalidateQueries('trackedFiles');
+    queryClient.invalidateQueries('trackedFilescc');
     return data;
   }
     

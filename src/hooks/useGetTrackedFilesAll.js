@@ -18,8 +18,8 @@ export default function useGetTrackedFilesAll() {
   }
     
   return useQuery(['trackedFiles'], getAllTrackedFiles, { 
-    staleTime: (10 * (60 * 1000)), // 10 min 
-    cacheTime: (15 * (60 * 1000)), // 15 min
+    staleTime: (5 * (60 * 1000)), // 5 min 
+    cacheTime: (6 * (60 * 1000)), // 6 min
   });
 
 }

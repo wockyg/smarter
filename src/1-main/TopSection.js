@@ -29,6 +29,8 @@ import DashboardCCAdmin from '../2-top/DashboardCCAdmin';
 
 import SampleTable from '../table-components/SampleTable';
 
+import useGetUsers from '../hooks/useGetUsers';
+
 import { UserContext } from '../contexts/UserContext';
 
 import { useParams } from 'react-router-dom';
@@ -71,37 +73,25 @@ export default function TopSection() {
 
     let { id: linkId } = useParams();
 
-    // const { status: statusReferrals, data: referrals, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferrals();
+    const { status: statusUsers, data: users, error: errorUsers, isFetching: isFetchingUsers } = useGetUsers();
 
-    const { user, navbarTab, setNavbarTab } = useContext(UserContext);
-  
-    const [tab, setTab] = useState(0);
+    const { user, navbarTab, setNavbarTab, showCCDash } = useContext(UserContext);
 
-    const handleChange = (event, newValue) => {
-    setTab(newValue);
-    };
+    const showCCDashUser = users && (showCCDash ? users?.filter(u => u?.initials === showCCDash)[0] : user);
+
+    // console.log("re-render TopSection");
+    // console.log("(Top) user.initials:", showCCDashUser?.initials);
+    // console.log("(Top) user.covering:", showCCDashUser?.covering);
 
     return (
       
     <Box sx={{ width: '100%'}}>
-        {/* <Box sx={{ borderBottom: 1, borderColor: 'divider', position: 'sticky', top: 65, background: '#F5F8F9'  }}>
-        <Tabs value={tab} onChange={handleChange} aria-label="referral tabs">
-            <Tab label={<div><GridViewIcon />{` Dashboard`}</div>} {...a11yProps(0)} />
-            <Tab label={<div><PendingActionsIcon />{` Schedule`}</div>} {...a11yProps(1)} />
-            <Tab label={<div><FaxIcon />{` Records Req.`}</div>} {...a11yProps(2)} />
-            <Tab label={<div><RequestQuoteIcon />{` Billing`}</div>} {...a11yProps(3)} />
-            <Tab label={<div><SearchIcon />{` Search`}</div>} {...a11yProps(4)} />
-            <Tab label={<div><CalendarMonthIcon />{` Calendars`}</div>} {...a11yProps(5)} />
-            <Tab label={<div><AssessmentIcon />{` Reports`}</div>} {...a11yProps(6)} />
-            <Tab label={<div><LocationOnIcon />{` Network Map`}</div>} {...a11yProps(7)} />
-        </Tabs>
-        </Box> */}
         <TabPanel value={navbarTab} index={0}>
             
-            {user &&
+            {users && showCCDashUser && user &&
             <>
             {user.admin ?
-            <DashboardCCAdmin user={user} />
+            <DashboardCCAdmin user={showCCDashUser} />
             // <DashboardCCManager user={user} />
             // <DashboardCC user={user} />
             :
@@ -116,7 +106,6 @@ export default function TopSection() {
         </TabPanel>
         <TabPanel value={navbarTab} index={2}>
             <MapTab />
-            
         </TabPanel>
         <TabPanel value={navbarTab} index={3}>
             <RecordsRequest />
@@ -133,9 +122,6 @@ export default function TopSection() {
         <TabPanel value={navbarTab} index={7}>
             <SearchTab />
         </TabPanel>
-        {/* <TabPanel value={tab} index={8}>
-            <BugReportsTab />
-        </TabPanel> */}
     </Box>
     
     );

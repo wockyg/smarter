@@ -21,6 +21,7 @@ export default function useUpdateUser() {
         console.log(data);
         console.log(values);
         queryClient.invalidateQueries(`user`);
+        queryClient.invalidateQueries(`users`);
         return data;
       });
   }

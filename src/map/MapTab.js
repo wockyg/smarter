@@ -1,4 +1,6 @@
 import { useState, useRef, useContext } from 'react';
+import {api} from '../index';
+
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
@@ -7,7 +9,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -30,6 +32,7 @@ import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
 import useGetReferral from '../hooks/useGetReferral';
 import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 import useUpdateReferral from '../hooks/useUpdateReferral';
+import useGetLatLon from '../hooks/useGetLatLon';
 
 import { DetailsContext } from '../contexts/DetailsContext';
 
@@ -124,6 +127,8 @@ export default function MapTab(props) {
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
+
+    // const { status: statusLatLon, data: latLon, error: errorLatLon, isFetching: isFetchingLatLon } = useGetLatLon();
 
     const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
@@ -258,6 +263,28 @@ export default function MapTab(props) {
         selectedClaim?.serviceGeneral === 'DPT' && setFilteredPins(therapistsFilteredDPT);
         selectedClaim?.serviceGeneral === 'FCE' && setSelectedFilter('fceppd');
         selectedClaim?.serviceGeneral === 'FCE' && setFilteredPins(therapistsFilteredFCEPPD)
+        
+        api.get(`/map/fromAddress/${searchVal}`)
+            .then(response => {
+    
+            const data = response.data;
+            const {lat, lon} = data;
+            console.log("Center:", lat, lon);
+            setSearchLat(lat);
+            setSearchLon(lon);
+            // const feature = point([lat, lon]);
+            // const [minLng, minLat, maxLng, maxLat] = bbox(feature);
+            // console.log("Box:", minLng, minLat, maxLng, maxLat);
+            mapRef.current.flyTo({center: [lon, lat], zoom: circleZoom});
+            setCircleSource(createGeoJSONCircle([lon, lat], circleRadius));
+            console.log(circleRadius);
+
+            });
+        
+        
+        
+        
+        
         fromAddress(searchVal)
         .then(({ results }) => {
             const { lat, lng } = results[0].geometry.location;

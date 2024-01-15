@@ -44,6 +44,7 @@ export default function useAddReferral() {
                                 'jdFromAdjuster': values.jdFromAdjuster.length > 0 ? values.jdFromAdjuster[0] : null,
                                 'mriFromAdjuster': values.mriFromAdjuster.length > 0 ? values.mriFromAdjuster[0] : null,
                                 'postOpFromAdjuster': values.postOpFromAdjuster.length > 0 ? values.postOpFromAdjuster[0] : null,
+                                'betaTest': values.betaTest.length > 0 ? true : null,
                               })
                               .then(response => {
                                 const data = response.data;
@@ -55,6 +56,8 @@ export default function useAddReferral() {
                                 queryClient.invalidateQueries('referralscalendar');
                                 queryClient.invalidateQueries('referralsearch');
                                 queryClient.invalidateQueries('referralsearchall');
+                                queryClient.invalidateQueries('trackedFiles');
+                                queryClient.invalidateQueries('trackedFilescc');
                                 return data;
                               });
     

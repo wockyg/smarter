@@ -51,16 +51,46 @@ const headCells = [
     label: 'Therapist',
   },
   {
-    id: 'claimantConfirmDayBefore',
+    id: 'rxFromAdjuster',
     numeric: false,
     disablePadding: false,
-    label: 'Claimant DB',
+    label: 'Rx',
   },
   {
-    id: 'ptConfirmDayBefore',
+    id: 'demosFromAdjuster',
     numeric: false,
     disablePadding: false,
-    label: 'PT DB',
+    label: 'Demos',
+  },
+  {
+    id: 'ovnFromAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'OVN',
+  },
+  {
+    id: 'ptNotesFromAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'PTN',
+  },
+  {
+    id: 'mriFromAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'MRI',
+  },
+  {
+    id: 'jdFromAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'JD',
+  },
+  {
+    id: 'postOpFromAdjuster',
+    numeric: false,
+    disablePadding: false,
+    label: 'PostOp',
   },
 ];
 
