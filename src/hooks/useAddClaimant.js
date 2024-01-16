@@ -12,9 +12,9 @@ export default function useAddClaimant() {
                                 'lastName': `${values.lastName}`,
                                 'employerId': values.employerId > 0 ? values.employerId : null,
                                 'gender': `${values.gender}`,
-                                'birthDate': `${values.birthDate}`,
-                                'injuryDate1': `${values.injuryDate1}`,
-                                'injuryDate2': `${values.injuryDate2}`,
+                                'birthDate': values.birthDate,
+                                'injuryDate1': values.injuryDate1,
+                                'injuryDate2': values.injuryDate2,
                                 'address': `${values.address}`,
                                 'city': `${values.city}`,
                                 'state': `${values.state}`,
@@ -28,7 +28,7 @@ export default function useAddClaimant() {
                               })
                               .then(response => {
                                 const data = response.data;
-                                // console.log(data);
+                                console.log("values:", values);
                                 queryClient.invalidateQueries('claimants');
                                 queryClient.invalidateQueries('claimantsdropdown');
                                 queryClient.invalidateQueries('claimantsearchall');

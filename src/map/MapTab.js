@@ -27,7 +27,7 @@ import TherapistDetails from '../details/TherapistDetails';
 
 import { useParams } from 'react-router-dom';
 
-import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
+// import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
 
 import useGetReferral from '../hooks/useGetReferral';
 import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
@@ -113,12 +113,6 @@ export default function MapTab(props) {
     // const circleSource = createGeoJSONCircle([LON, LAT], 10);
 
     const mapRef = useRef();
-
-    setDefaults({
-    key: "AIzaSyDZTDhDWFKMSUkvPEzKEVEyNCzZh0SFTw4",
-    language: "en",
-    region: "es",
-    });
 
     // console.log(circleSource);
 
@@ -285,22 +279,22 @@ export default function MapTab(props) {
         
         
         
-        fromAddress(searchVal)
-        .then(({ results }) => {
-            const { lat, lng } = results[0].geometry.location;
-            console.log("Center:", lat, lng);
-            setSearchLat(lat);
-            setSearchLon(lng);
-            // const feature = point([lat, lng]);
-            // const [minLng, minLat, maxLng, maxLat] = bbox(feature);
-            // console.log("Box:", minLng, minLat, maxLng, maxLat);
-            mapRef.current.flyTo({center: [lng, lat], zoom: circleZoom});
-            setCircleSource(createGeoJSONCircle([lng, lat], circleRadius));
-            console.log(circleRadius);
+        // fromAddress(searchVal)
+        // .then(({ results }) => {
+        //     const { lat, lng } = results[0].geometry.location;
+        //     console.log("Center:", lat, lng);
+        //     setSearchLat(lat);
+        //     setSearchLon(lng);
+        //     // const feature = point([lat, lng]);
+        //     // const [minLng, minLat, maxLng, maxLat] = bbox(feature);
+        //     // console.log("Box:", minLng, minLat, maxLng, maxLat);
+        //     mapRef.current.flyTo({center: [lng, lat], zoom: circleZoom});
+        //     setCircleSource(createGeoJSONCircle([lng, lat], circleRadius));
+        //     console.log(circleRadius);
 
 
-        })
-        .catch(console.error);
+        // })
+        // .catch(console.error);
     };
 
     const handleClearSearch = (event) => {

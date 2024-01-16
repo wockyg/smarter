@@ -32,7 +32,7 @@ export default function ClaimantAddForm() {
                 employerId: '',
                 gender: '',
                 birthDate: '',
-                injuryDate: '',
+                injuryDate1: '',
                 address: '',
                 city: '',
                 state: '',
@@ -50,7 +50,7 @@ export default function ClaimantAddForm() {
                 employerId: Yup.number(),
                 gender: Yup.string(),
                 birthDate: Yup.string(),
-                injuryDate: Yup.string(),
+                injuryDate1: Yup.string(),
                 address: Yup.string(),
                 city: Yup.string(),
                 state: Yup.string(),
@@ -112,9 +112,9 @@ export default function ClaimantAddForm() {
                             </Grid>
                             <Grid item>
                                 <FormInput
-                                    id="injuryDate"
+                                    id="injuryDate1"
                                     label="DOI:"
-                                    name="injuryDate"
+                                    name="injuryDate1"
                                     type="text"
                                 />
                             </Grid>

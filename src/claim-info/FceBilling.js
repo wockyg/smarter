@@ -50,7 +50,6 @@ export default function FceBilling() {
         const keys = Object.keys(row);
         const changedKeys = keys.filter(index => row[index] !== currentEditRow[index]);
         const values = changedKeys.reduce((obj, key, index) => ({ ...obj, [key]: currentEditRow[key] }), {});
-        // values.fceId = row.fceId;
         values.referralId = row.referralId;
         console.log(values);
         Object.keys(values).length > 2 && mutationUpdate.mutate(values);

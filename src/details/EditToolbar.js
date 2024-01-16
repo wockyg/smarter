@@ -71,6 +71,7 @@ export default function EditToolbar(props) {
     const stopEditing = () => {
         console.log("done editing");
         submitForm();
+        // resetForm();
         setCurrentlyEditing(null);
     }
 
