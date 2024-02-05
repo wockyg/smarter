@@ -73,6 +73,8 @@ const RecordsRequestContextProvider = (props) => {
     const numWorkedFriday = worked?.filter(w => w.worked === fridayISO).length;
     const numFaxReceivedFriday = faxReceived?.filter(f => f.rrFaxReceived === fridayISO).length;
 
+    const [therapistSearchVal, setTherapistSearchVal] = useState('');
+
     // console.log('M', numFaxReceivedMonday);
     // console.log('T', numFaxReceivedTuesday);
     // console.log('W', numFaxReceivedWednesday);
@@ -97,6 +99,7 @@ const RecordsRequestContextProvider = (props) => {
             numWorkedWednesday, numFaxReceivedWednesday, 
             numWorkedThursday, numFaxReceivedThursday, 
             numWorkedFriday, numFaxReceivedFriday,
+            therapistSearchVal, setTherapistSearchVal
         }}>
             {props.children}
         </RecordsRequestContext.Provider>

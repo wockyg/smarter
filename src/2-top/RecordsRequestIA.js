@@ -63,18 +63,33 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Attend',
+    enableEdit: true,
+    inputType: 'select',
+    options: ['Yes', 'No']
+  },
+  {
+    id: 'confirmedPayor',
+    numeric: false,
+    disablePadding: false,
+    label: 'Confirmed Payor',
+    enableEdit: true,
+    inputType: 'checkbox',
   },
   {
     id: 'reportReceivedDate',
     numeric: false,
     disablePadding: false,
     label: 'Report',
+    enableEdit: true,
+    inputType: 'date',
   },
   {
     id: 'reportStatus',
     numeric: false,
     disablePadding: false,
     label: 'Status',
+    enableEdit: true,
+    inputType: 'textarea',
   },
 ];
 
@@ -91,7 +106,9 @@ export default function RecordsRequestIA(props) {
         headCells={headCells}
         rows={rows}
         initialSort={initialSort}
+        inlineEdit={true}
         title='RR IA'
+        type='ref'
         />
         :
         <Skeleton variant="rectangular" width='100%' height={475} />

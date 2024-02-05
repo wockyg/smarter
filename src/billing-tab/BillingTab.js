@@ -9,6 +9,7 @@ import D1500NotApproved from './D1500NotApproved';
 import D1500NotSentNew from './D1500NotSentNew';
 import AdjusterPastDue from './AdjusterPastDue';
 import FacilityPastDue from './FacilityPastDue';
+import FeeSchedules from '../3-middle/FeeSchedules';
 
 import '../App.css';
 
@@ -35,7 +36,7 @@ export default function BillingTab(props) {
                 Missing V1500
             </ToggleButton>
             <ToggleButton value="d1500NotApproved" aria-label="D1500NotApproved">
-                D1500 Not Approved
+                V1500 Uploads
             </ToggleButton>
             <ToggleButton value="d1500NotSent" aria-label="D1500NotSent">
                 D1500 Not Sent
@@ -45,6 +46,9 @@ export default function BillingTab(props) {
             </ToggleButton>
             <ToggleButton value="ptPastDue" aria-label="ptPastDue">
                 PT Past Due
+            </ToggleButton>
+            <ToggleButton value="feeSchedules" aria-label="feeSchedules">
+                Fee Schedules
             </ToggleButton>
         </ToggleButtonGroup>
         
@@ -63,6 +67,9 @@ export default function BillingTab(props) {
         }
         {selectedFilter === 'ptPastDue' &&
         <FacilityPastDue />
+        }
+        {selectedFilter === 'feeSchedules' &&
+        <FeeSchedules />
         }
         </Box>
     );

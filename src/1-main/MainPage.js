@@ -4,7 +4,6 @@ import TopSection from './TopSection';
 import MiddleSection from './MiddleSection';
 import BottomSection from './BottomSection';
 import AddFormModal from '../form-components/AddFormModal';
-import DocumentTester from '../document-templates/DocumentTester';
 
 import useUpdateUser from '../hooks/useUpdateUser';
 
@@ -38,13 +37,16 @@ export default function MainPage() {
   return (
     <div style={{height: 'auto'}}>
     <MainNavbar />
-    {/* {navbarTab === 'schedule' || navbarTab === 'billing' &&
-    <SecondaryTabs />
-    } */}
+
+    {/* {navbarTab === 'schedule' || navbarTab === 'billing' && <SecondaryTabs />} */}
+
     <TopSection />
-    {/* <DocumentTester /> */}
+
     <MiddleSection />
-    <BottomSection />
+
+    {/* Hide apptVerif/Billing if on RR tab */}
+    {navbarTab !== 3 && <BottomSection />}
+
     <AddFormModal />
     
     </div>

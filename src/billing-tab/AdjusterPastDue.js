@@ -286,7 +286,7 @@ export default function AdjusterPastDue(props) {
             <ReferralTable
             headCells={filter.service === "FCE" ? headCellsFCE : headCellsDPT}
             rows={filter.service === "FCE" ? rowsFCE : rowsDPT}
-            type={filter.service === "DPT" ? 'bil' : null}
+            type={filter.service === "DPT" ? 'bil' : 'fce'}
             title='Adj Past Due'
             initialSort={initialSort}
             inlineEdit={true}

@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import useGetRecordsRequest from '../hooks/useGetRecordsRequest';
 import ReferralTable from '../table-components/ReferralTable';
 import Skeleton from '@mui/material/Skeleton';
+import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 
 const headCells = [
   {
@@ -96,6 +98,8 @@ export default function RecordsRequestTable(props) {
 
     const {filter, handleFilter, preference, handlePreference, ascending} = props;
 
+    const { therapistSearchVal } = useContext(RecordsRequestContext);
+
     const { status: statusRows, data: rows, error: errorRows, isFetching: isFetchingRows } = useGetRecordsRequest();
 
     const rowsSorted = rows?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]) || -b[secondSort]?.localeCompare(a[secondSort]));
@@ -119,20 +123,34 @@ export default function RecordsRequestTable(props) {
     });
 
     const rowsFiltered2 = rowsFiltered?.filter(row => {
+      
       if (preference === 'fax') {
-        return (row.rrFaxPreference !== null) || (row.rrFaxPreference === null && row.rrEmailPreference === null && row.rrPhonePreference === null);
+        return (row.rrPreference === 'Fax' || row.rrPreference === null);
       }
       if (preference === 'phone') {
-        return row.rrPhonePreference !== null;
+        return row.rrPreference === 'Phone';
       }
       if (preference === 'email') {
-        return row.rrEmailPreference !== null;
+        return row.rrPreference === 'Email';
       }
       else {
         return row;
       }
     });
 
+    const rowsFiltered3 = rowsFiltered2?.filter(row => {
+      
+      if (therapistSearchVal !== '') {
+        return (row.therapistBeaver.toLowerCase().includes(therapistSearchVal.toLowerCase()));
+      }
+      else {
+        return row;
+      }
+    });
+
+    // console.log(rows);
+    // console.log(rowsSorted);
+    // console.log(rowsFiltered);
     // console.log(rowsFiltered2);
 
     return (
@@ -141,7 +159,7 @@ export default function RecordsRequestTable(props) {
         {rows ?
         <ReferralTable
         headCells={headCells}
-        rows={rowsFiltered2}
+        rows={rowsFiltered3}
         initialSort={initialSort}
         initialSortOrder={ascending ? 'asc' : 'desc'}
         title='RecordsRequest'

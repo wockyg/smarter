@@ -48,6 +48,8 @@ import { Link } from 'react-router-dom';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import { SearchContext } from '../contexts/SearchContext';
+import { DetailsContext } from '../contexts/DetailsContext';
+import { RecordsRequestContext } from '../contexts/RecordsRequestContext';
 
 import { useNavigate } from "react-router-dom";
 
@@ -57,12 +59,18 @@ import useUpdateVisit from '../hooks/useUpdateVisit';
 import useUpdateFceppdBilling from '../hooks/useUpdateFceppdBilling';
 import useUpdateReferral from '../hooks/useUpdateReferral';
 import useUpdateUserHistory from '../hooks/useUpdateUserHistory';
+import useUpdateV1500Upload from '../hooks/useUpdateV1500Upload';
 import useGetUser from '../hooks/useGetUser';
 import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
+import useGetCptForAllStates from '../hooks/useGetCptForAllStates';
+import useGetReferralsOrphan from '../hooks/useGetReferralsOrphan';
 
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
 import { BlobProvider, Document, Page, Text, pdf, usePDF } from '@react-pdf/renderer';
+
+import { Formik, Form, Field, useField } from 'formik';
+import * as Yup from 'yup';
 
 import { UserContext } from '../contexts/UserContext';
 
@@ -132,7 +140,7 @@ function ReferralTableHead(props) {
 
  // extract into reusable file
 function EnhancedTableToolbar(props) {
-    const { numSelected, handleStartBulkEdit, handleClearSelected, type, preference, handlePreference, filter, handleFilter } = props;
+    const { numSelected, handleStartBulkEdit, handleClearSelected, type, preference, handlePreference, filter, handleFilter, therapistSearchVal, setTherapistSearchVal } = props;
 
     return (
         <Toolbar
@@ -152,72 +160,103 @@ function EnhancedTableToolbar(props) {
             </IconButton>
             </Tooltip>
         ) : ('')} */}
-        
-            <Tooltip title="Bulk Edit">
-            <IconButton onClick={handleStartBulkEdit} disabled={numSelected === 0}>
-                <DehazeIcon /><EditIcon />
-            </IconButton>
-            </Tooltip>
 
-            {type === 'rr' &&
-            <>
-            <ToggleButtonGroup
-            size="small"
-            value={preference}
-            exclusive
-            onChange={handlePreference}
-            aria-label="text alignment"
-            >
-                <ToggleButton value="fax" aria-label="fax">
-                    Fax/None
-                </ToggleButton>
-                <ToggleButton value="phone" aria-label="phone">
-                    Phone
-                </ToggleButton>
-                <ToggleButton value="email" aria-label="email">
-                    Email
-                </ToggleButton>
-                <ToggleButton value="all" aria-label="all">
-                    All
-                </ToggleButton>
-            </ToggleButtonGroup>
+            <Grid container spacing={2}>
+                <Grid item>
+                    {/* <Tooltip title="Bulk Edit"> */}
+                    <IconButton onClick={handleStartBulkEdit} disabled={numSelected === 0}>
+                        <DehazeIcon /><EditIcon />
+                    </IconButton>
+                    {/* </Tooltip> */}
+                </Grid>
+                {type === 'rr' &&
+                <Grid item>
+                <ToggleButtonGroup
+                size="small"
+                value={preference}
+                exclusive
+                onChange={handlePreference}
+                aria-label="text alignment"
+                >
+                    <ToggleButton value="fax" aria-label="fax">
+                        Fax/None
+                    </ToggleButton>
+                    <ToggleButton value="phone" aria-label="phone">
+                        Phone
+                    </ToggleButton>
+                    <ToggleButton value="email" aria-label="email">
+                        Email
+                    </ToggleButton>
+                    <ToggleButton value="all" aria-label="all">
+                        All
+                    </ToggleButton>
+                </ToggleButtonGroup>
+                </Grid>
+                }
+                {type === 'rr' &&
+                <Grid item>
+                <ToggleButtonGroup
+                size="small"
+                value={filter}
+                exclusive
+                onChange={handleFilter}
+                aria-label="text alignment"
+                >
+                    <ToggleButton value="tbw" aria-label="tbw">
+                        TBW
+                    </ToggleButton>
+                    <ToggleButton value="worked" aria-label="worked">
+                        Worked
+                    </ToggleButton>
+                    <ToggleButton value="fuh" aria-label="fuh">
+                        FU/H
+                    </ToggleButton>
+                    <ToggleButton value="cu" aria-label="cu">
+                        Caught Up
+                    </ToggleButton>
+                    <ToggleButton value="" aria-label="all">
+                        All
+                    </ToggleButton>
+                </ToggleButtonGroup>
+                </Grid>
+                }
+                {type === 'rr' &&
+                <Grid item>
+                <TextField 
+                type='text' 
+                // style={{marginRight: 10, padding: 5}}
+                onChange={(e) => setTherapistSearchVal(e.target.value)}
+                value={therapistSearchVal}
+                label="Therapist"
+                InputProps={{
+                    endAdornment: (
+                    <IconButton 
+                    onClick={() => setTherapistSearchVal('')}
+                    sx={{visibility: therapistSearchVal !== '' ? 'visible' : 'hidden'}}
+                    >
+                        <HighlightOffIcon />
+                    </IconButton>
+                    )
+                }}
+                />
+                </Grid>
+                }
 
-            <ToggleButtonGroup
-            size="small"
-            value={filter}
-            exclusive
-            onChange={handleFilter}
-            aria-label="text alignment"
-            >
-                <ToggleButton value="tbw" aria-label="tbw">
-                    TBW
-                </ToggleButton>
-                <ToggleButton value="worked" aria-label="worked">
-                    Worked
-                </ToggleButton>
-                <ToggleButton value="fuh" aria-label="fuh">
-                    FU/H
-                </ToggleButton>
-                <ToggleButton value="cu" aria-label="cu">
-                    Caught Up
-                </ToggleButton>
-                <ToggleButton value="" aria-label="all">
-                    All
-                </ToggleButton>
-            </ToggleButtonGroup>
-            </>
-            }
-
-        {numSelected > 0 ? (
-            <Typography
-            sx={{ flex: '1 1 100%' }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-            >
-            {numSelected} selected
-            </Typography>
-        ) : ('')}
+                {numSelected > 0 ? (
+                    <Grid item>
+                    <Typography
+                    // sx={{ flex: '1 1 100%' }}
+                    color="inherit"
+                    variant="subtitle1"
+                    component="div"
+                    >
+                    {numSelected} selected
+                    </Typography>
+                    </Grid>
+                ) : ('')}
+            
+            </Grid>
+            
 
         {numSelected > 0 ? (
             <Tooltip title="Clear Selection">
@@ -266,10 +305,15 @@ export default function ReferralTable(props) {
 
     const { rows, headCells, initialSort, initialSortOrder, removable, title, inlineEdit, bulkEdit, type, cptRowsNotApproved, preference, handlePreference, filter, handleFilter, cc } = props;
 
-    // console.log(props);
+    // console.log(cptRowsNotApproved);
+
+    const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
+    const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
     const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedD1500, setSelectedD1500 } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
+    const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
+    const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
 
     const mutationDelete = useDeleteReferral();
     const visitUpdate = useUpdateVisit();
@@ -277,6 +321,7 @@ export default function ReferralTable(props) {
     const referralUpdate = useUpdateReferral();
     const userHistoryUpdate = useUpdateUserHistory();
     const rrLastWorkedUpdate = useUpdateRRLastWorked();
+    const v1500Update = useUpdateV1500Upload();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -359,9 +404,11 @@ export default function ReferralTable(props) {
           setBillMode(false);
           setKeepBillMode(false);
         }
+        setCurrentlyEditingSelectedClaim(false);
     };
 
     const handleClickHcfa = (event, row) => {
+        // console.log("ROW: ", row);
         navigate(`/${row.referralId}`)
         setNotesPage(0);
         setClaimTab(0);
@@ -370,7 +417,13 @@ export default function ReferralTable(props) {
         setBillMode(true);
         const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
         // console.log("NEW ROWS: ", newRows);
-        setCptRows(newRows);
+        // calculate rates for each row
+        const newnewRows = newRows.map(r => {
+            const rateBase = r.cpt ? codes?.filter(c => c?.Code === +r?.cpt)[0][row?.jurisdiction] : -1;
+            const rateTotal = (rateBase * +r.units).toFixed(2);
+            return {...r, charges: rateTotal}
+        })
+        setCptRows(newnewRows);
         setSelectedD1500(row);
     };
 
@@ -407,26 +460,16 @@ export default function ReferralTable(props) {
         setCurrentEditRow({});
     };
 
-     const handleChangeEdit = (event, key) => {
+    const handleChangeEdit = (event, key) => {
         
         const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
         setCurrentEditRow(newRow);
+    };
 
-        // console.log(key);
-
-        // let newRow;
-        // if (key === "needPN") {
-        //     setNeedPNValue(!needPNvalue);
-        //     newRow = {...currentEditRow, needPN: needPNvalue === false ? null : "Need PN"};
-        //     // console.log(newRow);
-        // }
-        // else {
-        //     newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value};
-        // }
-
-        // console.log(key, newRow[key]);
-        // TODO: debud needPN
-        // console.log(event.target.value);
+    const handleChangeEditCheckbox = (event, key) => {
+        
+        const newRow = {...currentEditRow, [key]: !currentEditRow[key]};
+        setCurrentEditRow(newRow);
     };
 
     const stopEditing = (row) => {
@@ -440,15 +483,26 @@ export default function ReferralTable(props) {
                 values.billingId = row.billingId;
                 visitUpdate.mutate(values);
             }
-            else {
+            else if(type === 'fce') {
                 values.referralId = row.referralId;
                 fceUpdate.mutate(values);
+            }
+            else if(type === 'ref') {
+                values.referralId = row.referralId;
+                referralUpdate.mutate(values);
             }
         }
 
         setEditIDx(-1);
         setRevertData({});
         setCurrentEditRow({});
+    };
+
+    const handleUpdateV1500 = (event, row) => {
+        console.log("Attaching v1500 to referal...");
+        const values = {v1500Id: row.v1500Id, referralId: event.target.value};
+        console.log(values);
+        v1500Update.mutate(values);
     };
 
     const handleSelectAllClick = (event) => {
@@ -654,6 +708,8 @@ export default function ReferralTable(props) {
             handlePreference={handlePreference}
             filter={filter}
             handleFilter={handleFilter}
+            therapistSearchVal={therapistSearchVal}
+            setTherapistSearchVal={setTherapistSearchVal}
             />
             }
 
@@ -745,45 +801,141 @@ export default function ReferralTable(props) {
                                         <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
                                             
                                             {col.id === 'claimNumber' && type !== 'hcfa' ?
-                                            <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
-                                                {row.claimNumber ? row.claimNumber : 'WILL GET'}
-                                            </Link>
+                                                <Link to={`/${row.referralId}`} className='claimNumber-button' onClick={(event) => handleClaimClicked(event, row)}>
+                                                    {row.claimNumber ? row.claimNumber : 'WILL GET'}
+                                                </Link>
                                             :
-                                            <>
-                                            {row[col.id] === true ?
-                                            <CheckIcon />
-                                            :
-                                            <>
-                                            {(col.enableEdit && currentlyEditing) ?
-                                            <>
-                                            {col.inputType === 'select' ?
-                                            <select
-                                            name={col.id}
-                                            value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
-                                            onChange={(event) => handleChangeEdit(event, col.id)}
-                                            style={{width: col.inputWidth || 'auto'}}
-                                            >
-                                                    <option value=''>-</option>
-                                                    {col.options.map((n) => (
-                                                        <option key={n} value={n}>{n}</option>
-                                                    ))}
-                                            </select>
-                                            :
-                                            <input 
-                                            type={col.inputType}
-                                            name={col.id}
-                                            value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
-                                            onChange={(event) => handleChangeEdit(event, col.id)}
-                                            style={{width: col.inputWidth || 'auto'}}
-                                            />
-                                            }
-                                            </>
-                                            :
-                                            row[col.id]
-                                            }
-                                            </>
-                                            }
-                                            </>
+                                                row[col.id] === true ?
+                                                    <CheckIcon />
+                                                :  
+                                                    (col.enableEdit && currentlyEditing) ?
+                                                        <>
+                                                        {col.inputType === 'select' &&
+                                                        <select
+                                                        name={col.id}
+                                                        value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                                        onChange={(event) => handleChangeEdit(event, col.id)}
+                                                        style={{width: col.inputWidth || 'auto'}}
+                                                        >
+                                                                <option value=''>-</option>
+                                                                {col.options.map((n) => (
+                                                                    <option key={n} value={n}>{n}</option>
+                                                                ))}
+                                                        </select>
+                                                        }
+                                                        {(col.inputType === 'text' || col.inputType === 'date') &&
+                                                        <input 
+                                                        type={col.inputType}
+                                                        name={col.id}
+                                                        value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                                        onChange={(event) => handleChangeEdit(event, col.id)}
+                                                        style={{width: col.inputWidth || 'auto'}}
+                                                        />
+                                                        }
+                                                        {(col.inputType === 'textarea') &&
+                                                        <textarea 
+                                                        name={col.id}
+                                                        value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                                        onChange={(event) => handleChangeEdit(event, col.id)}
+                                                        // style={{width: col.inputWidth || 'auto'}}
+                                                        rows="5"
+                                                        cols="65"
+                                                        />
+                                                        }
+                                                        {(col.inputType === 'checkbox') &&
+                                                            <input 
+                                                            type="checkbox"
+                                                            name={col.id}
+                                                            value={currentEditRow[col.id] ? true : false}
+                                                            checked={currentEditRow[col.id] ? true : false}
+                                                            onChange={(event) => handleChangeEditCheckbox(event, col.id)}
+                                                            />
+                                                        }
+                                                        </>
+                                                    :
+                                                        ((type === 'hcfa' && col.id === 'bodyPart' && !row.referralId) ?
+                                                            // <Grid container spacing={1}>
+                                                            //     <Grid item>
+                                                            //         <select
+                                                            //         name={col.id}
+                                                            //         value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
+                                                            //         onChange={(event) => handleChangeEdit(event, col.id)}
+                                                            //         style={{width: col.inputWidth || 'auto'}}
+                                                            //         >
+                                                            //                 <option value=''>Select</option>
+                                                            //                 {orphan.filter(o => o.claimNumber === row.claimNumber).map((o, i) => (
+                                                            //                     <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                            //                 ))}
+                                                            //         </select>
+                                                            //     </Grid>
+                                                            //     <Grid item>
+                                                            //         <button>+</button>
+                                                            //         <IconButton>
+                                                            //             <CheckIcon fontSize='small' />
+                                                            //         </IconButton>
+                                                            //     </Grid>
+                                                            // </Grid>
+
+                                                            <Grid container spacing={1}>
+                                                                <Grid item>
+                                                                    <Formik
+                                                                    enableReinitialize
+                                                                    initialValues={{
+                                                                        v1500Id: row.v1500Id,
+                                                                        referralId: '',
+                                                                    }}
+                                                                    validationSchema={Yup.object({
+                                                                        v1500Id: Yup.number().required(),
+                                                                        referralId: Yup.number().required(),
+                                                                    })}
+                                                                    onSubmit={(values, actions) => {
+
+                                                                        // console.log("values:", values)
+
+                                                                        console.log("updating V1500...", values);
+
+                                                                        // v1500Update.mutate(values);
+
+                                                                        actions.setSubmitting(false);
+
+                                                                    }}
+                                                                    >
+                                                                        {formikProps => (
+                                                                            <Form>
+                                                                                <Grid container spacing={0.5}>
+                                                                                    <Grid item>
+                                                                                        <Field 
+                                                                                        as="select" 
+                                                                                        id="referralId"
+                                                                                        name="referralId"
+                                                                                        // className="redBorder"
+                                                                                        >
+                                                                                            <option value=''>Select</option>
+                                                                                            {orphan.filter(o => o.claimNumber === row.claimNumber).map((o, i) => (
+                                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                                            ))}
+                                                                                        </Field>
+                                                                                    </Grid>
+                                                                                </Grid>
+                                                                            </Form>
+                                                                        )}
+                                                                    </Formik>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    <button><CheckIcon fontSize='small' /></button>
+                                                                    {/* <IconButton>
+                                                                        <CheckIcon fontSize='small' />
+                                                                    </IconButton> */}
+                                                                </Grid>
+                                                            </Grid>
+                                                        :
+                                                            ((type === 'hcfa' && col.id === 'bodyPart') ?
+                                                                `(${row.service}) ${row.bodyPart}`
+                                                            :
+                                                                row[col.id]
+                                                            )
+                                                            
+                                                    )
                                             }
                                         </StyledTableCell>
                                     )})}

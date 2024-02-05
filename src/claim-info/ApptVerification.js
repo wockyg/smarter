@@ -28,11 +28,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 
 import useUpdateVisit from '../hooks/useUpdateVisit';
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
 import useDeleteVisit from '../hooks/useDeleteVisit';
+
+import DatePicker from "react-multi-date-picker"
 
 import { useParams } from 'react-router-dom';
 
@@ -49,7 +52,10 @@ export default function ApptVerification(props) {
     
     const [selected, setSelected] = useState([]);
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
+    const [modalType, setModalType] = useState(null);
     const [enabled, setEnabled] = useState({});
+
+    const [dates, setDates] = useState([]);
 
     const [needPNvalue, setNeedPNValue] = useState(Boolean(currentEditRow?.needPN));
 
@@ -80,6 +86,7 @@ export default function ApptVerification(props) {
         overflowY: 'scroll',
         // transform: 'translate(-20%, -20%)',
         width: 500,
+        // height: 600,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -143,12 +150,22 @@ export default function ApptVerification(props) {
         console.log('BULK');
         // open modal
         setBulkModalOpen(true);
+        setModalType('bulk');
+        
+    };
+
+    const handleStartUCA = (event, key) => {
+        console.log('UCA');
+        // open modal
+        setBulkModalOpen(true);
+        setModalType('uca');
         
     };
 
      const handleModalClose = (event, reason) => {
         if (reason !== 'backdropClick') {
             setBulkModalOpen(false);
+            setModalType(null);
         }
     };
 
@@ -179,6 +196,38 @@ export default function ApptVerification(props) {
         
         // close modal
         handleModalClose();
+        setModalType(null);
+        
+    }
+
+    const handleUCASubmit = (event, key) => {
+        // submit data
+        console.log('SUBMIT THE UPCOMING APPTS');
+        // console.log(currentBulkEdit);
+
+        const keys = Object.keys(currentBulkEdit);
+        const changedKeys = keys.filter(index => currentBulkEdit[index] !== -1);
+        const values = changedKeys.reduce((obj, key, index) => ({ ...obj, [key]: currentBulkEdit[key] }), {});
+
+        if (Object.keys(values).length > 0) {
+            console.log(values);
+            selected.forEach((billingId, i) => {
+                // mutationUpdate.mutate({...values, billingId: billingId});
+            });
+        }
+        else {
+            console.log("nothing to update...")
+        }
+        // reset selected
+        setSelected([]);
+        // reset enabled
+        setEnabled({});
+        // reset BulkEdit Fields
+        setCurrentBulkEdit({});
+        
+        // close modal
+        handleModalClose();
+        setModalType(null);
         
     }
 
@@ -258,22 +307,23 @@ export default function ApptVerification(props) {
 
         return (
             <Toolbar
+            // disableGutters
+            variant='dense'
             sx={{
                 pl: { sm: 2 },
                 pr: { xs: 1, sm: 1 },
-                ...(numSelected > 0 && {
+                ...({
                 bgcolor: (theme) =>
                     alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
                 }),
             }}
             >
-            {numSelected > 0 ? (
-                <Tooltip title="Bulk Edit">
-                <IconButton onClick={handleStartBulkEdit}>
-                    <DehazeIcon /><EditIcon />
-                </IconButton>
-                </Tooltip>
-            ) : ('')}
+            <IconButton onClick={handleStartBulkEdit} disabled={numSelected === 0}>
+                <DehazeIcon /><EditIcon />
+            </IconButton>
+            <IconButton disabled onClick={handleStartUCA}>
+                <EventRepeatIcon />
+            </IconButton>
 
             {numSelected > 0 ? (
                 <Typography
@@ -576,186 +626,219 @@ export default function ApptVerification(props) {
         aria-labelledby="modal-bulkEdit-apptVerif"
         >
         <>
+        {modalType === 'bulk' &&
             <Box sx={style}>
-            <Grid container spacing={0.5}>
-                <Grid item xs={11}>
-                <h2>Edit {selected.length} row{selected.length > 1 ? 's' : ''}</h2>
-                </Grid>
-                <Grid item xs={1}>
-                <button onClick={handleModalClose}>x</button>
-                </Grid>
-            </Grid>
-            <Grid container spacing={1}>
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'dosTime')}
-                                color="primary"
-                                checked={enabled.dosTime ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'dosTimeBox',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="dosTime" style={{display: 'block'}}>{"Time:"}</label>
-                            <select
-                                disabled={!enabled.dosTime}
-                                onChange={(event) => handleChangeBulkEdit(event, 'dosTime')}
-                                value={currentBulkEdit.dosTime ? currentBulkEdit.dosTime : ''}
-                                name="dosTime"
-                            >
-                                <option value={""}>{"---"}</option>
-                                {times.map((n) => (
-                                    <option key={n.Time} value={n.Time}>{n.Time}</option>
-                                ))}
-                            </select>
-                        </Grid>
+                <Grid container spacing={0.5}>
+                    <Grid item xs={11}>
+                    <h2>Edit {selected.length} row{selected.length > 1 ? 's' : ''}</h2>
+                    </Grid>
+                    <Grid item xs={1}>
+                    <button onClick={handleModalClose}>x</button>
                     </Grid>
                 </Grid>
-                <Box width="100%" />
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'attend')}
-                                color="primary"
-                                checked={enabled.attend ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'attendBox',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="attend" style={{display: 'block'}}>{"Attend:"}</label>
-                            <select
-                                disabled={!enabled.attend}
-                                onChange={(event) => handleChangeBulkEdit(event, 'attend')}
-                                value={currentBulkEdit.attend ? currentBulkEdit.attend : ""}
-                                name="attend"
-                            >
-                                <option value={""}>{"---"}</option>
-                                {['Yes', 'No'].map((n) => (
-                                    <option key={n} value={n}>{n}</option>
-                                ))}
-                            </select>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Box width="100%" />
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'serviceType')}
-                                color="primary"
-                                checked={enabled.serviceType ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'serviceTypeBox',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="serviceType" style={{display: 'block'}}>{"Type:"}</label>
-                            <select
-                                disabled={!enabled.serviceType}
-                                onChange={(event) => handleChangeBulkEdit(event, 'serviceType')}
-                                value={currentBulkEdit.serviceType ? currentBulkEdit.serviceType : ""}
-                                name="serviceType"
-                            >
-                                <option value={""}>{"---"}</option>
-                                {['Daily', 'InitialEval', 'Combined', 'Re-Eval', 'WC (2hr.)', 'WC (3hr.)', 'WH (2hr.)', 'WH (3hr.)'].map((n) => (
-                                    <option key={n} value={n}>{n}</option>
-                                ))}
-                            </select>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'dosTime')}
+                                    color="primary"
+                                    checked={enabled.dosTime ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'dosTimeBox',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="dosTime" style={{display: 'block'}}>{"Time:"}</label>
+                                <select
+                                    disabled={!enabled.dosTime}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'dosTime')}
+                                    value={currentBulkEdit.dosTime ? currentBulkEdit.dosTime : ''}
+                                    name="dosTime"
+                                >
+                                    <option value={""}>{"---"}</option>
+                                    {times.map((n) => (
+                                        <option key={n.Time} value={n.Time}>{n.Time}</option>
+                                    ))}
+                                </select>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Box width="100%" />
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'notesReceived')}
-                                color="primary"
-                                checked={enabled.notesReceived ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'notesReceivedBox',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="notesReceived" style={{display: 'block'}}>{"Notes Rec'd:"}</label>
-                            <select
-                                disabled={!enabled.notesReceived}
-                                onChange={(event) => handleChangeBulkEdit(event, 'notesReceived')}
-                                value={currentBulkEdit.notesReceived ? currentBulkEdit.notesReceived : ""}
-                                name="notesReceived"
-                            >
-                                <option value={""}>{"---"}</option>
-                                {['Daily', 'InitialEval', 'Re-Eval', 'Progress', 'Discharge'].map((n) => (
-                                    <option key={n} value={n}>{n}</option>
-                                ))}
-                            </select>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                <Box width="100%" />
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'v1500')}
-                                color="primary"
-                                checked={enabled.v1500 ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'v1500Box',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="v1500" style={{display: 'block'}}>{"V1500:"}</label>
-                            <input 
-                                disabled={!enabled.v1500}
-                                type="date" 
-                                name="v1500"
-                                value={currentBulkEdit.v1500 ? currentBulkEdit.v1500 : ''}
-                                onChange={(event) => handleChangeBulkEdit(event, 'v1500')}
-                            />
+                    <Box width="100%" />
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'attend')}
+                                    color="primary"
+                                    checked={enabled.attend ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'attendBox',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="attend" style={{display: 'block'}}>{"Attend:"}</label>
+                                <select
+                                    disabled={!enabled.attend}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'attend')}
+                                    value={currentBulkEdit.attend ? currentBulkEdit.attend : ""}
+                                    name="attend"
+                                >
+                                    <option value={""}>{"---"}</option>
+                                    {['Yes', 'No'].map((n) => (
+                                        <option key={n} value={n}>{n}</option>
+                                    ))}
+                                </select>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Box width="100%" />
-                <Grid item>
-                    <Grid container>
-                        <Grid item>
-                            <Checkbox
-                                onClick={(event) => handleEnableBulkField(event, 'dosNotes')}
-                                color="primary"
-                                checked={enabled.dosNotes ? true : false}
-                                inputProps={{
-                                'aria-labelledby': 'dosNotesBox',
-                                }}
-                            />
-                        </Grid>
-                        <Grid item>
-                            <label htmlFor="dosNotes" style={{display: 'block'}}>{"DOS Notes:"}</label>
-                            <textarea
-                                disabled={!enabled.dosNotes}
-                                name="dosNotes"
-                                value={(currentBulkEdit.dosNotes && currentBulkEdit.dosNotes !== -1) ? currentBulkEdit.dosNotes : ''}
-                                onChange={(event) => handleChangeBulkEdit(event, 'dosNotes')}
-                            />
+                    <Box width="100%" />
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'serviceType')}
+                                    color="primary"
+                                    checked={enabled.serviceType ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'serviceTypeBox',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="serviceType" style={{display: 'block'}}>{"Type:"}</label>
+                                <select
+                                    disabled={!enabled.serviceType}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'serviceType')}
+                                    value={currentBulkEdit.serviceType ? currentBulkEdit.serviceType : ""}
+                                    name="serviceType"
+                                >
+                                    <option value={""}>{"---"}</option>
+                                    {['Daily', 'InitialEval', 'Combined', 'Re-Eval', 'WC (2hr.)', 'WC (3hr.)', 'WH (2hr.)', 'WH (3hr.)'].map((n) => (
+                                        <option key={n} value={n}>{n}</option>
+                                    ))}
+                                </select>
+                            </Grid>
                         </Grid>
                     </Grid>
+                    <Box width="100%" />
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'notesReceived')}
+                                    color="primary"
+                                    checked={enabled.notesReceived ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'notesReceivedBox',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="notesReceived" style={{display: 'block'}}>{"Notes Rec'd:"}</label>
+                                <select
+                                    disabled={!enabled.notesReceived}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'notesReceived')}
+                                    value={currentBulkEdit.notesReceived ? currentBulkEdit.notesReceived : ""}
+                                    name="notesReceived"
+                                >
+                                    <option value={""}>{"---"}</option>
+                                    {['Daily', 'InitialEval', 'Re-Eval', 'Progress', 'Discharge'].map((n) => (
+                                        <option key={n} value={n}>{n}</option>
+                                    ))}
+                                </select>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Box width="100%" />
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'v1500')}
+                                    color="primary"
+                                    checked={enabled.v1500 ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'v1500Box',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="v1500" style={{display: 'block'}}>{"V1500:"}</label>
+                                <input 
+                                    disabled={!enabled.v1500}
+                                    type="date" 
+                                    name="v1500"
+                                    value={currentBulkEdit.v1500 ? currentBulkEdit.v1500 : ''}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'v1500')}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Box width="100%" />
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Checkbox
+                                    onClick={(event) => handleEnableBulkField(event, 'dosNotes')}
+                                    color="primary"
+                                    checked={enabled.dosNotes ? true : false}
+                                    inputProps={{
+                                    'aria-labelledby': 'dosNotesBox',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item>
+                                <label htmlFor="dosNotes" style={{display: 'block'}}>{"DOS Notes:"}</label>
+                                <textarea
+                                    disabled={!enabled.dosNotes}
+                                    name="dosNotes"
+                                    value={(currentBulkEdit.dosNotes && currentBulkEdit.dosNotes !== -1) ? currentBulkEdit.dosNotes : ''}
+                                    onChange={(event) => handleChangeBulkEdit(event, 'dosNotes')}
+                                />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Box width="100%" />                
+                    <Grid item>
+                        <button onClick={handleBulkSubmit}>Update</button>
+                    </Grid>
                 </Grid>
-                <Box width="100%" />                
-                <Grid item>
-                    <button onClick={handleBulkSubmit}>Update</button>
-                </Grid>
-            </Grid>
             </Box>
+        }
+        {modalType === 'uca' &&
+            <Box sx={style}>
+                <Grid container spacing={0.5}>
+                    <Grid item xs={11}>
+                    <h2>Add Upcoming appts</h2>
+                    </Grid>
+                    <Grid item xs={1}>
+                    <button onClick={handleModalClose}>x</button>
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                    <Grid item>
+                        <DatePicker
+                        multiple
+                        value={dates} 
+                        onChange={setDates}
+                        // minDate={new Date().setDate(5)}
+                        />
+                    </Grid>
+
+                    <Grid item>
+                        {dates.map(d => `${d}`)}
+                    </Grid>
+
+                    <Box width="100%" />             
+                    <Grid item>
+                        <button onClick={handleUCASubmit}>Update</button>
+                    </Grid>
+                </Grid>
+            </Box>
+        }
         </>
         </Modal>
         </>

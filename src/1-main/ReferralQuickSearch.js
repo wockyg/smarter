@@ -7,6 +7,7 @@ import useGetReferralsDropdownCalendar from '../hooks/useGetReferralsDropdownCal
 
 import { SearchContext } from '../contexts/SearchContext';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
+import { DetailsContext } from '../contexts/DetailsContext';
 
 import { useNavigate } from "react-router-dom";
 
@@ -30,6 +31,8 @@ export default function ReferralQuickSearch(props) {
 
     const { quickSearchVal, setQuickSearchVal, quickSearchInputVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, setCptRows } = useContext(SelectedClaimContext);
+    const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
+    
 
     const navigate = useNavigate();
 
@@ -54,6 +57,8 @@ export default function ReferralQuickSearch(props) {
             setBillMode(false);
             setKeepBillMode(false);
           }
+          setCurrentlyEditingSelectedClaim(false);
+          
         }}
         inputValue={quickSearchInputVal}
         onInputChange={(event, newInputValue) => {

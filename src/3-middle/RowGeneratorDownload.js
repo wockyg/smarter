@@ -110,6 +110,16 @@ export default function RowGenerator() {
 
     total_charges = (Math.round(total_charges * 100) / 100).toFixed(2);
 
+    const MyDoc = (
+    <HCFATemplate
+    selectedClaim={selectedClaim}
+    codeList={codeList}
+    cptRows={cptRows}
+    />
+    );
+
+    pdf(MyDoc).toBlob().then(blob => console.log(blob));
+
     const tableHeadProps = {
     //  border: '1px solid black',
      padding: 0.5,   
@@ -151,14 +161,10 @@ export default function RowGenerator() {
         console.log(cptRows);
     }
 
-    const stopEditing = (index) => {
+    const stopEditing = (row) => {
         console.log("done editing");
-        // console.log("Current row:", currentEditRow);
-        const filteredRows = cptRows.filter(r => r.rowId !== currentEditRow.rowId);
-        // console.log("All other rows:", filteredRows);
-        const newRows = [...filteredRows.slice(0, index), currentEditRow, ...filteredRows.slice(index)]
-        console.log("newRows:", newRows);
-        setCptRows(newRows);
+        const filteredRows = cptRows.filter(r => r.rank !== currentEditRow.rank);
+        setCptRows([...filteredRows, currentEditRow]);
         setEditIDx(-1);
         setRevertData({});
         setCurrentEditRow({});
@@ -236,65 +242,6 @@ export default function RowGenerator() {
               setSelectedD1500(null);
               setD1500SendFormat('');
             }, "500");
-        }
-        else{
-            console.log("womp womp..");
-        }
-    };
-
-    const handleSubmitD1500 = (event) => {
-        // console.log("ggglllllizzzyyy");
-        if (cptRows.length > 0) {
-            const MyDoc = (
-            <HCFATemplate
-            selectedClaim={selectedClaim}
-            codeList={codeList}
-            cptRows={cptRows}
-            />
-            );
-            pdf(MyDoc).toBlob()
-                      .then(blob => {
-
-                        const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
-                        const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
-
-                        const formData = new FormData();
-                        formData.append("referralId", +selectedClaim.referralId);
-                        formData.append("sendFormat", d1500SendFormat);
-                        formData.append("cptRows", JSON.stringify(cptRows));
-                        formData.append("dateApproved", new Date().toISOString());
-                        formData.append("physician_name", selectedD1500?.physician_name);
-                        formData.append("physician_npi", selectedD1500?.physician_npi);
-                        formData.append("patient_account_no", selectedD1500?.patient_account_no);
-                        formData.append("diagnosis_a", selectedD1500?.diagnosis_a);
-                        formData.append("diagnosis_b", selectedD1500?.diagnosis_b);
-                        formData.append("diagnosis_c", selectedD1500?.diagnosis_c);
-                        formData.append("diagnosis_d", selectedD1500?.diagnosis_d);
-                        formData.append("diagnosis_e", selectedD1500?.diagnosis_e);
-                        formData.append("diagnosis_f", selectedD1500?.diagnosis_f);
-                        formData.append("diagnosis_g", selectedD1500?.diagnosis_g);
-                        formData.append("diagnosis_h", selectedD1500?.diagnosis_h);
-                        formData.append("diagnosis_i", selectedD1500?.diagnosis_i);
-                        formData.append("diagnosis_j", selectedD1500?.diagnosis_j);
-                        formData.append("diagnosis_k", selectedD1500?.diagnosis_k);
-                        formData.append("diagnosis_l", selectedD1500?.diagnosis_l);
-                        formData.append("v1500Id", selectedD1500?.v1500Id);
-                        formData.append("d1500Blob", blob);
-                        formData.append("dateApproved", new Date().toISOString());
-                        formData.append("v1500_filename", v1500_filename);
-                        formData.append("d1500_filename", d1500_filename);
-
-                        // for (const pair of formData.entries()) {
-                        //    console.log(pair[0], pair[1]);
-                        // }
-                            
-                        hcfaAdd.mutate(formData);
-                        setTimeout(() => {
-                        setCptRows([]);
-                        setSelectedD1500(null);
-                        setD1500SendFormat('');
-                        }, "500");
-                      });
         }
         else{
             console.log("womp womp..");
@@ -761,7 +708,7 @@ export default function RowGenerator() {
                                             <Grid item xs={6}>
                                                 <CheckIcon
                                                 fontSize='small'
-                                                onClick={() => stopEditing(index)}
+                                                onClick={() => stopEditing()}
                                                 />
                                             </Grid>
                                             <Grid item xs={6}>
@@ -955,11 +902,21 @@ export default function RowGenerator() {
                                 <TableCell>
                                     
                                         {d1500SendFormat !== '' &&
-                                        <IconButton
-                                        onClick={handleSubmitD1500}
+                                        <PDFDownloadLink
+                                        document={
+                                            <HCFATemplate
+                                            selectedClaim={selectedClaim}
+                                            codeList={codeList}
+                                            cptRows={cptRows}
+                                            />
+                                        }
+                                        onClick={(e) => handleDownload(e)}
+                                        fileName={`${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`}
                                         >
-                                            <SaveIcon />
-                                        </IconButton>
+                                        {({ blob, url, loading, error }) =>
+                                            loading ? <HourglassTopIcon fontSize='small' /> : <SaveIcon fontSize='small' />
+                                        }
+                                        </PDFDownloadLink>
                                         }
                                     
                                 </TableCell>

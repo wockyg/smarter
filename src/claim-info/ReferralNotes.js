@@ -16,12 +16,11 @@ import { careCoordinators } from '../lookup-tables/lookup_careCoordinators';
 
 export default function ReferralNotes(props) {
 
-    const { selectedClaim, page, setPage } = props;
+    const { selectedClaim, page, setPage, rr } = props;
 
     const [newNote, setNewNote] = useState();
     
-    const inits = careCoordinators.map((row) => row.Initials);
-    inits.push('KS', 'SM');
+    const inits = rr ? ['SM'] : [...careCoordinators.map((row) => row.Initials), 'KS', 'SM'];
 
     const mutationAdd = useAddReferralNote();
     const mutationDelete = useDeleteReferralNote();
@@ -81,7 +80,7 @@ export default function ReferralNotes(props) {
                       value={newNote?.initials ? newNote.initials : ""} 
                       onChange={(event) => handleChangeNote(event, 'initials')}
                       >
-                        <option value="">--</option>
+                        {!rr && <option value="">--</option>}
                         {inits.map((o) => <option key={o} value={o}>{o}</option>)}
                       </select>
                     </TableCell>

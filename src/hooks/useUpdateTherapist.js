@@ -25,57 +25,24 @@ export default function useUpdateTherapist() {
     const filtered = asArray.filter(([key, value]) => (key !== 'therapistId'));
     let newValues = Object.fromEntries(filtered);
 
-    if (values.address) {
-      const newAddress = `${values.address}, ${values.city}, ${values.state} ${values.zip}`
-      fromAddress(newAddress)
-      .then(({ results }) => {
-            const { lat, lng } = results[0].geometry.location;
-            console.log("new coordinates:", lat, lng);
-            newValues.lat = lat;
-            newValues.lon = lng;
-            api
-              .put(`/therapists/${values.therapistId}`, newValues)
-              .then(response => {
-                const data = response.data;
-                console.log(data);
-                console.log({...newValues, therapistId: values.therapistId});
-                if (selectedClaim.therapistId === values.therapistId) {
-                  queryClient.invalidateQueries(`referral${+linkId}`);
-                }
-                queryClient.invalidateQueries(`therapist${+values.therapistId}`);
-                queryClient.invalidateQueries('therapists');
-                queryClient.invalidateQueries('therapistsearchall');
-                // queryClient.invalidateQueries('therapistsaddresses');
-                queryClient.invalidateQueries('referralsearchall');
-                queryClient.invalidateQueries('referrals');
-                return data;
-              });
-            
-
-        })
-        .catch(console.error);
-    }
-    else {
-
-      api
-        .put(`/therapists/${values.therapistId}`, newValues)
-        .then(response => {
-          const data = response.data;
-          console.log(data);
-          console.log({...newValues, therapistId: values.therapistId});
-          if (selectedClaim.therapistId === values.therapistId) {
-            queryClient.invalidateQueries(`referral${+linkId}`);
-          }
-          queryClient.invalidateQueries(`therapist${+values.therapistId}`);
-          queryClient.invalidateQueries('therapists');
-          queryClient.invalidateQueries('therapistsearchall');
-          // queryClient.invalidateQueries('therapistsaddresses');
-          queryClient.invalidateQueries('referralsearchall');
-          queryClient.invalidateQueries('referrals');
-          return data;
-        });
-
-    }
+    api
+    .put(`/therapists/${values.therapistId}`, newValues)
+    .then(response => {
+      const data = response.data;
+      console.log(data);
+      console.log({therapistId: values.therapistId, ...newValues});
+      if (selectedClaim.therapistId === values.therapistId) {
+        queryClient.invalidateQueries(`referral${+linkId}`);
+      }
+      queryClient.invalidateQueries(`therapist${+values.therapistId}`);
+      queryClient.invalidateQueries('therapists');
+      queryClient.invalidateQueries('therapistsearchall');
+      // queryClient.invalidateQueries('therapistsaddresses');
+      queryClient.invalidateQueries('referralsearchall');
+      queryClient.invalidateQueries('referrals');
+      return data;
+    })
+    .catch(console.error);
 
     
   }

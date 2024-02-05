@@ -46,6 +46,7 @@ import useGetUser from '../hooks/useGetUser';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import { SearchContext } from '../contexts/SearchContext';
+import { DetailsContext } from '../contexts/DetailsContext';
 
 import { getComparator, handleChangePage, handleChangeRowsPerPage } from './TableComponents';
 
@@ -193,6 +194,7 @@ export default function MissingV1500Table(props) {
 
     const { setPage: setNotesPage, setTab: setClaimTab, billMode, keepBillMode, setBillMode, setKeepBillMode, setCptRows, setSelectedD1500 } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
+    const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
 
     const { rows, headCells, title } = props;
 
@@ -287,6 +289,7 @@ export default function MissingV1500Table(props) {
           setBillMode(false);
           setKeepBillMode(false);
         }
+        setCurrentlyEditingSelectedClaim(false);
     };
     const handleToggleMonthlys = (event) => {
         setMonthlys(event.target.value);
@@ -566,7 +569,7 @@ export default function MissingV1500Table(props) {
 
           console.log(emailRows);
 
-          const emailBody = true && 
+          const emailBody = selectedRows && 
                           `<html>
                               <head>
                                   <style>

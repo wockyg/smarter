@@ -9,31 +9,43 @@ const headCells = [
     id: 'v1500Id',
     numeric: false,
     disablePadding: false,
-    label: 'HCFA ID',
+    label: 'V1500 ID',
   },
+  // {
+  //   id: 'service',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Service',
+  // },
+  // {
+  //   id: 'claimant',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'Claimant',
+  // },
+  // {
+  //   id: 'original_dos',
+  //   numeric: false,
+  //   disablePadding: false,
+  //   label: 'DOS',
+  // },
   {
-    id: 'service',
+    id: 'v1500_filename',
     numeric: false,
     disablePadding: false,
-    label: 'Service',
+    label: 'V1500 Filename',
   },
   {
-    id: 'claimant',
+    id: 'bodyPart',
     numeric: false,
     disablePadding: false,
-    label: 'Claimant',
+    label: 'Body Part',
   },
   {
     id: 'claimNumber',
     numeric: false,
     disablePadding: false,
     label: 'Claim #',
-  },
-  {
-    id: 'original_dos',
-    numeric: false,
-    disablePadding: false,
-    label: 'DOS',
   },
   {
     id: 'adjuster',
@@ -83,6 +95,8 @@ export default function D1500NotApproved(props) {
 
     const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetV1500NotApproved();
     const { status: statusCptRows, data: cptRows, error: errorCptRows, isFetching: isFetchingCptRows } = useGetV1500RowsNotApproved();
+
+    // console.log(cptRows);
 
     const rowsSorted = bills?.sort((a, b) => -b[initialSort]?.localeCompare(a[initialSort]));
 

@@ -27,19 +27,15 @@ import TherapistDetails from '../details/TherapistDetails';
 
 import { useParams } from 'react-router-dom';
 
-// import {setDefaults, fromAddress, geocode, RequestType} from "react-geocode";
-
 import useGetReferral from '../hooks/useGetReferral';
 import useGetTherapistsSearchAll from '../hooks/useGetTherapistsSearchAll';
 import useUpdateReferral from '../hooks/useUpdateReferral';
-import useGetLatLon from '../hooks/useGetLatLon';
 
 import { DetailsContext } from '../contexts/DetailsContext';
 
 import { bbox, point, circle } from '@turf/turf';
 
 import '../App.css';
-
 
 import Map, {NavigationControl, Marker, Popup, Source, Layer} from 'react-map-gl';
 
@@ -109,20 +105,13 @@ export default function MapTab(props) {
     const TOKEN = "pk.eyJ1Ijoid29ja3lnIiwiYSI6ImNsbjk0amFjNTAzdXUybG56aGY4MW51OWgifQ.FHahp8Od7BRwsArJfP0YHw";
     const MAPSTYLE = "mapbox://styles/mapbox/streets-v12";
 
-    // const circleFeature = circle([-81.1006649, 32.0127042], 5, {units: 'miles'});
-    // const circleSource = createGeoJSONCircle([LON, LAT], 10);
-
     const mapRef = useRef();
-
-    // console.log(circleSource);
 
     let { id: linkId } = useParams();
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
     const { status: statusTherapists, data: therapists, error: errorTherapists, isFetching: isFetchingTherapists } = useGetTherapistsSearchAll();
-
-    // const { status: statusLatLon, data: latLon, error: errorLatLon, isFetching: isFetchingLatLon } = useGetLatLon();
 
     const { currentlyEditingSearch: currentlyEditing, setCurrentlyEditingSearch: setCurrentlyEditing } = useContext(DetailsContext);
 
@@ -274,27 +263,6 @@ export default function MapTab(props) {
             console.log(circleRadius);
 
             });
-        
-        
-        
-        
-        
-        // fromAddress(searchVal)
-        // .then(({ results }) => {
-        //     const { lat, lng } = results[0].geometry.location;
-        //     console.log("Center:", lat, lng);
-        //     setSearchLat(lat);
-        //     setSearchLon(lng);
-        //     // const feature = point([lat, lng]);
-        //     // const [minLng, minLat, maxLng, maxLat] = bbox(feature);
-        //     // console.log("Box:", minLng, minLat, maxLng, maxLat);
-        //     mapRef.current.flyTo({center: [lng, lat], zoom: circleZoom});
-        //     setCircleSource(createGeoJSONCircle([lng, lat], circleRadius));
-        //     console.log(circleRadius);
-
-
-        // })
-        // .catch(console.error);
     };
 
     const handleClearSearch = (event) => {

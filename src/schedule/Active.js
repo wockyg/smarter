@@ -57,18 +57,6 @@ const headCells = [
     label: 'Client',
   },
   {
-    id: 'fuHoldNotes',
-    numeric: false,
-    disablePadding: false,
-    label: 'FU/H Notes',
-  },
-  {
-    id: 'fuHoldTimestamp',
-    numeric: false,
-    disablePadding: false,
-    label: 'Timestamp',
-  },
-  {
     id: 'dmLastWorked',
     numeric: false,
     disablePadding: false,

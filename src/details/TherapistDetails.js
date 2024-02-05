@@ -3,10 +3,15 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
 import EditToolbar from '../details/EditToolbar';
@@ -64,8 +69,6 @@ export default function TherapistDetails(props) {
     const {detailsId: selectedTherapistId, currentlyEditing, setCurrentlyEditing, searchBox} = props;
 
     const { status: statusTRP, data: selectedTherapist, error: errorTRP, isFetching: isFetchingTRP } = useGetTherapist(+selectedTherapistId);
-
-    // const selectedTherapist = rows?.length > 0 && rows?.filter((row) => {return (row.therapistId === selectedTherapistId);})[0];
 
     const mutationUpdate = useUpdateTherapist();
 
@@ -127,6 +130,10 @@ export default function TherapistDetails(props) {
         doNotUseFCE: selectedTherapist.doNotUseFCE ? [`${selectedTherapist.doNotUseFCE}`] : [],
         doNotUsePPD: selectedTherapist.doNotUsePPD ? [`${selectedTherapist.doNotUsePPD}`] : [],
         doNotUseDPTReason: selectedTherapist.doNotUseDPTReason ? selectedTherapist.doNotUseDPTReason : '',
+        rrPreference: selectedTherapist.rrPreference ? selectedTherapist.rrPreference : '',
+        rrFax: selectedTherapist.rrFax ? selectedTherapist.rrFax : '',
+        rrEmail: selectedTherapist.rrEmail ? selectedTherapist.rrEmail : '',
+        rrPhone: selectedTherapist.rrPhone ? selectedTherapist.rrPhone : '',
     }}
     validationSchema={Yup.object({
         name: Yup.string(),
@@ -161,7 +168,6 @@ export default function TherapistDetails(props) {
             doNotUseDPT: values.doNotUseDPT.length > 0 ? values.doNotUseDPT[0] : '',
             doNotUseFCE: values.doNotUseFCE.length > 0 ? values.doNotUseFCE[0] : '',
             doNotUsePPD: values.doNotUsePPD.length > 0 ? values.doNotUsePPD[0] : '',
-            // doNotUseDPTReason: values.doNotUseDPTReason > 0 ? values.doNotUseDPTReason : '',
         }
         
         const keys = Object.keys(testVals);
@@ -177,8 +183,11 @@ export default function TherapistDetails(props) {
             if (changedValues.address || changedValues.city || changedValues.state || changedValues.zip) {
                 changedValues.address = changedValues.address || selectedTherapist.address;
                 changedValues.city = changedValues.city || selectedTherapist.city;
-                changedValues.state = changedValues.address || selectedTherapist.state;
+                changedValues.state = changedValues.state || selectedTherapist.state;
                 changedValues.zip = changedValues.zip || selectedTherapist.zip;
+            }
+            if (changedValues.rrPreference === '') {
+                changedValues.rrPreference = null;
             }
             console.log("updating therapist...");
             console.log(changedValues);
@@ -331,6 +340,72 @@ export default function TherapistDetails(props) {
 
                         {/* RR Preference radio buttons and text field go here */}
 
+                        <Grid item>
+                            <label style={{display: 'block'}}><u>{`RR Preference:`}</u></label>
+                            {currentlyEditing ?
+                            <>
+
+                            <div role="group" aria-labelledby="my-radio-group">  
+                                <label>
+                                <Field type="radio" name="rrPreference" value="" />
+                                None
+                                </label>
+                                <label>
+                                <Field type="radio" name="rrPreference" value="Fax" />
+                                Fax
+                                </label>
+                                <label>
+                                <Field type="radio" name="rrPreference" value="Phone" />
+                                Phone
+                                </label>
+                                <label>
+                                <Field type="radio" name="rrPreference" value="Email" />
+                                Email
+                                </label>
+                            </div>
+                            
+                            {formikProps.values.rrPreference === 'Fax' &&
+                            <input 
+                                type='text'
+                                name='rrFax'
+                                value={formikProps.values.rrFax || ''}
+                                onChange={formikProps.handleChange}
+                                onBlur={formikProps.handleBlur}
+                                placeholder='RR Fax goes here'
+                                // style={{width: width}}
+                            />
+                            }
+                            {formikProps.values.rrPreference === 'Phone' &&
+                            <input 
+                                type='text'
+                                name='rrPhone'
+                                value={formikProps.values.rrPhone || ''}
+                                onChange={formikProps.handleChange}
+                                onBlur={formikProps.handleBlur}
+                                placeholder='RR Phone goes here'
+                                // style={{width: width}}
+                            />
+                            }
+                            {formikProps.values.rrPreference === 'Email' &&
+                            <input 
+                                type='text'
+                                name='rrEmail'
+                                value={formikProps.values.rrEmail || ''}
+                                onChange={formikProps.handleChange}
+                                onBlur={formikProps.handleBlur}
+                                placeholder='RR Email goes here'
+                                // style={{width: width}}
+                            />
+                            }
+                            
+                            </>
+                            :
+                            <div>
+                            {(selectedTherapist?.rrPreference === 'Fax' && `Fax: ${selectedTherapist?.rrFax}`) || (selectedTherapist?.rrPreference === 'Phone' && `Phone: ${selectedTherapist?.rrPhone}`) || (selectedTherapist?.rrPreference === 'Email' && `Email: ${selectedTherapist?.rrEmail}`) || 'none'}
+                            </div>
+                            }
+                        </Grid>
+
                         {/* <EditableGridItem
                         field='rrPreference'
                         label='RR Preference'
@@ -339,10 +414,10 @@ export default function TherapistDetails(props) {
                         currentlyEditing={currentlyEditing}
                         selectedRow={selectedTherapist}
                         selectedParty='therapist'
-                        />
-                        <Box width="100%"/> */}
+                        /> */}
 
                         <Box width="100%"/>
+
                         <EditableGridItem
                         field='billingPhone'
                         label='Billing Phone'
