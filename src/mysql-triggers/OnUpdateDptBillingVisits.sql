@@ -41,7 +41,7 @@ CREATE TRIGGER `OnUpdateDptBillingVisits` BEFORE UPDATE ON `dptBillingVisits` FO
 	IF @ptStatus = "Discharge" AND @billingStatus = "Active" THEN 
 		SET @numYes = 
 			(SELECT COUNT(referralId) FROM dptBillingVisits
-			WHERE referralId = NEW.referralId AND NEW.attend = "Yes" AND NEW.v1500 IS NOT NULL);
+			WHERE referralId = NEW.referralId AND NEW.attend = "Yes");
 		SET @numPaid = 
 			(SELECT COUNT(referralId) FROM dptBillingVisits
 			WHERE referralId = NEW.referralId AND NEW.adjusterAmountPaid IS NOT NULL AND NEW.facilityAmountPaid IS NOT NULL);

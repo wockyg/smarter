@@ -1,4 +1,4 @@
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -11,6 +11,9 @@ import { styled } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Divider from '@mui/material/Divider';
 
 import Checkbox from '@mui/material/Checkbox';
 import Toolbar from '@mui/material/Toolbar';
@@ -29,13 +32,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 import useUpdateVisit from '../hooks/useUpdateVisit';
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
 import useDeleteVisit from '../hooks/useDeleteVisit';
 
-import DatePicker from "react-multi-date-picker"
+import VisitTally from './VisitTally';
+
+import {Calendar} from "react-multi-date-picker"
 
 import { useParams } from 'react-router-dom';
 
@@ -56,6 +63,9 @@ export default function ApptVerification(props) {
     const [enabled, setEnabled] = useState({});
 
     const [dates, setDates] = useState([]);
+    const [ucaTimes, setUcaTimes] = useState([]);
+    const [timeMode, setTimeMode] = useState('same');
+    const [time, setTime] = useState('');
 
     const [needPNvalue, setNeedPNValue] = useState(Boolean(currentEditRow?.needPN));
 
@@ -68,6 +78,10 @@ export default function ApptVerification(props) {
 
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetReferralVisits(linkId);
     const { status: statusAuth, data: auth, error: errorAuth, isFetching: isFetchingAuth } = useGetReferralAuth(linkId);
+
+    const blankDOS = visits?.filter(v => v.dos === null);
+
+    // console.log(blankDOS);
 
     const StyledTableCell = styled(TableCell)({
         padding: '0px 0px 0px 5px',
@@ -85,8 +99,8 @@ export default function ApptVerification(props) {
         left: '35%',
         overflowY: 'scroll',
         // transform: 'translate(-20%, -20%)',
-        width: 500,
-        // height: 600,
+        width: 800,
+        height: 600,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -147,7 +161,7 @@ export default function ApptVerification(props) {
     }
 
     const handleStartBulkEdit = (event, key) => {
-        console.log('BULK');
+        // console.log('BULK');
         // open modal
         setBulkModalOpen(true);
         setModalType('bulk');
@@ -155,10 +169,19 @@ export default function ApptVerification(props) {
     };
 
     const handleStartUCA = (event, key) => {
-        console.log('UCA');
+        // console.log('UCA');
         // open modal
         setBulkModalOpen(true);
         setModalType('uca');
+        console.log(ucaTimes);
+        
+    };
+
+    const handleOpenAuth = (event, key) => {
+        // console.log('Open Auth menu');
+        // open menu
+        // setMenuOpen(true);
+        // setMenuType('auth');
         
     };
 
@@ -166,6 +189,10 @@ export default function ApptVerification(props) {
         if (reason !== 'backdropClick') {
             setBulkModalOpen(false);
             setModalType(null);
+            setDates([]);
+            setUcaTimes([]);
+            setTimeMode('same');
+            setTime('')
         }
     };
 
@@ -203,31 +230,24 @@ export default function ApptVerification(props) {
     const handleUCASubmit = (event, key) => {
         // submit data
         console.log('SUBMIT THE UPCOMING APPTS');
-        // console.log(currentBulkEdit);
+        console.log(dates);
+        console.log(ucaTimes);
 
-        const keys = Object.keys(currentBulkEdit);
-        const changedKeys = keys.filter(index => currentBulkEdit[index] !== -1);
-        const values = changedKeys.reduce((obj, key, index) => ({ ...obj, [key]: currentBulkEdit[key] }), {});
+        const appts = dates.map((d, i) => ({dos: d.toDate().toISOString(), dosTime: timeMode === 'same' ? time : (ucaTimes[i] || null)}))
 
-        if (Object.keys(values).length > 0) {
-            console.log(values);
-            selected.forEach((billingId, i) => {
-                // mutationUpdate.mutate({...values, billingId: billingId});
-            });
-        }
-        else {
-            console.log("nothing to update...")
-        }
-        // reset selected
-        setSelected([]);
-        // reset enabled
-        setEnabled({});
-        // reset BulkEdit Fields
-        setCurrentBulkEdit({});
-        
-        // close modal
+        console.log("appts:", appts);
+
+
+        blankDOS.length >= appts.length && Promise.all(
+            appts.map((a, i) => {
+
+                const vals = {...a, billingId: blankDOS[i].billingId}
+
+                return mutationUpdate.mutate(vals);
+
+            })
+        );
         handleModalClose();
-        setModalType(null);
         
     }
 
@@ -299,6 +319,60 @@ export default function ApptVerification(props) {
         }
     };
 
+    const handleChangeDates = (newDates) => {
+
+        let temp = [];
+        let newTimes = [];
+        
+        if (newDates.length > dates.length) {
+            console.log("PUSH")
+            // date added, push
+            if (timeMode === 'different') {
+                temp.push('');
+            }
+            if (timeMode === 'same') {
+                temp.push(time);
+            }
+            newTimes = [...ucaTimes, ...temp];
+            
+        }
+        else if (newDates.length < dates.length) {
+            console.log("POP")
+            // date removed, pop
+            temp = [...ucaTimes];
+            temp.pop()
+            newTimes = [...temp];
+        }
+
+        console.log("newTimes", newTimes)
+        setUcaTimes(newTimes)
+        setDates(newDates)
+
+    }
+
+     const handleToggleTimeMode = (event) => {
+        setTimeMode(event.target.value);
+        if (event.target.value === 'different') {
+            setTime('');
+            const newTimes = new Array(dates.length).fill(time || '');
+            setUcaTimes(newTimes)
+        }
+    };
+
+    const handleChangeTime = (event) => {
+        setTime(event.target.value);
+        if (ucaTimes.length > 0) {
+            const newTimes = ucaTimes.map(u => event.target.value);
+            setUcaTimes(newTimes);
+        }
+    }
+
+    const handleChangeUcaTimes = (event, i) => {
+        const newTimes = [...ucaTimes.slice(0, i), event.target.value, ...ucaTimes.slice(i, ucaTimes.length - 1)];
+        console.log(newTimes)
+        setUcaTimes(newTimes)
+    }
+
     const isSelected = (billingId) => selected.indexOf(billingId) !== -1;
 
     // extract into reusable file
@@ -321,9 +395,23 @@ export default function ApptVerification(props) {
             <IconButton onClick={handleStartBulkEdit} disabled={numSelected === 0}>
                 <DehazeIcon /><EditIcon />
             </IconButton>
-            <IconButton disabled onClick={handleStartUCA}>
-                <EventRepeatIcon />
+            <IconButton onClick={handleStartUCA}>
+                <CalendarMonthIcon />
             </IconButton>
+
+            <Grid container spacing={2}>
+                <Grid item>
+                     
+                </Grid>
+                <Grid item>
+                    <IconButton onClick={handleOpenAuth}>
+                        <FormatListNumberedIcon />
+                    </IconButton>    
+                </Grid>
+                <Grid item>
+                    <VisitTally sx={{marginLeft: 2}} />
+                </Grid>
+            </Grid>            
 
             {numSelected > 0 ? (
                 <Typography
@@ -592,23 +680,21 @@ export default function ApptVerification(props) {
                                             <StyledTableCell>
                                                 <Grid container>
                                                     <Grid item xs={6}>
-                                                        <EditIcon
-                                                        sx={{cursor: "pointer"}}
-                                                        fontSize='small'
-                                                        onClick={() => selected.length === 0 && startEditing(j, row)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        {!au &&
-                                                        <>
+                                                        {!au ?
                                                         <DeleteIcon
                                                         sx={{cursor: "pointer"}}
                                                         fontSize='small'
                                                         onClick={() => handleRemove(row.billingId)}
                                                         />
-                                                        </>
+                                                        :
+                                                        <EditIcon
+                                                        sx={{cursor: "pointer"}}
+                                                        fontSize='small'
+                                                        onClick={() => selected.length === 0 && startEditing(j, row)}
+                                                        />
                                                         }
                                                     </Grid>
+                                                    
                                                 </Grid>
                                             </StyledTableCell>
                                             </>}
@@ -812,27 +898,86 @@ export default function ApptVerification(props) {
             <Box sx={style}>
                 <Grid container spacing={0.5}>
                     <Grid item xs={11}>
-                    <h2>Add Upcoming appts</h2>
+                    <h2>Add Upcoming appts</h2><h4> ({blankDOS.length - dates.length} remaining)</h4>
+                    <hr />
                     </Grid>
                     <Grid item xs={1}>
                     <button onClick={handleModalClose}>x</button>
                     </Grid>
                 </Grid>
-                <Grid container spacing={1}>
+                <Grid container spacing={2}>
                     <Grid item>
-                        <DatePicker
+
+                        <Calendar
                         multiple
                         value={dates} 
-                        onChange={setDates}
+                        onChange={(dates) => handleChangeDates(dates)}
                         // minDate={new Date().setDate(5)}
+                        mapDays={({ date, isSameDate }) => {
+                            
+                            const matches = dates.filter(d => isSameDate(date, d))
+                            
+                            if (dates.length === blankDOS.length && matches.length === 0) {
+                                return {
+                                disabled: true,
+                                // style: { color: "#ccc" },
+                                // onClick: () => alert("weekends are disabled")
+                                }
+                            }
+                        }}
                         />
-                    </Grid>
 
+                    </Grid>
                     <Grid item>
-                        {dates.map(d => `${d}`)}
+                        
+                            <ToggleButtonGroup
+                            size="small"
+                            value={timeMode}
+                            exclusive
+                            onChange={handleToggleTimeMode}
+                            aria-label="timeMode"
+                            >
+                                <ToggleButton value={'same'} aria-label="non-monthlys">
+                                Same Time
+                                </ToggleButton>
+                                <ToggleButton value={'different'} aria-label="monthlys">
+                                Different Times
+                                </ToggleButton>
+                            </ToggleButtonGroup>
+                            <br />
+                            <br />
+
+                            {dates.map((d, i) => (
+                                <Fragment key={i}>
+                                    <u>{`${d}`}</u> at {timeMode === 'same' ? 
+                                                        time 
+                                                        : 
+                                                        <select
+                                                        value={ucaTimes[i] || ''}
+                                                        onChange={(e) => handleChangeUcaTimes(e, i)}
+                                                        >
+                                                            <option value={''}>Select Time</option>
+                                                            {times.map((n, i) => (<option key={i} value={n.Time}>{n.Time}</option>))}
+                                                        </select>}
+                                                        <br/><br/>
+                                </Fragment>
+                            ))}
+                        
+                    </Grid>
+                    <Grid item>
+                       {timeMode === 'same' && <select
+                        onChange={handleChangeTime}
+                        value={time}
+                        name="dosTime"
+                        >
+                            <option value={''}>Select Time</option>
+                            {times.map((n) => (
+                                <option key={n.Time} value={n.Time}>{n.Time}</option>
+                            ))}
+                        </select>}
                     </Grid>
 
-                    <Box width="100%" />             
+                    <Box width="100%" />      
                     <Grid item>
                         <button onClick={handleUCASubmit}>Update</button>
                     </Grid>

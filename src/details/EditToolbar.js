@@ -162,11 +162,11 @@ export default function EditToolbar(props) {
                 <MenuItem  onClick={() => handleClickMenuSwap(((selectedParty === 'attorney' && selectedClaim.defenseAttorneyId) ? 'defenseAttorneyId' : ((selectedParty === 'attorney' && selectedClaim.plaintiffAttorneyId) ? 'plaintiffAttorneyId' : null) ))}>
                     Swap
                 </MenuItem>
-                {(selectedParty !== 'casemanager' || (selectedParty === 'casemanager' && !selectedClaim.casemanager2Id)) &&
+                {/* {(selectedParty !== 'casemanager' || (selectedParty === 'casemanager' && !selectedClaim.casemanager2Id)) &&
                 <MenuItem  onClick={() => handleClickMenuRemove(attorneyType ? attorneyType : null)}>
                     Remove
                 </MenuItem>
-                }
+                } */}
                 {selectedParty === 'casemanager' && !selectedClaim.casemanager2Id &&
                 <MenuItem  onClick={() => handleClickMenuSwap('casemanager2Id')}>
                     Add NCM2

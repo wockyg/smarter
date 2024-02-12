@@ -25,7 +25,7 @@ export default function VisitTally(props) {
         <>
         {selectedClaim?.referralId && auth?.length > 0 &&
         <div>
-            <Grid container spacing={2}>
+            {/* <Grid container spacing={2}>
                 <Grid item>
                     <div style={{fontSize: 13, textAlign: "left"}}>
                         <br />
@@ -35,6 +35,21 @@ export default function VisitTally(props) {
                         {visitCountBlank} Total visits remaining (Blank)<br />
                         <hr />
                         {visitCountNo} Total Missed visits (No)
+                    </div>
+                </Grid>
+            </Grid> */}
+
+            <Grid container spacing={2}>
+                <Grid item>
+                    <div style={{fontSize: 13, textAlign: "left"}}>
+                        {visitCountYes} (Yes)<br />
+                        {visitCountBlank} (Blank)
+                    </div>
+                </Grid>
+                <Grid item>
+                    <div style={{fontSize: 13, textAlign: "left"}}>
+                        {visitCountNo} (No)<br />
+                        {totalAuthVisits} Total Authorized
                     </div>
                 </Grid>
             </Grid>

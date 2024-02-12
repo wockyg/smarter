@@ -100,7 +100,7 @@ export default function ReferralDetails(props) {
             <Box sx={{border: 1}}>
                 <ClaimIdInfoAccordian selectedClaim={selectedClaim} />
             </Box>
-            <VisitTally />
+            {/* <VisitTally /> */}
         </Grid>
         {/* Referral Notes */}
         <Grid item xs={3.5}>
