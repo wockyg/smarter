@@ -14,9 +14,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-// import redPin from '../img/redPin.png';
+import redPin from '../img/redPin.png';
 import greenPin from '../img/greenPin.png';
 import lightGreenPin from '../img/lightGreenPin.png';
+import lightPurplePin from '../img/lightPurplePin.png';
 import purplePin from '../img/purplePin.png';
 import yellowPin from '../img/yellowPin.png';
 import grayPin from '../img/grayPin.png';
@@ -129,6 +130,7 @@ export default function MapTab(props) {
     const [searchVal, setSearchVal] = useState('');
     const [searchLat, setSearchLat] = useState();
     const [searchLon, setSearchLon] = useState();
+    const [pinDistance, setPinDistance] = useState(null);
     const [circleSource, setCircleSource] = useState();
     const [circleRadius, setCircleRadius] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 16.09 : 80.47);
     const [circleZoom, setCircleZoom] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 10.0 : 7.5);
@@ -238,6 +240,11 @@ export default function MapTab(props) {
         console.log("Pin click", row);
         event.originalEvent.stopPropagation();
         setPopupInfo(row);
+        // api.get(`/map/directions/${searchLat},${searchLon}x${row.lat},${row.lon}`)
+        //     .then(distance => {
+        //         console.log(distance)
+        //         setPinDistance(distance)
+        //     });
     };
 
     const handleClickSearch = (event) => {
@@ -455,7 +462,7 @@ export default function MapTab(props) {
                                     ?
                                     <img src={selectedClaim.serviceGeneral === 'DPT' ? selectedPinDPT : (selectedClaim.serviceGeneral === 'FCE' ? selectedPinFCE : grayPin)} alt="pin" width={25} />
                                     :
-                                    <img src={selectedFilter === 'dpt' ? greenPin : (selectedFilter === 'fceppd' ? purplePin : (selectedFilter === 'wcwh' ? yellowPin : grayPin))} alt="pin" width={25} />
+                                    <img src={selectedFilter === 'dpt' ? (row.dptAgreement === 'Network' ? greenPin : (row.dptAgreement === 'Single-Case' ? lightGreenPin : (row.dptAgreement === 'Denied' ? redPin : grayPin))) : (selectedFilter === 'fceppd' ? (row.fceAgreement === 'Network' ? purplePin : (row.fceAgreement === 'Single-Case' ? lightPurplePin : (row.fceAgreement === 'Denied' ? redPin : grayPin))) : (selectedFilter === 'wcwh' ? yellowPin : grayPin))} alt="pin" width={25} />
                                     }
                                 </Marker>
                             );
@@ -468,7 +475,7 @@ export default function MapTab(props) {
                                 onClose={() => setPopupInfo(null)}
                             >
                                 <div>
-                                {popupInfo.name}
+                                {popupInfo.name} ({pinDistance || 'xx miles'})
                                 </div>
                                 {selectedClaim && (selectedClaim.referralStatus === 'Open' || selectedClaim.referralStatus === 'Reschedule') && 
                                 <div>

@@ -37,6 +37,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ClearIcon from '@mui/icons-material/Clear';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import PropTypes from 'prop-types';
 
@@ -64,6 +65,7 @@ import useGetUser from '../hooks/useGetUser';
 import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
 import useGetCptForAllStates from '../hooks/useGetCptForAllStates';
 import useGetReferralsOrphan from '../hooks/useGetReferralsOrphan';
+import useAddV1500 from '../hooks/useAddV1500';
 
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
@@ -322,6 +324,7 @@ export default function ReferralTable(props) {
     const userHistoryUpdate = useUpdateUserHistory();
     const rrLastWorkedUpdate = useUpdateRRLastWorked();
     const v1500Update = useUpdateV1500Upload();
+    const v1500Add = useAddV1500()
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -337,12 +340,18 @@ export default function ReferralTable(props) {
 
     const [currentBulkEdit, setCurrentBulkEdit] = useState({});
     const [selected, setSelected] = useState([]);
-    const [bulkModalOpen, setBulkModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalType, setModalType] = useState(null);
     const [enabled, setEnabled] = useState({});
 
     const [generateRR, setGenerateRR] = useState(false);
     const [includeIA, setIncludeIA] = useState(false);
     const [includePN, setIncludePN] = useState(false);
+
+    const [uploadedFiles, setUploadedFiles] = useState([])
+    const [fileLimit, setFileLimit] = useState(false);
+
+    // console.log(uploadedFiles[0]);
 
     const open = Boolean(anchorEl);
 
@@ -391,6 +400,8 @@ export default function ReferralTable(props) {
     // const handlePrevRowId = (id) => {
     //     setPrevRowId(id);
     // };
+
+    
 
     const handleClaimClicked = (event, claim) => {
         claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
@@ -556,7 +567,16 @@ export default function ReferralTable(props) {
     const handleStartBulkEdit = () => {
         console.log('BULK');
         // open modal
-        setBulkModalOpen(true);
+        setModalType('bulk')
+        setModalOpen(true);
+        
+    };
+
+    const handleOpenUpload = () => {
+        console.log('UPLOAD');
+        // open modal
+        setModalType('upload')
+        setModalOpen(true);
         
     };
 
@@ -597,11 +617,13 @@ export default function ReferralTable(props) {
 
     const handleModalClose = (event, reason) => {
         if (reason !== 'backdropClick') {
-            setBulkModalOpen(false);
+            setModalOpen(false);
+            setModalType(null)
             setEnabled({});
             setIncludeIA(false);
             setIncludePN(false);
             setGenerateRR(false);
+            setUploadedFiles([])
         }
     };
 
@@ -686,11 +708,48 @@ export default function ReferralTable(props) {
         referralUpdate.mutate(values);
     };
 
+    const handleUploadFiles = (files) => {
+        const uploaded = [...uploadedFiles]
+        files.forEach((file) => uploaded.push(file))
+        setUploadedFiles(uploaded)
+    };
+
+    const handleFileEvent = (e) => {
+        const chosenFiles = Array.prototype.slice.call(e.target.files)
+        handleUploadFiles(chosenFiles)
+    };
+
+    const handleUploadSubmit = () => {
+        // submit data
+        console.log('SUBMIT THE V1500s');
+        console.log(uploadedFiles);
+
+        const formData = new FormData();
+        uploadedFiles.forEach(file => {
+            formData.append("v1500Blobs", file);
+        })
+
+        v1500Add.mutate(formData);
+        
+        // reset files array
+        // setUploadedFiles([]);
+        
+        // close modal
+        // handleModalClose();
+        
+    };
+
     let prevRowClassName = 'alternateColorA';
 
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
+
+            {type === 'hcfa' &&
+                <IconButton onClick={handleOpenUpload}>
+                    <UploadFileIcon />
+                </IconButton>
+            }
           
             {!cc &&
             <Button variant="text" onClick={onDownload}>
@@ -890,11 +949,11 @@ export default function ReferralTable(props) {
                                                                     })}
                                                                     onSubmit={(values, actions) => {
 
-                                                                        // console.log("values:", values)
+                                                                        console.log("values:", values)
 
                                                                         console.log("updating V1500...", values);
 
-                                                                        // v1500Update.mutate(values);
+                                                                        v1500Update.mutate(values);
 
                                                                         actions.setSubmitting(false);
 
@@ -1018,11 +1077,17 @@ export default function ReferralTable(props) {
 
             </Menu>
 
-            <Dialog open={bulkModalOpen} onClose={handleModalClose}>
+            <Dialog open={modalOpen} onClose={handleModalClose}>
               <DialogTitle>
                 <Grid container spacing={0.5}>
                     <Grid item xs={11}>
-                    Edit {selected.length} row{selected.length > 1 ? 's' : ''}
+                    {modalType === 'upload' &&
+                    "Upload V1500s"
+                    }
+                    {modalType === 'bulk' &&
+                    `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
+                    }
+                    
                     </Grid>
                     <Grid item xs={1}>
                     <button onClick={handleModalClose}>x</button>
@@ -1030,6 +1095,7 @@ export default function ReferralTable(props) {
                 </Grid>
               </DialogTitle>
               <DialogContent>
+                {modalType === 'bulk' &&
                 <Grid container spacing={1}>
                   {headCells.filter(r => r.enableEdit === true).map((field) => {
                     return(
@@ -1119,10 +1185,38 @@ export default function ReferralTable(props) {
                     </>
                   }
                 </Grid>
+                }
+                {modalType === 'upload' &&
+                <>
+                <input multiple
+                id='fileUpload'
+                type='file' 
+                accept='application/pdf'
+                onChange={handleFileEvent}
+                />
+                <div className="uploaded-files-list">
+                    <ul>
+                        {uploadedFiles.map(file => (
+                            <li>
+                                {file.name}
+                            </li>
+                        ))} 
+                    </ul>
+                </div>
+                </>
+                }
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleModalClose}>Cancel</Button>
+                {type === 'rr' &&
                 <Button onClick={handleBulkSubmit}>Generate</Button>
+                }
+                {type === 'hcfa' &&
+                <Button onClick={handleUploadSubmit}>Upload</Button>
+                }
+                {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
+                <Button onClick={handleBulkSubmit}>Update</Button>
+                }
               </DialogActions>
             </Dialog>
     </Box>

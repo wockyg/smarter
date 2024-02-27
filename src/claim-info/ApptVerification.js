@@ -24,6 +24,9 @@ import Tooltip from '@mui/material/Tooltip';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Popover from '@mui/material/Popover';
 
 import {times} from '../lookup-tables/lookup_times'
 
@@ -41,6 +44,7 @@ import useGetReferralAuth from '../hooks/useGetReferralAuth';
 import useDeleteVisit from '../hooks/useDeleteVisit';
 
 import VisitTally from './VisitTally';
+import AuthorizationTable from './AuthorizationTable';
 
 import {Calendar} from "react-multi-date-picker"
 
@@ -61,6 +65,10 @@ export default function ApptVerification(props) {
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [enabled, setEnabled] = useState({});
+
+    const [menuType, setMenuType] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const [dates, setDates] = useState([]);
     const [ucaTimes, setUcaTimes] = useState([]);
@@ -178,11 +186,24 @@ export default function ApptVerification(props) {
     };
 
     const handleOpenAuth = (event, key) => {
-        // console.log('Open Auth menu');
-        // open menu
-        // setMenuOpen(true);
-        // setMenuType('auth');
+        console.log('Open Auth menu');
+        setAnchorEl(event.currentTarget);
+        // console.log(event.currentTarget);
+        setMenuType('auth');
         
+    };
+
+    const handleOpenGrid = (event, key) => {
+        console.log('Open Grid edit');
+        setAnchorEl(event.currentTarget);
+        // console.log(event.currentTarget);
+        setMenuType('grid');
+        
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+        setMenuType(null);
     };
 
      const handleModalClose = (event, reason) => {
@@ -669,14 +690,14 @@ export default function ApptVerification(props) {
                                             </> 
                                             : 
                                             <>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.dos && row.dosFormat}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.dosTime}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.attend}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.serviceType}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.notesReceived}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.v1500 && row.v1500Format}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.dosNotes}</StyledTableCell>
-                                            <StyledTableCell sx={{ borderRight: 1 }}>{row.needPN}</StyledTableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dos}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dosTime}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.attend}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.serviceType}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.notesReceived}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.v1500 && row.v1500Format}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dosNotes}</TableCell>
+                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.needPN}</TableCell>
                                             <StyledTableCell>
                                                 <Grid container>
                                                     <Grid item xs={6}>
@@ -704,6 +725,26 @@ export default function ApptVerification(props) {
                 </TableBody>
             </Table>
         </TableContainer>
+
+        <Popover
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        id="add-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseMenu}
+        >
+            {menuType === 'auth' &&
+            <AuthorizationTable />
+            }
+
+            {menuType === 'grid' &&
+            'Grid edit'
+            }
+            
+        </Popover>
 
         <Modal
         disableEscapeKeyDown

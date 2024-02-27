@@ -90,7 +90,7 @@ export default function ReferralDetails(props) {
             </Accordion>
             <hr />
             {/* Authorization Table */}
-            <AuthorizationTable />
+            {/* <AuthorizationTable /> */}
             </>
             }
 

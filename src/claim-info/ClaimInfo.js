@@ -45,10 +45,17 @@ export default function ClaimInfo(props) {
 
     const handleClickMenuUpdate = () => {
         const field = anchorEl?.id;
-        setFieldUpdate(field);
-        // const value = anchorEl.firstChild.innerHTML;
-        // console.log(field, value);
-        // setAnchorEl(null);        
+        if (field !== 'confirmedPayor') {
+            setFieldUpdate(field);
+        }
+        else {
+            const vals = {
+                referralId: selectedClaim.referralId,
+                confirmedPayor: true
+            }
+            mutationUpdate.mutate(vals);
+            handleCloseMenu();
+        }
     };
 
     const handleCloseMenu = () => {
@@ -267,6 +274,12 @@ export default function ClaimInfo(props) {
             <Grid item>
                 <label htmlFor="fceApproved" style={{display: 'block'}}>FCE/PPD Approved:</label>
                 <div id="fceApproved">{selectedClaim.fceApproved ? selectedClaim.fceApprovedFormat : <ClickableInfo title="fceApproved" value="--/--/----" />}</div>
+            </Grid>
+            }
+            {selectedClaim.confirmAttend === 'Yes' && 
+            <Grid item>
+                <label htmlFor="confirmedPayor" style={{display: 'block'}}>Confirmed Payor:</label>
+                <div id="confirmedPayor">{selectedClaim.confirmedPayor ? <CheckIcon /> : <ClickableInfo title="confirmedPayor" value="--" />}</div>
             </Grid>
             }
             <Box width="100%"/>

@@ -46,6 +46,8 @@ export default function ClaimIdInfoAccordian(props) {
         {selectedClaim &&
         <>
         <div>
+
+            {/* Claimant Details */}
             <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -70,7 +72,9 @@ export default function ClaimIdInfoAccordian(props) {
                     <ClaimantDetails detailsId={selectedClaim.claimantId} currentlyEditing={currentlyEditing} setCurrentlyEditing={setCurrentlyEditing} />
                 </AccordionDetails>
             </Accordion>
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
+
+            {/* Physician Details */}
+            <Accordion TransitionProps={{ unmountOnExit: true }} sx={{background: !selectedClaim.physicianId && '#F5B7B1'}}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
@@ -84,7 +88,7 @@ export default function ClaimIdInfoAccordian(props) {
                         <>
                         <Box width="100%"/>
                         <Grid item>
-                            <div id="adjusterId">{`${selectedClaim.adjuster} | ${selectedClaim.adjusterClient}`}</div>
+                            <div id="adjusterId">{selectedClaim.adjusterId ? `${selectedClaim.adjusterDisplay}` : 'MISSING'}</div>
                         </Grid>
                         </>
                         }
@@ -102,7 +106,9 @@ export default function ClaimIdInfoAccordian(props) {
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
+
+            {/* Casemanager Details */}
+            <Accordion TransitionProps={{ unmountOnExit: true }} sx={{background: !selectedClaim.casemanagerId && '#F5B7B1'}}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel2a-content"
@@ -112,14 +118,12 @@ export default function ClaimIdInfoAccordian(props) {
                         <Grid item>
                             <label htmlFor="casemanagerId">Case Manager(s):</label>
                         </Grid>
-                        {selectedClaim.casemanagerId &&
-                        <>
+                        
                         <Box width="100%"/>
                         <Grid item>
-                            <div id="casemanagerId">{selectedClaim.casemanagerId ? `${selectedClaim.casemanager} | ${selectedClaim.casemanagerClient}` : <></>}</div>
+                            <div id="casemanagerId">{selectedClaim.casemanagerId ? `${selectedClaim.casemanager} | ${selectedClaim.casemanagerClient}` : 'MISSING'}</div>
                         </Grid>
-                        </>
-                        }
+                        
                         {selectedClaim.casemanager2Id &&
                         <>
                         <Box width="100%"/>
@@ -145,7 +149,9 @@ export default function ClaimIdInfoAccordian(props) {
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
+
+            {/* Physician Details */}
+            <Accordion TransitionProps={{ unmountOnExit: true }} sx={{background: !selectedClaim.physicianId && '#F5B7B1'}}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel3a-content"
@@ -155,12 +161,13 @@ export default function ClaimIdInfoAccordian(props) {
                         <Grid item>
                             <label htmlFor="physicianId">Physician:</label>
                         </Grid>
-                        {selectedClaim.physicianId &&
-                        <>
                         <Box width="100%"/>
                         <Grid item>
-                            <div id="physicianId">{`${selectedClaim.physicianLast}, ${selectedClaim.physicianFirst} | ${selectedClaim.physicianFacility}`}</div>
+                            <div id="physicianId">{selectedClaim.physicianId ? `${selectedClaim.physicianLast}, ${selectedClaim.physicianFirst} | ${selectedClaim.physicianFacility}` : 'MISSING'}</div>
                         </Grid>
+                        {selectedClaim.physicianId &&
+                        <>
+                        
                         </>
                         }
                     </Grid>
@@ -178,7 +185,8 @@ export default function ClaimIdInfoAccordian(props) {
                 </AccordionDetails>
             </Accordion>
 
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
+            {/* EmployerDetails */}
+            <Accordion TransitionProps={{ unmountOnExit: true }} sx={{background: !selectedClaim.claimantEmployerId && '#F5B7B1'}}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel3a-content"
@@ -188,14 +196,11 @@ export default function ClaimIdInfoAccordian(props) {
                         <Grid item>
                             <label htmlFor="claimantEmployerId">Employer:</label>
                         </Grid>
-                        {selectedClaim.claimantEmployerId &&
-                        <>
                         <Box width="100%"/>
                         <Grid item>
-                            <div id="claimantEmployerId">{`${selectedClaim.employer}`}</div>
+                            <div id="claimantEmployerId">{`${selectedClaim.claimantEmployerId ? selectedClaim.employer : 'MISSING'}`}</div>
                         </Grid>
-                        </>
-                        }
+                            
                     </Grid>
                 </AccordionSummary>
                 <AccordionDetails>
@@ -211,6 +216,7 @@ export default function ClaimIdInfoAccordian(props) {
                 </AccordionDetails>
             </Accordion>
 
+            {/* Attorney Details */}
             <Accordion TransitionProps={{ unmountOnExit: true }}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -258,7 +264,9 @@ export default function ClaimIdInfoAccordian(props) {
                     }
                 </AccordionDetails>
             </Accordion>
-            <Accordion TransitionProps={{ unmountOnExit: true }}>
+
+            {/* Therapist Details */}
+            <Accordion TransitionProps={{ unmountOnExit: true }} sx={{background: !selectedClaim.therapistId && '#F5B7B1'}}>
                 <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel5a-content"
@@ -271,12 +279,14 @@ export default function ClaimIdInfoAccordian(props) {
                         <Box width="100%"/>
                         <Grid item>
                             <div id="therapistId">
-                                {selectedClaim.therapistId && 
+                                {selectedClaim.therapistId ? 
                                 <>
                                 {`${selectedClaim.therapist}`}<br />
                                 {`${selectedClaim.therapistAddress},${selectedClaim.therapistSuite ? ` Ste. ${selectedClaim.therapistSuite},` : ''} ${selectedClaim.therapistCity}, ${selectedClaim.therapistState} ${selectedClaim.therapistZip}`}<br />
                                 {`P ${selectedClaim.therapistPhone}${selectedClaim.therapistPhoneExt ? ` x${selectedClaim.therapistPhoneExt}` : ''} :: F ${selectedClaim.therapistFax}`}
-                                </> 
+                                </>
+                                :
+                                'MISSING'
                                 }
                             </div>
                         </Grid>

@@ -13,7 +13,7 @@ export default function useUpdateV1500Upload() {
     console.log(newValues);
     
     api
-    .put(`/v1500/upload/${values.hcfaId}`, newValues)
+    .put(`/v1500/upload/${values.v1500Id}`, newValues)
     .then(response => {
       const data = response.data;
       console.log(response);
