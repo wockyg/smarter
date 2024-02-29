@@ -1,0 +1,173 @@
+{
+  "id": "bb668329-fcf1-4945-9648-04665a5b561c",
+  "created": "2024-02-22T03:48:34.414Z",
+  "completed": "2024-02-22T03:48:56.716Z",
+  "status": "COMPLETE",
+  "type": "cms_1500_sensible_demo",
+  "configuration": "02_12",
+  "environment": "production",
+  "page_count": 5,
+  "parsed_document": {
+    "patients_name": {
+      "type": "string",
+      "value": "BAPTISTE, JOHN"
+    },
+    "patients_account_number": {
+      "type": "string",
+      "value": "TLH2678"
+    },
+    "insureds_id_number": {
+      "type": "string",
+      "value": "WC20171087619"
+    },
+    "name_of_referring_provider": {
+      "type": "string",
+      "value": "CHRISTOPHER BABL"
+    },
+    "referring_provider_npi": {
+      "type": "string",
+      "value": "1073660841"
+    },
+    "diagnosis_codes": [
+      {
+        "value": "A. M54.59",
+        "type": "string"
+      }
+    ],
+    "box_24": [
+      {
+        "a.dates_of_service.from": {
+          "source": "02 05 20",
+          "value": "2020-02-05T00:00:00.000Z",
+          "type": "date"
+        },
+        "a.dates_of_service.to": {
+          "source": "02 05 20",
+          "value": "2020-02-05T00:00:00.000Z",
+          "type": "date"
+        },
+        "b.place_of_service": {
+          "type": "string",
+          "value": "11"
+        },
+        "b.procedures_services_or_supplies": {
+          "type": "string",
+          "value": "97161 GP"
+        },
+        "e.diagnosis_pointer": {
+          "type": "string",
+          "value": "A"
+        },
+        "f.charges": {
+          "value": "50",
+          "type": "string"
+        },
+        "g.days_or_units": {
+          "source": "1",
+          "value": 1,
+          "type": "number"
+        },
+        "j.rendering_provider_id.npi": {
+          "value": "1215554449",
+          "type": "string"
+        },
+        "j.rendering_provider_id.zz": null
+      },
+      {
+        "a.dates_of_service.from": null,
+        "a.dates_of_service.to": null,
+        "b.place_of_service": null,
+        "b.procedures_services_or_supplies": null,
+        "e.diagnosis_pointer": null,
+        "f.charges": null,
+        "g.days_or_units": null,
+        "j.rendering_provider_id.npi": null,
+        "j.rendering_provider_id.zz": null
+      },
+      {
+        "a.dates_of_service.from": null,
+        "a.dates_of_service.to": null,
+        "b.place_of_service": null,
+        "b.procedures_services_or_supplies": null,
+        "e.diagnosis_pointer": null,
+        "f.charges": null,
+        "g.days_or_units": null,
+        "j.rendering_provider_id.npi": null,
+        "j.rendering_provider_id.zz": null
+      },
+      {
+        "a.dates_of_service.from": null,
+        "a.dates_of_service.to": null,
+        "b.place_of_service": null,
+        "b.procedures_services_or_supplies": null,
+        "e.diagnosis_pointer": null,
+        "f.charges": null,
+        "g.days_or_units": null,
+        "j.rendering_provider_id.npi": null,
+        "j.rendering_provider_id.zz": null
+      },
+      {
+        "a.dates_of_service.from": null,
+        "a.dates_of_service.to": null,
+        "b.place_of_service": null,
+        "b.procedures_services_or_supplies": null,
+        "e.diagnosis_pointer": null,
+        "f.charges": null,
+        "g.days_or_units": null,
+        "j.rendering_provider_id.npi": null,
+        "j.rendering_provider_id.zz": null
+      },
+      {
+        "a.dates_of_service.from": null,
+        "a.dates_of_service.to": null,
+        "b.place_of_service": null,
+        "b.procedures_services_or_supplies": null,
+        "e.diagnosis_pointer": null,
+        "f.charges": null,
+        "g.days_or_units": null,
+        "j.rendering_provider_id.npi": null,
+        "j.rendering_provider_id.zz": null
+      }
+    ]
+  },
+  "validations": [],
+  "validation_summary": {
+    "fields": 12,
+    "fields_present": 12,
+    "errors": 0,
+    "warnings": 0,
+    "skipped": 0
+  },
+  "classification_summary": [
+    {
+      "configuration": "02_12",
+      "fingerprints": 1,
+      "fingerprints_present": 1,
+      "score": {
+        "value": 14,
+        "fields_present": 14,
+        "penalties": 0
+      }
+    }
+  ],
+  "errors": [],
+  "download_url": "https://sensible-so-document-type-bucket-prod-us-west-2.s3.us-west-2.amazonaws.com/a65567c7-bcfd-49a3-8684-6ac587a80c87/00d64d09-306b-4e44-a8cc-4606f16c5d36/EXTRACTION/bb668329-fcf1-4945-9648-04665a5b561c.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAR355P7AS33JQ7HNM%2F20240222%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240222T034900Z&X-Amz-Expires=900&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGwaCXVzLXdlc3QtMiJIMEYCIQCjO%2Bsru7Ibn7E23B9TRy3xSdjTtmckBBqVYlJhEIoOrAIhAI7f4znXa6V168q0MC3FdIggU%2BkuGXP5tgoFUHKxCq%2FpKogDCFUQAhoMMTI4NzA5NTU2MjYxIgxkCs%2FHx4kC%2BmWsYqEq5QIWrdQmLVH8LWH9XZFSwXPL3Z8fmmc3wqVnm8wH3DdOraNqdk0ahy%2BWxked8V0cLsFUr6KR2ZQrzhinMLkexVRMHvfCoo7ZecGWoA%2BTOnaXJTwdGMtoWRvqjbP59S8TmKNCwNH7IQkaLiPiwu8pIykOUQFieB6vjChjniI%2FL58oQoiOk2jxWDrzpw0cPeKwbO2i16ITWgbcGG3ObGc8V08uxVeZm07WXurFDCpzo3cJLRtvXHlz8pAHHD1K4ecl7Yxa9r%2BCP0UoXsSNbdwN5%2BeDzAnfTbTYRzcr6IC9V4FYdi8QncIyofs%2FEsfDb12hQhAhbRNi%2FKvxVxWPbZphCcxz1ikSLvIaYCCofVD3otc4sLe0Hqu2Fut8FPZrO4PlEJPJpdb5xx%2F9eB7dtPGriIRYINA7oqMFu%2BzDZIoriAWdpl3PrqWTHL9EpNjIUmkOQ01NybfU0C0hPIVq%2BOTGUJkVd%2FWNCDgwvYbbrgY6nQFbA%2BGSvwqrBfMY5JoEWHiUg5tsUt9U3M2znbiGUC1SF4nFPjLM2GracXB9iJW%2FNWCiJbSxX304DdrGQ4lu5ORDXL6BTbXfNn73x%2BdO0l5XG2GxsAM5o6xIxF9qvF2U%2Fi%2B%2FBjjLEnzJaZJI3IVDBTOkX06tJ5w0WmSVIGWFHJTBA%2Fc41HqPW7tCsNwSp7wp0UAMTPaGzgvrIPM8tUIq&X-Amz-Signature=b9fec02a7dd4f76bab3c335396a4a24f99c44523c5924bd13dad967804d464be&X-Amz-SignedHeaders=host&x-id=GetObject",
+  "file_metadata": {
+    "info": {
+      "producer": "Epson ScanSmart",
+      "creation_date": "2024-02-21T16:38:01.000-05:00",
+      "modification_date": "2024-02-21T16:38:01.000-05:00"
+    },
+    "metadata": {
+      "xmp:createdate": "2024-02-21T16:38:01-05:00",
+      "xmp:modifydate": "2024-02-21T16:38:01-05:00",
+      "xmpmm:documentid": "uuid:F4465695-F734-4651-AC95-D4FFDD857E62",
+      "xmpmm:instanceid": "uuid:3CC1D099-1539-49C0-B938-701837C7D3FC",
+      "pdf:producer": "Epson ScanSmart",
+      "pdfaid:part": "1",
+      "pdfaid:conformance": "B",
+      "dc:format": "application/pdf"
+    }
+  },
+  "coverage": 0.23333333333333334
+}

@@ -66,6 +66,7 @@ import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
 import useGetCptForAllStates from '../hooks/useGetCptForAllStates';
 import useGetReferralsOrphan from '../hooks/useGetReferralsOrphan';
 import useAddV1500 from '../hooks/useAddV1500';
+import useTestWebhook from '../hooks/useTestWebhook';
 
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
@@ -324,7 +325,8 @@ export default function ReferralTable(props) {
     const userHistoryUpdate = useUpdateUserHistory();
     const rrLastWorkedUpdate = useUpdateRRLastWorked();
     const v1500Update = useUpdateV1500Upload();
-    const v1500Add = useAddV1500()
+    const v1500Add = useAddV1500();
+    const webhookTest = useTestWebhook();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -739,11 +741,22 @@ export default function ReferralTable(props) {
         
     };
 
+    const handleTestWebhook = () => {
+        console.log('TEST THE WEBHOOK');
+        webhookTest.mutate();
+    };
+
     let prevRowClassName = 'alternateColorA';
 
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
+
+            {type === 'hcfa' &&
+                <Button size='small' onClick={handleTestWebhook}>
+                    Test Webhook
+                </Button>
+            }
 
             {type === 'hcfa' &&
                 <IconButton onClick={handleOpenUpload}>
@@ -823,8 +836,6 @@ export default function ReferralTable(props) {
                                 className={
                                     type === 'rr'
                                     ?
-
-                                        
                                         (row.referralId === +linkId 
                                          ? 
                                             'selectedClaimRowDPT'
@@ -970,7 +981,7 @@ export default function ReferralTable(props) {
                                                                                         // className="redBorder"
                                                                                         >
                                                                                             <option value=''>Select</option>
-                                                                                            {orphan.filter(o => o.claimNumber === row.claimNumber).map((o, i) => (
+                                                                                            {orphan.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
                                                                                                 <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                                             ))}
                                                                                         </Field>
@@ -1196,8 +1207,8 @@ export default function ReferralTable(props) {
                 />
                 <div className="uploaded-files-list">
                     <ul>
-                        {uploadedFiles.map(file => (
-                            <li>
+                        {uploadedFiles.map((file, i) => (
+                            <li key={i}>
                                 {file.name}
                             </li>
                         ))} 
