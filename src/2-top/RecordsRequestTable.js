@@ -155,7 +155,6 @@ export default function RecordsRequestTable(props) {
 
     return (
         <>
-        {ascending}
         {rows ?
         <ReferralTable
         headCells={headCells}

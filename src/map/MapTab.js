@@ -128,9 +128,10 @@ export default function MapTab(props) {
 
     const [popupInfo, setPopupInfo] = useState(null);
     const [searchVal, setSearchVal] = useState('');
-    const [searchLat, setSearchLat] = useState();
-    const [searchLon, setSearchLon] = useState();
+    const [searchLat, setSearchLat] = useState(null);
+    const [searchLon, setSearchLon] = useState(null);
     const [pinDistance, setPinDistance] = useState(null);
+    const [pinDuration, setPinDuration] = useState(null);
     const [circleSource, setCircleSource] = useState();
     const [circleRadius, setCircleRadius] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 16.09 : 80.47);
     const [circleZoom, setCircleZoom] = useState(selectedClaim?.serviceGeneral === 'DPT' ? 10.0 : 7.5);
@@ -240,11 +241,12 @@ export default function MapTab(props) {
         console.log("Pin click", row);
         event.originalEvent.stopPropagation();
         setPopupInfo(row);
-        // api.get(`/map/directions/${searchLat},${searchLon}x${row.lat},${row.lon}`)
-        //     .then(distance => {
-        //         console.log(distance)
-        //         setPinDistance(distance)
-        //     });
+        searchLat && searchLon && api.get(`/map/directions/${searchLat},${searchLon}x${row.lat},${row.lon}`)
+            .then(result => {
+                console.log(result.data)
+                setPinDistance(result.data.distance)
+                setPinDuration(result.data.duration)
+            });
     };
 
     const handleClickSearch = (event) => {
@@ -475,7 +477,7 @@ export default function MapTab(props) {
                                 onClose={() => setPopupInfo(null)}
                             >
                                 <div>
-                                {popupInfo.name} ({pinDistance || 'xx miles'})
+                                {popupInfo.name} {searchLat && searchLon && `(${pinDistance || 'xx mi'}, ${pinDuration || 'xx min'})`}
                                 </div>
                                 {selectedClaim && (selectedClaim.referralStatus === 'Open' || selectedClaim.referralStatus === 'Reschedule') && 
                                 <div>

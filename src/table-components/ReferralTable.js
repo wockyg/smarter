@@ -38,6 +38,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DehazeIcon from '@mui/icons-material/Dehaze';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 
 import PropTypes from 'prop-types';
 
@@ -65,7 +66,8 @@ import useGetUser from '../hooks/useGetUser';
 import useUpdateRRLastWorked from '../hooks/useUpdateRRLastWorked';
 import useGetCptForAllStates from '../hooks/useGetCptForAllStates';
 import useGetReferralsOrphan from '../hooks/useGetReferralsOrphan';
-import useAddV1500 from '../hooks/useAddV1500';
+import useAddV1500Sensible from '../hooks/useAddV1500Sensible';
+import useAddV1500Nanonets from '../hooks/useAddV1500Nanonets';
 import useTestWebhook from '../hooks/useTestWebhook';
 
 import { saveAs } from 'file-saver';
@@ -156,13 +158,6 @@ function EnhancedTableToolbar(props) {
             }),
         }}
         >
-            {/* {numSelected > 0 ? (
-            <Tooltip title="Bulk Edit">
-            <IconButton onClick={handleStartBulkEdit}>
-                <DehazeIcon /><EditIcon />
-            </IconButton>
-            </Tooltip>
-        ) : ('')} */}
 
             <Grid container spacing={2}>
                 <Grid item>
@@ -325,7 +320,8 @@ export default function ReferralTable(props) {
     const userHistoryUpdate = useUpdateUserHistory();
     const rrLastWorkedUpdate = useUpdateRRLastWorked();
     const v1500Update = useUpdateV1500Upload();
-    const v1500Add = useAddV1500();
+    const v1500AddSensible = useAddV1500Sensible();
+    const v1500AddNanonets = useAddV1500Nanonets();
     const webhookTest = useTestWebhook();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
@@ -352,6 +348,7 @@ export default function ReferralTable(props) {
 
     const [uploadedFiles, setUploadedFiles] = useState([])
     const [fileLimit, setFileLimit] = useState(false);
+    const [uploadComplete, setUploadComplete] = useState(false);
 
     // console.log(uploadedFiles[0]);
 
@@ -721,7 +718,7 @@ export default function ReferralTable(props) {
         handleUploadFiles(chosenFiles)
     };
 
-    const handleUploadSubmit = () => {
+    const handleUploadSubmit = (method) => {
         // submit data
         console.log('SUBMIT THE V1500s');
         console.log(uploadedFiles);
@@ -731,10 +728,9 @@ export default function ReferralTable(props) {
             formData.append("v1500Blobs", file);
         })
 
-        v1500Add.mutate(formData);
-        
-        // reset files array
-        // setUploadedFiles([]);
+        // method === 'sensible' && uploadedFiles.length > 0 && v1500AddSensible.mutate(formData)
+
+        method === 'nanonets' && uploadedFiles.length > 0 && v1500AddNanonets.mutate(formData, {onSuccess:  (newData) => {setUploadComplete(true)}})
         
         // close modal
         // handleModalClose();
@@ -1199,17 +1195,19 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
+                {!uploadComplete &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
                 accept='application/pdf'
                 onChange={handleFileEvent}
                 />
+                }
                 <div className="uploaded-files-list">
                     <ul>
                         {uploadedFiles.map((file, i) => (
                             <li key={i}>
-                                {file.name}
+                                {file.name}{uploadComplete && <TaskAltIcon color="success" />}
                             </li>
                         ))} 
                     </ul>
@@ -1218,12 +1216,20 @@ export default function ReferralTable(props) {
                 }
               </DialogContent>
               <DialogActions>
+                {!uploadComplete &&
                 <Button onClick={handleModalClose}>Cancel</Button>
+                }
                 {type === 'rr' &&
                 <Button onClick={handleBulkSubmit}>Generate</Button>
                 }
-                {type === 'hcfa' &&
-                <Button onClick={handleUploadSubmit}>Upload</Button>
+                {type === 'hcfa' && !uploadComplete &&
+                <>
+                {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
+                <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
+                </>
+                }
+                {type === 'hcfa' && uploadComplete &&
+                <Button onClick={handleModalClose}>Done</Button>
                 }
                 {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
                 <Button onClick={handleBulkSubmit}>Update</Button>

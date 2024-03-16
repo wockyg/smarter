@@ -1,7 +1,7 @@
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
 
-export default function useAddV1500() {
+export default function useAddV1500Nanonets() {
 
   const queryClient = useQueryClient();
 
@@ -12,7 +12,7 @@ export default function useAddV1500() {
     //   console.log(pair[0], pair[1]);
     // }
 
-    api.post('/v1500/upload/smarter', values,
+    api.post('/v1500/upload/smarter/nanonets', values,
         {
           headers:
           {
