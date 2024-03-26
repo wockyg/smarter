@@ -7,11 +7,6 @@ export default function useAddV1500Nanonets() {
 
   const addV1500 = (values) => {
 
-    // Display the key/value pairs
-    // for (const pair of values.entries()) {
-    //   console.log(pair[0], pair[1]);
-    // }
-
     api.post('/v1500/upload/smarter/nanonets', values,
         {
           headers:
@@ -22,9 +17,9 @@ export default function useAddV1500Nanonets() {
         )
         .then(response => {
           if (response.status === 200) {
-            const data = response.data;
-            console.log("addRow success", data);
-            return data;
+            console.log("Successfully posted to nanonets");
+            console.log(response.data)
+            return response.status;
           } 
           
         });}

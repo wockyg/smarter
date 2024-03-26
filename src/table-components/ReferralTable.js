@@ -69,6 +69,7 @@ import useGetReferralsOrphan from '../hooks/useGetReferralsOrphan';
 import useAddV1500Sensible from '../hooks/useAddV1500Sensible';
 import useAddV1500Nanonets from '../hooks/useAddV1500Nanonets';
 import useTestWebhook from '../hooks/useTestWebhook';
+import useTestWebhookNanonets from '../hooks/useTestWebhookNanonets';
 
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
@@ -322,7 +323,7 @@ export default function ReferralTable(props) {
     const v1500Update = useUpdateV1500Upload();
     const v1500AddSensible = useAddV1500Sensible();
     const v1500AddNanonets = useAddV1500Nanonets();
-    const webhookTest = useTestWebhook();
+    const webhookTest = useTestWebhookNanonets();
 
     const [order, setOrder] = useState(initialSortOrder || 'asc');
     const [orderBy, setOrderBy] = useState(initialSort);
@@ -622,6 +623,7 @@ export default function ReferralTable(props) {
             setIncludeIA(false);
             setIncludePN(false);
             setGenerateRR(false);
+            setUploadComplete(false);
             setUploadedFiles([])
         }
     };
