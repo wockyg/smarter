@@ -1,5 +1,5 @@
 import {api} from '../index';
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 
 const getV1500NotApproved = () => api
                         .get(`/v1500View/notApproved`)
@@ -11,9 +11,13 @@ const getV1500NotApproved = () => api
 
 export default function useGetV1500NotApproved() {
 
+  const queryClient = useQueryClient();
+
   async function getAllV1500NotApproved() {
+    
     const data = await getV1500NotApproved();
     // console.log('data: ', data);
+    queryClient.invalidateQueries('referralVisits');
     return data;
   }
     
