@@ -730,6 +730,8 @@ export default function ReferralTable(props) {
             formData.append("v1500Blobs", file);
         })
 
+        formData.append("userId", user.userId)
+
         // method === 'sensible' && uploadedFiles.length > 0 && v1500AddSensible.mutate(formData)
 
         method === 'nanonets' && uploadedFiles.length > 0 && v1500AddNanonets.mutate(formData, {onSuccess:  (newData) => {setUploadComplete(true)}})
