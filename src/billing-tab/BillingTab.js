@@ -10,6 +10,7 @@ import D1500NotSentNew from './D1500NotSentNew';
 import AdjusterPastDue from './AdjusterPastDue';
 import FacilityPastDue from './FacilityPastDue';
 import FeeSchedules from '../3-middle/FeeSchedules';
+import BillMachineTop from './BillMachineTop';
 
 import '../App.css';
 
@@ -56,7 +57,7 @@ export default function BillingTab(props) {
         <MissingV1500 />
         }
         {selectedFilter === 'd1500NotApproved' &&
-        <D1500NotApproved />
+        <BillMachineTop />
         }
         {selectedFilter === 'd1500NotSent' &&
         <D1500NotSent />
