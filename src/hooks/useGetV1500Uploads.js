@@ -21,7 +21,7 @@ export default function useGetV1500Uploads() {
   return useQuery(['v1500Uploads'], getAllV1500Uploads, { 
     staleTime: (1 * (60 * 1000)), // 1 min
     cacheTime: (2 * (60 * 1000)), // 2 min
-    refetchInterval: (1 * (5 * 1000)), // 5 sec
+    refetchInterval: (3 * (1 * 1000)), // 3 sec
   });
 
 }

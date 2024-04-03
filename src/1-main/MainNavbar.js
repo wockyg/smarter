@@ -121,6 +121,7 @@ export default function MainNavbar() {
 
 
   const [anchorEl0, setAnchorEl0] = useState(null);
+  const [menu0Type, setMenu0Type] = useState(null);
   const [anchorEl1, setAnchorEl1] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
   const [anchorEl3, setAnchorEl3] = useState(null);
@@ -143,6 +144,25 @@ export default function MainNavbar() {
 
   const { status: statusUsers, data: users, error: errorUsers, isFetching: isFetchingUsers, isIdle: isIdleUsers} = useGetUsers();
 
+  const onlineUsers = users?.filter(u => u.expireTime && u.role === 'CC' && new Date(u.expireTime).toString() > new Date().toString())
+
+  const usersSorted = users?.filter(f => (f.role === 'CC')).sort((a, b) => {
+      const valueA = a.expireTime;
+      const valueB = b.expireTime;
+
+      if (new Date(valueA) < new Date(valueB)) {
+        // console.log(`${valueA } < ${valueB}`);
+        return 1;
+      }
+      if (new Date(valueA) > new Date(valueB)) {
+        // console.log(`${valueA } > ${valueB}`);
+        return -1;
+      }
+      
+      // values must be equal
+      return 0;
+    });
+
   const updateUser = useUpdateUser();
   const addBugReport = useAddBugReport();
   const addFeatureRequest = useAddFeatureRequest();
@@ -164,8 +184,9 @@ export default function MainNavbar() {
     setAddModalOpen(true);
   }
 
-  const handleOpenMenu0 = (event, n, f) => {
+  const handleOpenMenu0 = (event, type) => {
     setAnchorEl0(event.currentTarget);
+    setMenu0Type(type || null)
     setAnchorEl1(null);
     setAnchorEl2(null);
     setAnchorEl3(null);
@@ -173,6 +194,8 @@ export default function MainNavbar() {
 
   const handleOpenHistory = (event, n, f) => {
     setAnchorEl0(null);
+    setMenu0Type(null)
+
     setAnchorEl1(event.currentTarget);
     setAnchorEl2(null);
     setAnchorEl3(null);
@@ -180,6 +203,8 @@ export default function MainNavbar() {
 
   const handleOpenHelp = (event, n, f) => {
     setAnchorEl0(null);
+    setMenu0Type(null)
+
     setAnchorEl1(null);
     setAnchorEl2(event.currentTarget);
     setAnchorEl3(null);
@@ -187,6 +212,8 @@ export default function MainNavbar() {
 
   const handleOpenAdd = (event, n, f) => {
     setAnchorEl0(null);
+    setMenu0Type(null)
+
     setAnchorEl1(null);
     setAnchorEl3(null);
     setAnchorEl3(event.currentTarget);
@@ -194,6 +221,7 @@ export default function MainNavbar() {
 
   const handleCloseMenu0 = () => {
       setAnchorEl0(null);
+      setMenu0Type(null)
   };
 
   const handleCloseHistory = () => {
@@ -209,7 +237,7 @@ export default function MainNavbar() {
   };
 
   const handleClick = (event) => {
-      updateUser.mutate({initials: user?.initials, lastLogout: new Date()});
+      // updateUser.mutate({initials: user?.initials, lastLogout: new Date()});
       logout({ logoutParams: { returnTo: window.location.origin } });
   };
 
@@ -414,7 +442,12 @@ export default function MainNavbar() {
           <IconButton sx={{border: 1, width: 30, height: 30}} onClick={handleOpenHelp}>
             <QuestionMarkIcon fontSize='small' />
           </IconButton>
-            <IconButton onClick={handleOpenMenu0}>
+          {user?.admin &&
+          <IconButton onClick={(e) => handleOpenMenu0(e, "online")}>
+            <Avatar key={onlineUsers?.length} sx={{cursor: 'pointer', bgcolor: '#51EF6E', width: 30, height: 30, fontSize: 13}}>{onlineUsers?.length}</Avatar>
+          </IconButton>
+          }
+          <IconButton onClick={handleOpenMenu0}>
             <Avatar key={user?.initials} sx={{cursor: 'pointer', bgcolor: deepOrange[500], width: 30, height: 30, fontSize: 13}}>{user?.initials}</Avatar>
           </IconButton>
             <Menu
@@ -498,18 +531,36 @@ export default function MainNavbar() {
         open={open0}
         onClose={handleCloseMenu0}
       >
-
-         <MenuItem>
+        {menu0Type === null &&
+        [
+        <MenuItem>
             Profile
-        </MenuItem>
+        </MenuItem>,
 
         <MenuItem>
             Settings
-        </MenuItem>
+        </MenuItem>,
 
         <MenuItem  onClick={(e) => handleClick(e)}>
             Logout
         </MenuItem>
+        ]
+        }
+
+        {menu0Type === "online" &&
+        
+        usersSorted.map((u, i) => {
+          const timeIdleMin = Math.round(Math.abs(new Date() - new Date(u.expireTime)) / 60000)
+          const timeIdleHrs = Math.round(timeIdleMin / 60)
+          return (
+            <MenuItem key={i} disabled={!u.isActive}>
+              {u.email} {!u.isActive && `(${timeIdleMin > 60 ? timeIdleHrs : timeIdleMin} ${timeIdleMin > 60 ? 'hr' : 'min'})`} 
+            </MenuItem>
+          )
+        }
+        )
+    
+        }
             
     </Menu>
 
