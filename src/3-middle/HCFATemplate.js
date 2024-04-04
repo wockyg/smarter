@@ -7,7 +7,7 @@ import blank1500 from '../document-templates/blank1500.jpg';
 
 export default function HCFATemplate(props) {
 
-    const {selectedClaim, codeList, cptRows, selectedD1500} = props;
+    const {selectedClaim, codeList, cptRows, selectedV1500} = props;
 
     const num_codes = codeList?.length;
 
@@ -104,21 +104,21 @@ export default function HCFATemplate(props) {
                 {/* Box 17 - NAME OF REFERRING PROVIDER / NPI */}
                 {/* <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedClaim?.physicianFirst.toUpperCase()} {selectedClaim?.physicianLast.toUpperCase()}, MD</Text> */}
                 {/* <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedClaim?.physicianNPI}</Text> */}
-                <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedD1500 ? selectedD1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
-                <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedD1500 ? selectedD1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
+                <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
+                <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
                 {/* Box 21 - DIAGNOSIS OR NATURE OF ILLNESS OR INJURY */}
-                {(num_codes > 0 || selectedD1500?.diagnosis_a) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_a : codeList[0].icd10}</Text>}
-                {(num_codes > 1 || selectedD1500?.diagnosis_b) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_b : codeList[1].icd10}</Text>}
-                {(num_codes > 2 || selectedD1500?.diagnosis_c) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_c : codeList[2].icd10}</Text>}
-                {(num_codes > 3 || selectedD1500?.diagnosis_d) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_d : codeList[3].icd10}</Text>}
-                {(num_codes > 4 || selectedD1500?.diagnosis_e) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_e : codeList[4].icd10}</Text>}
-                {(num_codes > 5 || selectedD1500?.diagnosis_f) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_f : codeList[5].icd10}</Text>}
-                {(num_codes > 6 || selectedD1500?.diagnosis_g) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_g : codeList[6].icd10}</Text>}
-                {(num_codes > 7 || selectedD1500?.diagnosis_h) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_h : codeList[7].icd10}</Text>}
-                {(num_codes > 8 || selectedD1500?.diagnosis_i) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_i : codeList[8].icd10}</Text>}
-                {(num_codes > 9 || selectedD1500?.diagnosis_j) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_j : codeList[9].icd10}</Text>}
-                {(num_codes > 10 || selectedD1500?.diagnosis_k) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_k : codeList[10].icd10}</Text>}
-                {(num_codes > 11 || selectedD1500?.diagnosis_l) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedD1500 ? selectedD1500.diagnosis_l : codeList[11].icd10}</Text>}
+                {(num_codes > 0 || selectedV1500?.diagnosis_a) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_a : codeList[0].icd10}</Text>}
+                {(num_codes > 1 || selectedV1500?.diagnosis_b) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_b : codeList[1].icd10}</Text>}
+                {(num_codes > 2 || selectedV1500?.diagnosis_c) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_c : codeList[2].icd10}</Text>}
+                {(num_codes > 3 || selectedV1500?.diagnosis_d) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_d : codeList[3].icd10}</Text>}
+                {(num_codes > 4 || selectedV1500?.diagnosis_e) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_e : codeList[4].icd10}</Text>}
+                {(num_codes > 5 || selectedV1500?.diagnosis_f) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_f : codeList[5].icd10}</Text>}
+                {(num_codes > 6 || selectedV1500?.diagnosis_g) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_g : codeList[6].icd10}</Text>}
+                {(num_codes > 7 || selectedV1500?.diagnosis_h) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_h : codeList[7].icd10}</Text>}
+                {(num_codes > 8 || selectedV1500?.diagnosis_i) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_i : codeList[8].icd10}</Text>}
+                {(num_codes > 9 || selectedV1500?.diagnosis_j) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_j : codeList[9].icd10}</Text>}
+                {(num_codes > 10 || selectedV1500?.diagnosis_k) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_k : codeList[10].icd10}</Text>}
+                {(num_codes > 11 || selectedV1500?.diagnosis_l) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_l : codeList[11].icd10}</Text>}
 
                 {/* Box 24 - DOS/CPT ROWS */}
 
@@ -231,7 +231,7 @@ export default function HCFATemplate(props) {
                 }
 
                 {/* Box 26 - PATIENT"S ACCOUNT NO */}
-                <Text style={{ position: 'absolute', top: 682, left: 175, fontSize: 8 }}>{selectedD1500 ? selectedD1500.patient_account_no : ''}</Text>
+                <Text style={{ position: 'absolute', top: 682, left: 175, fontSize: 8 }}>{selectedV1500 ? selectedV1500.patient_account_no : ''}</Text>
 
                 {/* Box 28 - TOTAL CHARGE */}
 
