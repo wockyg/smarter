@@ -309,7 +309,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedD1500, setSelectedD1500 } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500 } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -410,7 +410,7 @@ export default function ReferralTable(props) {
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
         setCptRows([]);
-        setSelectedD1500(null);
+        setSelectedV1500(null);
         if (claim.billingStatus === null || !keepBillMode) {
           setBillMode(false);
           setKeepBillMode(false);
@@ -435,7 +435,7 @@ export default function ReferralTable(props) {
             return {...r, charges: rateTotal}
         })
         setCptRows(newnewRows);
-        setSelectedD1500(row);
+        setSelectedV1500(row);
     };
 
     const handleOpenMenu = (event, id) => {
@@ -843,12 +843,23 @@ export default function ReferralTable(props) {
                                             `${rowColor}`
                                         )
                                     :
+                                        (type === 'hcfa'
+                                        ?
+                                            row.v1500Id === selectedV1500.v1500Id
+                                            ?
+                                            'selectedClaimRowDPT'
+                                            :
+                                            'alternateColorA'
+                                        :
                                         (row.referralId === +linkId 
                                          ? 
                                             (row.serviceGeneral === "FCE" ? 'selectedClaimRowFCE' : 'selectedClaimRowDPT') 
                                          :
                                             (row.serviceGeneral === "FCE" && 'regularRowFCE')
                                         )
+                                        )
+                                        
+                                        
                                 }
                                 onClick={(e) => type === 'hcfa' && handleClickHcfa(e, row)}
                                 >

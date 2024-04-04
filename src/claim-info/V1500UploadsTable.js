@@ -197,7 +197,7 @@ export default function V1500UploadsTable(props) {
                     <CheckCircleOutlineIcon color='success' />
                     }
 
-                    {row.uploadNanonetsStatus === 'Failure' &&
+                    {row.uploadNanonetsStatus === 'failed' &&
                     <WarningIcon color='error' />
                     }
                   </StyledTableCell>
@@ -211,7 +211,7 @@ export default function V1500UploadsTable(props) {
                     <CheckCircleOutlineIcon color='success' />
                     }
 
-                    {row.extractionStatus === 'Failure' &&
+                    {row.extractionStatus === 'failed' &&
                     <WarningIcon color='error' />
                     }
                   </StyledTableCell>
@@ -225,7 +225,7 @@ export default function V1500UploadsTable(props) {
                     <CheckCircleOutlineIcon color='success' />
                     }
 
-                    {row.uploadSmarterStatus === 'Failure' &&
+                    {row.uploadSmarterStatus === 'failed' &&
                     <WarningIcon color='error' />
                     }
                   </StyledTableCell>
@@ -239,7 +239,7 @@ export default function V1500UploadsTable(props) {
                     <CheckCircleOutlineIcon color='success' />
                     }
 
-                    {row.fileMoveStatus === 'Failure' &&
+                    {row.fileMoveStatus === 'failed' &&
                     <WarningIcon color='error' />
                     }
                   </StyledTableCell>

@@ -13,10 +13,11 @@ const SelectedClaimContextProvider = (props) => {
     const [cptRows, setCptRows] = useState([]);
     const [newRowData, setNewRowData] = useState({});
     const [selectedD1500, setSelectedD1500] = useState(null);
+    const [selectedV1500, setSelectedV1500] = useState(null);
     
     return (
         <SelectedClaimContext.Provider 
-        value={{ selectedClaimId, setSelectedClaimId, page, setPage, tab, setTab, billMode, setBillMode, cptRows, setCptRows, newRowData, setNewRowData, keepBillMode, setKeepBillMode, selectedD1500, setSelectedD1500 }}>
+        value={{ selectedClaimId, setSelectedClaimId, page, setPage, tab, setTab, billMode, setBillMode, cptRows, setCptRows, newRowData, setNewRowData, keepBillMode, setKeepBillMode, selectedD1500, setSelectedD1500, selectedV1500, setSelectedV1500 }}>
             {props.children}
         </SelectedClaimContext.Provider>
     );
