@@ -936,7 +936,7 @@ export default function RowGenerator() {
                                 <TableCell sx={{background: '#E0E4E8'}} />
                                 <TableCell sx={{background: '#E0E4E8'}} />
                                 <TableCell sx={{padding: 0.5, borderRight: '1px solid', borderLeft: '1px solid'}}>{total_charges}</TableCell>
-                                <TableCell sx={{padding: 0.5}}>{total_units}</TableCell>
+                                <TableCell sx={{padding: 0.5, background: total_units === 4 ? '#5DE576' : '#ED534A'}}>{total_units}</TableCell>
                                 <TableCell sx={{background: '#ABC3E3'}}>
                                     <div style={{padding: '1px'}}>
                                         <label htmlFor="d1500SendFormat">Format:</label>
