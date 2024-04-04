@@ -185,7 +185,7 @@ export default function V1500UploadsTable(props) {
                   </StyledTableCell>
 
                   <StyledTableCell sx={{ borderRight: 1 }} align="left">
-                    {row.dateAdded}
+                    {row.dateAddedFormat}
                   </StyledTableCell>
 
                   <StyledTableCell sx={{ borderRight: 1 }} align="left">
