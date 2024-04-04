@@ -144,7 +144,7 @@ export default function MainNavbar() {
 
   const { status: statusUsers, data: users, error: errorUsers, isFetching: isFetchingUsers, isIdle: isIdleUsers} = useGetUsers();
 
-  const onlineUsers = users?.filter(u => u.expireTime && u.role === 'CC' && new Date(u.expireTime).toString() > new Date().toString())
+  const onlineUsers = users?.filter(u => u.expireTime && u.role === 'CC' && u.isActive)
 
   const usersSorted = users?.filter(f => (f.role === 'CC')).sort((a, b) => {
       const valueA = a.expireTime;
