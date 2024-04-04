@@ -168,13 +168,39 @@ export default function V1500UploadsTable(props) {
                 // className={''}
                 // onClick={(e) => type === 'hcfa' && handleClickHcfa(e, row)}
                 >
-                  {headCells.filter(c => c.id !== 'extractionStatus').map((col, j, a2) => {
+                  {/* {headCells.filter(c => c.id !== 'extractionStatus').map((col, j, a2) => {
                     return(
                       <StyledTableCell sx={{ borderRight: 1 }} key={col.id} align="left">
                         {row[col.id]}
                       </StyledTableCell>
                     )
-                  })}
+                  })} */}
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.v1500Id}
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.original_filename}
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.dateAdded}
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.uploadNanonetsStatus === 'pending' &&
+                    <CircularProgress size={15} />
+                    }
+
+                    {row.uploadNanonetsStatus === 'Success' &&
+                    <CheckCircleOutlineIcon color='success' />
+                    }
+
+                    {row.uploadNanonetsStatus === 'Failure' &&
+                    <WarningIcon color='error' />
+                    }
+                  </StyledTableCell>
 
                   <StyledTableCell sx={{ borderRight: 1 }} align="left">
                     {row.extractionStatus === 'pending' &&
@@ -186,6 +212,34 @@ export default function V1500UploadsTable(props) {
                     }
 
                     {row.extractionStatus === 'Failure' &&
+                    <WarningIcon color='error' />
+                    }
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.uploadSmarterStatus === 'pending' &&
+                    <CircularProgress size={15} />
+                    }
+
+                    {row.uploadSmarterStatus === 'Success' &&
+                    <CheckCircleOutlineIcon color='success' />
+                    }
+
+                    {row.uploadSmarterStatus === 'Failure' &&
+                    <WarningIcon color='error' />
+                    }
+                  </StyledTableCell>
+
+                  <StyledTableCell sx={{ borderRight: 1 }} align="left">
+                    {row.fileMoveStatus === 'pending' &&
+                    <CircularProgress size={15} />
+                    }
+
+                    {row.fileMoveStatus === 'Success' &&
+                    <CheckCircleOutlineIcon color='success' />
+                    }
+
+                    {row.fileMoveStatus === 'Failure' &&
                     <WarningIcon color='error' />
                     }
                   </StyledTableCell>

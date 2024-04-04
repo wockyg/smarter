@@ -24,10 +24,28 @@ const headCells = [
     label: 'Uploaded',
   },  
   {
+    id: 'uploadNanonetsStatus',
+    numeric: false,
+    disablePadding: false,
+    label: 'NN-U',
+  },  
+  {
     id: 'extractionStatus',
     numeric: false,
     disablePadding: false,
-    label: 'Status',
+    label: 'NN-E',
+  }, 
+  {
+    id: 'uploadSmarterStatus',
+    numeric: false,
+    disablePadding: false,
+    label: 'SM-U',
+  },  
+  {
+    id: 'fileMoveStatus',
+    numeric: false,
+    disablePadding: false,
+    label: 'GD-U',
   },  
 
 ];
