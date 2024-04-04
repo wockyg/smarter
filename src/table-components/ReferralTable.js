@@ -845,7 +845,7 @@ export default function ReferralTable(props) {
                                     :
                                         (type === 'hcfa'
                                         ?
-                                            row.v1500Id === selectedV1500.v1500Id
+                                            row.v1500Id === selectedV1500?.v1500Id
                                             ?
                                             'selectedClaimRowDPT'
                                             :
