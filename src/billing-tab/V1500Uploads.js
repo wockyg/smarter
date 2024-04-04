@@ -18,7 +18,7 @@ const headCells = [
     label: 'Filename',
   },
   {
-    id: 'dateAdded',
+    id: 'dateAddedFormat',
     numeric: false,
     disablePadding: false,
     label: 'Uploaded',

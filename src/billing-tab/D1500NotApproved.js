@@ -9,7 +9,7 @@ const headCells = [
     id: 'v1500Id',
     numeric: false,
     disablePadding: false,
-    label: 'V1500 ID',
+    label: 'ID',
   },
   // {
   //   id: 'service',
@@ -60,7 +60,7 @@ const headCells = [
     label: 'Client',
   },
   {
-    id: 'dateAdded',
+    id: 'dateAddedFormat',
     numeric: false,
     disablePadding: false,
     label: 'Uploaded',
