@@ -849,7 +849,7 @@ export default function ReferralTable(props) {
                                             ?
                                             'selectedClaimRowDPT'
                                             :
-                                            'alternateColorA'
+                                            null
                                         :
                                         (row.referralId === +linkId 
                                          ? 
