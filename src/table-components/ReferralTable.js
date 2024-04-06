@@ -25,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Fab from '@mui/material/Fab';
 
 import { visuallyHidden } from '@mui/utils';
 
@@ -39,6 +40,9 @@ import DehazeIcon from '@mui/icons-material/Dehaze';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import DownloadingIcon from '@mui/icons-material/Downloading';
+
+import CircularProgress from '@mui/material/CircularProgress';
 
 import PropTypes from 'prop-types';
 
@@ -71,6 +75,9 @@ import useAddV1500Nanonets from '../hooks/useAddV1500Nanonets';
 import useTestWebhook from '../hooks/useTestWebhook';
 import useTestWebhookNanonets from '../hooks/useTestWebhookNanonets';
 
+import V1500UploadsMenu from '../claim-info/V1500UploadsMenu';
+import UploadButton from '../billing-tab/UploadButton';
+
 import { saveAs } from 'file-saver';
 import RecordsRequestLetter from '../document-templates/RecordsRequestLetter';
 import { BlobProvider, Document, Page, Text, pdf, usePDF } from '@react-pdf/renderer';
@@ -84,6 +91,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 
 import { useParams } from 'react-router-dom';
+
+import { green } from '@mui/material/colors';
+
 
 import './ReferralTable.css';
 
@@ -332,6 +342,7 @@ export default function ReferralTable(props) {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
+    const [menuType, setMenuType] = useState(null);
 
     const [editIDx, setEditIDx] = useState(-1);
     const [revertData, setRevertData] = useState({});
@@ -401,6 +412,18 @@ export default function ReferralTable(props) {
     //     setPrevRowId(id);
     // };
 
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+
+    const buttonSx = {
+        ...(success && {
+        bgcolor: green[500],
+        '&:hover': {
+            bgcolor: green[700],
+        },
+        }),
+    };
+
     
 
     const handleClaimClicked = (event, claim) => {
@@ -440,7 +463,9 @@ export default function ReferralTable(props) {
 
     const handleOpenMenu = (event, id) => {
         setAnchorEl(event.currentTarget);
+        setMenuType("deleteReferral")
         setDeleteId(id);
+
     };
 
     const handleCloseMenu = () => {
@@ -452,8 +477,7 @@ export default function ReferralTable(props) {
         mutationDelete.mutate(deleteId);
         // setNotesPage(0);
         // setClaimTab(0);
-        setAnchorEl(null);
-        setDeleteId(null);
+        handleCloseMenu();
     };
 
     const startEditing = (i, row) => {
@@ -572,8 +596,17 @@ export default function ReferralTable(props) {
         
     };
 
-    const handleOpenUpload = () => {
-        console.log('UPLOAD');
+    const handleClickUpload = (event) => {
+        console.log('OPEN UPLOAD menu');
+        setAnchorEl(event.currentTarget);
+        setMenuType("uploadButton")
+        // open modal
+        // setModalType('upload')
+        // setModalOpen(true);
+        
+    };
+
+    const handleOpenUploadModal = (event) => {
         // open modal
         setModalType('upload')
         setModalOpen(true);
@@ -746,25 +779,25 @@ export default function ReferralTable(props) {
         webhookTest.mutate();
     };
 
+    
+
     let prevRowClassName = 'alternateColorA';
 
     return(
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
 
-            {type === 'hcfa' &&
+            {/* {type === 'hcfa' &&
                 <Button size='small' onClick={handleTestWebhook}>
                     Test Webhook
                 </Button>
-            }
+            } */}
 
             {type === 'hcfa' &&
-                <IconButton onClick={handleOpenUpload}>
-                    <UploadFileIcon />
-                </IconButton>
+                <UploadButton handleClickUpload={handleClickUpload} />
             }
           
-            {!cc &&
+            {!cc && type !== 'hcfa' &&
             <Button variant="text" onClick={onDownload}>
               <DownloadIcon />
             </Button>
@@ -1093,9 +1126,24 @@ export default function ReferralTable(props) {
               open={open}
               onClose={handleCloseMenu}
             >
-              <MenuItem onClick={handleDeleteReferral}>
-                  Delete referral?
-              </MenuItem>
+                {menuType === "deleteReferral" &&
+                <MenuItem onClick={handleDeleteReferral}>
+                    Delete referral?
+                </MenuItem>  
+                }
+
+                {menuType === "uploadButton" &&
+                <MenuItem onClick={handleOpenUploadModal}>
+                    Upload new V1500's
+                </MenuItem>  
+                }
+
+                {menuType === "uploadButton" && 
+                <MenuItem>
+                    <V1500UploadsMenu />
+                </MenuItem>
+                }
+              
 
             </Menu>
 

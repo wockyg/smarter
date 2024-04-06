@@ -22,15 +22,15 @@ export default function BillMachineTop(props) {
 
     return (
         <Box sx={{ width: '100%', height: 570 }}>
-
-            <Grid container>
+            <D1500NotApproved />
+            {/* <Grid container>
                 <Grid item xs={3}>
                     <V1500Uploads />
                 </Grid>
                 <Grid item xs={9}>
                     <D1500NotApproved />
                 </Grid>
-            </Grid>
+            </Grid> */}
         
         </Box>
     );
