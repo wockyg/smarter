@@ -17,7 +17,9 @@ export default function UploadButton(props) {
 
   const { status: statusUploads, data: rows, error: errorUploads, isFetching: isFetchingUploads } = useGetV1500Uploads();
 
-  const numPending = rows?.filter(r => r.uploadProgress < 100).length
+  const numPending = rows?.filter(r => r.uploadProgress < 100 && r.uploadProgress > -1).length
+
+  const numFailed = rows?.filter(r => r.uploadProgress === -1).length
 
   // const buttonSx = {
   //       ...(success && {
@@ -40,8 +42,8 @@ export default function UploadButton(props) {
             // sx={buttonSx}
             onClick={props?.handleClickUpload}
             >
-              {numPending > 0 ?
-              <Badge badgeContent={numPending} color="error">
+              {(numPending > 0 || numFailed > 0) ?
+              <Badge badgeContent={numPending > 0 ? numPending : numFailed} color="error">
                 <UploadFileIcon />
               </Badge>
               :
