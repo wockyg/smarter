@@ -1,0 +1,1 @@
+export const notesReceived = ['', 'Daily', 'InitialEval', 'Re-Eval', 'Progress', 'Discharge']

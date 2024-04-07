@@ -4,6 +4,16 @@ import Box from '@mui/material/Box';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import FlagIcon from '@mui/icons-material/Flag';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import InfoFromAdjusterUpdateForm from './InfoFromAdjusterUpdateForm';
@@ -20,6 +30,7 @@ import ReminderForm from './ReminderForm';
 
 
 import useGetReferral from '../hooks/useGetReferral';
+import useGetReferralNotesFlagged from '../hooks/useGetReferralNotesFlagged';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
@@ -30,6 +41,7 @@ export default function ReferralDetails(props) {
     let { id: linkId } = useParams();
 
     const { status: statusReferrals, data: selectedClaim, error: errorReferrals, isFetching: isFetchingReferrals } = useGetReferral(+linkId);
+    const { status: statusFlagged, data: flagged, error: errorFlagged, isFetching: isFetchingFlagged } = useGetReferralNotesFlagged(+linkId);
 
     const { page, setPage } = useContext(SelectedClaimContext);
 
@@ -51,10 +63,50 @@ export default function ReferralDetails(props) {
 
         <Grid item xs={1.5}>
 
+            {/* <List>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <FlagIcon />
+                    </ListItemIcon>
+                    <ListItemText>
+                        Note goes here
+                        </ListItemText>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton>
+                    <ListItemIcon>
+                        <FlagIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Drafts" />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider /> */}
+      
+
             {/* Info from Adjuster */}
+            {selectedClaim?.referralStatus === 'Complete' ?
+            <Accordion TransitionProps={{ unmountOnExit: true }}>
+                <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel8a-content"
+                id="panel8a-header"
+                >
+                    Docs
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Box sx={{border: 1}}>
+                        <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
+                    </Box>
+                </AccordionDetails>
+            </Accordion>
+            :
             <Box sx={{border: 1}}>
                 <InfoFromAdjusterUpdateForm selectedClaim={selectedClaim} />
             </Box>
+            }
 
             <hr />
 
@@ -66,7 +118,7 @@ export default function ReferralDetails(props) {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
                 >
-                    Letters
+                    Letters (slow)
                 </AccordionSummary>
                 <AccordionDetails>
                     <AuthConfLetters />

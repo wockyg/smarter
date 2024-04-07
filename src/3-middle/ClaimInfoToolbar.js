@@ -8,6 +8,12 @@ import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import RuleIcon from '@mui/icons-material/Rule';
@@ -43,6 +49,7 @@ export default function ClaimInfoToolbar() {
     const [removeField, setRemoveField] = useState(null);
     const [editClaimNumber, setEditClaimNumber] = useState(false);
     const [tempClaimNumber, setTempClaimNumber] = useState('');
+    const [addNoteOpen, setAddNoteOpen] = useState(false);
 
     const open0 = Boolean(anchorEl0);
     const open1 = Boolean(anchorEl1);
@@ -93,6 +100,27 @@ export default function ClaimInfoToolbar() {
       }
       mutationUpdate.mutate(values);
       handleCloseMenu();
+    };
+
+    const handleAddImportantNote = () => {
+      setAddNoteOpen(true)
+      handleCloseMenu()
+    };
+
+    const handleSubmitImportantNote = () => {
+      // let values = {
+      //   referralId: selectedClaim.referralId,
+      //   [field]: value ? value : null
+      // }
+      // if (field === "fuHoldNotes") {
+      //   values.ptStatus = "Active";
+      // }
+      // mutationUpdate.mutate(values);
+      // handleCloseMenu();
+    };
+
+    const handleModalClose = () => {
+      setAddNoteOpen(false)
     };
 
     const handleUpdateClaimNumber = () => {
@@ -179,6 +207,9 @@ export default function ClaimInfoToolbar() {
                     </u>
                     </div>
                     }
+                </Badge>
+                <Badge>
+                  {selectedClaim.claimNumberNoDash}
                 </Badge>
               </h3>
             </Grid>
@@ -281,12 +312,16 @@ export default function ClaimInfoToolbar() {
           </Grid>
         </Box>
       </Box>
+      
       <Menu
         id="extras-add-menu"
         anchorEl={anchorEl0}
         open={open0}
         onClose={handleCloseMenu}
       >
+        <MenuItem  onClick={handleAddImportantNote}>
+            Add important note
+        </MenuItem>
         {!selectedClaim.betaTest && 
         <MenuItem  onClick={() => handleUpdate('betaTest', true)}>
             Add to Tracked Files
@@ -309,6 +344,7 @@ export default function ClaimInfoToolbar() {
         }
             
       </Menu>
+
       <Menu
       id="extras-remove-menu"
       anchorEl={anchorEl1}
@@ -321,6 +357,7 @@ export default function ClaimInfoToolbar() {
         </MenuItem>
   
       </Menu>
+
       <Menu
       id="extras-remove-menu"
       anchorEl={anchorEl2}
@@ -333,6 +370,30 @@ export default function ClaimInfoToolbar() {
         </MenuItem>
   
       </Menu>
+
+      <Dialog
+      open={addNoteOpen}
+      onClose={handleModalClose}
+      >
+
+        <DialogTitle>
+          Add important referral note
+        </DialogTitle>
+
+        <DialogContent>
+          <input
+          // id='fileUpload'
+          type='text' 
+          // onChange={handleFileEvent}
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleModalClose}>Cancel</Button>
+          <Button onClick={handleSubmitImportantNote}>Add</Button>
+        </DialogActions>
+
+      </Dialog>
       </>
       }
       </>

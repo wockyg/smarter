@@ -1,0 +1,1 @@
+export const serviceTypes = ['', 'Daily', 'InitialEval', 'Combined', 'Re-Eval', 'WC (2hr.)', 'WC (3hr.)', 'WH (2hr.)', 'WH (3hr.)']

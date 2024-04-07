@@ -28,7 +28,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Popover from '@mui/material/Popover';
 
-import {times} from '../lookup-tables/lookup_times'
+import { times } from '../lookup-tables/lookup_times'
+import { times2 } from '../lookup-tables/lookup_times2'
+import { serviceTypes } from '../lookup-tables/lookup_serviceTypes';
+import { notesReceived } from '../lookup-tables/lookup_notesReceived';
 
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -65,6 +68,14 @@ export default function ApptVerification(props) {
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
     const [modalType, setModalType] = useState(null);
     const [enabled, setEnabled] = useState({});
+
+    const [gridEditId, setGridEditId] = useState(null);
+    const [gridEditKey, setGridEditKey] = useState(null);
+    const [gridEditVal, setGridEditVal] = useState(null);
+    const [gridEditOgVal, setGridEditOgVal] = useState(null);
+    const [gridEditType, setGridEditType] = useState(null);
+    const [gridEditOptions, setGridEditOptions] = useState(null);
+    const [gridCheckboxChecked, setGridCheckboxChecked] = useState(Boolean(gridEditVal));
 
     const [menuType, setMenuType] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -193,17 +204,62 @@ export default function ApptVerification(props) {
         
     };
 
-    const handleOpenGrid = (event, key) => {
+    const handleOpenGrid = (event, row, key, type, options) => {
+        
+        // TODO validate grid edit request: is it allowed?
+
         console.log('Open Grid edit');
         setAnchorEl(event.currentTarget);
         // console.log(event.currentTarget);
         setMenuType('grid');
-        
+        setGridEditId(row.billingId)
+        setGridEditKey(key);
+        setGridEditVal(row[key]);
+        setGridEditType(type);
+        setGridEditOgVal(row[key]);
+        type === 'select' && setGridEditOptions(options)
+        type === 'checkbox' && setGridCheckboxChecked(Boolean(row[key]))
     };
+
+    const handleChangeGridEdit = (event) => {
+        let newVal;
+        if (gridEditType === "checkbox") {
+            newVal = gridEditVal ? null : "Yes";
+            setGridCheckboxChecked(Boolean(newVal))
+        }
+        else {
+            newVal = event.target.value === '' ? null : event.target.value;
+        }
+        setGridEditVal(newVal)
+    }
+
+    const handleGridSubmit = () => {
+
+        console.log('SUBMIT THE GRID');
+        console.log(gridEditKey, ": ", gridEditVal);
+
+        if (gridEditVal === gridEditOgVal) {
+            // value did not change, don't update db
+            console.log("nothing to update...")
+            handleCloseMenu();
+            return;
+        }
+
+        // update row in db
+        mutationUpdate.mutate({billingId: gridEditId, [gridEditKey]: gridEditVal});
+        handleCloseMenu();
+
+    }
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
         setMenuType(null);
+        setGridEditVal(null);
+        setGridEditOgVal(null);
+        setGridEditType(null);
+        setGridEditOptions(null)
+        setGridEditId(null)
+        // setGridCheckboxChecked(Boolean(gridEditVal))
     };
 
      const handleModalClose = (event, reason) => {
@@ -690,14 +746,30 @@ export default function ApptVerification(props) {
                                             </> 
                                             : 
                                             <>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dos}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dosTime}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.attend}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.serviceType}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.notesReceived}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.v1500 && row.v1500Format}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.dosNotes}</TableCell>
-                                            <TableCell onClick={handleOpenGrid} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>{row.needPN}</TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "dos", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.dos}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "dosTime", "select", times2)} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.dosTime}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "attend", "select", ['', 'Yes', 'No'])} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.attend}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "serviceType", "select", serviceTypes)} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.serviceType}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "notesReceived", "select", notesReceived)} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.notesReceived}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "v1500", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.v1500 && row.v1500}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "dosNotes", "textarea")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.dosNotes}
+                                            </TableCell>
+                                            <TableCell onClick={(e) => handleOpenGrid(e, row, "needPN", "checkbox")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.needPN}
+                                            </TableCell>
                                             <StyledTableCell>
                                                 <Grid container>
                                                     <Grid item xs={6}>
@@ -741,7 +813,50 @@ export default function ApptVerification(props) {
             }
 
             {menuType === 'grid' &&
-            'Grid edit'
+            <>
+
+            {(gridEditType === 'date' || gridEditType === 'text') &&
+            <input 
+            type={gridEditType}
+            name={gridEditKey}
+            value={gridEditVal ? gridEditVal : ''}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            {gridEditType === 'select' &&
+            <select
+            onChange={(event) => handleChangeGridEdit(event)}
+            value={gridEditVal ? gridEditVal : ''}
+            name={gridEditKey}
+            >
+                {gridEditOptions.map((o, i) => (
+                    <option key={i} value={o}>{o}</option>
+                ))}
+            </select>
+            }
+
+            {gridEditType === 'textarea' &&
+            <textarea
+            name={gridEditKey}
+            value={gridEditVal ? gridEditVal : ''}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            {gridEditType === 'checkbox' &&
+            <input 
+            type="checkbox"
+            id={`${gridEditKey}-checkbox`}
+            name={gridEditKey}
+            value={gridCheckboxChecked}
+            checked={gridCheckboxChecked}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            <Button onClick={handleGridSubmit}>Update</Button>
+            </>
             }
             
         </Popover>

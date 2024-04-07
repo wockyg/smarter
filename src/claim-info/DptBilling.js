@@ -20,6 +20,12 @@ import Tooltip from '@mui/material/Tooltip';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+
+import { serviceTypes } from '../lookup-tables/lookup_serviceTypes';
+import { notesReceived } from '../lookup-tables/lookup_notesReceived';
+import { status } from '../lookup-tables/lookup_paymentStatus';
 
 import useGetReferralVisits from '../hooks/useGetReferralVisits';
 import useGetReferralAuth from '../hooks/useGetReferralAuth';
@@ -44,6 +50,18 @@ export default function DptBilling(props) {
     const [selected, setSelected] = useState([]);
     const [bulkModalOpen, setBulkModalOpen] = useState(false);
     const [enabled, setEnabled] = useState({});
+
+    const [gridEditId, setGridEditId] = useState(null);
+    const [gridEditKey, setGridEditKey] = useState(null);
+    const [gridEditVal, setGridEditVal] = useState(null);
+    const [gridEditOgVal, setGridEditOgVal] = useState(null);
+    const [gridEditType, setGridEditType] = useState(null);
+    const [gridEditOptions, setGridEditOptions] = useState(null);
+    const [gridCheckboxChecked, setGridCheckboxChecked] = useState(Boolean(gridEditVal));
+
+    const [menuType, setMenuType] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const [writeOffValue, setWriteOffValue] = useState(Boolean(currentEditRow?.writeOff));
 
@@ -245,6 +263,64 @@ export default function DptBilling(props) {
         setCurrentEditRow({});
     };
 
+    const handleOpenGrid = (event, row, key, type, options) => {
+        
+        // TODO validate grid edit request: is it allowed?
+
+        console.log('Open Grid edit');
+        setAnchorEl(event.currentTarget);
+        // console.log(event.currentTarget);
+        setMenuType('grid');
+        setGridEditId(row.billingId)
+        setGridEditKey(key);
+        setGridEditVal(row[key]);
+        setGridEditType(type);
+        setGridEditOgVal(row[key]);
+        type === 'select' && setGridEditOptions(options)
+        type === 'checkbox' && setGridCheckboxChecked(Boolean(row[key]))
+    };
+
+    const handleChangeGridEdit = (event) => {
+        let newVal;
+        if (gridEditType === "checkbox") {
+            newVal = gridEditVal ? null : "Yes";
+            setGridCheckboxChecked(Boolean(newVal))
+        }
+        else {
+            newVal = event.target.value === '' ? null : event.target.value;
+        }
+        setGridEditVal(newVal)
+    }
+
+    const handleGridSubmit = () => {
+
+        console.log('SUBMIT THE GRID');
+        console.log(gridEditKey, ": ", gridEditVal);
+
+        if (gridEditVal === gridEditOgVal) {
+            // value did not change, don't update db
+            console.log("nothing to update...")
+            handleCloseMenu();
+            return;
+        }
+
+        // update row in db
+        mutationUpdate.mutate({billingId: gridEditId, [gridEditKey]: gridEditVal});
+        handleCloseMenu();
+
+    }
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+        setMenuType(null);
+        setGridEditVal(null);
+        setGridEditOgVal(null);
+        setGridEditType(null);
+        setGridEditOptions(null)
+        setGridEditId(null)
+        // setGridCheckboxChecked(Boolean(gridEditVal))
+    };
+
     const isSelected = (billingId) => selected.indexOf(billingId) !== -1;
 
      // extract into reusable file
@@ -374,12 +450,18 @@ export default function DptBilling(props) {
                                                 }}
                                             />
                                         </TableCell>
-                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{visitNum+" of "+totalAuthVisits}</TableCell>
-
-                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{row.dos && row.dosFormat}</TableCell>
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
+                                            {visitNum+" of "+totalAuthVisits}
+                                        </TableCell>
 
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
+                                            {row.dos && row.dos}
+                                        </TableCell>
+
+                                        {currentlyEditing ?
+                                        <>
+                                        {/* row.serviceType */}
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                             <select
                                             onChange={(event) => handleChangeEdit(event, 'serviceType')}
                                             value={currentEditRow.serviceType ? currentEditRow.serviceType : ""}
@@ -390,11 +472,10 @@ export default function DptBilling(props) {
                                                     <option key={n} value={n}>{n}</option>
                                                 ))}
                                             </select>
-                                            : row.serviceType}
                                         </TableCell>
 
+                                        {/* row.v1500 */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                              <input 
                                                 type="date" 
                                                 name="v1500"
@@ -402,11 +483,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'v1500')}
                                                 style={{width: '13ch'}}
                                             />
-                                            : row.v1500 && row.v1500Format}
                                         </TableCell>
 
+                                        {/* row.d1500Sent */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="date" 
                                                 name="d1500Sent"
@@ -414,11 +494,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'd1500Sent')}
                                                 style={{width: '13ch'}}
                                             />
-                                            : row.d1500Sent && row.d1500SentFormat}
                                         </TableCell>
 
+                                        {/* row.d1500SendFormat */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <select
                                             onChange={(event) => handleChangeEdit(event, 'd1500SendFormat')}
                                             value={currentEditRow.d1500SendFormat ? currentEditRow.d1500SendFormat : ""}
@@ -429,11 +508,10 @@ export default function DptBilling(props) {
                                                     <option key={n} value={n}>{n}</option>
                                                 ))}
                                             </select>
-                                            : row.d1500SendFormat}
                                         </TableCell>
 
+                                        {/* row.adjusterRate */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="text" 
                                                 name="adjusterRate"
@@ -441,15 +519,14 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'adjusterRate')}
                                                 style={{width: '8ch'}}
                                             />
-                                            : row.adjusterRate}
                                         </TableCell>
 
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px', backgroundColor: row.adjusterPastDueFormula === 'Yes' && '#F5B7B1'  }}>
-                                            {row.adjusterDateDueFormulaFormat}
+                                            {row.adjusterDateDueFormula}
                                         </TableCell>
 
+                                        {/* row.paymentStatus */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <select
                                             onChange={(event) => handleChangeEdit(event, 'paymentStatus')}
                                             value={currentEditRow.paymentStatus ? currentEditRow.paymentStatus : ""}
@@ -460,9 +537,9 @@ export default function DptBilling(props) {
                                                     <option key={n} value={n}>{n}</option>
                                                 ))}
                                             </select>
-                                            : row.paymentStatus}
                                         </TableCell>
 
+                                        {/* row.paymentStatusDate */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                             {currentlyEditing ?
                                             <input 
@@ -475,8 +552,8 @@ export default function DptBilling(props) {
                                             : row.paymentStatusDate && row.paymentStatusDateFormat}
                                         </TableCell>
 
+                                        {/* row.dateRebilled */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="date" 
                                                 name="dateRebilled"
@@ -484,11 +561,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'dateRebilled')}
                                                 style={{width: '13ch'}}
                                             />
-                                            : row.dateRebilled && row.dateRebilledFormat}
                                         </TableCell>
 
+                                        {/* row.rebillFormat */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <select
                                             onChange={(event) => handleChangeEdit(event, 'rebillFormat')}
                                             value={currentEditRow.rebillFormat ? currentEditRow.rebillFormat : ""}
@@ -499,11 +575,10 @@ export default function DptBilling(props) {
                                                     <option key={n} value={n}>{n}</option>
                                                 ))}
                                             </select>
-                                            : row.rebillFormat}
                                         </TableCell>
 
+                                        {/* row.adjusterDatePaid */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="date" 
                                                 name="adjusterDatePaid"
@@ -511,11 +586,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'adjusterDatePaid')}
                                                 style={{width: '13ch'}}
                                             />
-                                            : row.adjusterDatePaid && row.adjusterDatePaidFormat}
                                         </TableCell>
 
+                                        {/* row.adjusterAmountPaid */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="text" 
                                                 name="adjusterAmountPaid"
@@ -523,17 +597,18 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'adjusterAmountPaid')}
                                                 style={{width: '8ch'}}
                                             />
-                                            : row.adjusterAmountPaid}
-                                        </TableCell>
-
-                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{row.facilityRate}</TableCell>
-
-                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px', backgroundColor: row.facilityPastDueFormula === 'Yes' && '#F5B7B1' }}>
-                                            {row.facilityDateDueFormulaFormat}
                                         </TableCell>
 
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
+                                            {row.facilityRate}
+                                        </TableCell>
+
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px', backgroundColor: row.facilityPastDueFormula === 'Yes' && '#F5B7B1' }}>
+                                            {row.facilityDateDueFormula}
+                                        </TableCell>
+
+                                        {/* row.facilityDatePaid */}
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                             <input 
                                                 type="date" 
                                                 name="facilityDatePaid"
@@ -541,11 +616,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'facilityDatePaid')}
                                                 style={{width: '13ch'}}
                                             />
-                                            : row.facilityDatePaid && row.facilityDatePaidFormat}
                                         </TableCell>
 
+                                        {/* row.facilityAmountPaid */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="text" 
                                                 name="facilityAmountPaid"
@@ -553,11 +627,10 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'facilityAmountPaid')}
                                                 style={{width: '8ch'}}
                                             />
-                                            : row.facilityAmountPaid}
                                         </TableCell>
 
+                                        {/* row.checkNumber */}
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
                                             <input 
                                                 type="text" 
                                                 name="checkNumber"
@@ -565,21 +638,21 @@ export default function DptBilling(props) {
                                                 onChange={(event) => handleChangeEdit(event, 'checkNumber')}
                                                 style={{width: '6ch'}}
                                             />
-                                            : row.checkNumber}
                                         </TableCell>
 
-                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>{row.revenue}</TableCell>
-
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
-                                            {currentlyEditing ?
+                                            {row.revenue}
+                                        </TableCell>
+
+                                        {/* row.writeOff */}
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
                                             <input 
-                                                    type="checkbox"
-                                                    name="writeOff"
-                                                    value={currentEditRow.writeOff ? true : false}
-                                                    checked={currentEditRow.writeOff ? true : false}
-                                                    onChange={(event) => handleChangeEdit(event, 'writeOff')}
-                                                />
-                                            : row.writeOff}
+                                                type="checkbox"
+                                                name="writeOff"
+                                                value={currentEditRow.writeOff ? true : false}
+                                                checked={currentEditRow.writeOff ? true : false}
+                                                onChange={(event) => handleChangeEdit(event, 'writeOff')}
+                                            />
                                         </TableCell>
 
                                         <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
@@ -611,12 +684,137 @@ export default function DptBilling(props) {
                                                     </Grid>}
                                                 </Grid>
                                         </TableCell>
+
+                                        </>
+                                        :
+                                        <>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "serviceType", "select", serviceTypes)} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.serviceType}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "v1500", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.v1500}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "d1500Sent", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.d1500Sent}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "d1500SendFormat", "select", ['', 'Email', 'Fax', 'Mail'])} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.d1500SendFormat}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "adjusterRate", "text")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.adjusterRate}
+                                        </TableCell>
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px', backgroundColor: row.adjusterPastDueFormula === 'Yes' && '#F5B7B1'  }}>
+                                            {row.adjusterDateDueFormula}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "paymentStatus", "select", status)} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.paymentStatus}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "paymentStatusDate", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.paymentStatusDate}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "dateRebilled", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.dateRebilled}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "rebillFormat", "select", ['', 'Email', 'Fax', 'Mail'])} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.rebillFormat}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "adjusterDatePaid", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.adjusterDatePaid}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "adjusterAmountPaid", "text")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.adjusterAmountPaid}
+                                        </TableCell>
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
+                                            {row.facilityRate}
+                                        </TableCell>
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px', backgroundColor: row.facilityPastDueFormula === 'Yes' && '#F5B7B1' }}>
+                                            {row.facilityDateDueFormula}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "facilityDatePaid", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.facilityDatePaid}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "facilityAmountPaid", "text")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.facilityAmountPaid}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "checkNumber", "text")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.checkNumber}
+                                        </TableCell>
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
+                                            {row.revenue}
+                                        </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "writeOff", "checkbox")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.writeOff}
+                                        </TableCell>
+                                        </>
+                                        }
+
+                                        
                                     </TableRow>
                                 )}
                 )}
             </TableBody>
         </Table>
     </TableContainer>
+
+    <Popover
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        id="add-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseMenu}
+        >
+
+            {menuType === 'grid' &&
+            <>
+
+            {(gridEditType === 'date' || gridEditType === 'text') &&
+            <input 
+            type={gridEditType}
+            name={gridEditKey}
+            value={gridEditVal ? gridEditVal : ''}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            {gridEditType === 'select' &&
+            <select
+            onChange={(event) => handleChangeGridEdit(event)}
+            value={gridEditVal ? gridEditVal : ''}
+            name={gridEditKey}
+            >
+                {gridEditOptions.map((o, i) => (
+                    <option key={i} value={o}>{o}</option>
+                ))}
+            </select>
+            }
+
+            {gridEditType === 'textarea' &&
+            <textarea
+            name={gridEditKey}
+            value={gridEditVal ? gridEditVal : ''}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            {gridEditType === 'checkbox' &&
+            <input 
+            type="checkbox"
+            id={`${gridEditKey}-checkbox`}
+            name={gridEditKey}
+            value={gridCheckboxChecked}
+            checked={gridCheckboxChecked}
+            onChange={(event) => handleChangeGridEdit(event)}
+            />
+            }
+
+            <Button onClick={handleGridSubmit}>Update</Button>
+            </>
+            }
+            
+        </Popover>
 
     <Modal
     disableEscapeKeyDown

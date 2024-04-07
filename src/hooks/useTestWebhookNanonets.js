@@ -1,6 +1,6 @@
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
-import payload from '../lookup-tables/finally_nanonets.json';
+import payload from '../lookup-tables/finally_nanonets_noDash.json';
 
 export default function useTestWebhookNanonets() {
 
