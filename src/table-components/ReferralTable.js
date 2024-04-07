@@ -598,7 +598,7 @@ export default function ReferralTable(props) {
 
     const handleClickUpload = (event) => {
         console.log('OPEN UPLOAD menu');
-        // setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget);
         setMenuType("uploadButton")
         // open modal
         // setModalType('upload')

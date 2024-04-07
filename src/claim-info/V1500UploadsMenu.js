@@ -120,7 +120,7 @@ export default function V1500UploadsMenu(props) {
                 </Box>
               </Box>
               :
-              <IconButton onMouseEnter={setHoverVal(i)} onMouseLeave={clearHoverVal(i)}>
+              <IconButton>
                 <CheckCircleOutlineIcon color='success' />
               </IconButton>
             }
