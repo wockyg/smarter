@@ -208,9 +208,6 @@ export default function ClaimInfoToolbar() {
                     </div>
                     }
                 </Badge>
-                <Badge>
-                  {selectedClaim.claimNumberNoDash}
-                </Badge>
               </h3>
             </Grid>
             <Grid item>
