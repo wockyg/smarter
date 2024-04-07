@@ -26,6 +26,7 @@ import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Fab from '@mui/material/Fab';
+import ListItemText from '@mui/material/ListItemText';
 
 import { visuallyHidden } from '@mui/utils';
 
@@ -1134,7 +1135,8 @@ export default function ReferralTable(props) {
 
                 {menuType === "uploadButton" &&
                 <MenuItem>
-                    <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button>
+                    <ListItemText inset>Single</ListItemText>
+                    {/* <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button> */}
                 </MenuItem>  
                 }
 
