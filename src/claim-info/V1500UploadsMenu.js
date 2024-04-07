@@ -16,6 +16,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemButton from '@mui/material/ListItemButton';
 import Typography from '@mui/material/Typography';
+import Tooltip from '@mui/material/Tooltip';
 
 import MenuItem from '@mui/material/MenuItem';
 
@@ -97,7 +98,9 @@ export default function V1500UploadsMenu(props) {
             key={i}
             secondaryAction={
               row.uploadProgress === -1 ?
-              <WarningIcon />
+              <Tooltip title={row.failureMessage}>
+                <WarningIcon />
+              </Tooltip>
               :
               row.uploadProgress < 100 ?
               <Box sx={{ position: 'relative', display: 'inline-flex' }}>
