@@ -47,6 +47,8 @@ export default function V1500UploadsMenu(props) {
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState("dateAdded");
 
+  const [hoverVals, setHoverVals] = useState([]);
+
   const { status: statusUploads, data: rows, error: errorUploads, isFetching: isFetchingUploads } = useGetV1500Uploads();
 
   const rowsSorted = rows?.sort((a, b) => {
@@ -75,6 +77,16 @@ export default function V1500UploadsMenu(props) {
       // values must be equal
       return 0;
     });
+
+    const setHoverVal = (i) => {
+        
+    };
+
+    const clearHoverVal = (i) => {
+      let temp = [...hoverVals]
+      temp[i] = false
+      setHoverVals(temp)
+    };
 
   return(
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -108,12 +120,14 @@ export default function V1500UploadsMenu(props) {
                 </Box>
               </Box>
               :
-              <CheckCircleOutlineIcon />
+              <IconButton onMouseEnter={setHoverVal(i)} onMouseLeave={clearHoverVal(i)}>
+                <CheckCircleOutlineIcon color='success' />
+              </IconButton>
             }
             disablePadding
           >
             <ListItemButton role={undefined} dense>
-              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={row.uploadProgress < 100 ? <LinearProgress /> : `${row.dateAddedFormat2}`} />
+              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={(row.uploadProgress < 100 && row.uploadProgress > -1) ? <LinearProgress /> : `${row.dateAddedFormat2}`} />
             </ListItemButton>
 
             {/* {row.v1500Id}

@@ -137,7 +137,7 @@ export default function MainNavbar() {
 
   const { setAddModalOpen, setModalParty } = useContext(AddFormContext);
   const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
-  const { setPage: setNotesPage, setTab: setClaimTab , cptRows, setCptRows, setSelectedD1500 } = useContext(SelectedClaimContext);
+  const { setPage: setNotesPage, setTab: setClaimTab , cptRows, setCptRows, setSelectedV1500 } = useContext(SelectedClaimContext);
   const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
 
   const { user, logout, nickname, updated_at, navbarTab: tab, setNavbarTab: setTab } = useContext(UserContext);
@@ -174,7 +174,7 @@ export default function MainNavbar() {
       setQuickSearchVal(null);
       setQuickSearchInputVal('');
       setCptRows([]);
-      setSelectedD1500(null);
+      setSelectedV1500(null);
       setCurrentlyEditingSelectedClaim(false);
   };
 
