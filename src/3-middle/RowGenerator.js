@@ -76,7 +76,7 @@ export default function RowGenerator() {
     const [revertData, setRevertData] = useState({});
     const [d1500SendFormat, setD1500SendFormat] = useState('');
 
-    const { cptRows, setCptRows, selectedD1500, setSelectedD1500 } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500, setSelectedV1500 } = useContext(SelectedClaimContext);
 
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
@@ -212,28 +212,28 @@ export default function RowGenerator() {
                 sendFormat: d1500SendFormat, 
                 cptRows: cptRows, 
                 dateApproved: new Date().toISOString(),
-                physician_name: selectedD1500?.physician_name,
-                physician_npi: selectedD1500?.physician_npi,
-                patient_account_no: selectedD1500?.patient_account_no,
-                diagnosis_a: selectedD1500?.diagnosis_a,
-                diagnosis_b: selectedD1500?.diagnosis_b,
-                diagnosis_c: selectedD1500?.diagnosis_c,
-                diagnosis_d: selectedD1500?.diagnosis_d,
-                diagnosis_e: selectedD1500?.diagnosis_e,
-                diagnosis_f: selectedD1500?.diagnosis_f,
-                diagnosis_g: selectedD1500?.diagnosis_g,
-                diagnosis_h: selectedD1500?.diagnosis_h,
-                diagnosis_i: selectedD1500?.diagnosis_i,
-                diagnosis_j: selectedD1500?.diagnosis_j,
-                diagnosis_k: selectedD1500?.diagnosis_k,
-                diagnosis_l: selectedD1500?.diagnosis_l,
-                v1500Id: selectedD1500?.v1500Id
+                physician_name: selectedV1500?.physician_name,
+                physician_npi: selectedV1500?.physician_npi,
+                patient_account_no: selectedV1500?.patient_account_no,
+                diagnosis_a: selectedV1500?.diagnosis_a,
+                diagnosis_b: selectedV1500?.diagnosis_b,
+                diagnosis_c: selectedV1500?.diagnosis_c,
+                diagnosis_d: selectedV1500?.diagnosis_d,
+                diagnosis_e: selectedV1500?.diagnosis_e,
+                diagnosis_f: selectedV1500?.diagnosis_f,
+                diagnosis_g: selectedV1500?.diagnosis_g,
+                diagnosis_h: selectedV1500?.diagnosis_h,
+                diagnosis_i: selectedV1500?.diagnosis_i,
+                diagnosis_j: selectedV1500?.diagnosis_j,
+                diagnosis_k: selectedV1500?.diagnosis_k,
+                diagnosis_l: selectedV1500?.diagnosis_l,
+                v1500Id: selectedV1500?.v1500Id
             }
                 
             hcfaAdd.mutate(values);
             setTimeout(() => {
               setCptRows([]);
-              setSelectedD1500(null);
+              setSelectedV1500(null);
               setD1500SendFormat('');
             }, "500");
         }
@@ -263,22 +263,22 @@ export default function RowGenerator() {
                         formData.append("sendFormat", d1500SendFormat);
                         formData.append("cptRows", JSON.stringify(cptRows));
                         formData.append("dateApproved", new Date().toISOString());
-                        formData.append("physician_name", selectedD1500?.physician_name);
-                        formData.append("physician_npi", selectedD1500?.physician_npi);
-                        formData.append("patient_account_no", selectedD1500?.patient_account_no);
-                        formData.append("diagnosis_a", selectedD1500?.diagnosis_a);
-                        formData.append("diagnosis_b", selectedD1500?.diagnosis_b);
-                        formData.append("diagnosis_c", selectedD1500?.diagnosis_c);
-                        formData.append("diagnosis_d", selectedD1500?.diagnosis_d);
-                        formData.append("diagnosis_e", selectedD1500?.diagnosis_e);
-                        formData.append("diagnosis_f", selectedD1500?.diagnosis_f);
-                        formData.append("diagnosis_g", selectedD1500?.diagnosis_g);
-                        formData.append("diagnosis_h", selectedD1500?.diagnosis_h);
-                        formData.append("diagnosis_i", selectedD1500?.diagnosis_i);
-                        formData.append("diagnosis_j", selectedD1500?.diagnosis_j);
-                        formData.append("diagnosis_k", selectedD1500?.diagnosis_k);
-                        formData.append("diagnosis_l", selectedD1500?.diagnosis_l);
-                        formData.append("v1500Id", selectedD1500?.v1500Id);
+                        formData.append("physician_name", selectedV1500?.physician_name);
+                        formData.append("physician_npi", selectedV1500?.physician_npi);
+                        formData.append("patient_account_no", selectedV1500?.patient_account_no);
+                        formData.append("diagnosis_a", selectedV1500?.diagnosis_a);
+                        formData.append("diagnosis_b", selectedV1500?.diagnosis_b);
+                        formData.append("diagnosis_c", selectedV1500?.diagnosis_c);
+                        formData.append("diagnosis_d", selectedV1500?.diagnosis_d);
+                        formData.append("diagnosis_e", selectedV1500?.diagnosis_e);
+                        formData.append("diagnosis_f", selectedV1500?.diagnosis_f);
+                        formData.append("diagnosis_g", selectedV1500?.diagnosis_g);
+                        formData.append("diagnosis_h", selectedV1500?.diagnosis_h);
+                        formData.append("diagnosis_i", selectedV1500?.diagnosis_i);
+                        formData.append("diagnosis_j", selectedV1500?.diagnosis_j);
+                        formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
+                        formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
+                        formData.append("v1500Id", selectedV1500?.v1500Id);
                         formData.append("d1500Blob", blob);
                         formData.append("dateApproved", new Date().toISOString());
                         formData.append("v1500_filename", v1500_filename);
@@ -291,7 +291,7 @@ export default function RowGenerator() {
                         hcfaAdd.mutate(formData);
                         setTimeout(() => {
                         setCptRows([]);
-                        setSelectedD1500(null);
+                        setSelectedV1500(null);
                         setD1500SendFormat('');
                         }, "500");
                       });

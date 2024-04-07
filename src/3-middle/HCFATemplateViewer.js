@@ -49,7 +49,7 @@ export default function HCFATemplateViewer() {
 
     // const num_codes = codeList?.length;
 
-    const { cptRows, setCptRows, selectedD1500 } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500 } = useContext(SelectedClaimContext);
 
     // const numRows = cptRows?.length;
 
@@ -91,9 +91,9 @@ export default function HCFATemplateViewer() {
                 <PDFViewer style={styles.viewer} showToolbar={false}>
                     <HCFATemplate 
                     selectedClaim={selectedClaim} 
-                    codeList={codeList} 
+                    icd10CodeList={codeList}
                     cptRows={cptRows} 
-                    selectedD1500={selectedD1500}
+                    selectedV1500={selectedV1500}
                     />
                 </PDFViewer>
                 </Grid>
