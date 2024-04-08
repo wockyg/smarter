@@ -60,7 +60,7 @@ const headCells = [
     label: 'Client',
   },
   {
-    id: 'dateAddedFormat',
+    id: 'dateAdded',
     numeric: false,
     disablePadding: false,
     label: 'Uploaded',
