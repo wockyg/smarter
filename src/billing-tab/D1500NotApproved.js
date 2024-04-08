@@ -88,7 +88,7 @@ const headCells = [
 
 export default function D1500NotApproved(props) {
 
-    const initialSort = 'claimant';
+    const initialSort = 'v1500Id';
 
     const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetV1500NotApproved();
     const { status: statusCptRows, data: cptRows, error: errorCptRows, isFetching: isFetchingCptRows } = useGetV1500RowsNotApproved();
