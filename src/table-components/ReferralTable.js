@@ -1135,13 +1135,19 @@ export default function ReferralTable(props) {
 
                 {menuType === "uploadButton" &&
                 <MenuItem>
-                    {/* <ListItemText inset>Upload new V1500's</ListItemText> */}
-                    <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button>
+                <Grid container>
+                    <Grid item>
+                        <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button>
+                    </Grid>
+                </Grid>
+                    <Grid item>
+                        <div onClick={() => console.log("View all uploads...")}><u>View all</u></div>
+                    </Grid>
                 </MenuItem>  
                 }
 
                 {menuType === "uploadButton" &&
-                <MenuItem>
+                <MenuItem disableGutters>
                     {/* <ListItemText inset>Upload new V1500's</ListItemText> */}
                     <V1500UploadsMenu />
                 </MenuItem>  
