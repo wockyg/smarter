@@ -1026,7 +1026,7 @@ export default function ReferralTable(props) {
                                                                                         // className="redBorder"
                                                                                         >
                                                                                             <option value=''>Select</option>
-                                                                                            {orphan.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
+                                                                                            {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
                                                                                                 <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                                             ))}
                                                                                         </Field>
