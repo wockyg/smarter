@@ -1141,7 +1141,9 @@ export default function ReferralTable(props) {
                 }
 
                 {menuType === "uploadButton" && 
+                <MenuItem sx={{maxHeight: 500}}>
                     <V1500UploadsMenu />
+                </MenuItem>
                 }
               
 
