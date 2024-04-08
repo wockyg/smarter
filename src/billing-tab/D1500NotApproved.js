@@ -93,7 +93,7 @@ export default function D1500NotApproved(props) {
     const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetV1500NotApproved();
     const { status: statusCptRows, data: cptRows, error: errorCptRows, isFetching: isFetchingCptRows } = useGetV1500RowsNotApproved();
 
-    console.log(bills);
+    // console.log(bills);
 
     const rowsSorted = bills?.sort((a, b) => -b[initialSort] > a[initialSort]);
 
