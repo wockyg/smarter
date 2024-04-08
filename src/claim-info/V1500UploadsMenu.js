@@ -90,7 +90,7 @@ export default function V1500UploadsMenu(props) {
     };
 
   return(
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    <List sx={{ width: '100%', maxHeight: 400, overflow: 'scroll', bgcolor: 'background.paper' }}>
       {rowsSorted && rowsSorted.map((row, i, a) => {
         const labelId = `checkbox-list-label-${row.v1500Id}`;
         return(

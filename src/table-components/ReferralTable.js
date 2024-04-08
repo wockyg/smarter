@@ -1136,9 +1136,13 @@ export default function ReferralTable(props) {
                 {menuType === "uploadButton" &&
                 <MenuItem>
                     {/* <ListItemText inset>Upload new V1500's</ListItemText> */}
-                    <Box width='100%'>
-                        <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button>
-                    </Box>
+                    <Button variant="contained" onClick={handleOpenUploadModal}>Upload new V1500's</Button>
+                </MenuItem>  
+                }
+
+                {menuType === "uploadButton" &&
+                <MenuItem>
+                    {/* <ListItemText inset>Upload new V1500's</ListItemText> */}
                     <V1500UploadsMenu />
                 </MenuItem>  
                 }
