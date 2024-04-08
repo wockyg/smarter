@@ -775,6 +775,11 @@ export default function ReferralTable(props) {
         
     };
 
+    const handleClickOrphanOption = () => {
+        console.log('TEST THE WEBHOOK');
+        webhookTest.mutate();
+    };
+
     const handleTestWebhook = () => {
         console.log('TEST THE WEBHOOK');
         webhookTest.mutate();
@@ -1027,7 +1032,7 @@ export default function ReferralTable(props) {
                                                                                         >
                                                                                             <option value=''>Select</option>
                                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                                                <option key={i} value={o.referralId} onClick={(e) => handleClaimClicked(e, o)}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                                             ))}
                                                                                         </Field>
                                                                                     </Grid>
