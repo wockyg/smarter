@@ -1126,7 +1126,7 @@ export default function ReferralTable(props) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleCloseMenu}
-              sx={{maxHeight: 500, overflow: 'scroll'}}
+              sx={{maxHeight: 500}}
             >
                 {menuType === "deleteReferral" &&
                 <MenuItem onClick={handleDeleteReferral}>
