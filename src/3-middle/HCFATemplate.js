@@ -9,10 +9,6 @@ export default function HCFATemplate(props) {
 
     const {selectedClaim, icd10CodeList, cptRows, selectedV1500} = props;
 
-    const {diags} = selectedV1500;
-
-    console.log(selectedV1500)
-
     const num_ic10codes = icd10CodeList?.length; // for manual mode
 
     // const { cptRows, setCptRows } = useContext(SelectedClaimContext);
@@ -111,19 +107,18 @@ export default function HCFATemplate(props) {
                 <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
                 <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
                 {/* Box 21 - DIAGNOSIS OR NATURE OF ILLNESS OR INJURY */}
-                {/* TODO modify for manual mode */}
-                {(diags?.length > 0) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedV1500 ? diags[0] : icd10CodeList[0].icd10}</Text>}
-                {(diags?.length > 1) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedV1500 ? diags[1] : icd10CodeList[1].icd10}</Text>}
-                {(diags?.length > 2) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedV1500 ? diags[2] : icd10CodeList[2].icd10}</Text>}
-                {(diags?.length > 3) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedV1500 ? diags[3] : icd10CodeList[3].icd10}</Text>}
-                {(diags?.length > 4) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedV1500 ? diags[4] : icd10CodeList[4].icd10}</Text>}
-                {(diags?.length > 5) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedV1500 ? diags[5] : icd10CodeList[5].icd10}</Text>}
-                {(diags?.length > 6) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedV1500 ? diags[6] : icd10CodeList[6].icd10}</Text>}
-                {(diags?.length > 7) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedV1500 ? diags[7] : icd10CodeList[7].icd10}</Text>}
-                {(diags?.length > 8) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedV1500 ? diags[8] : icd10CodeList[8].icd10}</Text>}
-                {(diags?.length > 9) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedV1500 ? diags[9] : icd10CodeList[9].icd10}</Text>}
-                {(diags?.length > 10) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedV1500 ? diags[10] : icd10CodeList[10].icd10}</Text>}
-                {(diags?.length > 11) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedV1500 ? diags[11] : icd10CodeList[11].icd10}</Text>}
+                {(selectedV1500?.diagnosis_a) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedV1500.diagnosis_a}</Text>}
+                {(selectedV1500?.diagnosis_b) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedV1500.diagnosis_b}</Text>}
+                {(selectedV1500?.diagnosis_c) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedV1500.diagnosis_c}</Text>}
+                {(selectedV1500?.diagnosis_d) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedV1500.diagnosis_d}</Text>}
+                {(selectedV1500?.diagnosis_e) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedV1500.diagnosis_e}</Text>}
+                {(selectedV1500?.diagnosis_f) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedV1500.diagnosis_f}</Text>}
+                {(selectedV1500?.diagnosis_g) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedV1500.diagnosis_g}</Text>}
+                {(selectedV1500?.diagnosis_h) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedV1500.diagnosis_h}</Text>}
+                {(selectedV1500?.diagnosis_i) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedV1500.diagnosis_i}</Text>}
+                {(selectedV1500?.diagnosis_j) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedV1500.diagnosis_j}</Text>}
+                {(selectedV1500?.diagnosis_k) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedV1500.diagnosis_k0}</Text>}
+                {(selectedV1500?.diagnosis_l) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedV1500.diagnosis_l0}</Text>}
 
                 {/* Box 24 - DOS/CPT ROWS */}
 
