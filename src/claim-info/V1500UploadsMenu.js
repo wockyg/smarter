@@ -46,7 +46,7 @@ export default function V1500UploadsMenu(props) {
 
 
   const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState("dateAdded");
+  const [orderBy, setOrderBy] = useState("v1500Id");
 
   const [hoverVals, setHoverVals] = useState([]);
 
