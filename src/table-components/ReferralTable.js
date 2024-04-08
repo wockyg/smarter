@@ -1037,7 +1037,7 @@ export default function ReferralTable(props) {
                                                                     </Formik>
                                                                 </Grid>
                                                                 <Grid item>
-                                                                    <button><CheckIcon fontSize='small' /></button>
+                                                                    <IconButton size='small'><CheckIcon fontSize='small' type='submit' /></IconButton>
                                                                     {/* <IconButton>
                                                                         <CheckIcon fontSize='small' />
                                                                     </IconButton> */}
