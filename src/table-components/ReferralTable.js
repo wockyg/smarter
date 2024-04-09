@@ -445,6 +445,7 @@ export default function ReferralTable(props) {
 
     const handleOrphanClicked = (event) => {
         console.log("orphan clicked...")
+        console.log(event.target.value)
         event.target.value !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: event.target.value});
         setNotesPage(0);
         setClaimTab(0);
