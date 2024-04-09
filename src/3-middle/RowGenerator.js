@@ -255,7 +255,7 @@ export default function RowGenerator() {
             pdf(MyDoc).toBlob()
                       .then(blob => {
 
-                        const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
+                        // const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
                         const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
 
                         const formData = new FormData();
@@ -281,12 +281,8 @@ export default function RowGenerator() {
                         formData.append("v1500Id", selectedV1500?.v1500Id);
                         formData.append("d1500Blob", blob);
                         formData.append("dateApproved", new Date().toISOString());
-                        formData.append("v1500_filename", v1500_filename);
+                        // formData.append("v1500_filename", v1500_filename);
                         formData.append("d1500_filename", d1500_filename);
-
-                        // for (const pair of formData.entries()) {
-                        //    console.log(pair[0], pair[1]);
-                        // }
                             
                         hcfaAdd.mutate(formData);
                         setTimeout(() => {
@@ -956,7 +952,7 @@ export default function RowGenerator() {
                                 </TableCell>
                                 <TableCell>
                                     
-                                        {d1500SendFormat !== '' &&
+                                        {d1500SendFormat !== '' && cptRows.length > 0 &&
                                         <IconButton
                                         onClick={handleSubmitD1500}
                                         >
