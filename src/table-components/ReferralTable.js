@@ -443,6 +443,18 @@ export default function ReferralTable(props) {
         setCurrentlyEditingSelectedClaim(false);
     };
 
+    const handleOrphanClicked = (event) => {
+        console.log("orphan clicked...")
+        event.target.value !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: event.target.value});
+        setNotesPage(0);
+        setClaimTab(0);
+        setQuickSearchVal(null);
+        setQuickSearchInputVal('');
+        setCptRows([]);
+        setSelectedV1500(null);
+        setCurrentlyEditingSelectedClaim(false);
+    };
+
     const handleClickHcfa = (event, row) => {
         // console.log("ROW: ", row);
         navigate(`/${row.referralId}`)
@@ -1030,7 +1042,7 @@ export default function ReferralTable(props) {
                                                                                         id="referralId"
                                                                                         name="referralId"
                                                                                         // className="redBorder"
-                                                                                        onChange={(e) => handleClaimClicked(e)}
+                                                                                        onChange={handleOrphanClicked}
                                                                                         >
                                                                                             <option value=''>Select</option>
                                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
