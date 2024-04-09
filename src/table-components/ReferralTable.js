@@ -42,6 +42,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DownloadingIcon from '@mui/icons-material/Downloading';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -363,6 +364,8 @@ export default function ReferralTable(props) {
     const [fileLimit, setFileLimit] = useState(false);
     const [uploadComplete, setUploadComplete] = useState(false);
 
+    const [orphanVal, setOrphanVal] = useState('');
+
     // console.log(uploadedFiles[0]);
 
     const open = Boolean(anchorEl);
@@ -443,10 +446,14 @@ export default function ReferralTable(props) {
         setCurrentlyEditingSelectedClaim(false);
     };
 
-    const handleOrphanClicked = (event) => {
-        console.log("orphan clicked...")
-        console.log(event.target.value)
-        event.target.value !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: event.target.value});
+    const handleChangeOrphan = (event) => {
+        console.log("orphan changed...")
+        navigate(`/${event.target.value}`);
+        setOrphanVal(event.target.value)
+        // console.log(event.target.value)
+        // +event.target.value !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: event.target.value});
+        setBillMode(false);
+        setKeepBillMode(false);
         setNotesPage(0);
         setClaimTab(0);
         setQuickSearchVal(null);
@@ -458,22 +465,25 @@ export default function ReferralTable(props) {
 
     const handleClickHcfa = (event, row) => {
         // console.log("ROW: ", row);
-        navigate(`/${row.referralId}`)
-        setNotesPage(0);
-        setClaimTab(0);
-        setQuickSearchVal(null);
-        setQuickSearchInputVal('');
-        setBillMode(true);
-        const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
-        // console.log("NEW ROWS: ", newRows);
-        // calculate rates for each row
-        const newnewRows = newRows.map(r => {
-            const rateBase = r.cpt ? codes?.filter(c => c?.Code === +r?.cpt)[0][row?.jurisdiction] : -1;
-            const rateTotal = (rateBase * +r.units).toFixed(2);
-            return {...r, charges: rateTotal}
-        })
-        setCptRows(newnewRows);
-        setSelectedV1500(row);
+        
+        if (row.referralId) {
+            navigate(`/${row.referralId}`)
+            setNotesPage(0);
+            setClaimTab(0);
+            setQuickSearchVal(null);
+            setQuickSearchInputVal('');
+            setBillMode(true);
+            const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
+            // console.log("NEW ROWS: ", newRows);
+            // calculate rates for each row
+            const newnewRows = newRows.map(r => {
+                const rateBase = r.cpt ? codes?.filter(c => c?.Code === +r?.cpt)[0][row?.jurisdiction] : -1;
+                const rateTotal = (rateBase * +r.units).toFixed(2);
+                return {...r, charges: rateTotal}
+            })
+            setCptRows(newnewRows);
+            setSelectedV1500(row);
+        }
     };
 
     const handleOpenMenu = (event, id) => {
@@ -789,8 +799,8 @@ export default function ReferralTable(props) {
         
     };
 
-    const handleClickOrphanOption = () => {
-        console.log('TEST THE WEBHOOK');
+    const handleViewOrphan = () => {
+        console.log('VIEW ORPHAN');
         webhookTest.mutate();
     };
 
@@ -1028,7 +1038,7 @@ export default function ReferralTable(props) {
 
                                                                         console.log("updating V1500...", values);
 
-                                                                        v1500Update.mutate(values);
+                                                                        values.referralId !== '' && v1500Update.mutate(values);
 
                                                                         actions.setSubmitting(false);
 
@@ -1043,17 +1053,21 @@ export default function ReferralTable(props) {
                                                                                         id="referralId"
                                                                                         name="referralId"
                                                                                         // className="redBorder"
-                                                                                        // onChange={handleOrphanClicked}
+                                                                                        onChange={handleChangeOrphan}
+                                                                                        value={orphanVal}
                                                                                         >
                                                                                             <option value=''>Select</option>
                                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                                <option onClick={handleOrphanClicked} key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                                             ))}
                                                                                         </Field>
                                                                                     </Grid>
                                                                                     <Grid item>
                                                                                         <IconButton size='small' type='submit'><CheckIcon fontSize='small' /></IconButton>
                                                                                     </Grid>
+                                                                                    {/* <Grid item>
+                                                                                        <IconButton size='small' onClick={() => handleViewOrphan()}><RemoveRedEyeIcon fontSize='small' /></IconButton>
+                                                                                    </Grid> */}
                                                                                 </Grid>
                                                                             </Form>
                                                                         )}

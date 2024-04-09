@@ -17,12 +17,12 @@ const headCells = [
   //   disablePadding: false,
   //   label: 'Service',
   // },
-  // {
-  //   id: 'claimant',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Claimant',
-  // },
+  {
+    id: 'claimantUploadTable',
+    numeric: false,
+    disablePadding: false,
+    label: 'Claimant',
+  },
   // {
   //   id: 'original_dos',
   //   numeric: false,
@@ -42,7 +42,7 @@ const headCells = [
     label: 'Body Part',
   },
   {
-    id: 'claimNumber',
+    id: 'claim_number',
     numeric: false,
     disablePadding: false,
     label: 'Claim #',
