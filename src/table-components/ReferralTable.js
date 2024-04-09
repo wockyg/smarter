@@ -1042,11 +1042,11 @@ export default function ReferralTable(props) {
                                                                                         id="referralId"
                                                                                         name="referralId"
                                                                                         // className="redBorder"
-                                                                                        onChange={handleOrphanClicked}
+                                                                                        // onChange={handleOrphanClicked}
                                                                                         >
                                                                                             <option value=''>Select</option>
                                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                                                <option onClick={handleOrphanClicked} key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                                             ))}
                                                                                         </Field>
                                                                                     </Grid>
