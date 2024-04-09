@@ -108,7 +108,7 @@ export default function RowGenerator() {
         total_units = total_units + (+row.units);
     })
 
-    total_charges = (Math.round(total_charges * 100) / 100).toFixed(2);
+    total_charges = ((total_charges * 100) / 100).toFixed(2);
 
     const tableHeadProps = {
     //  border: '1px solid black',
@@ -179,7 +179,7 @@ export default function RowGenerator() {
             const newUnits = maxUnit === 1 ? '1' : '';
 
             const rateBase = codes?.filter(c => c?.Code === +event.target.value)[0][selectedClaim?.jurisdiction];
-            const rateTotal = (rateBase * +newUnits).toFixed(2);
+            const rateTotal = (rateBase * +newUnits * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
 
             const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value, charges: rateTotal, units: newUnits};
             
@@ -188,7 +188,7 @@ export default function RowGenerator() {
         else if (key === 'units') {
 
             const rateBase = codes?.filter(c => c?.Code === +currentEditRow.cpt)[0][selectedClaim?.jurisdiction];
-            const rateTotal = (rateBase * +event.target.value).toFixed(2);
+            const rateTotal = (rateBase * +event.target.value * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
 
             const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value, charges: +rateTotal};
             
@@ -351,13 +351,13 @@ export default function RowGenerator() {
             if (values.cpt.trim() !== '') {
                 
                 const rateBase = values.cpt ? codes?.filter(c => c?.Code === +values?.cpt)[0][selectedClaim?.jurisdiction] : -1;
-                const rateTotal = (rateBase * +values.units).toFixed(2);
+                const rateTotal = (rateBase * +values.units * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
                 // console.log(values.units);
                 if (values.units) {
-                    setFieldValue(props.name, +rateTotal);    
+                    setFieldValue('charges', +rateTotal);    
                 }
                 else {
-                    setFieldValue(props.name, '');
+                    setFieldValue('charges', '');
                 }
             }
         }, [values.cpt, values.units, setFieldValue, props.name]);
@@ -934,7 +934,9 @@ export default function RowGenerator() {
                                 <TableCell sx={{background: '#E0E4E8'}} />
                                 <TableCell sx={{background: '#E0E4E8'}} />
                                 <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
+                                <TableCell sx={{background: '#E0E4E8'}}>
+                                    {`(${selectedClaim.clientDiscount}%)`}
+                                </TableCell>
                                 <TableCell sx={{padding: 0.5, borderRight: '1px solid', borderLeft: '1px solid'}}>{total_charges}</TableCell>
                                 <TableCell sx={{padding: 0.5, background: total_units === 4 ? '#5DE576' : '#ED534A'}}>{total_units}</TableCell>
                                 <TableCell sx={{background: '#ABC3E3'}}>

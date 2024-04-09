@@ -478,7 +478,9 @@ export default function ReferralTable(props) {
             // calculate rates for each row
             const newnewRows = newRows.map(r => {
                 const rateBase = r.cpt ? codes?.filter(c => c?.Code === +r?.cpt)[0][row?.jurisdiction] : -1;
-                const rateTotal = (rateBase * +r.units).toFixed(2);
+                const rateTotal = (rateBase * +r.units * ((100 - (+row?.clientDiscount || 0)) / 100)).toFixed(2);
+                // console.log((100 - +row?.clientDiscount) / 100)
+                // console.log(rateTotal)
                 return {...r, charges: rateTotal}
             })
             setCptRows(newnewRows);

@@ -306,6 +306,16 @@ export default function ClaimInfoToolbar() {
               </h3>
             </Grid>
             }
+
+            {selectedClaim.clientDiscount && billMode &&
+            <Grid item>
+              <h3>
+                <Badge bg="danger">
+                    {`${selectedClaim?.clientDiscount}% Discount`}
+                </Badge>
+              </h3>
+            </Grid>
+            }
           </Grid>
         </Box>
       </Box>
@@ -316,6 +326,7 @@ export default function ClaimInfoToolbar() {
         open={open0}
         onClose={handleCloseMenu}
       >
+        {/* TODO finish implementation */}
         <MenuItem  onClick={handleAddImportantNote}>
             Add important note
         </MenuItem>
