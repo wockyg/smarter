@@ -428,6 +428,7 @@ export default function ReferralTable(props) {
     
 
     const handleClaimClicked = (event, claim) => {
+        console.log("claim clicked...")
         claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});
         setNotesPage(0);
         setClaimTab(0);
