@@ -464,7 +464,7 @@ export default function ReferralTable(props) {
     };
 
     const handleClickHcfa = (event, row) => {
-        // console.log("ROW: ", row);
+        console.log("ROW: ", row);
         
         if (row.referralId) {
             navigate(`/${row.referralId}`)
@@ -819,11 +819,11 @@ export default function ReferralTable(props) {
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
 
-            {/* {type === 'hcfa' &&
+            {type === 'hcfa' &&
                 <Button size='small' onClick={handleTestWebhook}>
                     Test Webhook
                 </Button>
-            } */}
+            }
 
             {type === 'hcfa' &&
                 <UploadButton handleClickUpload={handleClickUpload} />
