@@ -464,7 +464,7 @@ export default function ReferralTable(props) {
     };
 
     const handleClickHcfa = (event, row) => {
-        console.log("ROW: ", row);
+        // console.log("ROW: ", row);
         
         if (row.referralId) {
             navigate(`/${row.referralId}`)
@@ -476,11 +476,10 @@ export default function ReferralTable(props) {
             const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
             // console.log("NEW ROWS: ", newRows);
             // calculate rates for each row
+            // TODO turn in to reusable helper fn
             const newnewRows = newRows.map(r => {
                 const rateBase = r.cpt ? codes?.filter(c => c?.Code === +r?.cpt)[0][row?.jurisdiction] : -1;
                 const rateTotal = (rateBase * +r.units * ((100 - (+row?.clientDiscount || 0)) / 100)).toFixed(2);
-                // console.log((100 - +row?.clientDiscount) / 100)
-                // console.log(rateTotal)
                 return {...r, charges: rateTotal}
             })
             setCptRows(newnewRows);
