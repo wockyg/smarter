@@ -365,6 +365,7 @@ export default function ReferralTable(props) {
     const [uploadComplete, setUploadComplete] = useState(false);
 
     const [orphanVal, setOrphanVal] = useState('');
+    const [orphanId, setOrphanId] = useState(null);
 
     // console.log(uploadedFiles[0]);
 
@@ -446,8 +447,14 @@ export default function ReferralTable(props) {
         setCurrentlyEditingSelectedClaim(false);
     };
 
-    const handleChangeOrphan = (event) => {
-        console.log("orphan changed...")
+    const handleChooseOrphan = (id) => {
+        console.log("choose orphan...")
+        // console.log(event.target.value)
+        setOrphanId(id)
+    };
+
+    const handleChangeOrphanOption = (event) => {
+        console.log("orphan option changed...")
         navigate(`/${event.target.value}`);
         setOrphanVal(event.target.value)
         // console.log(event.target.value)
@@ -461,6 +468,11 @@ export default function ReferralTable(props) {
         setCptRows([]);
         setSelectedV1500(null);
         setCurrentlyEditingSelectedClaim(false);
+    };
+
+    const handleUpdateOrphan = (event) => {
+        console.log("updating orphan...")
+        v1500Update.mutate({v1500Id: orphanId, referralId: orphanVal})
     };
 
     const handleClickHcfa = (event, row) => {
@@ -999,82 +1011,92 @@ export default function ReferralTable(props) {
                                                         </>
                                                     :
                                                         ((type === 'hcfa' && col.id === 'bodyPart' && !row.referralId) ?
-                                                            // <Grid container spacing={1}>
-                                                            //     <Grid item>
-                                                            //         <select
-                                                            //         name={col.id}
-                                                            //         value={currentEditRow[col.id] ? currentEditRow[col.id] : ''}
-                                                            //         onChange={(event) => handleChangeEdit(event, col.id)}
-                                                            //         style={{width: col.inputWidth || 'auto'}}
-                                                            //         >
-                                                            //                 <option value=''>Select</option>
-                                                            //                 {orphan.filter(o => o.claimNumber === row.claimNumber).map((o, i) => (
-                                                            //                     <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
-                                                            //                 ))}
-                                                            //         </select>
-                                                            //     </Grid>
-                                                            //     <Grid item>
-                                                            //         <button>+</button>
-                                                            //         <IconButton>
-                                                            //             <CheckIcon fontSize='small' />
-                                                            //         </IconButton>
-                                                            //     </Grid>
-                                                            // </Grid>
-
+                                                            
+                                                            orphanId !== row.v1500Id ?
+                                                            <Button 
+                                                            size='small' 
+                                                            onClick={(e) => handleChooseOrphan(row.v1500Id)}>
+                                                                {orphan.filter(o => o.claimNumber === row.claim_number).length} choices
+                                                            </Button>
+                                                            :
                                                             <Grid container spacing={1}>
                                                                 <Grid item>
-                                                                    <Formik
-                                                                    enableReinitialize
-                                                                    initialValues={{
-                                                                        v1500Id: row.v1500Id,
-                                                                        referralId: '',
-                                                                    }}
-                                                                    validationSchema={Yup.object({
-                                                                        v1500Id: Yup.number().required(),
-                                                                        referralId: Yup.number().required(),
-                                                                    })}
-                                                                    onSubmit={(values, actions) => {
-
-                                                                        console.log("values:", values)
-
-                                                                        console.log("updating V1500...", values);
-
-                                                                        values.referralId !== '' && v1500Update.mutate(values);
-
-                                                                        actions.setSubmitting(false);
-
-                                                                    }}
+                                                                    <select
+                                                                    name={col.id}
+                                                                    value={orphanVal}
+                                                                    onChange={handleChangeOrphanOption}
+                                                                    // style={{width: col.inputWidth || 'auto'}}
                                                                     >
-                                                                        {formikProps => (
-                                                                            <Form>
-                                                                                <Grid container spacing={0.5}>
-                                                                                    <Grid item>
-                                                                                        <Field 
-                                                                                        as="select" 
-                                                                                        id="referralId"
-                                                                                        name="referralId"
-                                                                                        // className="redBorder"
-                                                                                        onChange={handleChangeOrphan}
-                                                                                        value={orphanVal}
-                                                                                        >
-                                                                                            <option value=''>Select</option>
-                                                                                            {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
-                                                                                            ))}
-                                                                                        </Field>
-                                                                                    </Grid>
-                                                                                    <Grid item>
-                                                                                        <IconButton size='small' type='submit'><CheckIcon fontSize='small' /></IconButton>
-                                                                                    </Grid>
-                                                                                    {/* <Grid item>
-                                                                                        <IconButton size='small' onClick={() => handleViewOrphan()}><RemoveRedEyeIcon fontSize='small' /></IconButton>
-                                                                                    </Grid> */}
-                                                                                </Grid>
-                                                                            </Form>
-                                                                        )}
-                                                                    </Formik>
+                                                                            <option value=''>Select</option>
+                                                                            {orphan.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
+                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                            ))}
+                                                                    </select>
+                                                                </Grid>
+                                                                <Grid item>
+                                                                    {orphanVal !== '' &&
+                                                                    <IconButton onClick={handleUpdateOrphan}>
+                                                                        <CheckIcon fontSize='small' />
+                                                                    </IconButton>
+                                                                    }
                                                                 </Grid>
                                                             </Grid>
+
+                                                            // <Grid container spacing={1}>
+                                                            //     <Grid item>
+                                                            //         <Formik
+                                                            //         enableReinitialize
+                                                            //         initialValues={{
+                                                            //             v1500Id: row.v1500Id,
+                                                            //             referralId: '',
+                                                            //         }}
+                                                            //         validationSchema={Yup.object({
+                                                            //             v1500Id: Yup.number().required(),
+                                                            //             referralId: Yup.number().required(),
+                                                            //         })}
+                                                            //         onSubmit={(values, actions) => {
+
+                                                            //             console.log("values:", values)
+
+                                                            //             console.log("updating V1500...", values);
+
+                                                            //             values.referralId !== '' && v1500Update.mutate(values);
+
+                                                            //             actions.setSubmitting(false);
+
+                                                            //         }}
+                                                            //         >
+                                                            //             {formikProps => (
+                                                            //                 <Form>
+                                                            //                     <Grid container spacing={0.5}>
+                                                            //                         <Grid item>
+                                                            //                             <Field 
+                                                            //                             as="select" 
+                                                            //                             id="referralId"
+                                                            //                             name="referralId"
+                                                            //                             // className="redBorder"
+                                                            //                             onChange={handleChangeOrphan}
+                                                            //                             value={orphanVal}
+                                                            //                             >
+                                                            //                                 <option value=''>Select</option>
+                                                            //                                 {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
+                                                            //                                     <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                            //                                 ))}
+                                                            //                             </Field>
+                                                            //                         </Grid>
+                                                            //                         <Grid item>
+                                                            //                             <Button size='small' type='submit'><CheckIcon fontSize='small' /></Button>
+                                                            //                         </Grid>
+                                                            //                         {JSON.stringify(formikProps.values)}
+                                                            //                         {/* <Grid item>
+                                                            //                             <IconButton size='small' onClick={() => handleViewOrphan()}><RemoveRedEyeIcon fontSize='small' /></IconButton>
+                                                            //                         </Grid> */}
+                                                            //                     </Grid>
+                                                            //                 </Form>
+                                                            //             )}
+                                                            //         </Formik>
+                                                            //     </Grid>
+                                                            // </Grid>
                                                         :
                                                             ((type === 'hcfa' && col.id === 'bodyPart') ?
                                                                 `(${row.service}) ${row.bodyPart}`

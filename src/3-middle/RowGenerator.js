@@ -255,34 +255,35 @@ export default function RowGenerator() {
             pdf(MyDoc).toBlob()
                       .then(blob => {
 
+                        console.log(selectedV1500)
+
                         // const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
                         const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
 
                         const formData = new FormData();
+                        formData.append("dateApproved", new Date().toISOString());
                         formData.append("referralId", +selectedClaim.referralId);
                         formData.append("sendFormat", d1500SendFormat);
-                        formData.append("cptRows", JSON.stringify(cptRows));
-                        formData.append("dateApproved", new Date().toISOString());
-                        formData.append("physician_name", selectedV1500?.physician_name);
-                        formData.append("physician_npi", selectedV1500?.physician_npi);
-                        formData.append("patient_account_no", selectedV1500?.patient_account_no);
-                        formData.append("diagnosis_a", selectedV1500?.diagnosis_a);
-                        formData.append("diagnosis_b", selectedV1500?.diagnosis_b);
-                        formData.append("diagnosis_c", selectedV1500?.diagnosis_c);
-                        formData.append("diagnosis_d", selectedV1500?.diagnosis_d);
-                        formData.append("diagnosis_e", selectedV1500?.diagnosis_e);
-                        formData.append("diagnosis_f", selectedV1500?.diagnosis_f);
-                        formData.append("diagnosis_g", selectedV1500?.diagnosis_g);
-                        formData.append("diagnosis_h", selectedV1500?.diagnosis_h);
-                        formData.append("diagnosis_i", selectedV1500?.diagnosis_i);
-                        formData.append("diagnosis_j", selectedV1500?.diagnosis_j);
-                        formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
-                        formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
-                        formData.append("v1500Id", selectedV1500?.v1500Id);
                         formData.append("d1500Blob", blob);
-                        formData.append("dateApproved", new Date().toISOString());
                         // formData.append("v1500_filename", v1500_filename);
                         formData.append("d1500_filename", d1500_filename);
+                        cptRows.length > 0 && formData.append("cptRows", JSON.stringify(cptRows));
+                        selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
+                        selectedV1500?.physician_npi && formData.append("physician_npi", selectedV1500?.physician_npi);
+                        selectedV1500?.patient_account_no && formData.append("patient_account_no", selectedV1500?.patient_account_no);
+                        selectedV1500?.diagnosis_a && formData.append("diagnosis_a", selectedV1500?.diagnosis_a);
+                        selectedV1500?.diagnosis_b && formData.append("diagnosis_b", selectedV1500?.diagnosis_b);
+                        selectedV1500?.diagnosis_c && formData.append("diagnosis_c", selectedV1500?.diagnosis_c);
+                        selectedV1500?.diagnosis_d && formData.append("diagnosis_d", selectedV1500?.diagnosis_d);
+                        selectedV1500?.diagnosis_e && formData.append("diagnosis_e", selectedV1500?.diagnosis_e);
+                        selectedV1500?.diagnosis_f && formData.append("diagnosis_f", selectedV1500?.diagnosis_f);
+                        selectedV1500?.diagnosis_g && formData.append("diagnosis_g", selectedV1500?.diagnosis_g);
+                        selectedV1500?.diagnosis_h && formData.append("diagnosis_h", selectedV1500?.diagnosis_h);
+                        selectedV1500?.diagnosis_i && formData.append("diagnosis_i", selectedV1500?.diagnosis_i);
+                        selectedV1500?.diagnosis_j && formData.append("diagnosis_j", selectedV1500?.diagnosis_j);
+                        selectedV1500?.diagnosis_k && formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
+                        selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
+                        selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
                             
                         hcfaAdd.mutate(formData);
                         setTimeout(() => {
