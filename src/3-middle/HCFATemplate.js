@@ -104,6 +104,7 @@ export default function HCFATemplate(props) {
                 {/* Box 17 - NAME OF REFERRING PROVIDER / NPI */}
                 {/* <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedClaim?.physicianFirst.toUpperCase()} {selectedClaim?.physicianLast.toUpperCase()}, MD</Text> */}
                 {/* <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedClaim?.physicianNPI}</Text> */}
+                <Text style={{ position: 'absolute', top: 409, left: 11, fontSize: 12 }}>DN</Text>
                 <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
                 <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
                 {/* Box 21 - DIAGNOSIS OR NATURE OF ILLNESS OR INJURY */}
