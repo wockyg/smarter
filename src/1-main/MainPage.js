@@ -21,11 +21,11 @@ export default function MainPage() {
     const expireTime = localStorage.getItem("expireTime")
     const expireTime2 = new Date(expireTime)
     const lastExpireTime2 = new Date(lastExpireTime)
-    console.log("expireTime:", expireTime2.toTimeString())
-    console.log("lastExpireTime:", lastExpireTime2.toTimeString())
+    // console.log("expireTime:", expireTime2.toTimeString())
+    // console.log("lastExpireTime:", lastExpireTime2.toTimeString())
     if (expireTime2 > lastExpireTime2){
       setLastExpireTime(expireTime2)
-      console.log("Posting new expireTime to DB...")
+      // console.log("Posting new expireTime to DB...")
       updateUser.mutate({initials: user.initials, expireTime: expireTime2.toUTCString()});
     }
   }

@@ -18,8 +18,8 @@ export default function useUpdateUser() {
       .put(`/users/${values.initials}`, newValues)
       .then(response => {
         const data = response.data;
-        console.log(data);
-        console.log(values);
+        // console.log(data);
+        // console.log(values);
         queryClient.invalidateQueries(`user`);
         queryClient.invalidateQueries(`users`);
         return data;
