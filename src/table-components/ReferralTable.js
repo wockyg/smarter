@@ -1214,30 +1214,36 @@ export default function ReferralTable(props) {
               <DialogTitle>
                 <Grid container spacing={0.5}>
                     <Grid item xs={11}>
-                    {modalType === 'upload' &&
+                    {modalType === 'upload' && v1500UploadProgress === null &&
                     "Upload V1500s"
                     }
+                    {modalType === 'upload' && v1500UploadProgress === 100 &&
+                    "Upload complete"
+                    }
                     {modalType === 'upload' && v1500UploadProgress !== null && v1500UploadProgress < 100 &&
-                <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                    <CircularProgress />
-                    <Box
-                    sx={{
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0,
-                        position: 'absolute',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    >
-                    <Typography variant="caption" component="div" color="text.secondary">
-                        {`${v1500UploadProgress}%`}
-                    </Typography>
+                    <>
+                    Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
+                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                        <CircularProgress />
+                        <Box
+                        sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        <Typography variant="caption" component="div" color="text.secondary">
+                            {`${v1500UploadProgress}%`}
+                        </Typography>
+                        </Box>
                     </Box>
-                </Box>
-                }
+                    </>
+                    }
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
