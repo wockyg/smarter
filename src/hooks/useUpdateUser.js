@@ -12,7 +12,7 @@ export default function useUpdateUser() {
     const filtered = asArray.filter(([key, value]) => (key !== 'initials'));
     const newValues = Object.fromEntries(filtered);
 
-    console.log("newValues", newValues)
+    // console.log("newValues", newValues)
 
     api
       .put(`/users/${values.initials}`, newValues)
@@ -28,7 +28,7 @@ export default function useUpdateUser() {
     
   return useSyncMutation( (values) => updateUser(values), 
                       {onSuccess: () => {
-                      console.log('successfully updated user...');
+                      // console.log('successfully updated user...');
                       }});
 
 }

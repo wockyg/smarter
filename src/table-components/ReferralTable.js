@@ -321,7 +321,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500 } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -696,6 +696,7 @@ export default function ReferralTable(props) {
             setGenerateRR(false);
             setUploadComplete(false);
             setUploadedFiles([])
+            setV1500UploadProgress(null)
         }
     };
 
@@ -1216,6 +1217,27 @@ export default function ReferralTable(props) {
                     {modalType === 'upload' &&
                     "Upload V1500s"
                     }
+                    {modalType === 'upload' && v1500UploadProgress !== null && v1500UploadProgress < 100 &&
+                <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                    <CircularProgress />
+                    <Box
+                    sx={{
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        position: 'absolute',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    >
+                    <Typography variant="caption" component="div" color="text.secondary">
+                        {`${v1500UploadProgress}%`}
+                    </Typography>
+                    </Box>
+                </Box>
+                }
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
@@ -1320,7 +1342,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {!uploadComplete &&
+                {!v1500UploadProgress &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1330,12 +1352,21 @@ export default function ReferralTable(props) {
                 }
                 <div className="uploaded-files-list">
                     <ul>
-                        {uploadedFiles.map((file, i) => (
-                            <li key={i}>
-                                {file.name}{uploadComplete && <TaskAltIcon color="success" />}
-                            </li>
-                        ))} 
+                        {uploadedFiles.map((file, i) => {
+
+                            // const progress = v1500UploadProgress.filter(p => p.filename === file.name)[0]?.percentComplete || -1
+
+                            return (
+                                <li key={i}>
+                                    {file.name}
+                                    {v1500UploadProgress === 100 &&
+                                    <TaskAltIcon color="success" />
+                                    }
+                                </li>
+                            )
+                        })} 
                     </ul>
+                    {JSON.stringify(v1500UploadProgress)}
                 </div>
                 </>
                 }
