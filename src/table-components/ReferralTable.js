@@ -1017,7 +1017,7 @@ export default function ReferralTable(props) {
                                                             <Button 
                                                             size='small' 
                                                             onClick={(e) => handleChooseOrphan(row.v1500Id)}>
-                                                                {orphan.filter(o => o.claimNumber === row.claim_number).length} choices
+                                                                {orphan?.filter(o => o.claimNumber === row.claim_number).length} choices
                                                             </Button>
                                                             :
                                                             <Grid container spacing={1}>
@@ -1029,7 +1029,7 @@ export default function ReferralTable(props) {
                                                                     // style={{width: col.inputWidth || 'auto'}}
                                                                     >
                                                                             <option value=''>Select</option>
-                                                                            {orphan.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
+                                                                            {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
                                                                                 <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
                                                                             ))}
                                                                     </select>
