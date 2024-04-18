@@ -1372,7 +1372,6 @@ export default function ReferralTable(props) {
                             )
                         })} 
                     </ul>
-                    {JSON.stringify(v1500UploadProgress)}
                 </div>
                 </>
                 }
