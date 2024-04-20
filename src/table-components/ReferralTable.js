@@ -1251,7 +1251,7 @@ export default function ReferralTable(props) {
                     </Grid> */}
                     <Grid item xs={11}>
                     {JSON.stringify(v1500UploadProgress)}
-                    {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 &&
+                    {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 && v1500UploadProgress?.percentComplete > 0 &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
                     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -1377,7 +1377,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {!v1500UploadProgress &&
+                {v1500UploadProgress.percentComplete === null &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
