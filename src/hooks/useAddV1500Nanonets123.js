@@ -11,30 +11,30 @@ export default function useAddV1500Nanonets() {
 
   const addV1500 = (values) => {
 
-    // console.log(values)
-
-    let files = values.getAll("v1500Blobs")
-
-    // console.log(files)
-
-    return Promise.all(
-      files.map((file, index) => {
-        const formData = new FormData();
-        formData.append("v1500Blobs", file);
-        formData.append("userId", values.get("userId"))
-        return api.post(
-          '/v1500/upload/smarter/nanonets', 
-          formData, 
+    api.post('/v1500/upload/smarter/nanonets', values,
           {
-            headers: {'Content-Type': 'multipart/form-data'},
+            headers:
+            {
+            'Content-Type': 'multipart/form-data'
+            },
             onUploadProgress: (p) => {
               const percentComplete = Math.round((p.loaded * 100) / p.total)
-              setV1500UploadProgress({filename: file.name, percentComplete: percentComplete})
+              setV1500UploadProgress(percentComplete)
               console.log(`${percentComplete}% uploaded`)
             }
-          })
-      })
-    )
+          }
+          )
+          .then(response => {
+            // const temp = v1500UploadProgress.filter(p => p.filename !== file.name)
+            // setV1500UploadProgress(temp)
+            if (response.status === 200) {
+              console.log("Successfully posted to nanonets");
+              console.log(response.data)
+              return response.status;
+            } 
+            
+          });
+
       
   }
     

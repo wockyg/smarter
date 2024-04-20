@@ -1213,7 +1213,7 @@ export default function ReferralTable(props) {
             <Dialog open={modalOpen} onClose={handleModalClose}>
               <DialogTitle>
                 <Grid container spacing={0.5}>
-                    <Grid item xs={11}>
+                    {/* <Grid item xs={11}>
                     {modalType === 'upload' && v1500UploadProgress === null &&
                     "Upload V1500s"
                     }
@@ -1248,10 +1248,39 @@ export default function ReferralTable(props) {
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
+                    </Grid> */}
+                    <Grid item xs={11}>
+                    {JSON.stringify(v1500UploadProgress)}
+                    {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 &&
+                    <>
+                    Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
+                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                        <CircularProgress />
+                        <Box
+                        sx={{
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            right: 0,
+                            position: 'absolute',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        >
+                        <Typography variant="caption" component="div" color="text.secondary">
+                            {`${v1500UploadProgress?.percentComplete}%`}
+                        </Typography>
+                        </Box>
+                    </Box>
+                    </>
+                    }
+                    {modalType === 'bulk' &&
+                    `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
+                    }
+                    
                     </Grid>
-                    <Grid item xs={1}>
-                    <button onClick={handleModalClose}>x</button>
-                    </Grid>
+                    
                 </Grid>
               </DialogTitle>
               <DialogContent>
@@ -1365,8 +1394,9 @@ export default function ReferralTable(props) {
                             return (
                                 <li key={i}>
                                     {file.name}
-                                    {v1500UploadProgress === 100 &&
-                                    <TaskAltIcon color="success" />
+                                    {v1500UploadProgress.filename === file.name &&
+                                    // <TaskAltIcon color="success" />
+                                    <CircularProgress size='small' />
                                     }
                                 </li>
                             )

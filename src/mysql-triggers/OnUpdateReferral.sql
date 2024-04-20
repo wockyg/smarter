@@ -119,7 +119,7 @@ CREATE TRIGGER `OnUpdateReferral` BEFORE UPDATE ON `referralsNotification` FOR E
 		END CASE;
 	END IF;
 	-- report sent to adj and md (FCE/PPD only)
-	IF NEW.ptStatus = "Limbo" AND NEW.reportToAdjuster IS NOT NULL AND AND NEW.reportToPhysician IS NOT NULL THEN
+	IF NEW.ptStatus = "Limbo" AND NEW.reportToAdjuster IS NOT NULL AND NEW.reportToPhysician IS NOT NULL THEN
 		SET NEW.ptStatus = "Complete";
 	END IF;
 	
