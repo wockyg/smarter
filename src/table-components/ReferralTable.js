@@ -1221,7 +1221,7 @@ export default function ReferralTable(props) {
                     {modalType === 'upload' && v1500UploadProgress.length > 0 && v1500UploadProgress.filter(v => v.percentComplete === 100).length === v1500UploadProgress.length &&
                     "Upload complete"
                     }
-                    {modalType === 'upload' && v1500UploadProgress.filter(v => v.percentComplete === 100).length < v1500UploadProgress.length &&
+                    {modalType === 'upload' && v1500UploadProgress.length > 0 && v1500UploadProgress.filter(v => v.percentComplete === 100).length < v1500UploadProgress.length &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
                     </>

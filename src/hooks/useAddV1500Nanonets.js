@@ -17,15 +17,13 @@ export default function useAddV1500Nanonets() {
 
     // console.log(files)
 
-    return await Promise.all(
+    const promises = files.map(async file => {
 
-      files.map(async (file, index) => {
+      const formData = new FormData();
+      formData.append("v1500Blobs", file);
+      formData.append("userId", values.get("userId"))
 
-        const formData = new FormData();
-        formData.append("v1500Blobs", file);
-        formData.append("userId", values.get("userId"))
-
-        return await api.post(
+      const upload = await api.post(
             '/v1500/upload/smarter/nanonets', 
             formData, 
             {
@@ -38,8 +36,14 @@ export default function useAddV1500Nanonets() {
                 }
             }
           )
-      })
-    )
+      
+      return upload
+
+    })
+
+    const result = await Promise.all(promises)
+    
+    return result
       
   }
     
