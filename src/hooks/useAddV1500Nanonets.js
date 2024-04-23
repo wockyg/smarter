@@ -9,7 +9,7 @@ export default function useAddV1500Nanonets() {
 
   const queryClient = useQueryClient();
 
-  const addV1500 = (values) => {
+  const addV1500 = async (values) => {
 
     // console.log(values)
 
@@ -17,7 +17,7 @@ export default function useAddV1500Nanonets() {
 
     // console.log(files)
 
-    Promise.all(
+    await Promise.all(
       files.map((file, index) => {
         const formData = new FormData();
         formData.append("v1500Blobs", file);
