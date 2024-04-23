@@ -33,7 +33,7 @@ export default function useAddV1500Nanonets() {
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
                   setV1500UploadProgress({filename: file.name, percentComplete: percentComplete})
-                  console.log(`${percentComplete}% uploaded`)
+                  console.log(`${file.name} - ${percentComplete}% uploaded`)
                 }
             }
           )
