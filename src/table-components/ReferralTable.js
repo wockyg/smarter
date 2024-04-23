@@ -43,6 +43,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DownloadingIcon from '@mui/icons-material/Downloading';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import PendingIcon from '@mui/icons-material/Pending';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -696,7 +697,7 @@ export default function ReferralTable(props) {
             setGenerateRR(false);
             setUploadComplete(false);
             setUploadedFiles([])
-            setV1500UploadProgress(null)
+            setV1500UploadProgress([])
         }
     };
 
@@ -1213,44 +1214,26 @@ export default function ReferralTable(props) {
             <Dialog open={modalOpen} onClose={handleModalClose}>
               <DialogTitle>
                 <Grid container spacing={0.5}>
-                    {/* <Grid item xs={11}>
-                    {modalType === 'upload' && v1500UploadProgress === null &&
+                    <Grid item xs={11}>
+                    {modalType === 'upload' && v1500UploadProgress.length === 0 &&
                     "Upload V1500s"
                     }
-                    {modalType === 'upload' && v1500UploadProgress === 100 &&
+                    {modalType === 'upload' && v1500UploadProgress.filter(v => v.percentComplete === 100).length === v1500UploadProgress.length &&
                     "Upload complete"
                     }
-                    {modalType === 'upload' && v1500UploadProgress !== null && v1500UploadProgress < 100 &&
+                    {modalType === 'upload' && v1500UploadProgress.filter(v => v.percentComplete === 100).length < v1500UploadProgress.length &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
-                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                        <CircularProgress />
-                        <Box
-                        sx={{
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: 'absolute',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        >
-                        <Typography variant="caption" component="div" color="text.secondary">
-                            {`${v1500UploadProgress}%`}
-                        </Typography>
-                        </Box>
-                    </Box>
                     </>
                     }
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
-                    </Grid> */}
-                    <Grid item xs={11}>
-                    {JSON.stringify(v1500UploadProgress)}
+                    </Grid>
+
+                    {/* <Grid item xs={11}>
+                    {JSON.stringify(v1500UploadProgress || {})}
                     {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 && v1500UploadProgress?.percentComplete > 0 &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
@@ -1279,7 +1262,7 @@ export default function ReferralTable(props) {
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
-                    </Grid>
+                    </Grid> */}
                     
                 </Grid>
               </DialogTitle>
@@ -1377,7 +1360,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {v1500UploadProgress.percentComplete === null &&
+                {v1500UploadProgress?.percentComplete === null &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1389,14 +1372,37 @@ export default function ReferralTable(props) {
                     <ul>
                         {uploadedFiles.map((file, i) => {
 
-                            // const progress = v1500UploadProgress.filter(p => p.filename === file.name)[0]?.percentComplete || -1
+                            const progress = v1500UploadProgress.filter(p => p.filename === file.name)[0]?.percentComplete || -1
 
                             return (
                                 <li key={i}>
                                     {file.name}
-                                    {v1500UploadProgress.filename === file.name &&
-                                    // <TaskAltIcon color="success" />
-                                    <CircularProgress size='small' />
+                                    {progress === -1 &&
+                                    <PendingIcon disabled />
+                                    }
+                                    {progress > 0 && progress < 100 &&
+                                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                                        <CircularProgress />
+                                        <Box
+                                        sx={{
+                                            top: 0,
+                                            left: 0,
+                                            bottom: 0,
+                                            right: 0,
+                                            position: 'absolute',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                        }}
+                                        >
+                                        <Typography variant="caption" component="div" color="text.secondary">
+                                            {`${progress}%`}
+                                        </Typography>
+                                        </Box>
+                                    </Box>
+                                    }
+                                    {progress === 100 &&
+                                    <TaskAltIcon color="success" />
                                     }
                                 </li>
                             )
