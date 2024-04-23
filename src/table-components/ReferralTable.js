@@ -1377,7 +1377,7 @@ export default function ReferralTable(props) {
                             return (
                                 <li key={i}>
                                     {file.name}
-                                    {progress === -1 &&
+                                    {progress === -1 && v1500UploadProgress.length > 0 &&
                                     <PendingIcon disabled />
                                     }
                                     {progress > 0 && progress < 100 &&
