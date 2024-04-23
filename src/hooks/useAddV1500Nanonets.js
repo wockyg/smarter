@@ -17,12 +17,13 @@ export default function useAddV1500Nanonets() {
 
     // console.log(files)
 
-    return Promise.all(
+    Promise.all(
       files.map((file, index) => {
         const formData = new FormData();
         formData.append("v1500Blobs", file);
         formData.append("userId", values.get("userId"))
-        return api.post(
+        return new Promise((resolve, reject) => {
+          api.post(
           '/v1500/upload/smarter/nanonets', 
           formData, 
           {
@@ -32,9 +33,16 @@ export default function useAddV1500Nanonets() {
               setV1500UploadProgress({filename: file.name, percentComplete: percentComplete})
               console.log(`${percentComplete}% uploaded`)
             }
+          }).then(data => {
+            console.log(`file ${index+1} uploaded?`)
+            console.log(data)
+            resolve(data)
           })
+        })
       })
-    )
+    ).then(res => {
+      return res
+    })
       
   }
     

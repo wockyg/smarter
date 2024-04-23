@@ -1213,7 +1213,7 @@ export default function ReferralTable(props) {
             <Dialog open={modalOpen} onClose={handleModalClose}>
               <DialogTitle>
                 <Grid container spacing={0.5}>
-                    <Grid item xs={11}>
+                    {/* <Grid item xs={11}>
                     {modalType === 'upload' && v1500UploadProgress === null &&
                     "Upload V1500s"
                     }
@@ -1248,8 +1248,8 @@ export default function ReferralTable(props) {
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
-                    </Grid>
-                    {/* <Grid item xs={11}>
+                    </Grid> */}
+                    <Grid item xs={11}>
                     {JSON.stringify(v1500UploadProgress)}
                     {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 && v1500UploadProgress?.percentComplete > 0 &&
                     <>
@@ -1279,7 +1279,7 @@ export default function ReferralTable(props) {
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
-                    </Grid> */}
+                    </Grid>
                     
                 </Grid>
               </DialogTitle>
@@ -1377,7 +1377,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {v1500UploadProgress === null &&
+                {v1500UploadProgress.percentComplete === null &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1394,9 +1394,9 @@ export default function ReferralTable(props) {
                             return (
                                 <li key={i}>
                                     {file.name}
-                                    {v1500UploadProgress === 100 &&
-                                    <TaskAltIcon color="success" />
-                                    // <CircularProgress size='small' />
+                                    {v1500UploadProgress.filename === file.name &&
+                                    // <TaskAltIcon color="success" />
+                                    <CircularProgress size='small' />
                                     }
                                 </li>
                             )
