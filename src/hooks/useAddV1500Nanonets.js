@@ -9,7 +9,7 @@ export default function useAddV1500Nanonets() {
 
   const queryClient = useQueryClient();
 
-  const addV1500 = (values) => {
+  const addV1500 = async (values) => {
 
     // console.log(values)
 
@@ -17,7 +17,7 @@ export default function useAddV1500Nanonets() {
 
     // console.log(files)
 
-    return Promise.all(
+    return await Promise.all(
 
       files.map(async (file, index) => {
 
@@ -32,7 +32,7 @@ export default function useAddV1500Nanonets() {
               headers: {'Content-Type': 'multipart/form-data'},
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
-                  setV1500UploadProgress({filename: file.name, percentComplete: percentComplete})
+                  // setV1500UploadProgress({filename: file.name, percentComplete: percentComplete})
                   console.log(`${percentComplete}% uploaded`)
                 }
             }
