@@ -835,13 +835,13 @@ export default function ReferralTable(props) {
     <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
 
-            {type === 'hcfa' &&
+            {/* {type === 'hcfa' &&
                 <Button size='small' onClick={handleTestWebhook}>
                     Test Webhook
                 </Button>
-            }
+            } */}
 
-            {type === 'hcfa' &&
+            {/* {type === 'hcfa' &&
                 JSON.stringify(v1500UploadProgress)
             }
 
@@ -851,7 +851,7 @@ export default function ReferralTable(props) {
 
             {type === 'hcfa' &&
                 JSON.stringify(v1500UploadFail)
-            }
+            } */}
 
             {type === 'hcfa' &&
                 <UploadButton handleClickUpload={handleClickUpload} />
