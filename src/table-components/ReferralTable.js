@@ -322,7 +322,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -843,6 +843,10 @@ export default function ReferralTable(props) {
             }
 
             {type === 'hcfa' &&
+                JSON.stringify(v1500UploadComplete)
+            }
+
+            {type === 'hcfa' &&
                 <UploadButton handleClickUpload={handleClickUpload} />
             }
           
@@ -1218,7 +1222,8 @@ export default function ReferralTable(props) {
             <Dialog open={modalOpen} onClose={handleModalClose}>
               <DialogTitle>
                 <Grid container spacing={0.5}>
-                    <Grid item xs={11}>
+
+                    {/* <Grid item xs={11}>
                     {modalType === 'upload' && v1500UploadProgress.length === 0 &&
                     "Upload V1500s"
                     }
@@ -1233,40 +1238,25 @@ export default function ReferralTable(props) {
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
-                    
-                    </Grid>
+                    </Grid> */}
 
-                    {/* <Grid item xs={11}>
-                    {JSON.stringify(v1500UploadProgress || {})}
-                    {modalType === 'upload' && v1500UploadProgress?.percentComplete < 100 && v1500UploadProgress?.percentComplete > 0 &&
+                    <Grid item xs={11}>
+                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length === 0 &&
+                    "Upload V1500s"
+                    }
+                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && v1500UploadComplete.length === uploadedFiles.length &&
+                    "Upload complete"
+                    }
+                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && v1500UploadComplete.length < uploadedFiles.length &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
-                    <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-                        <CircularProgress />
-                        <Box
-                        sx={{
-                            top: 0,
-                            left: 0,
-                            bottom: 0,
-                            right: 0,
-                            position: 'absolute',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}
-                        >
-                        <Typography variant="caption" component="div" color="text.secondary">
-                            {`${v1500UploadProgress?.percentComplete}%`}
-                        </Typography>
-                        </Box>
-                    </Box>
                     </>
                     }
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
                     
-                    </Grid> */}
+                    </Grid>
                     
                 </Grid>
               </DialogTitle>
@@ -1364,7 +1354,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {v1500UploadProgress.length === 0 &&
+                {Object.keys(v1500UploadProgress).length === 0 && // v1500UploadProgress.length === 0 &&
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1376,12 +1366,12 @@ export default function ReferralTable(props) {
                     <ul>
                         {uploadedFiles.map((file, i) => {
 
-                            const progress = v1500UploadProgress.filter(p => p.filename === file.name)[0]?.percentComplete || -1
+                            const progress = v1500UploadComplete.includes(file.name) ? 100 : v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
 
                             return (
                                 <li key={i}>
                                     {file.name}
-                                    {progress === -1 && v1500UploadProgress.length > 0 &&
+                                    {progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
                                     <PendingIcon disabled />
                                     }
                                     {progress > 0 && progress < 100 &&

@@ -5,9 +5,9 @@ import { useMutation, useQueryClient } from "react-query";
 
 export default function useAddV1500Nanonets() {
 
-  const { v1500UploadProgress, setV1500UploadProgress, billMode } = useContext(SelectedClaimContext);
+  const { v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete } = useContext(SelectedClaimContext);
 
-  const [progress, setProgress] = useState([])
+  // const [progress, setProgress] = useState([])
 
   // console.log(v1500UploadProgress)
 
@@ -15,7 +15,7 @@ export default function useAddV1500Nanonets() {
 
   const addV1500 = async (values) => {
 
-    console.log(progress)
+    // console.log(progress)
 
     const result = []
 
@@ -23,11 +23,13 @@ export default function useAddV1500Nanonets() {
 
     console.log(files)
 
-    const newProgress = files.map(f => {
-        return {filename: f.name, percentComplete: 0}
-    })
+    const complete = []
 
-    setProgress(newProgress)
+    // files.map(f => {
+    //     return {filename: f.name, percentComplete: 0}
+    // })
+
+    // setProgress(newProgress)
 
     for(let i = 0; i < files.length; i++) {
 
@@ -42,17 +44,21 @@ export default function useAddV1500Nanonets() {
               headers: {'Content-Type': 'multipart/form-data'},
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
-                  const otherFiles = progress.filter(v => v.filename !== files[i].name)
+                  // const otherFiles = newProgress.filter(v => v.filename !== files[i].name)
                   // console.log(otherFiles)
-                  const newState = [...otherFiles, {filename: files[i].name, percentComplete: percentComplete}]
-                  setProgress(newState)
+                  const newState = {filename: files[i].name, percentComplete: percentComplete}
                   setV1500UploadProgress(newState)
                   // console.log(`${files[i].name} - ${percentComplete}% uploaded`)
                 }
             }
           )
 
+      complete.push(files[i].name)
+      setV1500UploadComplete(complete)
+
       result.push(upload)
+
+
       
       // console.log(upload)
       console.log(`File ${i} uploaded...`)
