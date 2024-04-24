@@ -1419,15 +1419,17 @@ export default function ReferralTable(props) {
                 }
               </DialogContent>
               <DialogActions>
-                {!uploadComplete &&
-                <Button onClick={handleModalClose}>Cancel</Button>
-                }
+                
                 {type === 'rr' &&
+                <>
+                <Button onClick={handleModalClose}>Cancel</Button>
                 <Button onClick={handleBulkSubmit}>Generate</Button>
+                </>
                 }
                 {type === 'hcfa' && v1500UploadComplete.length === 0 &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
+                <Button onClick={handleModalClose}>Cancel</Button>
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
