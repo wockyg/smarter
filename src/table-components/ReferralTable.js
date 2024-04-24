@@ -1379,6 +1379,7 @@ export default function ReferralTable(props) {
 
                             return (
                                 <li key={i}>
+                                    {file.name}
                                     {failed &&
                                     <WarningIcon color='error' />
                                     }
