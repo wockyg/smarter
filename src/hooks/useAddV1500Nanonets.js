@@ -13,39 +13,39 @@ export default function useAddV1500Nanonets() {
 
     // console.log(values)
 
+    const result = []
+
     let files = values.getAll("v1500Blobs")
 
-    // console.log(files)
+    console.log(files)
 
-    const promises = files.map(async file => {
-
+    for(let i = 0; i < files.length; i++) {
+      
       const formData = new FormData();
-      formData.append("v1500Blobs", file);
+      formData.append("v1500Blobs", files[i]);
       formData.append("userId", values.get("userId"))
 
-      const upload = await new Promise((resolve, reject) => {
-        api.post(
+      const upload = await api.post(
             '/v1500/upload/smarter/nanonets', 
             formData, 
             {
               headers: {'Content-Type': 'multipart/form-data'},
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
-                  const otherFiles = v1500UploadProgress.filter(v => v.filename !== file.name)
-                  setV1500UploadProgress([...otherFiles, {filename: file.name, percentComplete: percentComplete}])
-                  console.log(`${file.name} - ${percentComplete}% uploaded`)
+                  const otherFiles = v1500UploadProgress.filter(v => v.filename !== files[i].name)
+                  setV1500UploadProgress([...otherFiles, {filename: files[i].name, percentComplete: percentComplete}])
+                  console.log(`${files[i].name} - ${percentComplete}% uploaded`)
                 }
             }
-          ).then(result => resolve(result))
-      })
+          )
 
-      console.log("randomLog.........")
+      result.push(upload)
       
-      return upload
+      // console.log(upload)
+      console.log(`File ${i} uploaded...`)
+    }
 
-    })
-
-    const result = await Promise.all(promises)
+    
     
     return result
       
