@@ -839,6 +839,10 @@ export default function ReferralTable(props) {
             }
 
             {type === 'hcfa' &&
+                JSON.stringify(v1500UploadProgress)
+            }
+
+            {type === 'hcfa' &&
                 <UploadButton handleClickUpload={handleClickUpload} />
             }
           

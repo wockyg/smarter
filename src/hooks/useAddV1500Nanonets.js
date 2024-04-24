@@ -20,7 +20,7 @@ export default function useAddV1500Nanonets() {
     console.log(files)
 
     for(let i = 0; i < files.length; i++) {
-      
+
       const formData = new FormData();
       formData.append("v1500Blobs", files[i]);
       formData.append("userId", values.get("userId"))
@@ -46,7 +46,7 @@ export default function useAddV1500Nanonets() {
     }
 
     
-    
+    // console.log(result)
     return result
       
   }
