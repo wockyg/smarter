@@ -44,6 +44,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DownloadingIcon from '@mui/icons-material/Downloading';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PendingIcon from '@mui/icons-material/Pending';
+import WarningIcon from '@mui/icons-material/Warning';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -322,7 +323,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -699,6 +700,7 @@ export default function ReferralTable(props) {
             setUploadedFiles([])
             setV1500UploadProgress({})
             setV1500UploadComplete([])
+            setV1500UploadFail([])
         }
     };
 
@@ -845,6 +847,10 @@ export default function ReferralTable(props) {
 
             {type === 'hcfa' &&
                 JSON.stringify(v1500UploadComplete)
+            }
+
+            {type === 'hcfa' &&
+                JSON.stringify(v1500UploadFail)
             }
 
             {type === 'hcfa' &&
@@ -1245,10 +1251,10 @@ export default function ReferralTable(props) {
                     {modalType === 'upload' && Object.keys(v1500UploadProgress).length === 0 &&
                     "Upload V1500s"
                     }
-                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && v1500UploadComplete.length === uploadedFiles.length &&
+                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) === uploadedFiles.length &&
                     "Upload complete"
                     }
-                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && v1500UploadComplete.length < uploadedFiles.length &&
+                    {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) < uploadedFiles.length &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
                     </>
@@ -1369,9 +1375,16 @@ export default function ReferralTable(props) {
 
                             const progress = v1500UploadComplete?.includes(file.name) ? 100 : v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
 
+                            const failed = v1500UploadFail?.includes(file.name)
+
                             return (
                                 <li key={i}>
-                                    {file.name}
+                                    {failed &&
+                                    <WarningIcon color='error' />
+                                    }
+                                    {progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
+                                    <PendingIcon disabled />
+                                    }
                                     {progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
                                     <PendingIcon disabled />
                                     }

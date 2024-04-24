@@ -15,6 +15,7 @@ const SelectedClaimContextProvider = (props) => {
     const [selectedV1500, setSelectedV1500] = useState(null);
     const [v1500UploadProgress, setV1500UploadProgress] = useState({});
     const [v1500UploadComplete, setV1500UploadComplete] = useState([]);
+    const [v1500UploadFail, setV1500UploadFail] = useState([]);
     
     return (
         <SelectedClaimContext.Provider 
@@ -27,7 +28,8 @@ const SelectedClaimContextProvider = (props) => {
                  keepBillMode, setKeepBillMode, 
                  selectedV1500, setSelectedV1500, 
                  v1500UploadProgress, setV1500UploadProgress,
-                 v1500UploadComplete, setV1500UploadComplete }}>
+                 v1500UploadComplete, setV1500UploadComplete,
+                 v1500UploadFail, setV1500UploadFail }}>
             {props.children}
         </SelectedClaimContext.Provider>
     );
