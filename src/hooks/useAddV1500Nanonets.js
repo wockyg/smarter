@@ -36,6 +36,8 @@ export default function useAddV1500Nanonets() {
                 }
             }
           )
+
+      console.log("randomLog.........")
       
       return upload
 
