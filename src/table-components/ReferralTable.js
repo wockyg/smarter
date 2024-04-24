@@ -805,6 +805,12 @@ export default function ReferralTable(props) {
 
         formData.append("userId", user.userId)
 
+        const newProgress = uploadedFiles.map(f => {
+            return {filename: f.name, percentComplete: 0}
+        })
+
+        setV1500UploadProgress(newProgress)
+
         // method === 'sensible' && uploadedFiles.length > 0 && v1500AddSensible.mutate(formData)
 
         method === 'nanonets' && uploadedFiles.length > 0 && v1500AddNanonets.mutate(formData, {onSuccess:  (newData) => {setUploadComplete(true)}})
