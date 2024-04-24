@@ -23,7 +23,8 @@ export default function useAddV1500Nanonets() {
       formData.append("v1500Blobs", file);
       formData.append("userId", values.get("userId"))
 
-      const upload = await api.post(
+      const upload = await new Promise((resolve, reject) => {
+        api.post(
             '/v1500/upload/smarter/nanonets', 
             formData, 
             {
@@ -35,7 +36,8 @@ export default function useAddV1500Nanonets() {
                   console.log(`${file.name} - ${percentComplete}% uploaded`)
                 }
             }
-          )
+          ).then(result => resolve(result))
+      })
 
       console.log("randomLog.........")
       
