@@ -697,7 +697,8 @@ export default function ReferralTable(props) {
             setGenerateRR(false);
             setUploadComplete(false);
             setUploadedFiles([])
-            setV1500UploadProgress([])
+            setV1500UploadProgress({})
+            setV1500UploadComplete([])
         }
     };
 
@@ -1413,13 +1414,13 @@ export default function ReferralTable(props) {
                 {type === 'rr' &&
                 <Button onClick={handleBulkSubmit}>Generate</Button>
                 }
-                {type === 'hcfa' && !uploadComplete &&
+                {type === 'hcfa' && v1500UploadComplete.length === 0 &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
-                {type === 'hcfa' && uploadComplete &&
+                {type === 'hcfa' && v1500UploadComplete.length > 0 && v1500UploadComplete.length === uploadedFiles.length &&
                 <Button onClick={handleModalClose}>Done</Button>
                 }
                 {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
