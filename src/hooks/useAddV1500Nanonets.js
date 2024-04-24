@@ -60,8 +60,9 @@ export default function useAddV1500Nanonets() {
 
 
       
-      // console.log(upload)
+      
       console.log(`File ${i} uploaded...`)
+      console.log(upload)
     }
 
     
