@@ -1366,7 +1366,7 @@ export default function ReferralTable(props) {
                     <ul>
                         {uploadedFiles.map((file, i) => {
 
-                            const progress = v1500UploadComplete.includes(file.name) ? 100 : v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
+                            const progress = v1500UploadComplete?.includes(file.name) ? 100 : v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
 
                             return (
                                 <li key={i}>
