@@ -7,6 +7,8 @@ export default function useAddV1500Nanonets() {
 
   const { v1500UploadProgress, setV1500UploadProgress, billMode } = useContext(SelectedClaimContext);
 
+  console.log(v1500UploadProgress)
+
   const queryClient = useQueryClient();
 
   const addV1500 = async (values) => {
@@ -33,7 +35,6 @@ export default function useAddV1500Nanonets() {
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
                   const otherFiles = [...v1500UploadProgress.filter(v => v.filename !== files[i].name)]
-                  // console.log([...v1500UploadProgress])
                   // console.log(otherFiles)
                   setV1500UploadProgress([...otherFiles, {filename: files[i].name, percentComplete: percentComplete}])
                   // console.log(`${files[i].name} - ${percentComplete}% uploaded`)
