@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
@@ -6,6 +6,8 @@ import { useMutation, useQueryClient } from "react-query";
 export default function useAddV1500Nanonets() {
 
   const { v1500UploadProgress, setV1500UploadProgress, billMode } = useContext(SelectedClaimContext);
+
+  const [progress, setProgress] = useState()
 
   console.log(v1500UploadProgress)
 
@@ -21,6 +23,12 @@ export default function useAddV1500Nanonets() {
 
     console.log(files)
 
+    const newProgress = files.map(f => {
+        return {filename: f.name, percentComplete: 0}
+    })
+
+    setProgress(newProgress)
+
     for(let i = 0; i < files.length; i++) {
 
       const formData = new FormData();
@@ -34,9 +42,11 @@ export default function useAddV1500Nanonets() {
               headers: {'Content-Type': 'multipart/form-data'},
               onUploadProgress: (p) => {
                   const percentComplete = Math.round((p.loaded * 100) / p.total)
-                  const otherFiles = [...v1500UploadProgress.filter(v => v.filename !== files[i].name)]
+                  const otherFiles = progress.filter(v => v.filename !== files[i].name)
                   // console.log(otherFiles)
-                  setV1500UploadProgress([...otherFiles, {filename: files[i].name, percentComplete: percentComplete}])
+                  const newState = [...otherFiles, {filename: files[i].name, percentComplete: percentComplete}]
+                  setProgress(newState)
+                  setV1500UploadProgress(newState)
                   // console.log(`${files[i].name} - ${percentComplete}% uploaded`)
                 }
             }
