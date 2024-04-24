@@ -7,15 +7,15 @@ export default function useAddV1500Nanonets() {
 
   const { v1500UploadProgress, setV1500UploadProgress, billMode } = useContext(SelectedClaimContext);
 
-  const [progress, setProgress] = useState()
+  const [progress, setProgress] = useState([])
 
-  console.log(v1500UploadProgress)
+  // console.log(v1500UploadProgress)
 
   const queryClient = useQueryClient();
 
   const addV1500 = async (values) => {
 
-    // console.log(values)
+    console.log(progress)
 
     const result = []
 
