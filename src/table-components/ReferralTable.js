@@ -1383,10 +1383,7 @@ export default function ReferralTable(props) {
                                     {failed &&
                                     <WarningIcon color='error' />
                                     }
-                                    {progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
-                                    <PendingIcon disabled />
-                                    }
-                                    {progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
+                                    {!failed && progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
                                     <PendingIcon disabled />
                                     }
                                     {progress > 0 && progress < 100 &&
