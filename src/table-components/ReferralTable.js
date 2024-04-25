@@ -1433,7 +1433,7 @@ export default function ReferralTable(props) {
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
-                {type === 'hcfa' && v1500UploadComplete.length > 0 && v1500UploadComplete.length === uploadedFiles.length &&
+                {type === 'hcfa' && v1500UploadComplete.length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) === uploadedFiles.length &&
                 <Button onClick={handleModalClose}>Done</Button>
                 }
                 {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
