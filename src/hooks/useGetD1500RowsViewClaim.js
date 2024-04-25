@@ -20,7 +20,6 @@ export default function useGetD1500RowsViewClaim(referralId) {
   return useQuery([`D1500RowsView_claim_${referralId}`, referralId], getAllD1500RowsView, { 
     staleTime: (10 * (60 * 1000)), // 10 min 
     cacheTime: (15 * (60 * 1000)), // 15 min
-    // refetchInterval: (1 * (5 * 1000)), // 5 sec
   });
 
 }
