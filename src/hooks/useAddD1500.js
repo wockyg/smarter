@@ -13,6 +13,8 @@ export default function useAddD1500() {
     //   console.log(pair[0], pair[1]);
     // }
 
+    const referralId = values.get("referralId")
+
     api.post('/d1500', values,
         {
           headers:
@@ -25,8 +27,8 @@ export default function useAddD1500() {
           if (response.status === 200) {
             console.log("Successfully posted d1500 to db...");
             console.log(response.data)
-            console.log(values.referralId)
-            queryClient.invalidateQueries(`D1500RowsView_claim_${values.referralId}`);
+            console.log(referralId)
+            queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
             return response.data;
           }
           // if (response.status === 200) {
@@ -73,7 +75,7 @@ export default function useAddD1500() {
     
   return useMutation( (values) => addD1500(values), 
                       {onSuccess: () => {
-                      console.log('successfully added D1500...');
+                      console.log('successfully submitted D1500 for processing...');
                       }});
 
 }
