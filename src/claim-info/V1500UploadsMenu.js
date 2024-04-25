@@ -130,7 +130,7 @@ export default function V1500UploadsMenu(props) {
             disablePadding
           >
             <ListItemButton role={undefined} dense>
-              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={(row.uploadProgress < 100 && row.uploadProgress > -1) ? <LinearProgress /> : `${row.dateAddedFormat2}`} />
+              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={(row.uploadProgress < 100 && row.uploadProgress > -1) ? <LinearProgress /> : `${row.dateAdded}`} />
             </ListItemButton>
 
             {/* {row.v1500Id}
