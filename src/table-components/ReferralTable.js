@@ -811,7 +811,15 @@ export default function ReferralTable(props) {
 
         // method === 'sensible' && uploadedFiles.length > 0 && v1500AddSensible.mutate(formData)
 
-        method === 'nanonets' && uploadedFiles.length > 0 && v1500AddNanonets.mutate(formData, {onSuccess:  (newData) => {setUploadComplete(true)}})
+        method === 'nanonets' && uploadedFiles.length > 0 && 
+        v1500AddNanonets.mutate(formData, {onSuccess:  (newData) => {
+            console.log(newData)
+            // const filtered = newData.filter(d => d.status !== 200)
+            // if (filtered.length > 0) {
+            //     v1500AddNanonets.mutate()
+            // }
+            setUploadComplete(true)
+        }})
         
         // close modal
         // handleModalClose();
