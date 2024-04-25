@@ -256,13 +256,14 @@ export default function RowGenerator() {
                       .then(blob => {
 
                         console.log(selectedV1500)
+                        console.log(selectedClaim)
 
                         // const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
                         const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
 
                         const formData = new FormData();
                         formData.append("dateApproved", new Date().toISOString());
-                        formData.append("referralId", +selectedClaim.referralId);
+                        formData.append("referralId", +selectedV1500.referralId);
                         formData.append("sendFormat", d1500SendFormat);
                         formData.append("d1500Blob", blob);
                         // formData.append("v1500_filename", v1500_filename);
