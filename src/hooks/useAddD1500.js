@@ -25,7 +25,8 @@ export default function useAddD1500() {
           if (response.status === 200) {
             console.log("Successfully posted d1500 to db...");
             console.log(response.data)
-            // queryClient.invalidateQueries(`D1500RowsView_claim_${values.referralId}`);
+            console.log(values.referralId)
+            queryClient.invalidateQueries(`D1500RowsView_claim_${values.referralId}`);
             return response.data;
           }
           // if (response.status === 200) {
