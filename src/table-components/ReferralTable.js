@@ -45,6 +45,7 @@ import DownloadingIcon from '@mui/icons-material/Downloading';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import PendingIcon from '@mui/icons-material/Pending';
 import WarningIcon from '@mui/icons-material/Warning';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -1384,7 +1385,10 @@ export default function ReferralTable(props) {
                                     <WarningIcon color='error' />
                                     }
                                     {!failed && progress === -1 && Object.keys(v1500UploadProgress).length > 0 &&
-                                    <PendingIcon disabled />
+                                    <AccessTimeIcon disabled />
+                                    }
+                                    {!failed && progress === 100 &&
+                                    <TaskAltIcon color="success" />
                                     }
                                     {progress > 0 && progress < 100 &&
                                     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -1406,9 +1410,6 @@ export default function ReferralTable(props) {
                                         </Typography>
                                         </Box>
                                     </Box>
-                                    }
-                                    {progress === 100 &&
-                                    <TaskAltIcon color="success" />
                                     }
                                 </li>
                             )
