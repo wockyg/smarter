@@ -66,6 +66,8 @@ export default function ClaimInfoToolbar() {
 
     const { billMode, setBillMode, keepBillMode, setKeepBillMode, selectedV1500, d1500Status } = useContext(SelectedClaimContext);
 
+    console.log(d1500Status)
+
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
     const mutationUpdate = useUpdateReferral();
