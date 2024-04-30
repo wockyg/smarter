@@ -71,6 +71,8 @@ export default function MainPage() {
 
     <TopSection />
 
+    {/* middle toolbar goes here */}
+
     <MiddleSection />
 
     {/* Hide apptVerif/Billing if on RR tab */}

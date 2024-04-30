@@ -331,7 +331,7 @@ export default function MainNavbar() {
             onClick={() => handleReset()}
           />
 
-          {/* TODO: responsive minimized version of logo/menu */}
+          {/* TODO responsive minimized version of logo/menu */}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -398,6 +398,7 @@ export default function MainNavbar() {
 
 
             <Box sx={{ paddingLeft: 2 }}>
+
             <Tabs
             variant="scrollable"
             scrollButtons={false}
@@ -415,19 +416,9 @@ export default function MainNavbar() {
                 <StyledTab label={<div><AssessmentIcon />{` Reports`}</div>} {...a11yProps(6)} />
                 <StyledTab label={<div><SearchIcon />{` Search`}</div>} {...a11yProps(7)} />
             </Tabs>
+
             </Box>
 
-
-
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
 
 
           </Box>

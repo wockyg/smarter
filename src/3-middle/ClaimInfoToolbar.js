@@ -21,6 +21,11 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InfoIcon from '@mui/icons-material/Info';
 import LanguageIcon from '@mui/icons-material/Language';
 import TranslateIcon from '@mui/icons-material/Translate';
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import MergeIcon from '@mui/icons-material/Merge';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -40,6 +45,8 @@ import { useParams } from 'react-router-dom';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
+import D1500ProgressStepper from './D1500ProgressStepper';
+
 
 export default function ClaimInfoToolbar() {
 
@@ -57,7 +64,7 @@ export default function ClaimInfoToolbar() {
 
     let { id: linkId } = useParams();
 
-    const { billMode, setBillMode, keepBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
+    const { billMode, setBillMode, keepBillMode, setKeepBillMode, selectedV1500, d1500Status } = useContext(SelectedClaimContext);
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
 
@@ -316,7 +323,14 @@ export default function ClaimInfoToolbar() {
               </h3>
             </Grid>
             }
+            {billMode && selectedV1500 && d1500Status &&
+            <Grid item>
+              <D1500ProgressStepper />
+            </Grid>
+            }
+            
           </Grid>
+
         </Box>
       </Box>
       
@@ -326,7 +340,7 @@ export default function ClaimInfoToolbar() {
         open={open0}
         onClose={handleCloseMenu}
       >
-        {/* TODO finish implementation */}
+        {/* TODO finish important notes implementation */}
         <MenuItem  onClick={handleAddImportantNote}>
             Add important note
         </MenuItem>

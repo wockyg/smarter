@@ -1,8 +1,12 @@
+import { useContext } from 'react';
 import {api} from '../index';
 import { useMutation, useQueryClient } from "react-query";
-import useAddD1500Rows from '../hooks/useAddD1500Rows';
+
+import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
 export default function useAddD1500() {
+
+  const { setCptRows, setSelectedV1500, setD1500SendFormat } = useContext(SelectedClaimContext);
 
   const queryClient = useQueryClient();
 
@@ -27,6 +31,9 @@ export default function useAddD1500() {
           if (response.status === 200) {
             console.log("Successfully posted d1500 to db...");
             // console.log(response.data)
+            setCptRows([]);
+            setSelectedV1500(null);
+            setD1500SendFormat('');
             queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
             return response.data;
           }

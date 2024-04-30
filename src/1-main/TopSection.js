@@ -79,10 +79,6 @@ export default function TopSection() {
 
     const showCCDashUser = users && (showCCDash ? users?.filter(u => u?.initials === showCCDash)[0] : user);
 
-    // console.log("re-render TopSection");
-    // console.log("(Top) user.initials:", showCCDashUser?.initials);
-    // console.log("(Top) user.covering:", showCCDashUser?.covering);
-
     return (
       
     <Box sx={{ width: '100%'}}>

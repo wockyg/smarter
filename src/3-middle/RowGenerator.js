@@ -74,9 +74,8 @@ export default function RowGenerator() {
     const [editIDx, setEditIDx] = useState(-1);
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
-    const [d1500SendFormat, setD1500SendFormat] = useState('');
 
-    const { cptRows, setCptRows, selectedV1500, setSelectedV1500 } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500, setSelectedV1500, d1500SendFormat, setD1500SendFormat } = useContext(SelectedClaimContext);
 
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
@@ -286,11 +285,7 @@ export default function RowGenerator() {
                         selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
                             
                         hcfaAdd.mutate(formData);
-                        setTimeout(() => {
-                        setCptRows([]);
-                        setSelectedV1500(null);
-                        setD1500SendFormat('');
-                        }, "500");
+                        
                       });
         }
         else{
