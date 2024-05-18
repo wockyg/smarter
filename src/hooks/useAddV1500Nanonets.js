@@ -60,9 +60,34 @@ export default function useAddV1500Nanonets() {
         console.log(`File ${i} uploaded...`)
       }
       else {
-        fail.push(files[i].name)
-        setV1500UploadFail(fail)
-        console.log(`File ${i} failed...`)
+        // try again
+        const upload2 = await api.post(
+              '/v1500/upload/smarter/nanonets', 
+              formData, 
+              {
+                headers: {'Content-Type': 'multipart/form-data'},
+                onUploadProgress: (p) => {
+                    const percentComplete = Math.round((p.loaded * 100) / p.total)
+                    // const otherFiles = newProgress.filter(v => v.filename !== files[i].name)
+                    // console.log(otherFiles)
+                    const newState = {filename: files[i].name, percentComplete: percentComplete}
+                    setV1500UploadProgress(newState)
+                    // console.log(`${files[i].name} - ${percentComplete}% uploaded`)
+                  }
+              }
+            )
+
+        if (upload2.status === 200) {
+          complete.push(files[i].name)
+          setV1500UploadComplete(complete)
+          console.log(`File ${i} uploaded...`)
+        }
+        else {
+          fail.push(files[i].name)
+          setV1500UploadFail(fail)
+          console.log(`File ${i} failed...`)
+        }
+
       }
 
 

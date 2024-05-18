@@ -98,9 +98,9 @@ export default function V1500UploadsMenu(props) {
             key={i}
             secondaryAction={
               row.uploadProgress === -1 ?
-              <Tooltip title={row.failureMessage}>
+              // <Tooltip title={row.failureMessage}>
                 <WarningIcon />
-              </Tooltip>
+              // </Tooltip>
               :
               row.uploadProgress < 100 ?
               <Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -130,7 +130,7 @@ export default function V1500UploadsMenu(props) {
             disablePadding
           >
             <ListItemButton role={undefined} dense>
-              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={(row.uploadProgress < 100 && row.uploadProgress > -1) ? <LinearProgress /> : `${row.dateAddedFormat2}`} />
+              <ListItemText id={labelId} primary={`${row.v1500Id} - ${row.original_filename}`} secondary={(row.uploadProgress < 100 && row.uploadProgress > -1) ? <LinearProgress /> : `${row.dateAddedFormat2}${row.uploadProgress === -1 ? ` - ${row.failureMessage}` : ''}`} />
             </ListItemButton>
 
             {/* {row.v1500Id}
