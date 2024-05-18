@@ -29,6 +29,7 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import WarningIcon from '@mui/icons-material/Warning';
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import useGetV1500Uploads from '../hooks/useGetV1500Uploads';
 
@@ -98,6 +99,7 @@ export default function V1500UploadsMenu(props) {
           <ListItem
             key={i}
             secondaryAction={
+              (new Date().getTime() - new Date(row.dateAdded).getTime()) / 1000 < 30 ?
               <Box sx={{ position: 'relative', display: 'inline-flex' }}>
                 {/* <CircularProgress /> */}
                 <Box
@@ -117,6 +119,10 @@ export default function V1500UploadsMenu(props) {
                   </Typography>
                 </Box>
               </Box>
+              :
+              <IconButton>
+                <ReplayIcon />
+              </IconButton>
             }
             disablePadding
           >
