@@ -45,17 +45,19 @@ export default function V1500UploadsMenu(props) {
         } = props;
 
 
-  const [order, setOrder] = useState('desc');
-  const [orderBy, setOrderBy] = useState("v1500Id");
+  const [order1, setOrder1] = useState('desc');
+  const [orderBy1, setOrderBy1] = useState("v1500Id");
+  const [order2, setOrder2] = useState('asc');
+  const [orderBy2, setOrderBy2] = useState("uploadProgress");
 
   const [hoverVals, setHoverVals] = useState([]);
 
   const { status: statusUploads, data: rows, error: errorUploads, isFetching: isFetchingUploads } = useGetV1500Uploads();
 
   const rowsSorted = rows?.sort((a, b) => {
-      const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
-      const valueB = b[orderBy] === null ? '' : (typeof b[orderBy] === "string" ? b[orderBy].toUpperCase() : b[orderBy]);
-      if (order === 'asc') {
+      const valueA = a[orderBy1] === null ? '' : (typeof a[orderBy1] === "string" ? a[orderBy1].toUpperCase() : a[orderBy1]);
+      const valueB = b[orderBy1] === null ? '' : (typeof b[orderBy1] === "string" ? b[orderBy1].toUpperCase() : b[orderBy1]);
+      if (order1 === 'asc') {
         if (valueA < valueB) {
           // console.log(`${valueA } < ${valueB}`);
           return -1;
@@ -65,7 +67,34 @@ export default function V1500UploadsMenu(props) {
           return 1;
         }
       }
-      if (order === 'desc') {
+      if (order1 === 'desc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return 1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return -1;
+        }
+      }
+      // values must be equal
+      return 0;
+    });
+
+    const rowsSorted2 = rowsSorted?.sort((a, b) => {
+      const valueA = a[orderBy2] === null ? '' : (typeof a[orderBy2] === "string" ? a[orderBy2].toUpperCase() : a[orderBy2]);
+      const valueB = b[orderBy2] === null ? '' : (typeof b[orderBy2] === "string" ? b[orderBy2].toUpperCase() : b[orderBy2]);
+      if (order2 === 'asc') {
+        if (valueA < valueB) {
+          // console.log(`${valueA } < ${valueB}`);
+          return -1;
+        }
+        if (valueA > valueB) {
+          // console.log(`${valueA } > ${valueB}`);
+          return 1;
+        }
+      }
+      if (order2 === 'desc') {
         if (valueA < valueB) {
           // console.log(`${valueA } < ${valueB}`);
           return 1;
@@ -91,7 +120,7 @@ export default function V1500UploadsMenu(props) {
 
   return(
     <List sx={{ width: '100%', maxHeight: 400, overflow: 'scroll', bgcolor: 'background.paper' }}>
-      {rowsSorted && rowsSorted.map((row, i, a) => {
+      {rowsSorted2 && rowsSorted2.map((row, i, a) => {
         const labelId = `checkbox-list-label-${row.v1500Id}`;
         return(
           <ListItem
