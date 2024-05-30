@@ -115,10 +115,6 @@ export default function MainNavbar() {
 
   // ------------------- //
 
-  const handleChange = (event, newValue) => {
-    setTab(newValue);
-  };
-
 
   const [anchorEl0, setAnchorEl0] = useState(null);
   const [menu0Type, setMenu0Type] = useState(null);
@@ -166,6 +162,10 @@ export default function MainNavbar() {
   const updateUser = useUpdateUser();
   const addBugReport = useAddBugReport();
   const addFeatureRequest = useAddFeatureRequest();
+
+  const handleChange = (event, newValue) => {
+    setTab(newValue);
+  };
 
   const navigate = useNavigate();
 

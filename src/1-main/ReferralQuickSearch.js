@@ -45,6 +45,7 @@ export default function ReferralQuickSearch(props) {
         <Autocomplete
         open={quickSearchInputVal.length > 0}
         value={quickSearchVal}
+        componentsProps={{ popper: { style: { width: 'fit-content' } } }}
         onChange={(event, claim) => {
           claim && claim?.referralId !== null && navigate(`/${claim.referralId}`);
           claim && claim?.referralId !== null && claim.referralId !== +linkId && userHistoryUpdate.mutate({initials: user?.initials, newId: claim.referralId});;
