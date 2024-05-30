@@ -395,7 +395,8 @@ export default function DptBilling(props) {
                     <TableCell sx={{ fontSize: 12 }}><u>DOS</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Type</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>V1500</u></TableCell>
-                    <TableCell sx={{ fontSize: 12 }}><u>D1500</u></TableCell>
+                    <TableCell sx={{ fontSize: 12 }}><u>D1500G</u></TableCell>
+                    <TableCell sx={{ fontSize: 12 }}><u>D1500S</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>Format</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>AdjRate</u></TableCell>
                     <TableCell sx={{ fontSize: 12 }}><u>AdjDue</u></TableCell>
@@ -481,6 +482,17 @@ export default function DptBilling(props) {
                                                 name="v1500"
                                                 value={currentEditRow.v1500 ? currentEditRow.v1500 : ''}
                                                 onChange={(event) => handleChangeEdit(event, 'v1500')}
+                                                style={{width: '13ch'}}
+                                            />
+                                        </TableCell>
+
+                                        {/* row.d1500Generated */}
+                                        <TableCell sx={{ borderRight: 1, fontSize: 11, padding: '0px 0px 0px 5px' }}>
+                                            <input 
+                                                type="date" 
+                                                name="d1500Generated"
+                                                value={currentEditRow.d1500Generated ? currentEditRow.d1500Generated : ''}
+                                                onChange={(event) => handleChangeEdit(event, 'd1500Generated')}
                                                 style={{width: '13ch'}}
                                             />
                                         </TableCell>
