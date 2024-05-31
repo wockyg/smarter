@@ -706,6 +706,9 @@ export default function DptBilling(props) {
                                         <TableCell onClick={(e) => handleOpenGrid(e, row, "v1500", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
                                                 {row.v1500}
                                         </TableCell>
+                                        <TableCell onClick={(e) => handleOpenGrid(e, row, "d1500Generated", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
+                                                {row.d1500Generated}
+                                        </TableCell>
                                         <TableCell onClick={(e) => handleOpenGrid(e, row, "d1500Sent", "date")} sx={{ borderRight: 1, padding: '0px 0px 0px 5px', fontSize: 11, }}>
                                                 {row.d1500Sent}
                                         </TableCell>
