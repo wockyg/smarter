@@ -324,7 +324,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -443,6 +443,7 @@ export default function ReferralTable(props) {
         setQuickSearchInputVal('');
         setCptRows([]);
         setSelectedV1500(null);
+        setD1500SendFormat(claim.billingProtocol)
         if (claim.billingStatus === null || !keepBillMode) {
           setBillMode(false);
           setKeepBillMode(false);
@@ -488,6 +489,7 @@ export default function ReferralTable(props) {
             setQuickSearchVal(null);
             setQuickSearchInputVal('');
             setBillMode(true);
+            setD1500SendFormat(row.billingProtocol)
             const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
             // console.log("NEW ROWS: ", newRows);
             // calculate rates for each row
@@ -1055,7 +1057,7 @@ export default function ReferralTable(props) {
                                                                     >
                                                                             <option value=''>Select</option>
                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart}`}</option>
+                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart} ${o.firstDOS}`}</option>
                                                                             ))}
                                                                     </select>
                                                                 </Grid>

@@ -26,7 +26,7 @@ import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import useGetReferral from '../hooks/useGetReferral';
 import useGetDOSDropdown from '../hooks/useGetDOSDropdown';
 import useGetCptForState from '../hooks/useGetCptForState';
-import useGetReferral_icd10 from '../hooks/useGetReferral_icd10';
+
 import useAddD1500 from '../hooks/useAddD1500';
 import useAddD1500Rows from '../hooks/useAddD1500Rows';
 
@@ -57,19 +57,57 @@ const AddCodeInput = ({ label, ...props }) => {
   );
 };
 
-export default function RowGenerator() {
+const getUniqueDOSString = (rows)  => {
+
+    const temp = rows.sort((a, b) => {
+                        if (a.dos === null){
+                            return 1;
+                        }
+                        if (b.dos === null){
+                            return -1;
+                        }
+                        if (a.dos === b.dos){
+                            return 0;
+                        }
+                        return a.dos < b.dos ? -1 : 1;
+                    });
+
+    const dos_array = temp?.map(r => `${(new Date(r.dos).getMonth() + 1) < 10 ? `0${new Date(r.dos).getMonth() + 1}` : `${new Date(r.dos).getMonth() + 1}`}-${(new Date(r.dos).getDate()) < 10 ? `0${new Date(r.dos).getDate()}` : `${new Date(r.dos).getDate()}`}-${new Date(r.dos).getFullYear()}`);
+    const uniqueDOS = Array.from(new Set(dos_array));
+    
+    const dos_array2 = temp?.map(r => r.dos);
+    const uniqueDOS2 = Array.from(new Set(dos_array2));
+    
+    const uniqueDOSString = `${uniqueDOS[0]}${uniqueDOS.length > 1 ? `, ${uniqueDOS[1]}` : ''}${uniqueDOS.length > 2 ? `, ${uniqueDOS[2]}` : ''}${uniqueDOS.length > 3 ? `, ${uniqueDOS[3]}` : ''}${uniqueDOS.length > 4 ? `, ${uniqueDOS[4]}` : ''}${uniqueDOS.length > 5 ? `, ${uniqueDOS[5]}` : ''}` 
+    
+    return uniqueDOSString
+  
+}
+
+export default function RowGenerator(props) {
 
     let { id: linkId } = useParams();
 
+    const {codeList} = props
+
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetDOSDropdown(linkId);
-    const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForState(selectedClaim?.jurisdiction);
-
+    
     const hcfaAdd = useAddD1500();
-    const rowAdd = useAddD1500Rows();
 
-    const filteredVisits = visits?.filter(v => v?.attend === "Yes" && v.v1500?.length > 0);
+    const filteredVisits = visits?.filter(v => v?.attend === "Yes" && v.v1500?.length > 0).sort((a, b) => {
+                                        if (a.dos === null){
+                                            return 1;
+                                        }
+                                        if (b.dos === null){
+                                            return -1;
+                                        }
+                                        if (a.dos === b.dos){
+                                            return 0;
+                                        }
+                                        return a.dos > b.dos ? -1 : 1;
+                                    });
 
     const [editIDx, setEditIDx] = useState(-1);
     const [currentEditRow, setCurrentEditRow] = useState({});
@@ -77,6 +115,8 @@ export default function RowGenerator() {
 
     const { cptRows, setCptRows, selectedV1500, setSelectedV1500, d1500SendFormat, setD1500SendFormat } = useContext(SelectedClaimContext);
 
+    // console.log(cptRows)
+    
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
                                             return 1;
@@ -242,19 +282,18 @@ export default function RowGenerator() {
     };
 
     const handleSubmitD1500 = (event) => {
-        // console.log("ggglllllizzzyyy");
         if (cptRows.length > 0) {
             const MyDoc = (
             <HCFATemplate
             selectedClaim={selectedClaim}
-            codeList={codeList}
+            icd10CodeList={codeList}
             cptRows={cptRows}
             />
             );
             pdf(MyDoc).toBlob()
                       .then(blob => {
 
-                        console.log(selectedV1500)
+                        // console.log(selectedV1500)
 
                         // const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
                         const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
@@ -266,24 +305,46 @@ export default function RowGenerator() {
                         formData.append("d1500Blob", blob);
                         // formData.append("v1500_filename", v1500_filename);
                         formData.append("d1500_filename", d1500_filename);
+                        formData.append("total_charges", total_charges);
                         cptRows.length > 0 && formData.append("cptRows", JSON.stringify(cptRows));
-                        selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
-                        selectedV1500?.physician_npi && formData.append("physician_npi", selectedV1500?.physician_npi);
-                        selectedV1500?.patient_account_no && formData.append("patient_account_no", selectedV1500?.patient_account_no);
-                        selectedV1500?.diagnosis_a && formData.append("diagnosis_a", selectedV1500?.diagnosis_a);
-                        selectedV1500?.diagnosis_b && formData.append("diagnosis_b", selectedV1500?.diagnosis_b);
-                        selectedV1500?.diagnosis_c && formData.append("diagnosis_c", selectedV1500?.diagnosis_c);
-                        selectedV1500?.diagnosis_d && formData.append("diagnosis_d", selectedV1500?.diagnosis_d);
-                        selectedV1500?.diagnosis_e && formData.append("diagnosis_e", selectedV1500?.diagnosis_e);
-                        selectedV1500?.diagnosis_f && formData.append("diagnosis_f", selectedV1500?.diagnosis_f);
-                        selectedV1500?.diagnosis_g && formData.append("diagnosis_g", selectedV1500?.diagnosis_g);
-                        selectedV1500?.diagnosis_h && formData.append("diagnosis_h", selectedV1500?.diagnosis_h);
-                        selectedV1500?.diagnosis_i && formData.append("diagnosis_i", selectedV1500?.diagnosis_i);
-                        selectedV1500?.diagnosis_j && formData.append("diagnosis_j", selectedV1500?.diagnosis_j);
-                        selectedV1500?.diagnosis_k && formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
-                        selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
-                        selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
-                            
+                        if (selectedV1500) {
+                            selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
+                            selectedV1500?.physician_npi && formData.append("physician_npi", selectedV1500?.physician_npi);
+                            selectedV1500?.patient_account_no && formData.append("patient_account_no", selectedV1500?.patient_account_no);
+                            selectedV1500?.diagnosis_a && formData.append("diagnosis_a", selectedV1500?.diagnosis_a);
+                            selectedV1500?.diagnosis_b && formData.append("diagnosis_b", selectedV1500?.diagnosis_b);
+                            selectedV1500?.diagnosis_c && formData.append("diagnosis_c", selectedV1500?.diagnosis_c);
+                            selectedV1500?.diagnosis_d && formData.append("diagnosis_d", selectedV1500?.diagnosis_d);
+                            selectedV1500?.diagnosis_e && formData.append("diagnosis_e", selectedV1500?.diagnosis_e);
+                            selectedV1500?.diagnosis_f && formData.append("diagnosis_f", selectedV1500?.diagnosis_f);
+                            selectedV1500?.diagnosis_g && formData.append("diagnosis_g", selectedV1500?.diagnosis_g);
+                            selectedV1500?.diagnosis_h && formData.append("diagnosis_h", selectedV1500?.diagnosis_h);
+                            selectedV1500?.diagnosis_i && formData.append("diagnosis_i", selectedV1500?.diagnosis_i);
+                            selectedV1500?.diagnosis_j && formData.append("diagnosis_j", selectedV1500?.diagnosis_j);
+                            selectedV1500?.diagnosis_k && formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
+                            selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
+                            selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
+                        }
+                        else {
+                            selectedClaim?.physicianId && formData.append("physician_name", `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD`);
+                            selectedClaim?.physicianNPI && formData.append("physician_npi", selectedClaim?.physicianNPI);
+                            selectedV1500?.therapistId && formData.append("patient_account_no", `${selectedClaim.claimantId}-${selectedClaim.therapistId}`);
+                            codeList[0] && formData.append("diagnosis_a", codeList[0]?.icd10);
+                            codeList[1] && formData.append("diagnosis_b", codeList[1]?.icd10);
+                            codeList[2] && formData.append("diagnosis_c", codeList[2]?.icd10);
+                            codeList[3] && formData.append("diagnosis_d", codeList[3]?.icd10);
+                            codeList[4] && formData.append("diagnosis_e", codeList[4]?.icd10);
+                            codeList[5] && formData.append("diagnosis_f", codeList[5]?.icd10);
+                            codeList[6] && formData.append("diagnosis_g", codeList[6]?.icd10);
+                            codeList[7] && formData.append("diagnosis_h", codeList[7]?.icd10);
+                            codeList[8] && formData.append("diagnosis_i", codeList[8]?.icd10);
+                            codeList[9] && formData.append("diagnosis_j", codeList[9]?.icd10);
+                            codeList[10] && formData.append("diagnosis_k", codeList[10]?.icd10);
+                            codeList[11] && formData.append("diagnosis_l", codeList[11]?.icd10);
+                            const uniqueDOSString = getUniqueDOSString(cptRows)
+                            formData.append("original_dos", uniqueDOSString);
+                        }
+                        
                         hcfaAdd.mutate(formData);
                         
                       });
@@ -344,9 +405,9 @@ export default function RowGenerator() {
                 
                 const rateBase = values.cpt ? codes?.filter(c => c?.Code === +values?.cpt)[0][selectedClaim?.jurisdiction] : -1;
                 const rateTotal = (rateBase * +values.units * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
-                // console.log(values.units);
+                // console.log(rateTotal);
                 if (values.units) {
-                    setFieldValue('charges', +rateTotal);    
+                    setFieldValue('charges', rateTotal);
                 }
                 else {
                     setFieldValue('charges', '');
@@ -364,7 +425,31 @@ export default function RowGenerator() {
         );
     };
 
-    return (
+    const DiagInput = ({ label, ...props }) => {
+
+        const { setFieldValue } = useFormikContext();
+
+        const [field, meta] = useField(props);
+
+        useEffect(() => {
+
+            if (codeList.length > 0) {
+                setFieldValue('diag', 'ABCD'.split(0, codeList.length));
+            }
+
+        }, [setFieldValue]);
+
+        return (
+            <>
+                <label htmlFor={props.name} style={{display: 'block'}}>{label}</label>
+                {meta.touched && meta.error ? (
+                <input className="redBorder" {...field} {...props} />
+            ) : <input {...field} {...props} />}
+            </>
+        );
+    };
+
+    return ( codeList &&
       <div>
                     {/* <button onClick={() => {console.log(formRef?.current?.values.cpt)}}>check</button> */}
 
@@ -373,14 +458,14 @@ export default function RowGenerator() {
                     // innerRef={formRef}
                     initialValues={{
                     // rank: `${numRows+1}`,
-                    dos: cptRows.length > 0 ? cptRows[cptRows.length - 1].dos : '',
+                    dos: cptRows?.length > 0 ? cptRows[cptRows?.length - 1].dos : '',
                     pos: '11',
                     cpt: '',
                     mod1: '',
                     mod2: '',
                     mod3: '',
                     mod4: '',
-                    diag: '',
+                    diag: codeList?.length > 0 ? 'ABCD'.slice(0, codeList?.length) : '',
                     charges: '',
                     units: '',
                     provider_npi: '',
@@ -542,6 +627,12 @@ export default function RowGenerator() {
                                         name="diag"
                                         type="text"
                                     />
+                                    {/* <DiagInput
+                                     id="diag"
+                                    label="D.P.:"
+                                    name="diag"
+                                    type="text"
+                                    /> */}
                                 </Grid>
                                 <Grid item xs="auto">
                                     <AddCodeInput
@@ -943,6 +1034,7 @@ export default function RowGenerator() {
                                             <option value='Email'>Email</option>
                                             <option value='Fax'>Fax</option>
                                             <option value='Mail'>Mail</option>
+                                            <option value='Electronic'>Electronic</option>
                                         </select>
                                     </div>
                                 </TableCell>

@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 
 import useGetReferral from '../hooks/useGetReferral';
+import useGetReferral_icd10 from '../hooks/useGetReferral_icd10';
 
 import { useParams } from 'react-router-dom';
 
@@ -17,10 +18,11 @@ export default function BillMachine() {
     let { id: linkId } = useParams();
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
+    const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
     return (
       <>
-      {selectedClaim?.billingStatus &&
+      {selectedClaim?.billingStatus && codeList &&
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Grid container>
@@ -35,7 +37,7 @@ export default function BillMachine() {
                     <Container disableGutters sx={{height: 370, background: '#138D75', overflow: 'auto', padding: 1}}>
                         {selectedClaim?.jurisdiction
                         ?
-                        <RowGenerator />
+                        <RowGenerator codeList={codeList} />
                         :
                         'No jurisdicton set'
                         }
@@ -50,8 +52,8 @@ export default function BillMachine() {
             </Grid>
 
             <Grid item xs={2.4} sx={{borderLeft: 1}}>
-                {/* <ICD10Table /> */}
-                {/* <hr /> */}
+                <ICD10Table />
+                <hr />
                 {selectedClaim?.jurisdiction
                 ?
                 <CPTTable />
