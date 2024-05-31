@@ -1057,7 +1057,7 @@ export default function ReferralTable(props) {
                                                                     >
                                                                             <option value=''>Select</option>
                                                                             {orphan?.filter(o => o.claimNumber === row.claim_number).map((o, i) => (
-                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart} ${o.firstDOS}`}</option>
+                                                                                <option key={i} value={o.referralId}>{`(${o.service}) ${o.bodyPart} (${o.firstDOS})`}</option>
                                                                             ))}
                                                                     </select>
                                                                 </Grid>
