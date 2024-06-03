@@ -306,7 +306,7 @@ export default function RowGenerator(props) {
                         // formData.append("v1500_filename", v1500_filename);
                         formData.append("d1500_filename", d1500_filename);
                         formData.append("total_charges", total_charges);
-                        cptRows.length > 0 && formData.append("cptRows", JSON.stringify(cptRows));
+                        cptRows.length > 0 && formData.append("cptRowsRaw", JSON.stringify(cptRows));
                         if (selectedV1500) {
                             selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
                             selectedV1500?.physician_npi && formData.append("physician_npi", selectedV1500?.physician_npi);
