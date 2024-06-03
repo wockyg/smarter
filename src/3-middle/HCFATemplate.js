@@ -9,6 +9,8 @@ export default function HCFATemplate(props) {
 
     const {selectedClaim, icd10CodeList, cptRows, selectedV1500} = props;
 
+    // console.log(icd10CodeList[0])
+
     // const num_ic10codes = icd10CodeList?.length; // for manual mode
 
     // const { cptRows, setCptRows } = useContext(SelectedClaimContext);
@@ -108,18 +110,18 @@ export default function HCFATemplate(props) {
                 <Text style={{ position: 'absolute', top: 409, left: 33, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_name : (selectedClaim.physicianId ? `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD` : '')}</Text>
                 <Text style={{ position: 'absolute', top: 409, left: 245, fontSize: 12 }}>{selectedV1500 ? selectedV1500.physician_npi : (selectedClaim.physicianNPI ? `${selectedClaim?.physicianNPI}` : '')}</Text>
                 {/* Box 21 - DIAGNOSIS OR NATURE OF ILLNESS OR INJURY */}
-                {(selectedV1500?.diagnosis_a || icd10CodeList[0]) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_a : icd10CodeList[0].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_b || icd10CodeList[1]) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_b : icd10CodeList[1].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_c || icd10CodeList[2]) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_c : icd10CodeList[2].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_d || icd10CodeList[3]) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_d : icd10CodeList[3].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_e || icd10CodeList[4]) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_e : icd10CodeList[4].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_f || icd10CodeList[5]) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_f : icd10CodeList[5].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_g || icd10CodeList[6]) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_g : icd10CodeList[6].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_h || icd10CodeList[7]) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_h : icd10CodeList[7].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_i || icd10CodeList[8]) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_i : icd10CodeList[8].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_j || icd10CodeList[9]) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_j : icd10CodeList[9].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_k || icd10CodeList[10]) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_k : icd10CodeList[10].icd10 || ''}</Text>}
-                {(selectedV1500?.diagnosis_l || icd10CodeList[11]) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_l : icd10CodeList[11].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_a || icd10CodeList.length > 0) && <Text style={{ position: 'absolute', top: 460, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_a : icd10CodeList[0].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_b || icd10CodeList.length > 1) && <Text style={{ position: 'absolute', top: 460, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_b : icd10CodeList[1].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_c || icd10CodeList.length > 2) && <Text style={{ position: 'absolute', top: 460, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_c : icd10CodeList[2].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_d || icd10CodeList.length > 3) && <Text style={{ position: 'absolute', top: 461, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_d : icd10CodeList[3].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_e || icd10CodeList.length > 4) && <Text style={{ position: 'absolute', top: 472, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_e : icd10CodeList[4].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_f || icd10CodeList.length > 5) && <Text style={{ position: 'absolute', top: 472, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_f : icd10CodeList[5].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_g || icd10CodeList.length > 6) && <Text style={{ position: 'absolute', top: 472, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_g : icd10CodeList[6].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_h || icd10CodeList.length > 7) && <Text style={{ position: 'absolute', top: 473, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_h : icd10CodeList[7].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_i || icd10CodeList.length > 8) && <Text style={{ position: 'absolute', top: 484, left: 25, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_i : icd10CodeList[8].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_j || icd10CodeList.length > 9) && <Text style={{ position: 'absolute', top: 484, left: 123, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_j : icd10CodeList[9].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_k || icd10CodeList.length > 10) && <Text style={{ position: 'absolute', top: 484, left: 221, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_k : icd10CodeList[10].icd10 || ''}</Text>}
+                {(selectedV1500?.diagnosis_l || icd10CodeList.length > 11) && <Text style={{ position: 'absolute', top: 484, left: 318, fontSize: 10 }}>{selectedV1500 ? selectedV1500.diagnosis_l : icd10CodeList[11].icd10 || ''}</Text>}
 
                 {/* Box 24 - DOS/CPT ROWS */}
 
