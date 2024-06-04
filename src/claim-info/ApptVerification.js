@@ -192,7 +192,7 @@ export default function ApptVerification(props) {
         // open modal
         setBulkModalOpen(true);
         setModalType('uca');
-        console.log(ucaTimes);
+        // console.log(ucaTimes);
         
     };
 
