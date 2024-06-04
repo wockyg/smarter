@@ -56,6 +56,7 @@ export default function ViewBills() {
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
     const [anchorEl, setAnchorEl] = useState(null);
+    const [dosArray, setDosArray] = useState([]);
 
     const open = Boolean(anchorEl);
 
@@ -104,12 +105,15 @@ export default function ViewBills() {
         fontSize: 11,
     });
 
-    const handleOpenMenu = (event, n, f) => {
+    const handleOpenMenu = (event, uniqueDOS) => {
       setAnchorEl(event.currentTarget);
+      setDosArray(uniqueDOS)
+
     };
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
+        setDosArray([])
     };
 
     return (
@@ -141,6 +145,9 @@ export default function ViewBills() {
                     {realBills && realBills.map((row, j) => {
 
                                     // console.log(row.rowData);
+                                    const dos_array = row.rowData?.map(r => r.Date_of_service_from);
+                                    const uniqueDOS = Array.from(new Set(dos_array));
+
 
                                     let total_charges = 0.0;
 
@@ -177,7 +184,7 @@ export default function ViewBills() {
                                             <StyledTableCell></StyledTableCell>
                                             <TableCell sx={{textAlign: 'right', padding: '0px 0px 0px 5px', fontSize: 11}}>
                                                 <Tooltip title="Duplicate" enterDelay={500}>
-                                                    <IconButton size='small' sx={{padding: 0.5}} onClick={handleOpenMenu}>
+                                                    <IconButton size='small' sx={{padding: 0.5}} onClick={(e) => handleOpenMenu(e, uniqueDOS)}>
                                                         <ContentCopyIcon fontSize='small' sx={{cursor: 'pointer'}} />
                                                     </IconButton>
                                                 </Tooltip>
@@ -268,7 +275,9 @@ export default function ViewBills() {
       >
 
         <MenuItem>
-            <input type='text' />
+            {dosArray.map((d, i) => (
+                <input type='date' key={i} />
+            ))}
         </MenuItem>
             
       </Menu>
