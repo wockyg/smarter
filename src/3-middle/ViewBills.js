@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material';
 
@@ -53,6 +55,10 @@ export default function ViewBills() {
     const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetD1500RowsViewClaim(linkId);
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const open = Boolean(anchorEl);
+
     const hcfaId_array = bills?.map(row => row.hcfaId);
     const uniqueHcfaIds = Array.from(new Set(hcfaId_array));
 
@@ -97,6 +103,14 @@ export default function ViewBills() {
         // paddingRight: 5,
         fontSize: 11,
     });
+
+    const handleOpenMenu = (event, n, f) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleCloseMenu = () => {
+        setAnchorEl(null);
+    };
 
     return (
       <>
@@ -163,7 +177,7 @@ export default function ViewBills() {
                                             <StyledTableCell></StyledTableCell>
                                             <StyledTableCell sx={{textAlign: 'right', paddingRight: 0.5}}>
                                                 <Tooltip title="Duplicate" enterDelay={500}>
-                                                    <IconButton size='small' sx={{padding: 0.5}}>
+                                                    <IconButton size='small' sx={{padding: 0.5}} onClick={handleOpenMenu}>
                                                         <ContentCopyIcon fontSize='small' sx={{cursor: 'pointer'}} />
                                                     </IconButton>
                                                 </Tooltip>
@@ -245,6 +259,19 @@ export default function ViewBills() {
                 </TableBody>
             </Table>
         </TableContainer>
+
+        <Menu
+        id="extras-add-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseMenu}
+      >
+
+        <MenuItem>
+            <input type='text' />
+        </MenuItem>
+            
+      </Menu>
       </>
     );
 }
