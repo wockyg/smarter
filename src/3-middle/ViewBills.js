@@ -175,7 +175,7 @@ export default function ViewBills() {
                                             <StyledTableCell></StyledTableCell>
                                             <StyledTableCell></StyledTableCell>
                                             <StyledTableCell></StyledTableCell>
-                                            <StyledTableCell sx={{textAlign: 'right', paddingRight: 0.5}}>
+                                            <TableCell sx={{textAlign: 'right', padding: '0px 0px 0px 5px', fontSize: 11}}>
                                                 <Tooltip title="Duplicate" enterDelay={500}>
                                                     <IconButton size='small' sx={{padding: 0.5}} onClick={handleOpenMenu}>
                                                         <ContentCopyIcon fontSize='small' sx={{cursor: 'pointer'}} />
@@ -200,7 +200,7 @@ export default function ViewBills() {
                                                         </PDFDownloadLink>
                                                     </IconButton>
                                                 </Tooltip>
-                                            </StyledTableCell>
+                                            </TableCell>
                                         </TableRow>
                                         {row.rowData.map((row) => {
                                             
