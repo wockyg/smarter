@@ -444,7 +444,7 @@ export default function ReferralTable(props) {
         setCptRows([]);
         setSelectedV1500(null);
         setD1500SendFormat(claim.billingProtocol)
-        if (claim.billingStatus === null || !keepBillMode) {
+        if (claim.billingStatus === null) {
           setBillMode(false);
           setKeepBillMode(false);
         }

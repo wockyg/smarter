@@ -20,7 +20,7 @@ export default function useGetD1500Status(id) {
   return useQuery(['d1500Status'], getAllD1500Status, { 
     staleTime: (10 * (60 * 1000)), // 10 min
     cacheTime: (15 * (60 * 1000)), // 15 min
-    // refetchInterval: (1 * (1 * 1000)), // 1 sec
+    refetchInterval: (1 * (1 * 1000)), // 1 sec
   });
 
 }

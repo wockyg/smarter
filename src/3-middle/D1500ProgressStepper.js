@@ -15,161 +15,171 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
+import useGetD1500Status from '../hooks/useGetD1500Status';
+
 
 export default function D1500ProgressStepper() {
 
-  const { d1500Id, setD1500Id, d1500Status } = useContext(SelectedClaimContext);
+  const { pendingD1500Id } = useContext(SelectedClaimContext);
 
-  const { matchStatus, mergeStatus, saveD1500Status, moveV1500Status } = d1500Status
+  const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || 0);
 
   // console.log(d1500Status)
 
-    return (
-      <Paper elevation={3} sx={{padding: 1, background: '#CFCFCF'}}>
-        <Grid container spacing={1}>
-          <Grid item>
-            {/* matchStatus indicator */}
-            {matchStatus === null &&
-            <FindInPageIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-            }
-            {matchStatus === 'pending' &&
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-              <CircularProgress />
-              <Box
-                sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: 'absolute',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="caption" component="div" color="text.secondary">
-                  <FindInPageIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-                </Typography>
-              </Box>
+  // const { matchStatus, mergeStatus, saveD1500Status, moveV1500Status } = d1500Status
+
+  // const matchStatus = "success"
+  // const mergeStatus = "pending"
+  // const moveV1500Status = null
+  // const saveD1500Status = null
+
+  return (
+    d1500Status &&
+    <Paper elevation={3} sx={{padding: 1, background: '#CFCFCF'}}>
+      <Grid container spacing={1}>
+        <Grid item>
+          {/* matchStatus indicator */}
+          {d1500Status.matchStatus === null &&
+          <FindInPageIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.matchStatus === 'pending' &&
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" component="div" color="text.secondary">
+                <FindInPageIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+              </Typography>
             </Box>
-            }
-            {matchStatus === 'failed' &&
-            <FindInPageIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
-            }
-            {matchStatus === 'success' &&
-            <FindInPageIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
-            }
-          </Grid>
-          <Grid item>
-            <KeyboardDoubleArrowRightIcon />
-          </Grid>
-          <Grid item>
-            {/* mergeStatus indicator */}
-            {mergeStatus === null &&
-            <MergeIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-            }
-            {mergeStatus === 'pending' &&
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-              <CircularProgress />
-              <Box
-                sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: 'absolute',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="caption" component="div" color="text.secondary">
-                  <MergeIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-                </Typography>
-              </Box>
-            </Box>
-            }
-            {mergeStatus === 'failed' &&
-            <MergeIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
-            }
-            {mergeStatus === 'success' &&
-            <MergeIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
-            }
-          </Grid>
-          <Grid item>
-            <KeyboardDoubleArrowRightIcon />
-          </Grid>
-          <Grid item>
-            {/* moveV1500Status indicator */}
-            {moveV1500Status === null &&
-            <DriveFileMoveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-            }
-            {moveV1500Status === 'pending' &&
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-              <CircularProgress />
-              <Box
-                sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: 'absolute',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="caption" component="div" color="text.secondary">
-                  <DriveFileMoveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-                </Typography>
-              </Box>
-            </Box>
-            }
-            {moveV1500Status === 'failed' &&
-            <DriveFileMoveIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
-            }
-            {moveV1500Status === 'success' &&
-            <DriveFileMoveIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
-            }
-          </Grid>
-          <Grid item>
-            <KeyboardDoubleArrowRightIcon />
-          </Grid>
-          <Grid item>
-            {/* saveD1500Status indicator */}
-            {saveD1500Status === null &&
-            <SaveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-            }
-            {saveD1500Status === 'pending' &&
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-              <CircularProgress />
-              <Box
-                sx={{
-                  top: 0,
-                  left: 0,
-                  bottom: 0,
-                  right: 0,
-                  position: 'absolute',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="caption" component="div" color="text.secondary">
-                  <SaveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
-                </Typography>
-              </Box>
-            </Box>
-            }
-            {saveD1500Status === 'failed' &&
-            <SaveIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
-            }
-            {saveD1500Status === 'success' &&
-            <SaveIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
-            }
-          </Grid>
+          </Box>
+          }
+          {d1500Status.matchStatus === 'failed' &&
+          <FindInPageIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.matchStatus === 'success' &&
+          <FindInPageIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
+          }
         </Grid>
-      </Paper>
-    
-    );
+        <Grid item>
+          <KeyboardDoubleArrowRightIcon />
+        </Grid>
+        <Grid item>
+          {/* mergeStatus indicator */}
+          {d1500Status.mergeStatus === null &&
+          <MergeIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.mergeStatus === 'pending' &&
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" component="div" color="text.secondary">
+                <MergeIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+              </Typography>
+            </Box>
+          </Box>
+          }
+          {d1500Status.mergeStatus === 'failed' &&
+          <MergeIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.mergeStatus === 'success' &&
+          <MergeIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
+          }
+        </Grid>
+        <Grid item>
+          <KeyboardDoubleArrowRightIcon />
+        </Grid>
+        <Grid item>
+          {/* moveV1500Status indicator */}
+          {d1500Status.moveV1500Status === null &&
+          <DriveFileMoveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.moveV1500Status === 'pending' &&
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" component="div" color="text.secondary">
+                <DriveFileMoveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+              </Typography>
+            </Box>
+          </Box>
+          }
+          {d1500Status.moveV1500Status === 'failed' &&
+          <DriveFileMoveIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.moveV1500Status === 'success' &&
+          <DriveFileMoveIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
+          }
+        </Grid>
+        <Grid item>
+          <KeyboardDoubleArrowRightIcon />
+        </Grid>
+        <Grid item>
+          {/* saveD1500Status indicator */}
+          {d1500Status.saveD1500Status === null &&
+          <SaveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.saveD1500Status === 'pending' &&
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" component="div" color="text.secondary">
+                <SaveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+              </Typography>
+            </Box>
+          </Box>
+          }
+          {d1500Status.saveD1500Status === 'failed' &&
+          <SaveIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.saveD1500Status === 'success' &&
+          <SaveIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
+          }
+        </Grid>
+      </Grid>
+    </Paper>
+  
+  );
 }

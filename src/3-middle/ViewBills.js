@@ -55,8 +55,11 @@ export default function ViewBills() {
     const { status: statusBills, data: bills, error: errorBills, isFetching: isFetchingBills } = useGetD1500RowsViewClaim(linkId);
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
+    const { setSelectedV1500, setCptRows, dupeRows, setDupeRows } = useContext(SelectedClaimContext);
+    
     const [anchorEl, setAnchorEl] = useState(null);
     const [dosArray, setDosArray] = useState([]);
+    const [newDos, setNewDos] = useState('');
 
     const open = Boolean(anchorEl);
 
@@ -105,15 +108,32 @@ export default function ViewBills() {
         fontSize: 11,
     });
 
-    const handleOpenMenu = (event, uniqueDOS) => {
-      setAnchorEl(event.currentTarget);
-      setDosArray(uniqueDOS)
+    const handleOpenMenu = (event, uniqueDOS, rows) => {
+        setAnchorEl(event.currentTarget);
+        setDosArray(uniqueDOS)
+        setDupeRows(rows);
+        
+    };
 
+    const handleChangeDupeDos = (event) => {
+        setNewDos(event.target.value);
     };
 
     const handleCloseMenu = () => {
         setAnchorEl(null);
         setDosArray([])
+        setDupeRows([])
+    };
+
+    const handleDuplicate = () => {
+        if (newDos === '') {
+            return
+        }
+        // attach new date to dos field
+        const newRows = dupeRows.map(r => ({...r, dos: newDos}))
+        setSelectedV1500(null)
+        setCptRows(newRows)
+        handleCloseMenu();
     };
 
     return (
@@ -184,7 +204,7 @@ export default function ViewBills() {
                                             <StyledTableCell></StyledTableCell>
                                             <TableCell sx={{textAlign: 'right', padding: '0px 0px 0px 5px', fontSize: 11}}>
                                                 <Tooltip title="Duplicate" enterDelay={500}>
-                                                    <IconButton size='small' sx={{padding: 0.5}} onClick={(e) => handleOpenMenu(e, uniqueDOS)}>
+                                                    <IconButton size='small' sx={{padding: 0.5}} onClick={(e) => handleOpenMenu(e, uniqueDOS, row.rowData)}>
                                                         <ContentCopyIcon fontSize='small' sx={{cursor: 'pointer'}} />
                                                     </IconButton>
                                                 </Tooltip>
@@ -275,9 +295,18 @@ export default function ViewBills() {
       >
 
         <MenuItem>
-            {dosArray.map((d, i) => (
-                <input type='date' key={i} />
-            ))}
+        <Grid container>
+            <Grid item>
+                {dosArray.map((d, i) => (
+                    <input value={newDos} onChange={handleChangeDupeDos} type='date' key={i} />
+                ))}
+            </Grid>
+            <Grid item>
+                <IconButton onClick={handleDuplicate}>
+                    <CheckIcon />
+                </IconButton>
+            </Grid>
+        </Grid>
         </MenuItem>
             
       </Menu>

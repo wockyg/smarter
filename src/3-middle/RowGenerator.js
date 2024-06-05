@@ -113,7 +113,7 @@ export default function RowGenerator(props) {
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
 
-    const { cptRows, setCptRows, selectedV1500, setSelectedV1500, d1500SendFormat, setD1500SendFormat } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
 
     // console.log(cptRows)
     
@@ -450,611 +450,611 @@ export default function RowGenerator(props) {
     };
 
     return ( codeList &&
-      <div>
-                    {/* <button onClick={() => {console.log(formRef?.current?.values.cpt)}}>check</button> */}
+        <div>
+            {/* <button onClick={() => {console.log(formRef?.current?.values.cpt)}}>check</button> */}
 
-                    {/* ADD ROW FORM */}
-                    <Formik
-                    // innerRef={formRef}
-                    initialValues={{
-                    // rank: `${numRows+1}`,
-                    dos: cptRows?.length > 0 ? cptRows[cptRows?.length - 1].dos : '',
-                    pos: '11',
-                    cpt: '',
-                    mod1: '',
-                    mod2: '',
-                    mod3: '',
-                    mod4: '',
-                    diag: codeList?.length > 0 ? 'ABCD'.slice(0, codeList?.length) : '',
-                    charges: '',
-                    units: '',
-                    provider_npi: '',
-                    }}
-                    validationSchema={Yup.object({
-                        dos: Yup.string().required('Req'),
-                        pos: Yup.string().required('Req'),
-                        cpt: Yup.string().required('Req'),
-                        mod1: Yup.string(),
-                        mod2: Yup.string(),
-                        mod3: Yup.string(),
-                        mod4: Yup.string(),
-                        diag: Yup.string().required('Req'),
-                        charges: Yup.number().required('Req'),
-                        units: Yup.number().required('Req'),
-                        provider_npi: Yup.string().required('Req'),
-                    })}
-                    onSubmit={(values, actions) => {
-                        setTimeout(() => {
-                            if (cptRows?.length < 6) {
-                                console.log('adding row...');
-                                const newRows = [...cptRows, values];
-                                setCptRows(newRows);
-                                // alert(JSON.stringify(values, null, 2));
-                            }
-                            actions.resetForm(
-                                {values: {
-                                    // rank: `${numRows+2}`,
-                                    dos: values?.dos,
-                                    pos: '11',
-                                    cpt: '',
-                                    mod1: '',
-                                    mod2: '',
-                                    mod3: '',
-                                    mod4: '',
-                                    diag: '',
-                                    charges: '',
-                                    units: '',
-                                    provider_npi: values?.provider_npi,
-                                }});
-                            actions.setSubmitting(false);
+            {/* ADD ROW FORM */}
+            <Formik
+            // innerRef={formRef}
+            initialValues={{
+            // rank: `${numRows+1}`,
+            dos: cptRows?.length > 0 ? cptRows[cptRows?.length - 1].dos : '',
+            pos: '11',
+            cpt: '',
+            mod1: '',
+            mod2: '',
+            mod3: '',
+            mod4: '',
+            diag: codeList?.length > 0 ? 'ABCD'.slice(0, codeList?.length) : '',
+            charges: '',
+            units: '',
+            provider_npi: '',
+            }}
+            validationSchema={Yup.object({
+                dos: Yup.string().required('Req'),
+                pos: Yup.string().required('Req'),
+                cpt: Yup.string().required('Req'),
+                mod1: Yup.string(),
+                mod2: Yup.string(),
+                mod3: Yup.string(),
+                mod4: Yup.string(),
+                diag: Yup.string().required('Req'),
+                charges: Yup.number().required('Req'),
+                units: Yup.number().required('Req'),
+                provider_npi: Yup.string().required('Req'),
+            })}
+            onSubmit={(values, actions) => {
+                setTimeout(() => {
+                    if (cptRows?.length < 6) {
+                        console.log('adding row...');
+                        const newRows = [...cptRows, values];
+                        setCptRows(newRows);
+                        // alert(JSON.stringify(values, null, 2));
+                    }
+                    actions.resetForm(
+                        {values: {
+                            // rank: `${numRows+2}`,
+                            dos: values?.dos,
+                            pos: '11',
+                            cpt: '',
+                            mod1: '',
+                            mod2: '',
+                            mod3: '',
+                            mod4: '',
+                            diag: '',
+                            charges: '',
+                            units: '',
+                            provider_npi: values?.provider_npi,
+                        }});
+                    actions.setSubmitting(false);
+                    
+                }, 1000);
+            }}
+            >
+                {({
+                    setFieldValue,
+                    setFieldTouched,
+                    values,
+                    errors,
+                    touched,
+                }) => (
+                <Form>
+                    <Grid container spacing={0.5}>
+                        <Grid item xs="auto">
+                            <label htmlFor="dos" style={{display: 'block'}}>DOS:</label>
+                            <Field 
+                            as="select" 
+                            id="dos"
+                            name="dos"
+                            // className="redBorder"
+                            >
+                                <option value="">Select</option>
+                                {filteredVisits?.map(v => {
+                                    return (
+                                        <option key={v.billingId} value={v.dos}>{v.dos}</option>
+                                    );
+                                })}
+                            </Field>
+                        </Grid>
+                        <Grid item xs="auto">
+                            <label htmlFor="pos" style={{display: 'block'}}>POS:</label>
+                            <Field 
+                            as="select" 
+                            id="pos"
+                            name="pos"
+                            // className="redBorder"
+                            >
+                                <option value={11}>11</option>
+                                <option value={12}>12</option>
+                            </Field>
+                        </Grid>
+                        <Grid item xs="auto">
+                            <CptInput />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <label htmlFor="units" style={{display: 'block'}}>Unit:</label>
+                            <Field 
+                            as="select" 
+                            id="units"
+                            name="units"
+                            // className="redBorder"
+                            >
+                                {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit === 1 &&
+                                <option value={1}>1</option>
+                                }
+                                {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 1 &&
+                                <>
+                                <option value="">-</option>
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                </>
+                                }
+                                {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 2 &&
+                                <option value={3}>3</option>
+                                }
+                                {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 3 &&
+                                <option value={4}>4</option>
+                                }
+                            </Field>
+                        </Grid>
+                        <Grid item xs="auto">
+                            <ChargesInput
+                                id="charges"
+                                label="Charges:"
+                                name="charges"
+                                type="text"
+                            />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="mod1"
+                                label="M1:"
+                                name="mod1"
+                                type="text"
+                            />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="mod2"
+                                label="M2:"
+                                name="mod2"
+                                type="text"
+                                disabled={values.mod1 ? false : true}
+                            />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="mod3"
+                                label="M3:"
+                                name="mod3"
+                                type="text"
+                                disabled={values.mod2 ? false : true}
+                            />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="mod4"
+                                label="M4:"
+                                name="mod4"
+                                type="text"
+                                disabled={values.mod3 ? false : true}
+                            />
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="diag"
+                                label="D.P.:"
+                                name="diag"
+                                type="text"
+                            />
+                            {/* <DiagInput
+                                id="diag"
+                            label="D.P.:"
+                            name="diag"
+                            type="text"
+                            /> */}
+                        </Grid>
+                        <Grid item xs="auto">
+                            <AddCodeInput
+                                id="provider_npi"
+                                label="Provider NPI:"
+                                name="provider_npi"
+                                type="text"
+                            />
+                        </Grid>
+                        <Grid item xs="auto" className='container'>
+                            <button type='submit' className='addRowButton'>+</button>
+                        </Grid>
+                    </Grid>
+
+                </Form>
+                )}
+            </Formik>
+            <hr />
+
+            {/* <div style={{ height: 300, width: '100%' }}>
+                <DataGrid rowHeight={25} sx={{ fontSize: 8 }} rows={rows} columns={columns} hideFooter />
+            </div> */}
+
+            {/* ROWS */}
+            <TableContainer component={Paper}>
+                <Table size="small" aria-label="a dense table">
+                    <TableHead>
+                    <TableRow>
+                        <TableCell sx={{...tableHeadProps}}><u>#</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>DOS</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>POS</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>CPT</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>MOD</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}></TableCell>
+                        <TableCell sx={{...tableHeadProps}}></TableCell>
+                        <TableCell sx={{...tableHeadProps}}></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>DIAG</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>CHARG</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>UNIT</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}><u>NPI</u></TableCell>
+                        <TableCell sx={{...tableHeadProps}}></TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody> 
+                    {cptRows?.map((row, index) => {
+                        const currentlyEditing = editIDx === index;
+                        return (
+                        <TableRow key={index} hover>
                             
-                        }, 1000);
-                    }}
-                    >
-                        {({
-                            setFieldValue,
-                            setFieldTouched,
-                            values,
-                            errors,
-                            touched,
-                        }) => (
-                        <Form>
-                            <Grid container spacing={0.5}>
-                                <Grid item xs="auto">
-                                    <label htmlFor="dos" style={{display: 'block'}}>DOS:</label>
-                                    <Field 
-                                    as="select" 
-                                    id="dos"
-                                    name="dos"
-                                    // className="redBorder"
-                                    >
-                                        <option value="">Select</option>
-                                        {filteredVisits?.map(v => {
-                                            return (
-                                                <option key={v.billingId} value={v.dos}>{v.dos}</option>
-                                            );
-                                        })}
-                                    </Field>
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <label htmlFor="pos" style={{display: 'block'}}>POS:</label>
-                                    <Field 
-                                    as="select" 
-                                    id="pos"
-                                    name="pos"
-                                    // className="redBorder"
-                                    >
-                                        <option value={11}>11</option>
-                                        <option value={12}>12</option>
-                                    </Field>
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <CptInput />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <label htmlFor="units" style={{display: 'block'}}>Unit:</label>
-                                    <Field 
-                                    as="select" 
-                                    id="units"
-                                    name="units"
-                                    // className="redBorder"
-                                    >
-                                        {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit === 1 &&
-                                        <option value={1}>1</option>
+                            <TableCell sx={{...tableBodyProps}} component="th" scope="row">{index+1}</TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <select
+                                name="dos"
+                                onChange={(event) => handleChangeInlineEdit(event, 'dos', index)}
+                                value={currentEditRow.dos} 
+                                >
+                                    <option value="">Select</option>
+                                    {filteredVisits?.map(v => {
+                                        return (
+                                            <option key={v.billingId} value={v.dos}>{v.dos}</option>
+                                        );
+                                    })}
+                                </select>
+                                : 
+                                row.dos}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <select
+                                name="pos"
+                                onChange={(event) => handleChangeInlineEdit(event, 'pos', index)}
+                                value={currentEditRow.pos} 
+                                >
+                                    <option value={11}>11</option>
+                                    <option value={12}>12</option>
+                                </select>
+                                :
+                                row.pos}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <select
+                                name="cpt"
+                                onChange={(event) => handleChangeInlineEdit(event, 'cpt', index)}
+                                value={currentEditRow.cpt} 
+                                >
+                                    <option value="">Select</option>
+                                    {codes?.map(v => {
+                                        return (
+                                            <option key={v.Code} value={v.Code}>{v.Code}</option>
+                                        );
+                                    })}
+                                </select>
+                                :
+                                row.cpt}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                style={{width: '4ch'}}
+                                name='mod1'
+                                onChange={(event) => handleChangeInlineEdit(event, 'mod1', index)} 
+                                value={currentEditRow.mod1}
+                                />
+                                :
+                                row.mod1}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                disabled={currentEditRow.mod1 ? false : true}
+                                style={{width: '4ch'}}
+                                name='mod2'
+                                onChange={(event) => handleChangeInlineEdit(event, 'mod2', index)} 
+                                value={currentEditRow.mod2}
+                                />
+                                :
+                                row.mod2}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                disabled={currentEditRow.mod2 ? false : true}
+                                style={{width: '4ch'}}
+                                name='mod3'
+                                onChange={(event) => handleChangeInlineEdit(event, 'mod3', index)} 
+                                value={currentEditRow.mod3}
+                                />
+                                :
+                                row.mod3}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                disabled={currentEditRow.mod3 ? false : true}
+                                style={{width: '4ch'}}
+                                name='mod4'
+                                onChange={(event) => handleChangeInlineEdit(event, 'mod4', index)} 
+                                value={currentEditRow.mod4}
+                                />
+                                :
+                                row.mod4}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                style={{width: '6ch'}}
+                                name='diag'
+                                onChange={(event) => handleChangeInlineEdit(event, 'diag', index)} 
+                                value={currentEditRow.diag}
+                                />
+                                :
+                                row.diag}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                style={{width: '7ch'}}
+                                name='charges'
+                                onChange={(event) => handleChangeInlineEdit(event, 'charges', index)} 
+                                value={currentEditRow.charges}
+                                />
+                                :
+                                row.charges}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <select
+                                name="units"
+                                onChange={(event) => handleChangeInlineEdit(event, 'units', index)}
+                                value={currentEditRow.units} 
+                                >
+                                    {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit === 1 &&
+                                    <option value={1}>1</option>
+                                    }
+                                    {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 1 &&
+                                    <>
+                                    <option value="">-</option>
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    </>
+                                    }
+                                    {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 2 &&
+                                    <option value={3}>3</option>
+                                    }
+                                    {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 3 &&
+                                    <option value={4}>4</option>
+                                    }
+                                </select>
+                                :
+                                row.units}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                {currentlyEditing ? 
+                                <input
+                                style={{width: '11ch'}}
+                                name='provider_npi'
+                                onChange={(event) => handleChangeInlineEdit(event, 'provider_npi', index)} 
+                                value={currentEditRow.provider_npi}
+                                />
+                                :
+                                row.provider_npi}
+                            </TableCell>
+                            <TableCell sx={{...tableBodyProps}} >
+                                <Grid container>
+                                    {currentlyEditing ? 
+                                    <>
+                                    <Grid item xs={6}>
+                                        <CheckIcon
+                                        fontSize='small'
+                                        onClick={() => stopEditing(index)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <ClearIcon
+                                        fontSize='small'
+                                        onClick={() => cancelEdit(index, row)}
+                                        />
+                                    </Grid>
+                                    </> : 
+                                    <>
+                                    <Grid item xs={cptRows.length > 1 ? 3 : 6}>
+                                        <EditIcon
+                                        fontSize='small'
+                                        onClick={() => startEditing(index, row)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={cptRows.length > 1 ? 3 : 6}>
+                                        <DeleteIcon
+                                        fontSize='small'
+                                        onClick={() => handleRemove(index)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        {index > 0 &&
+                                        <KeyboardArrowUpIcon
+                                        fontSize='small'
+                                        onClick={() => handleSwap(index, 'up')}
+                                        />
                                         }
-                                        {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 1 &&
-                                        <>
-                                        <option value="">-</option>
-                                        <option value={1}>1</option>
-                                        <option value={2}>2</option>
-                                        </>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        {index < (cptRows.length - 1) &&
+                                        <KeyboardArrowDownIcon
+                                        fontSize='small'
+                                        onClick={() => handleSwap(index, 'down')}
+                                        />
                                         }
-                                        {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 2 &&
-                                        <option value={3}>3</option>
-                                        }
-                                        {codes?.filter(c => c.Code === +values.cpt)[0]?.MaxUnit > 3 &&
-                                        <option value={4}>4</option>
-                                        }
-                                    </Field>
+                                    </Grid>
+                                    </>}
                                 </Grid>
-                                <Grid item xs="auto">
-                                    <ChargesInput
-                                        id="charges"
-                                        label="Charges:"
-                                        name="charges"
-                                        type="text"
-                                    />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="mod1"
-                                        label="M1:"
-                                        name="mod1"
-                                        type="text"
-                                    />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="mod2"
-                                        label="M2:"
-                                        name="mod2"
-                                        type="text"
-                                        disabled={values.mod1 ? false : true}
-                                    />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="mod3"
-                                        label="M3:"
-                                        name="mod3"
-                                        type="text"
-                                        disabled={values.mod2 ? false : true}
-                                    />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="mod4"
-                                        label="M4:"
-                                        name="mod4"
-                                        type="text"
-                                        disabled={values.mod3 ? false : true}
-                                    />
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="diag"
-                                        label="D.P.:"
-                                        name="diag"
-                                        type="text"
-                                    />
-                                    {/* <DiagInput
-                                     id="diag"
-                                    label="D.P.:"
-                                    name="diag"
-                                    type="text"
-                                    /> */}
-                                </Grid>
-                                <Grid item xs="auto">
-                                    <AddCodeInput
-                                        id="provider_npi"
-                                        label="Provider NPI:"
-                                        name="provider_npi"
-                                        type="text"
-                                    />
-                                </Grid>
-                                <Grid item xs="auto" className='container'>
-                                    <button type='submit' className='addRowButton'>+</button>
-                                </Grid>
-                            </Grid>
-
-                        </Form>
-                        )}
-                    </Formik>
-                    <hr />
-
-                    {/* <div style={{ height: 300, width: '100%' }}>
-                        <DataGrid rowHeight={25} sx={{ fontSize: 8 }} rows={rows} columns={columns} hideFooter />
-                    </div> */}
-
-                    {/* ROWS */}
-                    <TableContainer component={Paper}>
-                        <Table size="small" aria-label="a dense table">
-                            <TableHead>
-                            <TableRow>
-                                <TableCell sx={{...tableHeadProps}}><u>#</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>DOS</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>POS</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>CPT</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>MOD</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}></TableCell>
-                                <TableCell sx={{...tableHeadProps}}></TableCell>
-                                <TableCell sx={{...tableHeadProps}}></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>DIAG</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>CHARG</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>UNIT</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}><u>NPI</u></TableCell>
-                                <TableCell sx={{...tableHeadProps}}></TableCell>
-                            </TableRow>
-                            </TableHead>
-                            <TableBody> 
-                            {cptRows?.map((row, index) => {
-                                const currentlyEditing = editIDx === index;
-                                return (
-                                <TableRow key={index} hover>
-                                    
-                                    <TableCell sx={{...tableBodyProps}} component="th" scope="row">{index+1}</TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <select
-                                        name="dos"
-                                        onChange={(event) => handleChangeInlineEdit(event, 'dos', index)}
-                                        value={currentEditRow.dos} 
-                                        >
-                                            <option value="">Select</option>
-                                            {filteredVisits?.map(v => {
-                                                return (
-                                                    <option key={v.billingId} value={v.dos}>{v.dos}</option>
-                                                );
-                                            })}
-                                        </select>
-                                        : 
-                                        row.dos}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <select
-                                        name="pos"
-                                        onChange={(event) => handleChangeInlineEdit(event, 'pos', index)}
-                                        value={currentEditRow.pos} 
-                                        >
-                                            <option value={11}>11</option>
-                                            <option value={12}>12</option>
-                                        </select>
-                                        :
-                                        row.pos}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <select
-                                        name="cpt"
-                                        onChange={(event) => handleChangeInlineEdit(event, 'cpt', index)}
-                                        value={currentEditRow.cpt} 
-                                        >
-                                            <option value="">Select</option>
-                                            {codes?.map(v => {
-                                                return (
-                                                    <option key={v.Code} value={v.Code}>{v.Code}</option>
-                                                );
-                                            })}
-                                        </select>
-                                        :
-                                        row.cpt}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        style={{width: '4ch'}}
-                                        name='mod1'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'mod1', index)} 
-                                        value={currentEditRow.mod1}
-                                        />
-                                        :
-                                        row.mod1}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        disabled={currentEditRow.mod1 ? false : true}
-                                        style={{width: '4ch'}}
-                                        name='mod2'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'mod2', index)} 
-                                        value={currentEditRow.mod2}
-                                        />
-                                        :
-                                        row.mod2}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        disabled={currentEditRow.mod2 ? false : true}
-                                        style={{width: '4ch'}}
-                                        name='mod3'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'mod3', index)} 
-                                        value={currentEditRow.mod3}
-                                        />
-                                        :
-                                        row.mod3}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        disabled={currentEditRow.mod3 ? false : true}
-                                        style={{width: '4ch'}}
-                                        name='mod4'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'mod4', index)} 
-                                        value={currentEditRow.mod4}
-                                        />
-                                        :
-                                        row.mod4}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        style={{width: '6ch'}}
-                                        name='diag'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'diag', index)} 
-                                        value={currentEditRow.diag}
-                                        />
-                                        :
-                                        row.diag}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        style={{width: '7ch'}}
-                                        name='charges'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'charges', index)} 
-                                        value={currentEditRow.charges}
-                                        />
-                                        :
-                                        row.charges}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <select
-                                        name="units"
-                                        onChange={(event) => handleChangeInlineEdit(event, 'units', index)}
-                                        value={currentEditRow.units} 
-                                        >
-                                            {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit === 1 &&
-                                            <option value={1}>1</option>
-                                            }
-                                            {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 1 &&
-                                            <>
-                                            <option value="">-</option>
-                                            <option value={1}>1</option>
-                                            <option value={2}>2</option>
-                                            </>
-                                            }
-                                            {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 2 &&
-                                            <option value={3}>3</option>
-                                            }
-                                            {codes?.filter(c => c.Code === +currentEditRow.cpt)[0]?.MaxUnit > 3 &&
-                                            <option value={4}>4</option>
-                                            }
-                                        </select>
-                                        :
-                                        row.units}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        {currentlyEditing ? 
-                                        <input
-                                        style={{width: '11ch'}}
-                                        name='provider_npi'
-                                        onChange={(event) => handleChangeInlineEdit(event, 'provider_npi', index)} 
-                                        value={currentEditRow.provider_npi}
-                                        />
-                                        :
-                                        row.provider_npi}
-                                    </TableCell>
-                                    <TableCell sx={{...tableBodyProps}} >
-                                        <Grid container>
-                                            {currentlyEditing ? 
-                                            <>
-                                            <Grid item xs={6}>
-                                                <CheckIcon
-                                                fontSize='small'
-                                                onClick={() => stopEditing(index)}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={6}>
-                                                <ClearIcon
-                                                fontSize='small'
-                                                onClick={() => cancelEdit(index, row)}
-                                                />
-                                            </Grid>
-                                            </> : 
-                                            <>
-                                            <Grid item xs={cptRows.length > 1 ? 3 : 6}>
-                                                <EditIcon
-                                                fontSize='small'
-                                                onClick={() => startEditing(index, row)}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={cptRows.length > 1 ? 3 : 6}>
-                                                <DeleteIcon
-                                                fontSize='small'
-                                                onClick={() => handleRemove(index)}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                {index > 0 &&
-                                                <KeyboardArrowUpIcon
-                                                fontSize='small'
-                                                onClick={() => handleSwap(index, 'up')}
-                                                />
-                                                }
-                                            </Grid>
-                                            <Grid item xs={3}>
-                                                {index < (cptRows.length - 1) &&
-                                                <KeyboardArrowDownIcon
-                                                fontSize='small'
-                                                onClick={() => handleSwap(index, 'down')}
-                                                />
-                                                }
-                                            </Grid>
-                                            </>}
-                                        </Grid>
-                                    </TableCell>
-                                </TableRow>
-                            )})}
-                            {cptRows.length < 1 &&
-                            <TableRow>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {cptRows.length < 2 &&
-                            <TableRow sx={{padding: 0.5}}>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {cptRows.length < 3 &&
-                            <TableRow sx={{padding: 0.5}}>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {cptRows.length < 4 &&
-                            <TableRow sx={{padding: 0.5}}>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {cptRows.length < 5 &&
-                            <TableRow sx={{padding: 0.5}}>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {cptRows.length < 6 &&
-                            <TableRow sx={{padding: 0.5}}>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                                <TableCell sx={{...dummyRowProps}}>x</TableCell>
-                            </TableRow>
-                            }
-                            {/* totals row */}
-                            {cptRows.length >= 0 &&
-                            <>
-                            <TableRow>
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                                <TableCell />
-                            </TableRow>
-                            <TableRow>
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}}><u>Totals:</u></TableCell>
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}} />
-                                <TableCell sx={{background: '#E0E4E8'}}>
-                                    {`(${selectedClaim.clientDiscount}%)`}
-                                </TableCell>
-                                <TableCell sx={{padding: 0.5, borderRight: '1px solid', borderLeft: '1px solid'}}>{total_charges}</TableCell>
-                                <TableCell sx={{padding: 0.5, background: total_units === 4 ? '#5DE576' : '#ED534A'}}>{total_units}</TableCell>
-                                <TableCell sx={{background: '#ABC3E3'}}>
-                                    <div style={{padding: '1px'}}>
-                                        <label htmlFor="d1500SendFormat">Format:</label>
-                                        <select
-                                        name="d1500SendFormat"
-                                        onChange={(event) => handleUpdateD1500SendFormat(event)}
-                                        value={d1500SendFormat} 
-                                        >
-                                            <option value=''>Select</option>
-                                            <option value='Email'>Email</option>
-                                            <option value='Fax'>Fax</option>
-                                            <option value='Mail'>Mail</option>
-                                            <option value='Electronic'>Electronic</option>
-                                        </select>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    
-                                        {d1500SendFormat !== '' && cptRows.length > 0 &&
-                                        <IconButton
-                                        onClick={handleSubmitD1500}
-                                        >
-                                            <SaveIcon />
-                                        </IconButton>
-                                        }
-                                    
-                                </TableCell>
-                            </TableRow>
-                            </>
-                            }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </div>
+                            </TableCell>
+                        </TableRow>
+                    )})}
+                    {cptRows.length < 1 &&
+                    <TableRow>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {cptRows.length < 2 &&
+                    <TableRow sx={{padding: 0.5}}>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {cptRows.length < 3 &&
+                    <TableRow sx={{padding: 0.5}}>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {cptRows.length < 4 &&
+                    <TableRow sx={{padding: 0.5}}>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {cptRows.length < 5 &&
+                    <TableRow sx={{padding: 0.5}}>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {cptRows.length < 6 &&
+                    <TableRow sx={{padding: 0.5}}>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                        <TableCell sx={{...dummyRowProps}}>x</TableCell>
+                    </TableRow>
+                    }
+                    {/* totals row */}
+                    {cptRows.length >= 0 &&
+                    <>
+                    <TableRow>
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                        <TableCell />
+                    </TableRow>
+                    <TableRow>
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}}><u>Totals:</u></TableCell>
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}} />
+                        <TableCell sx={{background: '#E0E4E8'}}>
+                            {selectedClaim.clientDiscount ? `(${selectedClaim.clientDiscount}%)` : ''}
+                        </TableCell>
+                        <TableCell sx={{padding: 0.5, borderRight: '1px solid', borderLeft: '1px solid'}}>{total_charges}</TableCell>
+                        <TableCell sx={{padding: 0.5, background: total_units === 4 ? '#5DE576' : '#ED534A'}}>{total_units}</TableCell>
+                        <TableCell sx={{background: '#ABC3E3'}}>
+                            <div style={{padding: '1px'}}>
+                                <label htmlFor="d1500SendFormat">Format:</label>
+                                <select
+                                name="d1500SendFormat"
+                                onChange={(event) => handleUpdateD1500SendFormat(event)}
+                                value={d1500SendFormat} 
+                                >
+                                    <option value=''>Select</option>
+                                    <option value='Email'>Email</option>
+                                    <option value='Fax'>Fax</option>
+                                    <option value='Mail'>Mail</option>
+                                    <option value='Electronic'>Electronic</option>
+                                </select>
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            
+                                {d1500SendFormat !== '' && cptRows.length > 0 &&
+                                <IconButton
+                                onClick={handleSubmitD1500}
+                                >
+                                    <SaveIcon />
+                                </IconButton>
+                                }
+                            
+                        </TableCell>
+                    </TableRow>
+                    </>
+                    }
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 }
