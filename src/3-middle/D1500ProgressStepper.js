@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import MergeIcon from '@mui/icons-material/Merge';
@@ -21,7 +22,7 @@ import useGetD1500Status from '../hooks/useGetD1500Status';
 
 export default function D1500ProgressStepper() {
 
-  const { pendingD1500Id } = useContext(SelectedClaimContext);
+  const { pendingD1500Id, setPendingD1500Id, pendingD1500Upload } = useContext(SelectedClaimContext);
 
   const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || 0);
 
@@ -34,8 +35,13 @@ export default function D1500ProgressStepper() {
   // const moveV1500Status = null
   // const saveD1500Status = null
 
+  const handleCloseStepper = () => {
+    setPendingD1500Id(null)
+  }
+
   return (
-    d1500Status &&
+    (d1500Status || pendingD1500Upload) &&
+    <>
     <Paper elevation={3} sx={{padding: 1, background: '#CFCFCF'}}>
       <Grid container spacing={1}>
         {/* uploadStatus indicator */}
@@ -217,6 +223,8 @@ export default function D1500ProgressStepper() {
         </Grid>
       </Grid>
     </Paper>
+    <Button onClick={() => handleCloseStepper()}>Ok</Button>
+    </>
   
   );
 }

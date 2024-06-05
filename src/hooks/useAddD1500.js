@@ -6,7 +6,7 @@ import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
 export default function useAddD1500() {
 
-  const { setCptRows, setSelectedV1500, setD1500SendFormat, setPendingD1500Id } = useContext(SelectedClaimContext);
+  const { setCptRows, setSelectedV1500, setD1500SendFormat, setPendingD1500Id, setPendingD1500Upload } = useContext(SelectedClaimContext);
 
   const queryClient = useQueryClient();
 
@@ -18,6 +18,8 @@ export default function useAddD1500() {
     // }
 
     const referralId = values.get("referralId")
+
+    setPendingD1500Upload(true)
 
     api.post('/d1500', values,
         {
@@ -31,12 +33,16 @@ export default function useAddD1500() {
           if (response.status === 200) {
             console.log("Successfully posted d1500 to db...");
             // console.log(response.data)
+            setPendingD1500Upload(false)
             setPendingD1500Id(response.data?.hcfaId)
             queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
             setCptRows([]);
             setSelectedV1500(null);
             setD1500SendFormat('');
             return response.data;
+          }
+          else {
+            // TODO upload failed
           }
           
         });}

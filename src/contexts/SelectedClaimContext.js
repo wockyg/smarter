@@ -21,6 +21,7 @@ const SelectedClaimContextProvider = (props) => {
     const [v1500UploadFail, setV1500UploadFail] = useState([]);
     const [d1500SendFormat, setD1500SendFormat] = useState('');
 
+    const [pendingD1500Upload, setPendingD1500Upload] = useState(false);
     const [pendingD1500Id, setPendingD1500Id] = useState(null);
 
     // const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || null);
@@ -40,6 +41,7 @@ const SelectedClaimContextProvider = (props) => {
                  v1500UploadComplete, setV1500UploadComplete,
                  v1500UploadFail, setV1500UploadFail,
                  d1500SendFormat, setD1500SendFormat,
+                 pendingD1500Upload, setPendingD1500Upload,
                  pendingD1500Id, setPendingD1500Id,
                 //  d1500Status 
                  }}>
