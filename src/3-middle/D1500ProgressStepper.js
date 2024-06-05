@@ -223,7 +223,9 @@ export default function D1500ProgressStepper() {
         </Grid>
       </Grid>
     </Paper>
-    <Button onClick={() => handleCloseStepper()}>Ok</Button>
+    {d1500Status.saveD1500Status === 'success' &&
+    <Button variant="contained" onClick={() => handleCloseStepper()}>Ok</Button>
+    }
     </>
   
   );
