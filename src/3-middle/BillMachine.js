@@ -26,9 +26,9 @@ export default function BillMachine() {
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
-    const { pendingD1500Id } = useContext(SelectedClaimContext);
+    const { pendingD1500Id, pendingD1500Upload } = useContext(SelectedClaimContext);
 
-    const open =  Boolean(pendingD1500Id);
+    const open =  Boolean(pendingD1500Id) || pendingD1500Upload;
     
 
     return (

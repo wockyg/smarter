@@ -40,7 +40,7 @@ export default function D1500ProgressStepper() {
   }
 
   return (
-    (d1500Status || pendingD1500Upload) &&
+    d1500Status &&
     <>
     <Paper elevation={3} sx={{padding: 1, background: '#CFCFCF'}}>
       <Grid container spacing={1}>

@@ -33,8 +33,8 @@ export default function useAddD1500() {
           if (response.status === 200) {
             console.log("Successfully posted d1500 to db...");
             // console.log(response.data)
-            setPendingD1500Upload(false)
             setPendingD1500Id(response.data?.hcfaId)
+            setPendingD1500Upload(false)
             queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
             setCptRows([]);
             setSelectedV1500(null);
