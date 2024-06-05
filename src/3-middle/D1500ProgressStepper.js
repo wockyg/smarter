@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import MergeIcon from '@mui/icons-material/Merge';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
@@ -37,8 +38,44 @@ export default function D1500ProgressStepper() {
     d1500Status &&
     <Paper elevation={3} sx={{padding: 1, background: '#CFCFCF'}}>
       <Grid container spacing={1}>
+        {/* uploadStatus indicator */}
+         <Grid item>
+          {d1500Status.uploadStatus === null &&
+          <CloudUploadIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.uploadStatus === 'pending' &&
+          <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+            <CircularProgress />
+            <Box
+              sx={{
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Typography variant="caption" component="div" color="text.secondary">
+                <CloudUploadIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
+              </Typography>
+            </Box>
+          </Box>
+          }
+          {d1500Status.uploadStatus === 'failed' &&
+          <CloudUploadIcon fontSize='large' sx={{background: '#ED534A', padding: 0.5, borderRadius: 5}} />
+          }
+          {d1500Status.uploadStatus === 'success' &&
+          <CloudUploadIcon fontSize='large' sx={{background: '#27C917', padding: 0.5, borderRadius: 5}} />
+          }
+        </Grid>
         <Grid item>
-          {/* matchStatus indicator */}
+          <KeyboardDoubleArrowRightIcon />
+        </Grid>
+        {/* matchStatus indicator */}
+        <Grid item>
           {d1500Status.matchStatus === null &&
           <FindInPageIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
           }
@@ -73,8 +110,8 @@ export default function D1500ProgressStepper() {
         <Grid item>
           <KeyboardDoubleArrowRightIcon />
         </Grid>
+        {/* mergeStatus indicator */}
         <Grid item>
-          {/* mergeStatus indicator */}
           {d1500Status.mergeStatus === null &&
           <MergeIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
           }
@@ -109,8 +146,8 @@ export default function D1500ProgressStepper() {
         <Grid item>
           <KeyboardDoubleArrowRightIcon />
         </Grid>
+        {/* moveV1500Status indicator */}
         <Grid item>
-          {/* moveV1500Status indicator */}
           {d1500Status.moveV1500Status === null &&
           <DriveFileMoveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
           }
@@ -145,8 +182,8 @@ export default function D1500ProgressStepper() {
         <Grid item>
           <KeyboardDoubleArrowRightIcon />
         </Grid>
+        {/* saveD1500Status indicator */}
         <Grid item>
-          {/* saveD1500Status indicator */}
           {d1500Status.saveD1500Status === null &&
           <SaveIcon fontSize='large' sx={{padding: 0.5, borderRadius: 5}} />
           }
