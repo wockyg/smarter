@@ -15,7 +15,7 @@ const SelectedClaimContextProvider = (props) => {
     const [cptRows, setCptRows] = useState([]);
     const [dupeRows, setDupeRows] = useState([]);
     const [newRowData, setNewRowData] = useState({});
-    const [selectedV1500, setSelectedV1500] = useState(null);
+    const [selectedV1500, setSelectedV1500] = useState([]);
     const [v1500UploadProgress, setV1500UploadProgress] = useState({});
     const [v1500UploadComplete, setV1500UploadComplete] = useState([]);
     const [v1500UploadFail, setV1500UploadFail] = useState([]);

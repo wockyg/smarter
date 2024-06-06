@@ -113,9 +113,11 @@ export default function RowGenerator(props) {
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
 
-    const { cptRows, setCptRows, selectedV1500, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
 
     // console.log(cptRows)
+
+    const selectedV1500 = selectedV1500Array[0]
     
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){

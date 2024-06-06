@@ -7,9 +7,11 @@ import blank1500 from '../document-templates/blank1500.jpg';
 
 export default function HCFATemplate(props) {
 
-    const {selectedClaim, icd10CodeList, cptRows, selectedV1500} = props;
+    const {selectedClaim, icd10CodeList, cptRows, selectedV1500: selectedV1500Array} = props;
 
     // console.log(icd10CodeList)
+
+    const selectedV1500 = selectedV1500Array[0]
 
     // const num_ic10codes = icd10CodeList?.length; // for manual mode
 

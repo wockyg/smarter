@@ -46,6 +46,8 @@ import { useParams } from 'react-router-dom';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
 import D1500ProgressStepper from './D1500ProgressStepper';
+import MultipleClaimsWidget from './MultipleClaimsWidget';
+import MainNavbar from '../1-main/MainNavbar';
 
 
 export default function ClaimInfoToolbar() {
@@ -64,11 +66,13 @@ export default function ClaimInfoToolbar() {
 
     let { id: linkId } = useParams();
 
-    const { billMode, setBillMode, keepBillMode, setKeepBillMode, selectedV1500, d1500Status } = useContext(SelectedClaimContext);
+    const { billMode, setBillMode, keepBillMode, setKeepBillMode } = useContext(SelectedClaimContext);
 
     // console.log(d1500Status)
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
+    // const { status: status, data: allClaims, error: error, isFetching: isFetching } = useGetReferral(selectedClaim?.referralId);
+    // console.log(allClaims)
 
     const mutationUpdate = useUpdateReferral();
 
@@ -162,13 +166,12 @@ export default function ClaimInfoToolbar() {
         setBillMode(!billMode);
     };
 
-     const handleChangeKeepBillMode = (e, v) => {
-        setKeepBillMode(!keepBillMode);
+    const handleChangeKeepBillMode = (e, v) => {
+      setKeepBillMode(!keepBillMode);
     };
 
     return (
-      <>
-      {selectedClaim?.referralId &&
+      selectedClaim?.referralId &&
       <>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -242,7 +245,7 @@ export default function ClaimInfoToolbar() {
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>
-            {billMode &&
+            {/* {billMode &&
             <Grid item>
               <FormControlLabel
               control=
@@ -257,7 +260,7 @@ export default function ClaimInfoToolbar() {
               }
               label="Lock BillMode" />
             </Grid>
-            }
+            } */}
             </>
             }
             {selectedClaim?.betaTest &&
@@ -277,7 +280,7 @@ export default function ClaimInfoToolbar() {
                 <IconButton onClick={(e) => handleOpenMenu(e, 1, 'spanishSpeaking')}>
                   <Badge bg="primary">
                       {/* {selectedClaim.spanishSpeaking} */}
-                      Spanish
+                      SS
                   </Badge>
                 </IconButton>
               </h3>
@@ -325,11 +328,14 @@ export default function ClaimInfoToolbar() {
               </h3>
             </Grid>
             }
-            {billMode && selectedV1500 && d1500Status &&
-            <Grid item>
-              <D1500ProgressStepper />
+
+            <Grid item xs={"auto"} sx={{border: 'solid 1px'}}>
+              <Grid container justifyContent="flex-end">
+                <Grid item xs={12}>
+                  <MultipleClaimsWidget selectedClaim={selectedClaim} />
+                </Grid>
+              </Grid>
             </Grid>
-            }
             
           </Grid>
 
@@ -418,8 +424,6 @@ export default function ClaimInfoToolbar() {
         </DialogActions>
 
       </Dialog>
-      </>
-      }
       </>
     
     );
