@@ -496,9 +496,12 @@ export default function ReferralTable(props) {
 
             !billMode && setBillMode(true);
 
-            if (row.merge && row.referralId === linkId) {
+            if (row.clientMerge && row.referralId === linkId) {
+                if (selectedV1500.map(s => s.v1500Id).includes(row.v1500Id)) {
+                    // deselector
+                }
                 // check number of available rows against number of new rows
-                if ((6 - cptRows.length) >= newRows.length) {
+                else if ((6 - cptRows.length) >= newRows.length) {
                     // append rows to cptRows instead of replacing rows
                     // add row to selectedV1500 instead of replacing it
                     setCptRows([...cptRows, ...newnewRows]);
