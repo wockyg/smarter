@@ -496,9 +496,10 @@ export default function ReferralTable(props) {
 
             !billMode && setBillMode(true);
 
-            if (row.clientMerge && row.referralId === linkId) {
+            if (row.clientMerge && (row.referralId === +linkId)) {
                 if (selectedV1500.map(s => s.v1500Id).includes(row.v1500Id)) {
                     // deselector
+                    console.log("deselector")
                 }
                 // check number of available rows against number of new rows
                 else if ((6 - cptRows.length) >= newRows.length) {
@@ -509,6 +510,8 @@ export default function ReferralTable(props) {
                 }
             }
             else {
+                console.log("not comptrust...")
+                
                 if (row.referralId !== linkId) {
                     navigate(`/${row.referralId}`)
                     setNotesPage(0);
