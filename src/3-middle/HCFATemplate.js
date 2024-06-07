@@ -11,7 +11,7 @@ export default function HCFATemplate(props) {
 
     console.log(props)
 
-    const selectedV1500 = selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
+    const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
 
     // const num_ic10codes = icd10CodeList?.length; // for manual mode
 

@@ -118,7 +118,7 @@ export default function RowGenerator(props) {
     // console.log(selectedV1500Array)
 
     // const selectedV1500 = selectedV1500Array[0]
-    const selectedV1500 = selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
+    const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
     
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
