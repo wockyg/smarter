@@ -500,6 +500,11 @@ export default function ReferralTable(props) {
                 if (selectedV1500.map(s => s.v1500Id).includes(row.v1500Id)) {
                     // deselector
                     console.log("deselector")
+                    // filter out rows
+                    const removeRows = cptRows.filter(r => r.v1500Id !== row.v1500Id);
+                    const removeV1500 = selectedV1500.filter(s => s.v1500Id !== row.v1500Id)
+                    setCptRows(removeRows);
+                    setSelectedV1500(removeV1500);
                 }
                 // check number of available rows against number of new rows
                 else if ((6 - cptRows.length) >= newRows.length) {
