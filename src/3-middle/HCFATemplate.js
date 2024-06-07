@@ -11,7 +11,7 @@ export default function HCFATemplate(props) {
 
     // console.log(icd10CodeList)
 
-    const selectedV1500 = selectedV1500Array[0]
+    const selectedV1500 = selectedV1500Array[0] || null
 
     // const num_ic10codes = icd10CodeList?.length; // for manual mode
 
@@ -47,7 +47,7 @@ export default function HCFATemplate(props) {
 
     // console.log(total_charges);
 
-    return (
+    return ( selectedV1500 &&
       <Document>
         <Page size='LETTER' style={{ position: 'relative' }}>
             <View style={{ display: 'flex', height: '100%', width:'100%', position: 'relative' }}>
