@@ -115,7 +115,7 @@ export default function RowGenerator(props) {
 
     const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
 
-    // console.log(cptRows)
+    console.log(selectedV1500Array)
 
     const selectedV1500 = selectedV1500Array[0]
     
