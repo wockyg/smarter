@@ -442,7 +442,7 @@ export default function ReferralTable(props) {
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
         setCptRows([]);
-        setSelectedV1500(null);
+        setSelectedV1500([]);
         setD1500SendFormat(claim.billingProtocol)
         if (claim.billingStatus === null) {
           setBillMode(false);
@@ -470,7 +470,7 @@ export default function ReferralTable(props) {
         setQuickSearchVal(null);
         setQuickSearchInputVal('');
         setCptRows([]);
-        setSelectedV1500(null);
+        setSelectedV1500([]);
         setCurrentlyEditingSelectedClaim(false);
     };
 

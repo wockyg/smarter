@@ -174,7 +174,7 @@ export default function MainNavbar() {
       setQuickSearchVal(null);
       setQuickSearchInputVal('');
       setCptRows([]);
-      setSelectedV1500(null);
+      setSelectedV1500([]);
       setCurrentlyEditingSelectedClaim(false);
   };
 

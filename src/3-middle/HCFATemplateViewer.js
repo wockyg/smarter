@@ -66,7 +66,7 @@ export default function HCFATemplateViewer() {
     // const dos_days = dos_array?.map( (row) => {return (row.getDate()+1) < 10 ? `0${row.getDate()+1}` : `${row.getDate()+1}`} );
     // const dos_years = dos_array?.map( (row) => {return String(row.getFullYear()).substring(2)} );
 
-    console.log(selectedV1500);
+    // console.log(selectedV1500);
 
     // const dos_dollars = cptRows?.map( (row) => {return row.charges.toString().substring(0, row.charges.toString().indexOf('.'));} );
     // const dos_cents = cptRows?.map( (row) => {return row.charges.toString().substring(row.charges.toString().indexOf('.')+1);} );

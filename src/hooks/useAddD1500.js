@@ -37,7 +37,7 @@ export default function useAddD1500() {
             setPendingD1500Upload(false)
             queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
             setCptRows([]);
-            setSelectedV1500(null);
+            setSelectedV1500([]);
             setD1500SendFormat('');
             return response.data;
           }

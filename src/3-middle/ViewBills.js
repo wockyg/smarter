@@ -131,7 +131,7 @@ export default function ViewBills() {
         }
         // attach new date to dos field
         const newRows = dupeRows.map(r => ({...r, dos: newDos}))
-        setSelectedV1500(null)
+        setSelectedV1500([])
         setCptRows(newRows)
         handleCloseMenu();
     };
