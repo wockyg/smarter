@@ -47,7 +47,7 @@ export default function HCFATemplate(props) {
 
     // console.log(total_charges);
 
-    return ( selectedV1500 &&
+    return (
       <Document>
         <Page size='LETTER' style={{ position: 'relative' }}>
             <View style={{ display: 'flex', height: '100%', width:'100%', position: 'relative' }}>
