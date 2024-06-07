@@ -30,7 +30,7 @@ const headCells = [
   //   label: 'DOS',
   // },
   {
-    id: 'v1500_filename',
+    id: 'v1500_filename_display',
     numeric: false,
     disablePadding: false,
     label: 'V1500 Filename',
