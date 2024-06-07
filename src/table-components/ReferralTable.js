@@ -515,7 +515,7 @@ export default function ReferralTable(props) {
                 }
             }
             else {
-                console.log("not comptrust...")
+                // console.log("not comptrust...")
                 
                 if (row.referralId !== linkId) {
                     navigate(`/${row.referralId}`)

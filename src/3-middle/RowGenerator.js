@@ -171,8 +171,13 @@ export default function RowGenerator(props) {
     };
 
     const handleRemove = (i) => {
-        const newData = cptRows?.filter((x, j) => j !== i);
-        setCptRows(newData);
+        const row = cptRows[i]
+        const newRows = cptRows?.filter((x, j) => j !== i);
+        setCptRows(newRows);
+        if (row.clientMerge && !newRows.map(r => r.v1500Id).includes(row.v1500Id)) {
+            const removeV1500 = selectedV1500.filter(s => s.v1500Id !== row.v1500Id)
+            selectedV1500(removeV1500)
+        }
     }
 
     const handleSwap = (i, direction) => {
