@@ -115,9 +115,10 @@ export default function RowGenerator(props) {
 
     const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
 
-    console.log(selectedV1500Array)
+    // console.log(selectedV1500Array)
 
-    const selectedV1500 = selectedV1500Array[0]
+    // const selectedV1500 = selectedV1500Array[0]
+    const selectedV1500 = selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
     
     const dos_array = cptRows?.map(row => row.dos).sort((a, b) => {
                                         if (a.dos === null){
@@ -243,44 +244,6 @@ export default function RowGenerator(props) {
 
     const handleUpdateD1500SendFormat = (event) => {
         setD1500SendFormat(event.target.value);
-    };
-
-    const handleDownload = (event) => {
-        // console.log("ggglllllizzzyyy");
-        if (cptRows.length > 0) {
-            const values = {
-                referralId: selectedClaim.referralId, 
-                sendFormat: d1500SendFormat, 
-                cptRows: cptRows, 
-                dateApproved: new Date().toISOString(),
-                physician_name: selectedV1500?.physician_name,
-                physician_npi: selectedV1500?.physician_npi,
-                patient_account_no: selectedV1500?.patient_account_no,
-                diagnosis_a: selectedV1500?.diagnosis_a,
-                diagnosis_b: selectedV1500?.diagnosis_b,
-                diagnosis_c: selectedV1500?.diagnosis_c,
-                diagnosis_d: selectedV1500?.diagnosis_d,
-                diagnosis_e: selectedV1500?.diagnosis_e,
-                diagnosis_f: selectedV1500?.diagnosis_f,
-                diagnosis_g: selectedV1500?.diagnosis_g,
-                diagnosis_h: selectedV1500?.diagnosis_h,
-                diagnosis_i: selectedV1500?.diagnosis_i,
-                diagnosis_j: selectedV1500?.diagnosis_j,
-                diagnosis_k: selectedV1500?.diagnosis_k,
-                diagnosis_l: selectedV1500?.diagnosis_l,
-                v1500Id: selectedV1500?.v1500Id
-            }
-                
-            hcfaAdd.mutate(values);
-            setTimeout(() => {
-              setCptRows([]);
-              setSelectedV1500(null);
-              setD1500SendFormat('');
-            }, "500");
-        }
-        else{
-            console.log("womp womp..");
-        }
     };
 
     const handleSubmitD1500 = (event) => {
