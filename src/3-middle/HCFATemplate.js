@@ -9,9 +9,9 @@ export default function HCFATemplate(props) {
 
     const {selectedClaim, icd10CodeList, cptRows, selectedV1500: selectedV1500Array} = props;
 
-    // console.log(icd10CodeList)
+    console.log(selectedV1500Array)
 
-    const selectedV1500 = selectedV1500Array[0] || null
+    const selectedV1500 = selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
 
     // const num_ic10codes = icd10CodeList?.length; // for manual mode
 
