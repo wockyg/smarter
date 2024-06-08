@@ -178,8 +178,8 @@ export default function RowGenerator(props) {
         setCptRows(newRows);
         if (selectedClaim.clientMerge && !newRows.map(r => r.v1500Id).includes(row.v1500Id)) {
             console.log("Last row...")
-            const removeV1500 = selectedV1500.filter(s => s.v1500Id !== row.v1500Id)
-            selectedV1500(removeV1500)
+            const removeV1500 = selectedV1500Array.filter(s => s.v1500Id !== row.v1500Id)
+            setSelectedV1500(removeV1500)
         }
     }
 
