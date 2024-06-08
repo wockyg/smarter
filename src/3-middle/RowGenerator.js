@@ -29,6 +29,7 @@ import useGetCptForState from '../hooks/useGetCptForState';
 
 import useAddD1500 from '../hooks/useAddD1500';
 import useAddD1500Rows from '../hooks/useAddD1500Rows';
+import useAddD1500Merge from '../hooks/useAddD1500Merge';
 
 import { useParams } from 'react-router-dom';
 
@@ -95,6 +96,7 @@ export default function RowGenerator(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForState(selectedClaim?.jurisdiction);
     
     const hcfaAdd = useAddD1500();
+    const hcfaAddMerge = useAddD1500Merge();
 
     const filteredVisits = visits?.filter(v => v?.attend === "Yes" && v.v1500?.length > 0).sort((a, b) => {
                                         if (a.dos === null){
@@ -175,6 +177,7 @@ export default function RowGenerator(props) {
         const newRows = cptRows?.filter((x, j) => j !== i);
         setCptRows(newRows);
         if (row.clientMerge && !newRows.map(r => r.v1500Id).includes(row.v1500Id)) {
+            console.log("Last row...")
             const removeV1500 = selectedV1500.filter(s => s.v1500Id !== row.v1500Id)
             selectedV1500(removeV1500)
         }
@@ -277,6 +280,7 @@ export default function RowGenerator(props) {
                         formData.append("d1500_filename", d1500_filename);
                         formData.append("total_charges", total_charges);
                         cptRows.length > 0 && formData.append("cptRowsRaw", JSON.stringify(cptRows));
+                        
                         if (selectedV1500) {
                             selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
                             selectedV1500?.physician_npi && formData.append("physician_npi", selectedV1500?.physician_npi);
@@ -294,8 +298,13 @@ export default function RowGenerator(props) {
                             selectedV1500?.diagnosis_k && formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
                             selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
                             selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
+                            if (selectedV1500.clientMerge) {
+                                formData.append("v1500IdsRaw", selectedV1500Array.map(s => s.v1500Id));
+                                // append totalCharges array
+                            }
                         }
                         else {
+                            // maunal mode
                             selectedClaim?.physicianId && formData.append("physician_name", `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD`);
                             selectedClaim?.physicianNPI && formData.append("physician_npi", selectedClaim?.physicianNPI);
                             selectedV1500?.therapistId && formData.append("patient_account_no", `${selectedClaim.claimantId}-${selectedClaim.therapistId}`);
@@ -311,11 +320,31 @@ export default function RowGenerator(props) {
                             codeList[9] && formData.append("diagnosis_j", codeList[9]?.icd10);
                             codeList[10] && formData.append("diagnosis_k", codeList[10]?.icd10);
                             codeList[11] && formData.append("diagnosis_l", codeList[11]?.icd10);
-                            const uniqueDOSString = getUniqueDOSString(cptRows)
-                            formData.append("original_dos", uniqueDOSString);
+                            if (selectedClaim.clientMerge) {
+                                const uniqueDOSStrings = selectedV1500Array.map(s => s.original_dos)
+                                formData.append("original_dos_arrayRaw", uniqueDOSStrings);
+                            }
+                            else {
+                                const uniqueDOSString = getUniqueDOSString(cptRows)
+                                formData.append("original_dos", uniqueDOSString);
+                            }
+
+                            
                         }
-                        
-                        hcfaAdd.mutate(formData);
+                        if (selectedClaim.clientMerge) {
+                            const dos_array = cptRows?.map(r => r.dos);
+                            const uniqueDOS = Array.from(new Set(dos_array));
+                            formData.append("unique_dos_arrayRaw", JSON.stringify(uniqueDOS));
+                            // TODO separate out total charges by dos
+                            const adjusterRates = uniqueDOS.map(u => cptRows.filter(r => r.dos === u.dos).map(x => x.charges)).map(a => a.reduce((partialSum, a) => partialSum + a, 0))
+                            console.log("adjusterRates:", adjusterRates)
+                            formData.append("adjuster_rates_arrayRaw", JSON.stringify(adjusterRates));
+                            // send to new merge endpoint
+                            hcfaAddMerge.mutate(formData);
+                        }
+                        else {
+                            hcfaAdd.mutate(formData);
+                        }
                         
                       });
         }
