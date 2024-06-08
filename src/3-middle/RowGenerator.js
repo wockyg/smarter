@@ -176,7 +176,7 @@ export default function RowGenerator(props) {
         const row = cptRows[i]
         const newRows = cptRows?.filter((x, j) => j !== i);
         setCptRows(newRows);
-        if (row.clientMerge && !newRows.map(r => r.v1500Id).includes(row.v1500Id)) {
+        if (selectedClaim.clientMerge && !newRows.map(r => r.v1500Id).includes(row.v1500Id)) {
             console.log("Last row...")
             const removeV1500 = selectedV1500.filter(s => s.v1500Id !== row.v1500Id)
             selectedV1500(removeV1500)
@@ -268,6 +268,8 @@ export default function RowGenerator(props) {
 
                         // console.log(selectedV1500)
 
+                        const merge = selectedClaim.clientMerge && selectedV1500Array.length > 1
+
                         // const v1500_filename= `${selectedClaim.claimant} DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
                         const d1500_filename= `${selectedClaim.claimant} ADJ DOS ${uniqueDOSReorder[0]}${uniqueDOSReorder.length > 1 ? `, ${uniqueDOSReorder[1]}` : ''}${uniqueDOSReorder.length > 2 ? `, ${uniqueDOSReorder[2]}` : ''}${uniqueDOSReorder.length > 3 ? `, ${uniqueDOSReorder[3]}` : ''}${uniqueDOSReorder.length > 4 ? `, ${uniqueDOSReorder[4]}` : ''}${uniqueDOSReorder.length > 5 ? `, ${uniqueDOSReorder[5]}` : ''}.pdf`
 
@@ -298,7 +300,7 @@ export default function RowGenerator(props) {
                             selectedV1500?.diagnosis_k && formData.append("diagnosis_k", selectedV1500?.diagnosis_k);
                             selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
                             selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
-                            if (selectedV1500.clientMerge) {
+                            if (merge) {
                                 formData.append("v1500IdsRaw", selectedV1500Array.map(s => s.v1500Id));
                                 // append totalCharges array
                             }
@@ -320,7 +322,7 @@ export default function RowGenerator(props) {
                             codeList[9] && formData.append("diagnosis_j", codeList[9]?.icd10);
                             codeList[10] && formData.append("diagnosis_k", codeList[10]?.icd10);
                             codeList[11] && formData.append("diagnosis_l", codeList[11]?.icd10);
-                            if (selectedClaim.clientMerge) {
+                            if (merge) {
                                 const uniqueDOSStrings = selectedV1500Array.map(s => s.original_dos)
                                 formData.append("original_dos_arrayRaw", uniqueDOSStrings);
                             }
@@ -331,7 +333,7 @@ export default function RowGenerator(props) {
 
                             
                         }
-                        if (selectedClaim.clientMerge) {
+                        if (merge) {
                             const dos_array = cptRows?.map(r => r.dos);
                             const uniqueDOS = Array.from(new Set(dos_array));
                             formData.append("unique_dos_arrayRaw", JSON.stringify(uniqueDOS));
