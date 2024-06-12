@@ -324,7 +324,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, split, setNumSplit, uniqueDOS } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -494,6 +494,8 @@ export default function ReferralTable(props) {
                 return {...r, charges: rateTotal}
             })
 
+            // TODO calculate total charges??
+
             !billMode && setBillMode(true);
 
             if (row.clientMerge && (row.referralId === +linkId)) {
@@ -506,8 +508,16 @@ export default function ReferralTable(props) {
                     setCptRows(removeRows);
                     setSelectedV1500(removeV1500);
                 }
+
                 // check number of available rows against number of new rows
-                else if ((6 - cptRows.length) >= newRows.length) {
+                // TODO add menu feature for user to choose which rows to add to merged hcfa
+                // else if ((6 - cptRows.length) >= newRows.length) {
+                //     // append rows to cptRows instead of replacing rows
+                //     // add row to selectedV1500 instead of replacing it
+                //     setCptRows([...cptRows, ...newnewRows]);
+                //     setSelectedV1500([...selectedV1500, row]);
+                // }
+                else {
                     // append rows to cptRows instead of replacing rows
                     // add row to selectedV1500 instead of replacing it
                     setCptRows([...cptRows, ...newnewRows]);
@@ -527,6 +537,9 @@ export default function ReferralTable(props) {
                 } 
                 setCptRows(newnewRows);
                 setSelectedV1500([row]);
+                const dos_array = newnewRows.map(r => r.dos);
+                const newUniqueDOS = Array.from(new Set(dos_array));
+                split ? setNumSplit(newUniqueDOS.length) : setNumSplit(0)
             }
             
             

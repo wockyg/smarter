@@ -366,6 +366,7 @@ export default function MainNavbar() {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -462,12 +463,12 @@ export default function MainNavbar() {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
+              
             </Menu>
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
-    
     
 
     {/* <Navbar bg="light" expand="lg" sticky="top">
@@ -524,15 +525,15 @@ export default function MainNavbar() {
       >
         {menu0Type === null &&
         [
-        <MenuItem>
+        <MenuItem key={0}>
             Profile
         </MenuItem>,
 
-        <MenuItem>
+        <MenuItem key={1}>
             Settings
         </MenuItem>,
 
-        <MenuItem  onClick={(e) => handleClick(e)}>
+        <MenuItem key={2} onClick={(e) => handleClick(e)}>
             Logout
         </MenuItem>
         ]

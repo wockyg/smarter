@@ -89,7 +89,7 @@ export default function RowGenerator(props) {
 
     let { id: linkId } = useParams();
 
-    const {codeList} = props
+    const {codeList, index} = props
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
     const { status: statusVisits, data: visits, error: errorVisits, isFetching: isFetchingVisits } = useGetDOSDropdown(linkId);
@@ -115,9 +115,11 @@ export default function RowGenerator(props) {
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
 
-    const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id, split, uniqueDOS: uniqueDOSSplit } = useContext(SelectedClaimContext);
 
     // console.log(selectedV1500Array)
+
+    const newRows = cptRows && (split ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
 
     // const selectedV1500 = selectedV1500Array[0]
     const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
@@ -147,7 +149,7 @@ export default function RowGenerator(props) {
 
     let total_units = 0;
 
-    cptRows?.forEach((row) => {
+    newRows?.forEach((row) => {
         total_charges = total_charges + (+row.charges);
         total_units = total_units + (+row.units);
     })
@@ -207,7 +209,7 @@ export default function RowGenerator(props) {
         const filteredRows = cptRows.filter(r => r.rowId !== currentEditRow.rowId);
         // console.log("All other rows:", filteredRows);
         const newRows = [...filteredRows.slice(0, index), currentEditRow, ...filteredRows.slice(index)]
-        console.log("newRows:", newRows);
+        // console.log("newRows:", newRows);
         setCptRows(newRows);
         setEditIDx(-1);
         setRevertData({});
@@ -224,17 +226,26 @@ export default function RowGenerator(props) {
     const handleChangeInlineEdit = (event, key, i) => {
         if (key === 'cpt') {
             
-            const maxUnit = codes?.filter(c => c?.Code === +event.target.value)[0].MaxUnit;
-
-            const newUnits = '1';
+            // const maxUnit = codes?.filter(c => c?.Code === +event.target.value)[0].MaxUnit;
             
             // const newUnits = maxUnit === 1 ? '1' : '';
+
+            const newUnits = '1';
 
             const rateBase = codes?.filter(c => c?.Code === +event.target.value)[0][selectedClaim?.jurisdiction];
             const rateTotal = (rateBase * +newUnits * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
 
             const newRow = {...currentEditRow, [key]: event.target.value === '' ? null : event.target.value, charges: rateTotal, units: newUnits};
             
+            if(event.target.value === '97530' || event.target.value === '97535') {
+                newRow.mod1 = '59'
+            }
+            else {
+                newRow.mod1 = ''  
+            }
+
+            // console.log(newRow)
+
             setCurrentEditRow(newRow);
         }
         else if (key === 'units') {
@@ -262,7 +273,7 @@ export default function RowGenerator(props) {
             <HCFATemplate
             selectedClaim={selectedClaim}
             icd10CodeList={codeList}
-            cptRows={cptRows}
+            cptRows={newRows}
             />
             );
             pdf(MyDoc).toBlob()
@@ -283,7 +294,7 @@ export default function RowGenerator(props) {
                         // formData.append("v1500_filename", v1500_filename);
                         formData.append("d1500_filename", d1500_filename);
                         formData.append("total_charges", total_charges);
-                        cptRows.length > 0 && formData.append("cptRowsRaw", JSON.stringify(cptRows));
+                        newRows.length > 0 && formData.append("cptRowsRaw", JSON.stringify(newRows));
                         
                         if (selectedV1500) {
                             selectedV1500?.physician_name && formData.append("physician_name", selectedV1500?.physician_name);
@@ -373,7 +384,16 @@ export default function RowGenerator(props) {
                 // else {
                 //     setFieldValue('units', '');
                 // }
+
+                if (values.cpt.trim() === '97530' || values.cpt.trim() === '97535') {
+                    // set mod1 = 59
+                    setFieldValue('mod1', '59');
+                }
+                else {
+                    setFieldValue('mod1', '');
+                }
             }
+
         }, [values.cpt, setFieldValue]);
 
         return (
@@ -462,7 +482,7 @@ export default function RowGenerator(props) {
             // innerRef={formRef}
             initialValues={{
             // rank: `${numRows+1}`,
-            dos: cptRows?.length > 0 ? cptRows[cptRows?.length - 1].dos : '',
+            dos: newRows?.length > 0 ? newRows[newRows?.length - 1].dos : '',
             pos: '11',
             cpt: '',
             mod1: '',
@@ -526,7 +546,7 @@ export default function RowGenerator(props) {
                     <Grid container spacing={0.5}>
                         <Grid item xs="auto">
                             <label htmlFor="dos" style={{display: 'block'}}>DOS:</label>
-                            <Field 
+                            <Field
                             as="select" 
                             id="dos"
                             name="dos"
@@ -681,7 +701,7 @@ export default function RowGenerator(props) {
                     </TableRow>
                     </TableHead>
                     <TableBody> 
-                    {cptRows?.map((row, index) => {
+                    {newRows?.map((row, index) => {
                         const currentlyEditing = editIDx === index;
                         return (
                         <TableRow key={index} hover>

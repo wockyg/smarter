@@ -38,9 +38,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function HCFATemplateViewer() {
+export default function HCFATemplateViewer(props) {
 
     let { id: linkId } = useParams();
+
+    const {index} = props
 
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
@@ -49,7 +51,9 @@ export default function HCFATemplateViewer() {
 
     // const num_codes = codeList?.length;
 
-    const { cptRows, setCptRows, selectedV1500 } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500, split, uniqueDOS } = useContext(SelectedClaimContext);
+
+    const newRows = split ? cptRows.filter(c => c.dos === uniqueDOS[index]) : [...cptRows]
 
     // const numRows = cptRows?.length;
 
@@ -92,7 +96,7 @@ export default function HCFATemplateViewer() {
                     <HCFATemplate 
                     selectedClaim={selectedClaim} 
                     icd10CodeList={codeList}
-                    cptRows={cptRows} 
+                    cptRows={newRows} 
                     selectedV1500={selectedV1500}
                     />
                 </PDFViewer>

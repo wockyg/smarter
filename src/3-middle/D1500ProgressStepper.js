@@ -20,11 +20,13 @@ import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 import useGetD1500Status from '../hooks/useGetD1500Status';
 
 
-export default function D1500ProgressStepper() {
+export default function D1500ProgressStepper(props) {
 
-  const { pendingD1500Id, setPendingD1500Id, pendingD1500Upload } = useContext(SelectedClaimContext);
+  const { pendingD1500Id, setPendingD1500Id, pendingD1500Upload, cptRows, setCptRows, uniqueDOS, split, numSplit, setNumSplit, setSelectedV1500, setD1500SendFormat } = useContext(SelectedClaimContext);
 
   const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || 0);
+
+  const {index} = props
 
   // console.log(d1500Status)
 
@@ -37,6 +39,19 @@ export default function D1500ProgressStepper() {
 
   const handleCloseStepper = () => {
     setPendingD1500Id(null)
+    
+    if (split) {
+      
+      if (numSplit === 0) {
+        setCptRows([])
+        setSelectedV1500([]);
+        setD1500SendFormat('');
+      }
+      else if (numSplit > 0) {
+        setCptRows(cptRows.filter(c => c.dos !== uniqueDOS[index]))
+        setNumSplit(numSplit - 1)
+      }
+    }
   }
 
   return (

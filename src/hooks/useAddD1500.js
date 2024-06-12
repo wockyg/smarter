@@ -6,7 +6,7 @@ import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
 export default function useAddD1500() {
 
-  const { setCptRows, setSelectedV1500, setD1500SendFormat, setPendingD1500Id, setPendingD1500Upload } = useContext(SelectedClaimContext);
+  const { setCptRows, setSelectedV1500, setD1500SendFormat, setPendingD1500Id, setPendingD1500Upload, split  } = useContext(SelectedClaimContext);
 
   const queryClient = useQueryClient();
 
@@ -36,9 +36,10 @@ export default function useAddD1500() {
             setPendingD1500Id(response.data?.hcfaId)
             setPendingD1500Upload(false)
             queryClient.invalidateQueries(`D1500RowsView_claim_${referralId}`);
-            setCptRows([]);
-            setSelectedV1500([]);
-            setD1500SendFormat('');
+            !split && setCptRows([]);
+            !split && setSelectedV1500([]);
+            !split && setD1500SendFormat('');
+            
             return response.data;
           }
           else {

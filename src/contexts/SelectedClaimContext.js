@@ -24,6 +24,11 @@ const SelectedClaimContextProvider = (props) => {
     const [pendingD1500Upload, setPendingD1500Upload] = useState(false);
     const [pendingD1500Id, setPendingD1500Id] = useState(null);
 
+    const dos_array = cptRows.length > 0 ? cptRows.map(r => r.dos) : [];
+    const uniqueDOS = Array.from(new Set(dos_array));
+    const split = Boolean(uniqueDOS.length > 1)
+    const [numSplit, setNumSplit] = useState(uniqueDOS.length);
+
     // const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || null);
     
     return (
@@ -43,6 +48,8 @@ const SelectedClaimContextProvider = (props) => {
                  d1500SendFormat, setD1500SendFormat,
                  pendingD1500Upload, setPendingD1500Upload,
                  pendingD1500Id, setPendingD1500Id,
+                 uniqueDOS, split,
+                 numSplit, setNumSplit
                 //  d1500Status 
                  }}>
             {props.children}
