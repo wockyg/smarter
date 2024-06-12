@@ -226,7 +226,9 @@ export default function RowGenerator(props) {
             
             const maxUnit = codes?.filter(c => c?.Code === +event.target.value)[0].MaxUnit;
 
-            const newUnits = maxUnit === 1 ? '1' : '';
+            const newUnits = '1';
+            
+            // const newUnits = maxUnit === 1 ? '1' : '';
 
             const rateBase = codes?.filter(c => c?.Code === +event.target.value)[0][selectedClaim?.jurisdiction];
             const rateTotal = (rateBase * +newUnits * ((100 - (+selectedClaim?.clientDiscount || 0)) / 100)).toFixed(2);
@@ -364,12 +366,13 @@ export default function RowGenerator(props) {
             const maxUnit = values.cpt ? codes?.filter(c => c?.Code === +values?.cpt)[0]?.MaxUnit : -1;
             // set the value of charges, based on cpt and units
             if (values.cpt.trim() !== '') {
-                if (maxUnit === 1) {
-                    setFieldValue('units', '1');    
-                }
-                else {
-                    setFieldValue('units', '');
-                }
+                setFieldValue('units', '1');    
+                // if (maxUnit === 1) {
+                //     setFieldValue('units', '1');    
+                // }
+                // else {
+                //     setFieldValue('units', '');
+                // }
             }
         }, [values.cpt, setFieldValue]);
 
