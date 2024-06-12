@@ -338,7 +338,7 @@ export default function RowGenerator(props) {
                             const uniqueDOS = Array.from(new Set(dos_array));
                             formData.append("unique_dos_arrayRaw", JSON.stringify(uniqueDOS));
                             // TODO separate out total charges by dos
-                            const adjusterRates = uniqueDOS.map(u => cptRows.filter(r => r.dos === u.dos).map(x => x.charges)).map(a => a.reduce((partialSum, a) => partialSum + a, 0))
+                            const adjusterRates = uniqueDOS.map(u => cptRows.filter(r => r.dos === u).map(x => +x.charges)).map(a => +a.reduce((partialSum, a) => partialSum + a, 0).toFixed(2))
                             console.log("adjusterRates:", adjusterRates)
                             formData.append("adjuster_rates_arrayRaw", JSON.stringify(adjusterRates));
                             // send to new merge endpoint
