@@ -301,12 +301,12 @@ export default function RowGenerator(props) {
                             selectedV1500?.diagnosis_l && formData.append("diagnosis_l", selectedV1500?.diagnosis_l);
                             selectedV1500?.v1500Id && formData.append("v1500Id", selectedV1500?.v1500Id);
                             if (merge) {
-                                formData.append("v1500IdsRaw", selectedV1500Array.map(s => s.v1500Id));
+                                formData.append("v1500IdsRaw", JSON.stringify(selectedV1500Array.map(s => s.v1500Id)));
                                 // append totalCharges array
                             }
                         }
                         else {
-                            // maunal mode
+                            // maunal mode only
                             selectedClaim?.physicianId && formData.append("physician_name", `${selectedClaim?.physicianFirst.toUpperCase()} ${selectedClaim?.physicianLast.toUpperCase()}, MD`);
                             selectedClaim?.physicianNPI && formData.append("physician_npi", selectedClaim?.physicianNPI);
                             selectedV1500?.therapistId && formData.append("patient_account_no", `${selectedClaim.claimantId}-${selectedClaim.therapistId}`);
