@@ -324,7 +324,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, split, setNumSplit, uniqueDOS } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, setNumSplit, uniqueDOS } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -520,6 +520,8 @@ export default function ReferralTable(props) {
                 else {
                     // append rows to cptRows instead of replacing rows
                     // add row to selectedV1500 instead of replacing it
+                    // console.log("newNewRows", newnewRows)
+                    // console.log("cptRows", cptRows)
                     setCptRows([...cptRows, ...newnewRows]);
                     setSelectedV1500([...selectedV1500, row]);
                 }
@@ -535,11 +537,9 @@ export default function ReferralTable(props) {
                     setQuickSearchInputVal('');
                     setD1500SendFormat(row.billingProtocol)
                 } 
+                
                 setCptRows(newnewRows);
                 setSelectedV1500([row]);
-                const dos_array = newnewRows.map(r => r.dos);
-                const newUniqueDOS = Array.from(new Set(dos_array));
-                split ? setNumSplit(newUniqueDOS.length) : setNumSplit(0)
             }
             
             

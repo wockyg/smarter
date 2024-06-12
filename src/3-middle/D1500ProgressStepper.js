@@ -18,11 +18,18 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
 
 import useGetD1500Status from '../hooks/useGetD1500Status';
+import useGetReferral from '../hooks/useGetReferral';
+
+import { useParams } from 'react-router-dom';
 
 
 export default function D1500ProgressStepper(props) {
 
-  const { pendingD1500Id, setPendingD1500Id, pendingD1500Upload, cptRows, setCptRows, uniqueDOS, split, numSplit, setNumSplit, setSelectedV1500, setD1500SendFormat } = useContext(SelectedClaimContext);
+  let { id: linkId } = useParams();
+
+  const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
+
+  const { pendingD1500Id, setPendingD1500Id, pendingD1500Upload, cptRows, setCptRows, uniqueDOS, numSplit, setNumSplit, setSelectedV1500, setD1500SendFormat } = useContext(SelectedClaimContext);
 
   const { status, data: d1500Status, error, isFetching } = useGetD1500Status(pendingD1500Id || 0);
 
@@ -40,18 +47,18 @@ export default function D1500ProgressStepper(props) {
   const handleCloseStepper = () => {
     setPendingD1500Id(null)
     
-    if (split) {
+    // if (uniqueDOS.length > 1 && !selectedClaim.clientMerge) {
       
-      if (numSplit === 0) {
-        setCptRows([])
-        setSelectedV1500([]);
-        setD1500SendFormat('');
-      }
-      else if (numSplit > 0) {
-        setCptRows(cptRows.filter(c => c.dos !== uniqueDOS[index]))
-        setNumSplit(numSplit - 1)
-      }
-    }
+    //   if (numSplit === 0) {
+    //     setCptRows([])
+    //     setSelectedV1500([]);
+    //     setD1500SendFormat('');
+    //   }
+    //   else if (numSplit > 0) {
+    //     setCptRows(cptRows.filter(c => c.dos !== uniqueDOS[index]))
+    //     setNumSplit(numSplit - 1)
+    //   }
+    // }
   }
 
   return (

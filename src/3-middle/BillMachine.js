@@ -53,7 +53,7 @@ export default function BillMachine() {
     const { status: statusReferral, data: selectedClaim, error: errorReferral, isFetching: isFetchingReferral } = useGetReferral(+linkId);
     const { status: statusReferral_icd10, data: codeList, error: errorReferral_icd10, isFetching: isFetchingReferral_icd10 } = useGetReferral_icd10(+linkId);
 
-    const { pendingD1500Id, pendingD1500Upload, uniqueDOS, split, numSplit } = useContext(SelectedClaimContext);
+    const { pendingD1500Id, pendingD1500Upload, uniqueDOS } = useContext(SelectedClaimContext);
 
     const open =  Boolean(pendingD1500Id) || pendingD1500Upload;
 
@@ -80,7 +80,7 @@ export default function BillMachine() {
                 </Grid>
                 <Grid item xs={6.7} className='billRows'>
                   {/* TODO tabs for each dos if >1 */}
-                  {split ?
+                  {uniqueDOS.length > 1 && !selectedClaim.clientMerge ?
                   <>
                   <Box sx={{ borderBottom: 2, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">

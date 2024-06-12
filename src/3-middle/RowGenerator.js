@@ -115,11 +115,11 @@ export default function RowGenerator(props) {
     const [currentEditRow, setCurrentEditRow] = useState({});
     const [revertData, setRevertData] = useState({});
 
-    const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id, split, uniqueDOS: uniqueDOSSplit } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500: selectedV1500Array, setSelectedV1500, d1500SendFormat, setD1500SendFormat, pendingD1500Id, uniqueDOS: uniqueDOSSplit } = useContext(SelectedClaimContext);
 
     // console.log(selectedV1500Array)
 
-    const newRows = cptRows && (split ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
+    const newRows = cptRows && (uniqueDOSSplit.length > 1 && !selectedClaim.clientMerge ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
 
     // const selectedV1500 = selectedV1500Array[0]
     const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null

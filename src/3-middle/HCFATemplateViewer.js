@@ -51,9 +51,11 @@ export default function HCFATemplateViewer(props) {
 
     // const num_codes = codeList?.length;
 
-    const { cptRows, setCptRows, selectedV1500, split, uniqueDOS } = useContext(SelectedClaimContext);
+    const { cptRows, setCptRows, selectedV1500, uniqueDOS } = useContext(SelectedClaimContext);
 
-    const newRows = split ? cptRows.filter(c => c.dos === uniqueDOS[index]) : [...cptRows]
+    const newRows = uniqueDOS.length > 1 && !selectedClaim?.clientMerge ? cptRows.filter(c => c.dos === uniqueDOS[index]) : [...cptRows]
+
+    // console.log("newRows:", newRows)
 
     // const numRows = cptRows?.length;
 
