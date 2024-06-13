@@ -3,6 +3,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { Page, Text, View, Document, StyleSheet, PDFViewer, Image, PDFDownloadLink } from '@react-pdf/renderer';
 
 import blank1500 from '../document-templates/blank1500.jpg';
+import { da } from 'date-fns/locale';
 
 
 export default function HCFATemplate(props) {
@@ -27,12 +28,14 @@ export default function HCFATemplate(props) {
     const day = today.getDate();
     const year = today.getFullYear();
 
-    const dos_array = cptRows?.map( (row) => {return new Date(Date.parse(row.dos));} );
-    const dos_months = dos_array?.map( (row) => {return (row.getMonth()+1) < 10 ? `0${row.getMonth()+1}` : `${row.getMonth()+1}`} );
-    const dos_days = dos_array?.map( (row) => {return (row.getDate()+1) < 10 ? `0${row.getDate()+1}` : `${row.getDate()+1}`} );
-    const dos_years = dos_array?.map( (row) => {return String(row.getFullYear()).substring(2)} );
+    
+    const dos_months = cptRows?.map( (row) => {return row.dos.slice(5, 7)} );
+    const dos_days = cptRows?.map( (row) => {return row.dos.slice(8, 10)} );
+    const dos_years = cptRows?.map( (row) => {return row.dos.slice(2, 4)} );
 
-    // console.log(cptRows);
+    // console.log(dos_months);
+    // console.log(dos_days);
+    // console.log(dos_years);
 
     const dos_dollars = cptRows?.map( (row) => {return row?.charges.toString().substring(0, row?.charges.toString().indexOf('.'));} );
     const dos_cents = cptRows?.map( (row) => {return row?.charges.toString().substring(row?.charges.toString().indexOf('.')+1);} );
