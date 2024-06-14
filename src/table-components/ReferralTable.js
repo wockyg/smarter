@@ -348,6 +348,8 @@ export default function ReferralTable(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
     const [menuType, setMenuType] = useState(null);
+
+    const [uploadSubmitted, setUploadSubmitted] = useState(false);
     
     const [editIDx, setEditIDx] = useState(-1);
     const [revertData, setRevertData] = useState({});
@@ -747,6 +749,7 @@ export default function ReferralTable(props) {
             setIncludePN(false);
             setGenerateRR(false);
             setUploadComplete(false);
+            uploadSubmitted && setUploadSubmitted(false)
             setUploadedFiles([])
             setV1500UploadProgress({})
             setV1500UploadComplete([])
@@ -850,6 +853,7 @@ export default function ReferralTable(props) {
         // submit data
         console.log('SUBMIT THE V1500s');
         console.log(uploadedFiles);
+        setUploadSubmitted(true)
 
         const formData = new FormData();
         uploadedFiles.forEach(file => {
@@ -1421,7 +1425,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {!uploadComplete && // Object.keys(v1500UploadProgress).length === 0
+                {!uploadSubmitted && // Object.keys(v1500UploadProgress).length === 0
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1486,14 +1490,14 @@ export default function ReferralTable(props) {
                 <Button onClick={handleBulkSubmit}>Generate</Button>
                 </>
                 }
-                {type === 'hcfa' && !uploadComplete &&
+                {type === 'hcfa' && !uploadSubmitted &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
                 <Button onClick={handleModalClose}>Cancel</Button>
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
-                {type === 'hcfa' && uploadComplete &&
+                {type === 'hcfa' && uploadSubmitted &&
                 <Button onClick={handleModalClose}>Dismiss</Button>
                 }
                 {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
