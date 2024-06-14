@@ -324,7 +324,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, setNumSplit, uniqueDOS } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, uploadedFiles, setUploadedFiles } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -348,7 +348,7 @@ export default function ReferralTable(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
     const [menuType, setMenuType] = useState(null);
-
+    
     const [editIDx, setEditIDx] = useState(-1);
     const [revertData, setRevertData] = useState({});
     const [currentEditRow, setCurrentEditRow] = useState({});
@@ -363,7 +363,6 @@ export default function ReferralTable(props) {
     const [includeIA, setIncludeIA] = useState(false);
     const [includePN, setIncludePN] = useState(false);
 
-    const [uploadedFiles, setUploadedFiles] = useState([])
     const [fileLimit, setFileLimit] = useState(false);
     const [uploadComplete, setUploadComplete] = useState(false);
 
@@ -1313,11 +1312,13 @@ export default function ReferralTable(props) {
                     {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) === uploadedFiles.length &&
                     "Upload complete"
                     }
+                    {/* TODO enable dismiss immediately after submission */}
                     {modalType === 'upload' && Object.keys(v1500UploadProgress).length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) < uploadedFiles.length &&
                     <>
                     Uploading {uploadedFiles.length} file{uploadedFiles.length > 1 && 's'}...
                     </>
                     }
+                    
                     {modalType === 'bulk' &&
                     `Edit ${selected.length} row${selected.length > 1 ? 's' : ''}`
                     }
@@ -1420,7 +1421,7 @@ export default function ReferralTable(props) {
                 }
                 {modalType === 'upload' &&
                 <>
-                {Object.keys(v1500UploadProgress).length === 0 && // v1500UploadProgress.length === 0 &&
+                {!uploadComplete && // Object.keys(v1500UploadProgress).length === 0
                 <input multiple
                 id='fileUpload'
                 type='file' 
@@ -1485,15 +1486,15 @@ export default function ReferralTable(props) {
                 <Button onClick={handleBulkSubmit}>Generate</Button>
                 </>
                 }
-                {type === 'hcfa' && Object.keys(v1500UploadProgress).length === 0 &&
+                {type === 'hcfa' && !uploadComplete &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
                 <Button onClick={handleModalClose}>Cancel</Button>
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
-                {type === 'hcfa' && v1500UploadComplete.length > 0 && (v1500UploadComplete.length + v1500UploadFail.length) === uploadedFiles.length &&
-                <Button onClick={handleModalClose}>Done</Button>
+                {type === 'hcfa' && uploadComplete &&
+                <Button onClick={handleModalClose}>Dismiss</Button>
                 }
                 {type !== 'rr' && type !== 'hcfa' && modalType === 'bulk' &&
                 <Button onClick={handleBulkSubmit}>Update</Button>

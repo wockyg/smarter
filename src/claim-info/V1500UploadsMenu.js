@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 import Paper from '@mui/material/Paper';
@@ -31,6 +31,8 @@ import WarningIcon from '@mui/icons-material/Warning';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import ReplayIcon from '@mui/icons-material/Replay';
 
+import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
+
 import useGetV1500Uploads from '../hooks/useGetV1500Uploads';
 
 
@@ -52,6 +54,8 @@ export default function V1500UploadsMenu(props) {
   const [hoverVals, setHoverVals] = useState([]);
 
   const { status: statusUploads, data: rows, error: errorUploads, isFetching: isFetchingUploads } = useGetV1500Uploads();
+
+  const { uploadedFiles, v1500UploadProgress, v1500UploadComplete, v1500UploadFail } = useContext(SelectedClaimContext);
 
   const rowsSorted = rows?.sort((a, b) => {
       const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
@@ -90,10 +94,53 @@ export default function V1500UploadsMenu(props) {
       setHoverVals(temp)
     };
 
-  return(
+  return( rowsSorted && uploadedFiles &&
     <List sx={{ width: '100%', maxHeight: 400, overflow: 'scroll', bgcolor: 'background.paper' }}>
-      {/* pending uploads */}
-      {rowsSorted && rowsSorted.filter(r => r.uploadProgress > -1 && r.uploadProgress < 100).map((row, i, a) => {
+      {/* pending initial upload */}
+      {uploadedFiles.filter(u => !v1500UploadComplete?.includes(u.name) && !v1500UploadFail?.includes(u.name)).map((file, i) => {
+
+        const labelId = `checkbox-list-label-${i}`;
+
+         const progress = v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
+
+        return (
+          <ListItem
+            key={i}
+            secondaryAction={
+              <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+                {/* <CircularProgress /> */}
+                <Box
+                  sx={{
+                    top: 0,
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    position: 'absolute',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Typography variant="caption" component="div" color="text.secondary">
+                    {`${Math.round(progress)}%`}
+                  </Typography>
+                </Box>
+              </Box>
+            }
+            disablePadding
+          >
+            <ListItemButton role={undefined} dense>
+              <ListItemText id={labelId} primary={`${file.name}`} secondary={<LinearProgress />} />
+            </ListItemButton>
+
+            <br />
+            
+          </ListItem>
+        )
+      })}
+
+      {/* pending webhook response */}
+      {rowsSorted.filter(r => r.uploadProgress > -1 && r.uploadProgress < 100).map((row, i, a) => {
         const labelId = `checkbox-list-label-${row.v1500Id}`;
         return(
           <ListItem
@@ -136,7 +183,34 @@ export default function V1500UploadsMenu(props) {
         )
       })}
 
-      {rowsSorted && rowsSorted.filter(r => r.uploadProgress === -1 || r.uploadProgress === 100).map((row, i, a) => {
+      {/* failed initial upload */}
+      {uploadedFiles.filter(u => v1500UploadFail?.includes(u.name)).map((file, i) => {
+
+        const today = new Date().toJSON().slice(0, 10)
+        const todayTime = new Date().toJSON().slice(11, 16)
+
+        return(
+          <ListItem
+            key={i}
+            secondaryAction={
+              <IconButton>
+                <WarningIcon color='error' />
+              </IconButton>
+            }
+            disablePadding
+          >
+            <ListItemButton role={undefined} dense>
+              <ListItemText id={i} primary={`${file.name}`} secondary={`${today} @ ${todayTime} - upload failed womp womp`} />
+            </ListItemButton>
+
+            <br />
+            
+          </ListItem>
+        )
+      })}
+
+      {/* completed uploads */}
+      {rowsSorted.filter(r => r.uploadProgress === -1 || r.uploadProgress === 100).map((row, i, a) => {
         const labelId = `checkbox-list-label-${row.v1500Id}`;
         return(
           <ListItem
