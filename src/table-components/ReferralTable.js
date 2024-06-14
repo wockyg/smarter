@@ -480,11 +480,15 @@ export default function ReferralTable(props) {
     };
 
     const handleClickHcfa = (event, row) => {
-        // console.log("ROW: ", row);
+        console.log("ROW: ", row);
         
         if (row.referralId) {
 
+            console.log("cptRowsNotApproved:", cptRowsNotApproved)
+
             const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
+
+            console.log("newRows:", newRows)
             
             // calculate rates for each row
             // TODO turn in to reusable helper fn
@@ -494,7 +498,7 @@ export default function ReferralTable(props) {
                 return {...r, charges: rateTotal}
             })
 
-            console.log(newnewRows)
+            console.log("newnewRows:", newnewRows)
 
             // TODO calculate total charges??
 

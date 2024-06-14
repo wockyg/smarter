@@ -111,7 +111,7 @@ export default function BillMachine() {
                   <Container disableGutters sx={{height: 370, background: '#138D75', overflow: 'auto', padding: 1, position: "relative"}}>
                       {selectedClaim?.jurisdiction
                       ?
-                      <RowGenerator codeList={codeList} index={0} />
+                      <RowGenerator codeList={codeList} />
                       :
                       'No jurisdicton set'
                       }
