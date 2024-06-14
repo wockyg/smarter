@@ -742,18 +742,24 @@ export default function ReferralTable(props) {
 
     const handleModalClose = (event, reason) => {
         if (reason !== 'backdropClick') {
+            // general/all
             setModalOpen(false);
             setModalType(null)
+
+            // bulk
             setEnabled({});
+
+            // rr
             setIncludeIA(false);
             setIncludePN(false);
             setGenerateRR(false);
-            setUploadComplete(false);
+
+            // upload
             uploadSubmitted && setUploadSubmitted(false)
-            setUploadedFiles([])
-            setV1500UploadProgress({})
-            setV1500UploadComplete([])
-            setV1500UploadFail([])
+            // setUploadedFiles([])
+            // setV1500UploadProgress({})
+            // setV1500UploadComplete([])
+            // setV1500UploadFail([])
         }
     };
 
