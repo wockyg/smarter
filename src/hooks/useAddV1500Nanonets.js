@@ -60,7 +60,9 @@ export default function useAddV1500Nanonets() {
         // v1500UploadComplete.length > 0
         setUploadedFiles(uploadedFiles.filter(u => u.name !== files[i.name]))
         console.log(`File ${i} uploaded...`)
+        console.log("files.length", files.length)
         if (i+1 === files.length) {
+          console.log("final file, resetting state...")
           setV1500UploadProgress({})
           setV1500UploadComplete([])
           setV1500UploadFail([])
@@ -68,6 +70,7 @@ export default function useAddV1500Nanonets() {
       }
       else {
         // try again
+        console.log("try again...")
         const upload2 = await api.post(
               '/v1500/upload/smarter/nanonets', 
               formData, 
@@ -89,7 +92,9 @@ export default function useAddV1500Nanonets() {
           setV1500UploadComplete(complete)
           setUploadedFiles(uploadedFiles.filter(u => u.name !== files[i.name]))
           console.log(`File ${i} uploaded...`)
+          console.log("files.length", files.length)
           if (i+1 === files.length) {
+            console.log("final file, resetting state...")
             setV1500UploadProgress({})
             setV1500UploadComplete([])
             setV1500UploadFail([])
