@@ -124,7 +124,7 @@ export default function V1500UploadsMenu(props) {
                   }}
                 >
                   <Typography variant="caption" component="div" color="text.secondary">
-                    {`${Math.round(progress)}%`}
+                    {`${progress > -1 ? progress : '0'}%`}
                   </Typography>
                 </Box>
               </Box>
