@@ -494,6 +494,8 @@ export default function ReferralTable(props) {
                 return {...r, charges: rateTotal}
             })
 
+            console.log(newnewRows)
+
             // TODO calculate total charges??
 
             !billMode && setBillMode(true);
