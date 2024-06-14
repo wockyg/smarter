@@ -119,11 +119,12 @@ export default function RowGenerator(props) {
 
     // console.log(selectedV1500Array)
 
-    const newRows = cptRows && ((index && !selectedClaim.clientMerge) ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
+    const newRows = cptRows && ((index >= 0 && !selectedClaim.clientMerge) ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
 
     // console.log(uniqueDOSSplit)
-    // console.log(newRows)
-    console.log("cptRows", cptRows)
+    console.log(uniqueDOSSplit[index])
+    console.log("newRows", newRows)
+    // console.log("cptRows", cptRows)
 
     // const selectedV1500 = selectedV1500Array[0]
     const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
