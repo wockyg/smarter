@@ -121,7 +121,7 @@ export default function RowGenerator(props) {
 
     const newRows = cptRows && (uniqueDOSSplit.length > 1 && !selectedClaim.clientMerge ? cptRows.filter(r => r.dos === uniqueDOSSplit[index]) : [...cptRows])
 
-    console.log(uniqueDOSSplit[index])
+    console.log(uniqueDOSSplit)
     console.log(newRows)
     console.log(cptRows)
 
