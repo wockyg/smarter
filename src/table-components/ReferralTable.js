@@ -484,7 +484,7 @@ export default function ReferralTable(props) {
         
         if (row.referralId) {
 
-            console.log("cptRowsNotApproved:", cptRowsNotApproved)
+            // console.log("cptRowsNotApproved:", cptRowsNotApproved)
 
             const newRows = cptRowsNotApproved?.filter(r => r.v1500Id === row.v1500Id);
 
