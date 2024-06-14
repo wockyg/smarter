@@ -123,6 +123,7 @@ export default function RowGenerator(props) {
 
     console.log(uniqueDOSSplit[index])
     console.log(newRows)
+    console.log(cptRows)
 
     // const selectedV1500 = selectedV1500Array[0]
     const selectedV1500 = selectedV1500Array && selectedV1500Array.length > 0 ? selectedV1500Array[0] : null
