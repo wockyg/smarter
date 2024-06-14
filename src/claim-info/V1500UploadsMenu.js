@@ -57,6 +57,8 @@ export default function V1500UploadsMenu(props) {
 
   const { uploadedFiles, v1500UploadProgress, v1500UploadComplete, v1500UploadFail } = useContext(SelectedClaimContext);
 
+  console.log("uploadedFiles", uploadedFiles)
+
   const rowsSorted = rows?.sort((a, b) => {
       const valueA = a[orderBy] === null ? '' : (typeof a[orderBy] === "string" ? a[orderBy].toUpperCase() : a[orderBy]);
       const valueB = b[orderBy] === null ? '' : (typeof b[orderBy] === "string" ? b[orderBy].toUpperCase() : b[orderBy]);
