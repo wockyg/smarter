@@ -740,7 +740,7 @@ export default function ReferralTable(props) {
         }
     };
 
-    const handleModalClose = (cancel) => {
+    const handleModalClose = (e, cancel) => {
 
         // general/all
         setModalOpen(false);
@@ -951,7 +951,7 @@ export default function ReferralTable(props) {
             />
             }
 
-            {`${uploadedFiles.length}`}
+            {/* {`${uploadedFiles.length}`} */}
 
             <TableContainer sx={{ height: cc ? 300 : 400 }}>
                 <Table
@@ -1506,7 +1506,7 @@ export default function ReferralTable(props) {
                 {type === 'hcfa' && !uploadSubmitted &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
-                <Button onClick={() => handleModalClose(true)}>Cancel</Button>
+                <Button onClick={(e) => handleModalClose(e, true)}>Cancel</Button>
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
