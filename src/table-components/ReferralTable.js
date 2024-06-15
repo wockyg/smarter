@@ -948,6 +948,8 @@ export default function ReferralTable(props) {
             />
             }
 
+            {JSON.stringify(uploadedFiles)}
+
             <TableContainer sx={{ height: cc ? 300 : 400 }}>
                 <Table
                 stickyHeader

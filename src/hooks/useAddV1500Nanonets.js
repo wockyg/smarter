@@ -72,8 +72,8 @@ export default function useAddV1500Nanonets() {
         }
         else {
           const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
-          console.log("uploadedFiles", uploadedFiles)
-          console.log("newFiles", newFiles)
+          // console.log("uploadedFiles", uploadedFiles)
+          // console.log("newFiles", newFiles)
           setUploadedFiles(newFiles)
         }
       }
@@ -111,8 +111,8 @@ export default function useAddV1500Nanonets() {
           else {
             // console.log("is anybody there????")
             const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
-            console.log("uploadedFiles", uploadedFiles)
-            console.log("newFiles", newFiles)
+            // console.log("uploadedFiles", uploadedFiles)
+            // console.log("newFiles", newFiles)
             setUploadedFiles(newFiles)
           }
         }
