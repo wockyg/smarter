@@ -740,27 +740,27 @@ export default function ReferralTable(props) {
         }
     };
 
-    const handleModalClose = (event, reason) => {
-        if (reason !== 'backdropClick') {
-            // general/all
-            setModalOpen(false);
-            setModalType(null)
+    const handleModalClose = (cancel) => {
 
-            // bulk
-            setEnabled({});
+        // general/all
+        setModalOpen(false);
+        setModalType(null)
 
-            // rr
-            setIncludeIA(false);
-            setIncludePN(false);
-            setGenerateRR(false);
+        // bulk
+        setEnabled({});
 
-            // upload
-            uploadSubmitted && setUploadSubmitted(false)
-            // setUploadedFiles([])
-            // setV1500UploadProgress({})
-            // setV1500UploadComplete([])
-            // setV1500UploadFail([])
-        }
+        // rr
+        setIncludeIA(false);
+        setIncludePN(false);
+        setGenerateRR(false);
+
+        // upload
+        uploadSubmitted && setUploadSubmitted(false)
+        cancel && setUploadedFiles([])
+        // setV1500UploadProgress({})
+        // setV1500UploadComplete([])
+        // setV1500UploadFail([])
+        
     };
 
     const handleBulkSubmit = () => {
@@ -848,6 +848,8 @@ export default function ReferralTable(props) {
         const uploaded = [...uploadedFiles]
         files.forEach((file) => uploaded.push(file))
         setUploadedFiles(uploaded)
+        // console.log('newUploadedFiles', uploaded);
+        // console.log(uploaded[0].name);
     };
 
     const handleFileEvent = (e) => {
@@ -858,7 +860,6 @@ export default function ReferralTable(props) {
     const handleUploadSubmit = (method) => {
         // submit data
         console.log('SUBMIT THE V1500s');
-        console.log(uploadedFiles);
         setUploadSubmitted(true)
 
         const formData = new FormData();
@@ -948,7 +949,7 @@ export default function ReferralTable(props) {
             />
             }
 
-            {JSON.stringify(uploadedFiles)}
+            {`${uploadedFiles.length}`}
 
             <TableContainer sx={{ height: cc ? 300 : 400 }}>
                 <Table
@@ -1503,7 +1504,7 @@ export default function ReferralTable(props) {
                 {type === 'hcfa' && !uploadSubmitted &&
                 <>
                 {/* <Button onClick={() => handleUploadSubmit('sensible')}>Upload Sensible</Button> */}
-                <Button onClick={handleModalClose}>Cancel</Button>
+                <Button onClick={() => handleModalClose(true)}>Cancel</Button>
                 <Button onClick={() => handleUploadSubmit('nanonets')}>Upload</Button>
                 </>
                 }
