@@ -34,7 +34,7 @@ export default function useAddV1500Nanonets() {
 
     let uploadedFiles = JSON.parse(values.get("uploadedFilesRaw"))
 
-    console.log(uploadedFiles)
+    console.log("uploadedFiles", uploadedFiles)
 
     for(let i = 0; i < files.length; i++) {
 

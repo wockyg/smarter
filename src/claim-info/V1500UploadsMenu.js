@@ -105,7 +105,7 @@ export default function V1500UploadsMenu(props) {
 
          const progress = v1500UploadProgress.filename === file.name ? v1500UploadProgress.percentComplete : -1
 
-        return ( progress > -1 &&
+        return (
           <ListItem
             key={i}
             secondaryAction={
@@ -124,7 +124,7 @@ export default function V1500UploadsMenu(props) {
                   }}
                 >
                   <Typography variant="caption" component="div" color="text.secondary">
-                    {`${progress}%`}
+                    {`${progress === -1 ? '0' : progress}%`}
                   </Typography>
                 </Box>
               </Box>
