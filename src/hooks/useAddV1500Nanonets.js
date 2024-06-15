@@ -32,7 +32,7 @@ export default function useAddV1500Nanonets() {
 
     // setProgress(newProgress)
 
-    let uploadedFiles = JSON.parse(values.get("uploadedFilesRaw"))
+    let uploadedFiles = values.get("uploadedFilesRaw")
 
     console.log("uploadedFiles", uploadedFiles)
 
