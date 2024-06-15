@@ -60,10 +60,8 @@ export default function useAddV1500Nanonets() {
         // v1500UploadComplete.length > 0
         // console.log("uploadedFiles", uploadedFiles)
         // console.log("files[i.name]", files[i.name])
-        const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
-        setUploadedFiles(newFiles)
+        
         console.log(`File ${i} uploaded...`)
-        console.log("newFiles", newFiles)
         // console.log("files.length", files.length)
         if (i+1 === files.length) {
           console.log("final file, resetting state...")
@@ -71,6 +69,12 @@ export default function useAddV1500Nanonets() {
           setV1500UploadProgress({})
           setV1500UploadComplete([])
           setV1500UploadFail([])
+        }
+        else {
+          const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
+          console.log("uploadedFiles", uploadedFiles)
+          console.log("newFiles", newFiles)
+          setUploadedFiles(newFiles)
         }
       }
       else {
@@ -105,7 +109,7 @@ export default function useAddV1500Nanonets() {
             setV1500UploadFail([])
           }
           else {
-            console.log("is anybody there????")
+            // console.log("is anybody there????")
             const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
             console.log("uploadedFiles", uploadedFiles)
             console.log("newFiles", newFiles)
