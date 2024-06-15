@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "react-query";
 
 export default function useAddV1500Nanonets() {
 
-  const { uploadedFiles, setUploadedFiles, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail } = useContext(SelectedClaimContext);
+  const { setUploadedFiles, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail } = useContext(SelectedClaimContext);
 
   // const [progress, setProgress] = useState([])
 
@@ -31,6 +31,10 @@ export default function useAddV1500Nanonets() {
     // })
 
     // setProgress(newProgress)
+
+    let uploadedFiles = JSON.parse(values.get("uploadedFilesRaw"))
+
+    console.log(uploadedFiles)
 
     for(let i = 0; i < files.length; i++) {
 
@@ -71,10 +75,10 @@ export default function useAddV1500Nanonets() {
         }
         else {
           console.log(`File ${i+1} uploaded...`)
-          const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
+          uploadedFiles = uploadedFiles.filter(u => u.name !== files[i].name)
           // console.log("uploadedFiles", uploadedFiles)
-          console.log("newFiles", newFiles)
-          setUploadedFiles(newFiles)
+          console.log("uploadedFiles", uploadedFiles)
+          setUploadedFiles(uploadedFiles)
         }
       }
       else {
