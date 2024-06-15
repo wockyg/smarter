@@ -869,7 +869,7 @@ export default function ReferralTable(props) {
 
         formData.append("userId", user.userId)
 
-        formData.append("uploadedFilesRaw", JSON.stringify(uploadedFiles));
+        // formData.append("uploadedFilesRaw", JSON.stringify(uploadedFiles));
 
         // method === 'sensible' && uploadedFiles.length > 0 && v1500AddSensible.mutate(formData)
 
