@@ -73,7 +73,7 @@ export default function useAddV1500Nanonets() {
           console.log(`File ${i+1} uploaded...`)
           const newFiles = uploadedFiles.filter(u => u.name !== files[i].name)
           // console.log("uploadedFiles", uploadedFiles)
-          // console.log("newFiles", newFiles)
+          console.log("newFiles", newFiles)
           setUploadedFiles(newFiles)
         }
       }
