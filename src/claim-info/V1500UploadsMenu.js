@@ -57,6 +57,11 @@ export default function V1500UploadsMenu(props) {
 
   const { uploadedFiles, v1500UploadProgress, v1500UploadComplete, v1500UploadFail } = useContext(SelectedClaimContext);
 
+  console.log("1", uploadedFiles[0])
+
+  uploadedFiles.reverse()
+
+  // console.log("2", uploadedFiles[0])
   // console.log("uploadedFiles", uploadedFiles)
 
   const rowsSorted = rows?.sort((a, b) => {
