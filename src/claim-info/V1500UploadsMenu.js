@@ -59,7 +59,7 @@ export default function V1500UploadsMenu(props) {
 
   // console.log("1", uploadedFiles[0])
 
-  uploadedFiles.reverse()
+  const filesReversed = uploadedFiles.toReversed()
 
   // console.log("2", uploadedFiles[0])
   // console.log("uploadedFiles", uploadedFiles)
@@ -104,7 +104,7 @@ export default function V1500UploadsMenu(props) {
   return( rowsSorted && uploadedFiles &&
     <List sx={{ width: '100%', maxHeight: 400, overflow: 'scroll', bgcolor: 'background.paper' }}>
       {/* pending initial upload */}
-      {uploadedFiles.filter(u => !v1500UploadComplete?.includes(u.name) && !v1500UploadFail?.includes(u.name)).map((file, i) => {
+      {filesReversed.filter(u => !v1500UploadComplete?.includes(u.name) && !v1500UploadFail?.includes(u.name)).map((file, i) => {
 
         const labelId = `checkbox-list-label-${i}`;
 
