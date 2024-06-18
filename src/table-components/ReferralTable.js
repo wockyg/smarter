@@ -324,7 +324,7 @@ export default function ReferralTable(props) {
     const { status: statusCpt, data: codes, error: errorCpt, isFetching: isFetchingCpt } = useGetCptForAllStates();
     const { status: statusOrphan, data: orphan, error: errorOrphan, isFetching: isFetchingOrphan } = useGetReferralsOrphan();
 
-    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, uploadedFiles, setUploadedFiles } = useContext(SelectedClaimContext);
+    const { setPage: setNotesPage, setTab: setClaimTab, billMode, setBillMode, keepBillMode, setKeepBillMode, cptRows, setCptRows, selectedV1500, setSelectedV1500, v1500UploadProgress, setV1500UploadProgress, v1500UploadComplete, setV1500UploadComplete, v1500UploadFail, setV1500UploadFail, setD1500SendFormat, uploadedFiles, setUploadedFiles, uploadSubmitted, setUploadSubmitted } = useContext(SelectedClaimContext);
     const { setQuickSearchVal, setQuickSearchInputVal } = useContext(SearchContext);
     const { setCurrentlyEditingSelectedClaim } = useContext(DetailsContext);
     const { therapistSearchVal, setTherapistSearchVal } = useContext(RecordsRequestContext);
@@ -348,8 +348,6 @@ export default function ReferralTable(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [deleteId, setDeleteId] = useState(null);
     const [menuType, setMenuType] = useState(null);
-
-    const [uploadSubmitted, setUploadSubmitted] = useState(false);
     
     const [editIDx, setEditIDx] = useState(-1);
     const [revertData, setRevertData] = useState({});

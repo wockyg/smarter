@@ -11,13 +11,17 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import useGetV1500Uploads from '../hooks/useGetV1500Uploads';
 
+import { SelectedClaimContext } from '../contexts/SelectedClaimContext';
+
 import { green } from '@mui/material/colors';
 
 export default function UploadButton(props) {
 
   const { status: statusUploads, data: rows, error: errorUploads, isFetching: isFetchingUploads } = useGetV1500Uploads();
 
-  const numPending = rows?.filter(r => r.uploadProgress < 100 && r.uploadProgress > -1).length
+  const { uploadedFiles } = useContext(SelectedClaimContext);
+
+  const numPending = rows?.filter(r => r.uploadProgress < 100 && r.uploadProgress > -1).length + uploadedFiles.length
 
   const numFailed = rows?.filter(r => r.uploadProgress === -1).length
 
@@ -43,7 +47,7 @@ export default function UploadButton(props) {
             onClick={props?.handleClickUpload}
             >
               {(numPending > 0 || numFailed > 0) ?
-              <Badge badgeContent={numPending > 0 ? numPending : numFailed} color="error">
+              <Badge badgeContent={numPending > 0 ? numPending : numFailed} color={numPending > 0 ? "success" : "error"}>
                 <UploadFileIcon />
               </Badge>
               :
